@@ -14,26 +14,36 @@ alias fd 'fdfind -H -I -E ".git"'
 # Basic shortcuts
 alias n 'nvim'
 alias c 'clear'
-alias l 'ls -AlhF --group-directories-first'
 alias q 'exit'
 
+# Exa (or ls + tree)
+if which exa >/dev/null
+    alias l 'exa --all --long --header --icons --sort=ext --git'
+    alias ll 'exa --all --long --tree --header --icons --sort=ext --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
+else
+    alias l 'ls -AlhF --group-directories-first'
+    if which tree >/dev/null
+        alias ll 'tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
+    end
+end
+
 # Tmux
-alias t  'tmux'
+alias t 'tmux'
 alias ta 'tmux at || tmux new'
 
 # Git
-alias g   'git'
-alias ga  'git add'
+alias g 'git'
+alias ga 'git add'
 alias gco 'git checkout'
 alias gcp 'git cherry-pick --ff'
-alias gd  'git diff'
+alias gd 'git diff'
 alias ggl 'git grep --files-with-matches'
-alias gl  'git log'
-alias gg  'git graph'
-alias gs  'git status --short'
+alias gl 'git log'
+alias gg 'git graph'
+alias gs 'git status --short'
 
 # Weather (short and long versions)
-alias wttr    'curl "v2d.wttr.in/wan+chai?format=4"'
+alias wttr 'curl "v2d.wttr.in/wan+chai?format=4"'
 alias weather 'curl "v2d.wttr.in/wan+chai"'
 
 # Goto c mount (on WSL)
@@ -49,7 +59,6 @@ alias du 'du -h -d 2'
 alias free 'free -h'
 alias xsel 'xsel -b'
 alias uptime 'uptime -p'
-alias tree 'tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
 
 # == FZF ==
 
