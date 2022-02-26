@@ -18,20 +18,29 @@ function fish_prompt --description 'Informative prompt'
         set -l statusb_color (set_color --bold $fish_color_status)
         set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
 
-        printf '%s%s@%s %s%s %s%s%s %s ' (set_color brblue) \
-            $USER (prompt_hostname) (set_color $fish_color_cwd) $PWD $pipestatus_string \
-            (set_color normal) (fish_git_prompt) (set_color normal)
+        # User
+        printf '%s%s@%s ' (set_color brblue) $USER (prompt_hostname)
 
-        # Git status
-        if type git > /dev/null 2> /dev/null
-        end
+        # pwd (current location)
+        printf '%s%s' (set_color $fish_color_cwd) $PWD
 
         # Tmux session name
-        if type tmux > /dev/null 2> /dev/null
+        if type tmux >/dev/null 2>/dev/null
             if test "$TERM" = "tmux-256color"
-                printf '[%s] ' (tmux display-message -p "#S")
+                printf ' %s[tmux:%s%s%s]' (set_color normal) (set_color brgreen) (tmux display-message -p "#S") (set_color normal)
             end
         end
+
+        # Git status
+        # Note that this places a space in front
+        if type git >/dev/null 2>/dev/null
+            printf '%s%s ' (set_color normal) (fish_git_prompt)
+        end
+
+        # Pipe status (error code)
+        printf '%s ' $pipestatus_string
+
+        # Pointer
         printf '\n> '
     end
 end
