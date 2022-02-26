@@ -22,19 +22,18 @@ function fish_prompt --description 'Informative prompt'
         printf '%s%s@%s ' (set_color brblue) $USER (prompt_hostname)
 
         # pwd (current location)
-        printf '%s%s' (set_color $fish_color_cwd) $PWD
+        printf '%s%s ' (set_color $fish_color_cwd) $PWD
 
         # Tmux session name
         if type tmux >/dev/null 2>/dev/null
             if test "$TERM" = "tmux-256color"
-                printf ' %s[tmux:%s%s%s]' (set_color normal) (set_color brgreen) (tmux display-message -p "#S") (set_color normal)
+                printf '%s[tmux:%s%s%s] ' (set_color normal) (set_color brgreen) (tmux display-message -p "#S") (set_color normal)
             end
         end
 
         # Git status
-        # Note that this places a space in front
         if type git >/dev/null 2>/dev/null
-            printf '%s%s ' (set_color normal) (fish_git_prompt)
+            printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^.//')
         end
 
         # Pipe status (error code)
