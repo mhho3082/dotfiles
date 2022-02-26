@@ -33,7 +33,7 @@ function fish_prompt --description 'Informative prompt'
 
         # Git status
         if type git >/dev/null 2>/dev/null
-            printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^.//')
+            printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^[ \t]*//')
         end
 
         # Pipe status (error code)
