@@ -1,0 +1,74 @@
+[user]
+    name = Max Ho
+    email = 73323597+mhho3082@users.noreply.github.com
+
+[core]
+    editor = nvim
+    eol = lf
+    autocrlf = false
+
+[init]
+    defaultBranch = main
+
+[push]
+    default = current
+
+[code]
+    editor = nvim
+
+# ---
+
+[alias]
+    graph = log --graph --abbrev-commit --date-order --format=format:'%Cblue%h%Creset%C(bold red)%d%Creset %s <%an> %Cgreen(%ar)%Creset' --all
+
+# ---
+
+[log]
+    decorate = true
+    abbrevCommit = true
+
+[format]
+    pretty = "%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(green)(%cr) %C(cyan)<%an>%Creset"
+
+# ---
+
+[merge]
+    tool = nvim
+
+[mergetool]
+  prompt = false
+
+[mergetool "nvim"]
+    cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+
+# ---
+
+[diff]
+    tool = nvimdiff
+
+[difftool]
+    prompt = false
+
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+
+[difftool "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+
+# ---
+
+[filter "lfs"]
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+
+# ---
+
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential

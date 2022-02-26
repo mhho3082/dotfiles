@@ -1,0 +1,14 @@
+# WSL
+wslu/
+
+# Configs
+configstore/
+
+# Fish vars
+fish/fish_variables
+
+# GH secrets
+gh/hosts.yml
+
+# nvim packer compiled
+nvim/plugin/packer_compiled.lua
