@@ -3,7 +3,7 @@
 -- It would create multiple LSP server instances and generate terrible lag
 
 -- Programs needed:
--- unzip
+-- unzip (for installation)
 -- ripgrep & fd
 -- python3, pip3, pynvim module
 -- nodejs, npm, neovim module
