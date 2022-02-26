@@ -11,4 +11,4 @@ fish/fish_variables
 gh/hosts.yml
 
 # nvim packer compiled
-nvim/plugin/packer_compiled.lua
+nvim/plugin/
