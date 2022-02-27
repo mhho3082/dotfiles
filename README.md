@@ -9,7 +9,7 @@ source-file ~/.config/tmux/.tmux.conf
 ```
 
 To avoid Windows paths from polluting the WSL path,
-add a file (or append to) `/etc/wsl.conf`:
+add a file (or append to) `/etc/wsl.conf` with `sudo nano`:
 ```
 [interop]
 appendWindowsPath = false
