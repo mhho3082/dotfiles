@@ -132,7 +132,19 @@ require('packer').startup(function()
 
     -- Markdown
     use 'godlygeek/tabular'
-    use 'preservim/vim-markdown'
+    use{
+        'preservim/vim-markdown',
+        requires = 'godlygeek/tabular',
+        config = function()
+            -- disable header folding
+            vim.g.vim_markdown_folding_disabled = 1
+            -- disable conceal
+            vim.g.vim_markdown_conceal = 0
+            -- diable math tex conceal
+            vim.g.tex_conceal = ""
+            vim.g.vim_markdown_math = 1
+        end,
+    }
 
     -- Generate Markdown TOC
     use {
