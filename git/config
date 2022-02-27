@@ -33,16 +33,17 @@
     ca = !"git add . && git commit"
     co = checkout
 
+    # Remove all changes from staging
+    unstage = reset --mixed
     # Remove all changes made
     discard = reset --hard
+    # Undo last commit softly
+    uncommit = reset HEAD~1 --mixed
 
     # Diff between latest commit and current
     d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
     # `git di i` Diff between i revisions ago and current
     di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
-
-    cp = cherry-pick --ff
-    gl = grep --files-with-matches
 
     # Remove branch
     r = branch -D
