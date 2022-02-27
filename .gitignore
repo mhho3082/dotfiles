@@ -9,10 +9,10 @@ configstore/
 # Fish vars
 fish/fish_variables
 
-# GH secrets
+# GitHub secrets
 gh/hosts.yml
 
-# nvim packer compiled
+# nvim packer compiled data
 nvim/plugin/
 
 # Tmux logs
