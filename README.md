@@ -15,7 +15,8 @@ Note: Ubuntu/Debian calls `fd` as `fdfind`, so this name is used throughout the 
 
 If with tmux version < 3.1 (try `tmux -V`),
 add a file `~/.tmux.conf`:
-```
+```tmux
+# Use config in ~/.config/
 source-file ~/.config/tmux/.tmux.conf
 ```
 
