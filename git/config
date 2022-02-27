@@ -30,7 +30,6 @@
 
     a = add
     c = commit
-    ca = !"git add . && git commit"
     co = checkout
 
     # Remove all changes from staging
