@@ -10,6 +10,9 @@ so you can just clone this repo to `~/.config/` with the following:
 git clone https://github.com/mhho3082/dotfiles.git ~/.config/
 ```
 
+Note: Ubuntu/Debian calls `fd` as `fdfind`, so this name is used throughout the config
+(On Arch/Manjaro: `fd`, on Fedora: `fd-find`)
+
 If with tmux version < 3.1 (try `tmux -V`),
 add a file `~/.tmux.conf`:
 ```
