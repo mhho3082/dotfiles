@@ -1,8 +1,13 @@
-# Environment variables
+# == Environment variables ==
 
 # Let's go Neovim!
 set --universal --export VISUAL nvim
 set --universal --export EDITOR nvim
+
+# Goto c mount (on WSL)
+if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null
+    alias cdc 'cd /mnt/c/Users/max/'
+end
 
 # == Rename programs ==
 
@@ -46,9 +51,6 @@ alias gs 'git status --short'
 alias wttr 'curl "v2d.wttr.in/wan+chai?format=4"'
 alias weather 'curl "v2d.wttr.in/wan+chai"'
 
-# Goto c mount (on WSL)
-alias cdc 'cd /mnt/c/Users/max/'
-
 # Default flags
 alias mkdir 'mkdir -p'
 alias ps 'ps -ef'
@@ -66,6 +68,7 @@ alias uptime 'uptime -p'
 set --universal --export FZF_DEFAULT_COMMAND 'fdfind --type file --hidden --no-ignore'
 
 # == Interactive settings ==
+
 if status is-interactive
     # Commands to run in interactive sessions
 end
