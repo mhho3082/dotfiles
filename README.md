@@ -44,7 +44,8 @@ Appended data starting with `ppa:` is the PPA for Ubuntu.
 - `python3-venv`
 - `python3-pip`
 - `neovim` (`ppa:neovim-ppa/stable`)
-- `neovim` module (`sudo npm install -g neovim`)
+- `neovim` NodeJS module (`sudo npm install -g neovim`)
+- `pynvim` Python module (`pip3 install --upgrade pynvim`)
 - `clang`
 - `clang-format`
 - `llvm`
