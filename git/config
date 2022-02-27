@@ -28,8 +28,8 @@
     # Show graph
     ll = log --graph --abbrev-commit --date-order --all
 
-    go = checkout
-    gob = checkout -b
+    goto = checkout
+    gobr = checkout -b
 
     a = add
     c = commit
