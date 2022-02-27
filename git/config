@@ -18,16 +18,40 @@
 
 # ---
 
+# Ideas from https://github.com/mathiasbynens/dotfiles
+
 [alias]
-    a = add
-    p = push
+    # Short status
     s = status --short
-    co = checkout
+    # Show log
     l = log
-    g = log --graph --abbrev-commit --date-order --all
-    d = diff
+    # Show graph
+    ll = log --graph --abbrev-commit --date-order --all
+
+    a = add
+    co = checkout
+
+    # Diff between latest commit and current
+    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+    # `git di n` Diff between n revisions ago and current
+    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
     cp = cherry-pick --ff
     gl = grep --files-with-matches
+
+    # Remove branch
+    r = branch -D
+    # Remove branches that have already been merged with main.
+    # a.k.a. ‘remove merged’
+    rm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+    # Show verbose output about tags, branches or remotes
+    tags = tag -l
+    branches = branch --all
+    remotes = remote --verbose
+
+    # List contributors with number of commits.
+    contributors = shortlog --summary --numbered
 
 # ---
 
@@ -81,3 +105,23 @@
 
 [credential "https://gist.github.com"]
 	helper = !/usr/bin/gh auth git-credential
+
+[url "git@github.com:"]
+
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+
+	insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+
+	insteadOf = "gst:"
+	pushInsteadOf = "gist:"
+	pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+
+	insteadOf = "gist:"
