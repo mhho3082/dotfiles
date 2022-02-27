@@ -39,8 +39,8 @@
     # Undo last commit softly
     uncommit = reset HEAD~1 --mixed
 
-    # `fix SHA` Fix a commit with sha SHA
-    fixup = !"git commit --fixup $1; git rebase -i --autosquash $1"
+    # `fix i` Fix (add staged changes to) a commit with (partial) SHA i (found from log)
+    fix = !"git commit --fixup $1; git rebase -i --autosquash $1"
 
     # Diff between latest commit and current
     d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
