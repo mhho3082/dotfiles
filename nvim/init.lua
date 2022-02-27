@@ -520,8 +520,9 @@ require("nvim-lsp-installer").on_server_ready(function(server)
                 language = 'en-GB',
                 dictionary = {
                     ['en-GB'] = {
-                        "neovim", "Neovim",
-                        "fzf", "ripgrep", "fd"
+                        "neovim",
+                        "fzf", "ripgrep", "fd",
+                        "dotfiles",
                     }
                 }
             }
