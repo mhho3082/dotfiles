@@ -1,0 +1,47 @@
+(... -> motion/operator)
+
+C-w + [+-<>] - resize windows
+C-w + [v/s]  - split
+
+C-v - visual block
+
+"*y - yank to clipboard
+"*p - paste from clipboard
+
+:set number   - see number row
+:set nonumber - hide number row
+
+:new term://... - New terminal split
+                  (pwsh, fish, bash, etc.)
+<C-\><C-n>      - Get out of terminal mode
+
+:setlocal spell - turn on spellcheck
+
+<C-n> / <C-p> - next / prev (in autocomplete)
+
+<A-[hjkl]> - move selection
+
+s...    - multi-char sneak (as operator)
+...z... - sneak (as motion for operator)
+
+gc... - toggle line comment (o/O; gca -> end of line)
+gb... - toggle block comment (gbc -> line)
+
+...ga... - align stuff
+(See https://github.com/junegunn/vim-easy-align)
+
+:Floggit          - see whole git project
+:G ...            - for git commands
+:Gdiffsplit       - see diff view
+:Flogsplit        - see log graph
+(See https://github.com/tpope/vim-fugitive)
+(Also see https://github.com/rbong/vim-flog/blob/master/EXAMPLES.md)
+
+:Trouble - See problems
+
+For nvim-tree: See kyazdani42/nvim-tree.lua
+
+:PackerInstall - Install plugins in init.vim
+:PackerSync    - Update and auto-clean plugins
+
+:GenTocGFM - Generate TOC for md
