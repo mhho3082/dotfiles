@@ -33,6 +33,9 @@
     ca = !"git add . && git commit"
     co = checkout
 
+    # Remove all changes made
+    discard = reset --hard
+
     # Diff between latest commit and current
     d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
     # `git di i` Diff between i revisions ago and current
