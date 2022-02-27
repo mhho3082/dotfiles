@@ -331,9 +331,10 @@ wk.register({
         name = "leader",
         f = {
             name = "find",
-            w = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "word" },
-            f = { "<cmd>Telescope find_files<cr>", "file" },
-            r = { "<cmd>Telescope oldfiles<cr>", "recent" },
+            f = { "<cmd>Telescope find_files<cr>", "files" },
+            g = { "<cmd>Telescope git_files<cr>", "git files" },
+            r = { "<cmd>Telescope oldfiles<cr>", "recents" },
+            b = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "buffer" },
             s = { "<cmd>Telescope live_grep<cr>", "search" },
             c = { "<cmd>Telescope commands<cr>", "commands" },
         },
@@ -454,6 +455,11 @@ require('telescope').setup {
             i = {
                 ["<esc>"] = actions.close
             },
+        },
+    },
+    pickers = {
+        find_files = {
+            find_command = { "fdfind", "--type", "f", "-H", "-I", "-E", ".git" }
         },
     },
     extensions = {
