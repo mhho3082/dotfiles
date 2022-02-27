@@ -1,6 +1,6 @@
 set __fish_git_prompt_showcolorhints
 set __fish_git_prompt_show_informative_status
-set __fish_git_prompt_showupstream "informative"
+set __fish_git_prompt_showupstream informative
 set __fish_git_prompt_char_cleanstate ""
 
 function fish_prompt --description 'Informative prompt'
@@ -25,14 +25,14 @@ function fish_prompt --description 'Informative prompt'
         printf '%s%s ' (set_color $fish_color_cwd) $PWD
 
         # Tmux session name
-        if type tmux >/dev/null 2>/dev/null
+        if type tmux &>/dev/null
             if test -n "$TMUX"
                 printf '%s[tmux:%s%s%s] ' (set_color normal) (set_color brgreen) (tmux display-message -p "#S") (set_color normal)
             end
         end
 
         # Git status
-        if type git >/dev/null 2>/dev/null
+        if type git &>/dev/null
             printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^[ \t]*//')
         end
 

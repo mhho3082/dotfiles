@@ -5,7 +5,7 @@ set --universal --export VISUAL nvim
 set --universal --export EDITOR nvim
 
 # Goto c mount (on WSL)
-if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null
+if grep -qEi "(Microsoft|WSL)" /proc/version &>/dev/null
     alias cdc 'cd /mnt/c/Users/max/'
 end
 
@@ -17,27 +17,27 @@ alias fd 'fdfind -H -I -E ".git"'
 # == Alias ==
 
 # Basic shortcuts
-alias n 'nvim'
-alias c 'clear'
-alias q 'exit'
+alias n nvim
+alias c clear
+alias q exit
 
 # Exa (or ls + tree)
-if which exa >/dev/null
+if which exa &>/dev/null
     alias l 'exa --all --long --header --icons --sort=ext --git'
     alias ll 'exa --all --long --tree --header --icons --sort=ext --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
 else
     alias l 'ls -AlhF --group-directories-first'
-    if which tree >/dev/null
+    if which tree &>/dev/null
         alias ll 'tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
     end
 end
 
 # Tmux
-alias t 'tmux'
+alias t tmux
 alias ta 'tmux at || tmux new'
 
 # Git
-alias g 'git'
+alias g git
 alias ga 'git add'
 alias gco 'git checkout'
 alias gcp 'git cherry-pick --ff'
