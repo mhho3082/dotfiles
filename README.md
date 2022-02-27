@@ -18,6 +18,7 @@ source-file ~/.config/tmux/.tmux.conf
 
 To avoid Windows paths from polluting the WSL path,
 add a file (or append to) `/etc/wsl.conf` with `sudo nano`:
+(Note that neovim `"+` and `"*` registers will stop working)
 ```
 [interop]
 appendWindowsPath = false
