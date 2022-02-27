@@ -7,7 +7,7 @@ so you can just clone this repo to `~/.config/` with the following:
 (remember to do backup first if you already have a `~/.config/` folder)
 
 ```bash
-git clone git@github.com/mhho3082/dotfiles.git ~/.config/
+git clone https://github.com/mhho3082/dotfiles.git ~/.config/
 ```
 
 If with tmux version < 3.1 (try `tmux -V`),
