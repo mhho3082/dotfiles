@@ -60,7 +60,7 @@ alias uptime 'uptime -p'
 # == FZF ==
 
 # Setup fzf with fd as default source
-set --universal --export FZF_DEFAULT_COMMAND 'fdfind --type file --hidden --no-ignore'
+set --universal --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E ".git"'
 
 # == Interactive settings ==
 
