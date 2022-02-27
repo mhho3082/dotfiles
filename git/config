@@ -19,7 +19,15 @@
 # ---
 
 [alias]
-    graph = log --graph --abbrev-commit --date-order --all
+    a = add
+    p = push
+    s = status --short
+    co = checkout
+    l = log
+    g = log --graph --abbrev-commit --date-order --all
+    d = diff
+    cp = cherry-pick --ff
+    gl = grep --files-with-matches
 
 # ---
 

@@ -17,6 +17,7 @@ alias fd 'fdfind -H -I -E ".git"'
 # == Alias ==
 
 # Basic shortcuts
+alias g git
 alias n nvim
 alias c clear
 alias q exit
@@ -35,17 +36,6 @@ end
 # Tmux
 alias t tmux
 alias ta 'tmux at || tmux new'
-
-# Git
-alias g git
-alias ga 'git add'
-alias gco 'git checkout'
-alias gcp 'git cherry-pick --ff'
-alias gd 'git diff'
-alias ggl 'git grep --files-with-matches'
-alias gl 'git log'
-alias gg 'git graph'
-alias gs 'git status --short'
 
 # Weather (short and long versions)
 alias wttr 'curl "v2d.wttr.in/wan+chai?format=4"'
