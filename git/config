@@ -18,17 +18,18 @@
 
 # ---
 
-# Ideas from https://github.com/mathiasbynens/dotfiles
+# Some ideas from https://github.com/mathiasbynens/dotfiles
 
 [alias]
     # Short status
-    s = status --short
+    s = status -sb
     # Show log
     l = log
     # Show graph
     ll = log --graph --abbrev-commit --date-order --all
 
     a = add
+    c = commit
     co = checkout
 
     # Diff between latest commit and current
