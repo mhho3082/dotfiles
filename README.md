@@ -6,7 +6,7 @@
 
 This repo is designed to be placed in `~/.config/`,
 so you can just clone this repo with the following:<br>
-(remember to do backup first if needed)
+(remember to do backup first)
 
 ```bash
 git clone https://github.com/mhho3082/dotfiles.git ~/.config/
@@ -17,13 +17,14 @@ git clone https://github.com/mhho3082/dotfiles.git ~/.config/
 This is listed in the order of installation.
 Those surrounded in brackets are found to be installed already in Ubuntu 20.04 LTS.
 Appended data starting with `ppa:` is the PPA for Ubuntu.
+If installed already and still have `ppa:` - they need upgrading with the PPA.
 
 <details>
 <summary> App List </summary>
 
 - (`tmux`)
 - (`htop`)
-- `git` (`ppa:git-core/ppa`)
+- (`git`) (`ppa:git-core/ppa`)
 - `unzip`
 - `fish` (`ppa:fish-shell/release-3`)
 - `exa` (`ppa:spvkgn/exa`)
@@ -45,7 +46,7 @@ Appended data starting with `ppa:` is the PPA for Ubuntu.
 - `python3-pip`
 - `neovim` (`ppa:neovim-ppa/stable`)
 - `neovim` NodeJS module (`sudo npm install -g neovim`)
-- `pynvim` Python module (`pip3 install --upgrade pynvim`)
+- (`pynvim`) Python module (`pip3 install --upgrade pynvim`)
 - `clang`
 - `clang-format`
 - `llvm`
