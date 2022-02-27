@@ -531,7 +531,7 @@ require("nvim-lsp-installer").on_server_ready(function(server)
                     ['en-GB'] = {
                         "neovim",
                         "fzf", "ripgrep", "fd",
-                        "dotfiles",
+                        "dotfiles", "zsh"
                     }
                 }
             }

@@ -17,3 +17,6 @@ nvim/plugin/
 
 # Tmux logs
 tmux*.log
+
+# htop
+htop/

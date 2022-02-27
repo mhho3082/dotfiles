@@ -12,6 +12,25 @@ so you can just clone this repo with the following:<br>
 git clone https://github.com/mhho3082/dotfiles.git ~/.config/
 ```
 
+If you are having a clean install (say WSL), please:
+1. Get Git working (to a bare minimum, at least)
+2. Clone this repo
+3. Work on installing and setting up other apps
+
+## Features
+
+* Numerous aliases - see `./fish/config.fish` and `./git/config`
+* Bookmarks through `fzf` - call with `m`
+  * Bookmarks file in `~/.cd_bookmarks`
+* Powerful setup for Tmux and Neovim
+  * Various powerful and ergonomic plugins for Neovim
+  * Vim-like key remaps for Tmux - see `./tmux/.tmux.conf`
+  * Minimalist UI
+* Minimal setup
+  * Set Fish as default shell
+  * Sync Neovim's plugins
+  * Log in to GitHub CLI
+
 ## Program list
 
 This is listed in the order of installation.
@@ -30,7 +49,7 @@ If installed already and still have `ppa:` - they need upgrading with the PPA.
 - `exa` (`ppa:spvkgn/exa`)
 - `fzf`
 - `ripgrep`
-- `fd-find`
+- `fdfind`
 - `gh` 
   ```
   $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -56,14 +75,20 @@ If installed already and still have `ppa:` - they need upgrading with the PPA.
 
 ## Notes
 
+To set fish as the default shell (from bash / zsh):
+
+```bash
+chsh -s `which fish`
+```
+
 To sync Neovim plugins (from the terminal):
 
 ```bash
 n +PackerSync
 ```
 
-(Weird) names for `fd`:
-- Ubuntu/Debian: `fdfind` (Used throughout the config)
+(Weird) names for the `fd` tool:
+- Ubuntu/Debian: `fdfind` (Used throughout the config) (for Ubuntu > v19.10)
 - Arch/Manjaro: `fd`
 - Fedora: `fd-find`
 
