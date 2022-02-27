@@ -61,14 +61,6 @@ require('packer').startup(function()
         end,
     }
 
-    -- Generate TOC
-    use {
-        'mzlogin/vim-markdown-toc',
-        config = function()
-            vim.g.vmt_cycle_list_item_markers = 1
-        end,
-    }
-
     --  VIEW --
 
     --  Indent guide
@@ -137,6 +129,18 @@ require('packer').startup(function()
 
     --  Format
     use 'sbdchd/neoformat'
+
+    -- Markdown
+    use 'godlygeek/tabular'
+    use 'preservim/vim-markdown'
+
+    -- Generate Markdown TOC
+    use {
+        'mzlogin/vim-markdown-toc',
+        config = function()
+            vim.g.vmt_cycle_list_item_markers = 1
+        end,
+    }
 
     --  COMMAND TOOLS --
 
