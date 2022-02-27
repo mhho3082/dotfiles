@@ -28,7 +28,9 @@
     # Show graph
     ll = log --graph --abbrev-commit --date-order --all
 
-    co = checkout
+    go = checkout
+    gob = checkout -b
+
     a = add
     c = commit
 

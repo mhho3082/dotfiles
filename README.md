@@ -1,5 +1,7 @@
 # Dotfiles
 
+**Warning: very unstable, fork/use with care**
+
 If with tmux version < 3.1 (try `tmux -V`),
 add a file `~/.tmux.conf`:
 ```
