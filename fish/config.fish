@@ -12,6 +12,7 @@ end
 # == Rename programs ==
 
 # Ubuntu calls fd as such, so...
+# Note that fish alias are just functions, so this name is not changed for other places
 alias fd 'fdfind -H -I -E ".git"'
 
 # == Alias ==
