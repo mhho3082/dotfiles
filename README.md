@@ -19,7 +19,7 @@ Those surrounded in brackets are found to be installed already in Ubuntu 20.04 L
 Appended data is the PPA for Ubuntu.
 
 <details>
-<summary> <u> App List </u> </summary>
+<summary> App List </summary>
 
 - (`tmux`)
 - (`htop`)
