@@ -30,7 +30,7 @@ please see the folder `./tips/`.
 ## Features
 
 * Numerous aliases - see `./fish/config.fish` and `./git/config`
-* Bookmarks through `fzf` - call with `m`
+* Get around your `marks` with fuzzy find (alias `m`)
   * Bookmarks file in `~/.cd_bookmarks`
 * Powerful setup for Tmux and Neovim
   * Various powerful and ergonomic plugins for Neovim

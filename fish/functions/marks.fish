@@ -1,5 +1,7 @@
 # Idea from https://dmitryfrank.com/articles/shell_shortcuts
 
+# Requires fzf
+
 # Location of bookmark file
 set bookmark_path ~/.cd_bookmarks
 
@@ -12,11 +14,11 @@ end
 
 # Add completion
 set -l bookmark_commands add edit remove
-complete -f -c mark -n "not __fish_seen_subcommand_from $bookmark_commands" -a add -d "Add current pwd to bookmarks"
-complete -f -c mark -n "not __fish_seen_subcommand_from $bookmark_commands" -a edit -d "Edit bookmarks"
-complete -f -c mark -n "not __fish_seen_subcommand_from $bookmark_commands" -a remove -d "Remove current pwd from bookmarks"
+complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a add -d "Add current pwd to bookmarks"
+complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a edit -d "Edit bookmarks"
+complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a remove -d "Remove current pwd from bookmarks"
 
-function mark --description "cd with bookmarks"
+function marks --description "cd with bookmarks"
     if begin [ "$argv[1]" = a ]; or [ "$argv[1]" = "add" ]; end # Add pwd to bookmarks
         # Add only if not found
         if ! grep -Fxq "$PWD" $bookmark_path

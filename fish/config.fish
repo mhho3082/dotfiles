@@ -17,7 +17,7 @@ alias g git
 alias n nvim
 alias c clear
 alias q exit
-alias m mark # see ./functions/mark.fish
+alias m marks # see ./functions/marks.fish
 
 # Exa (or ls + tree)
 if which exa &>/dev/null
