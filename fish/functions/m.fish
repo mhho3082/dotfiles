@@ -12,16 +12,15 @@ end
 
 function m --description "cd with bookmarks"
     if which fzf &>/dev/null
-        if test -f $bookmark_path
-
-            set -l dest_dir ( cat $bookmark_path | sed 's|#.*||g' | sed 's|^\~|/home/'"$USER"'|g' | sed '/^\s*$/d' | sort | fzf --preview $preview_string  --prompt="marks> ")
-
-            if [ "$dest_dir" != "" ]
-                cd $dest_dir
-            end
-        else
+        if test ! -f $bookmark_path
             touch $bookmark_path
             echo "$bookmark_path created"
+        end
+
+        set -l dest_dir ( cat $bookmark_path | sed 's|#.*||g' | sed 's|^\~|/home/'"$USER"'|g' | sed '/^\s*$/d' | sort | fzf --preview $preview_string  --prompt="marks> ")
+
+        if [ "$dest_dir" != "" ]
+            cd $dest_dir
         end
     else
         echo "fzf not installed"
