@@ -1,8 +1,8 @@
 # == Environment variables ==
 
 # Let's go Neovim!
-set --universal --export VISUAL nvim
-set --universal --export EDITOR nvim
+set --global --export VISUAL nvim
+set --global --export EDITOR nvim
 
 # == Rename programs ==
 
@@ -52,7 +52,7 @@ alias uptime 'uptime -p'
 # == FZF ==
 
 # Setup fzf with fd as default source
-set --universal --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E ".git"'
+set --global --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E ".git"'
 
 # == Interactive settings ==
 
