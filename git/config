@@ -59,6 +59,9 @@
     branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     remotes = remote --verbose
 
+    # Get SHA of head, useful in detached head
+    sha = rev-parse --short HEAD
+
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
 
