@@ -47,7 +47,7 @@
     fix = !"git commit --fixup $1; git rebase -i --autosquash $1~1"
 
     # Diff between latest commit and current
-    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+    d = !"git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat"
     # `git di i` Diff between i revisions ago and current
     di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
