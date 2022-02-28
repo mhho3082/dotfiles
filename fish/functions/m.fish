@@ -17,7 +17,13 @@ function m --description "cd with bookmarks"
             echo "$bookmark_path created"
         end
 
-        set -l dest_dir ( cat $bookmark_path | sed 's|#.*||g' | sed 's|^\~|/home/'"$USER"'|g' | sed '/^\s*$/d' | sort | fzf --preview $preview_string  --prompt="marks> ")
+        set -l dest_dir ( cat $bookmark_path |
+                          sed 's|#.*||g' |                # Remove comments
+                          sed 's|^\~|/home/'"$USER"'|g' | # Expand ~/
+                          sed '/^\s*$/d' |                # Remove leading whitespace
+                          sed '/^*\s$/d' |                # Remove trailing whitespace
+                          sort | uniq |                   # Remove duplicates
+                          fzf --preview $preview_string  --prompt="marks> ")
 
         if [ "$dest_dir" != "" ]
             cd $dest_dir
