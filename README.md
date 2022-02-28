@@ -15,7 +15,7 @@ so to use it on your machine, just clone it:
 # Do backup if needed
 tar -cpzf "/home/$USER/config_backup.tar.gz" "/home/$USER/.config/"
 
-# Clone the repo to machine
+# Clone the repo
 git clone https://github.com/mhho3082/dotfiles.git ~/.config/
 ```
 
@@ -42,12 +42,12 @@ please see the folder `./tips/`.
   * Sync Neovim's plugins
   * Log in to GitHub CLI
 
-## Program list
+## App list
 
 This is listed in the order of installation.
 Those surrounded in brackets are found to be installed already in Ubuntu 20.04 LTS.
 Appended data starting with `ppa:` is the PPA for Ubuntu.
-If installed already and still have `ppa:` - they need upgrading with the PPA.
+If it is installed already and still have `ppa:` - it needs upgrading with the PPA.
 
 <details>
 <summary> App List </summary>
@@ -95,6 +95,9 @@ chsh -s `which fish`
 To sync Neovim plugins (from the terminal):
 
 ```bash
+nvim +PackerSync
+
+# Or, if you have the fish alias running
 n +PackerSync
 ```
 
