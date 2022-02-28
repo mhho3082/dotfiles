@@ -13,11 +13,11 @@ alias fd 'fdfind -H -I -E ".git"'
 # == Alias ==
 
 # Basic shortcuts
-# There also exists `m` and `ma` for bookmarks, see ./functions/m.fish
 alias g git
 alias n nvim
 alias c clear
 alias q exit
+alias m mark # see ./functions/mark.fish
 
 # Exa (or ls + tree)
 if which exa &>/dev/null
