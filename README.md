@@ -86,11 +86,6 @@ If installed already and still have `ppa:` - they need upgrading with the PPA.
 
 ## Notes
 
-Credits where it's due:
-- Git alias partly from https://github.com/mathiasbynens/dotfiles
-- Tmux status bar based off of https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
-- `m` bookmark function inspired by https://dmitryfrank.com/articles/shell_shortcuts
-
 To set fish as the default shell (from bash / zsh):
 
 ```bash
@@ -125,3 +120,12 @@ since the CLI clipboard tool, `win32yank`, is on the Windows side of the path)
 [interop]
 appendWindowsPath = false
 ```
+
+## Credits
+
+- Git alias partly from
+  https://github.com/mathiasbynens/dotfiles
+- Tmux status bar based off of
+  https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
+- `m` bookmark function inspired by
+  https://dmitryfrank.com/articles/shell_shortcuts
