@@ -53,8 +53,6 @@
 
     # Remove branch
     r = branch -D
-    # Remove branches that have already been merged with main, i.e., 'remove merged'
-    rm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
 
     # Show verbose output about tags, branches or remotes
     tags = tag -l
