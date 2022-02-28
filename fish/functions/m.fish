@@ -31,3 +31,7 @@ end
 function ma --description "add to bookmarks"
     echo $PWD >>$bookmark_path
 end
+
+function me --description "edit bookmarks"
+    $VISUAL $bookmark_path
+end
