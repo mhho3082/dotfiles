@@ -38,9 +38,6 @@ alias ta 'tmux at || tmux new'
 alias wttr 'curl "v2d.wttr.in/wan+chai?format=4"'
 alias weather 'curl "v2d.wttr.in/wan+chai"'
 
-# Pretty print path
-alias path 'echo $PATH | sed "s/ /\\n/g"'
-
 # Default flags
 alias mkdir 'mkdir -p'
 alias ps 'ps -ef'
