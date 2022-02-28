@@ -4,11 +4,6 @@
 set --universal --export VISUAL nvim
 set --universal --export EDITOR nvim
 
-# Goto c mount (on WSL)
-if grep -qEi "(Microsoft|WSL)" /proc/version &>/dev/null
-    alias cdc 'cd /mnt/c/Users/max/'
-end
-
 # == Rename programs ==
 
 # Ubuntu calls fd as such, so...
