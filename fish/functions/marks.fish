@@ -34,8 +34,11 @@ function marks --description "cd with bookmarks"
         # Allow editing of bookmarks
         $VISUAL $bookmark_path
 
-        # Expand ~/
+        # Expand ~
         sed -i -e 's|^\~|/home/'"$USER"'|' $bookmark_path
+
+        # Remove trailing /
+        sed -i -e 's|/$||' $bookmark_path
 
         # Remove duplicates
         gawk -i inplace '!a[$0]++' $bookmark_path
@@ -65,10 +68,11 @@ function marks --description "cd with bookmarks"
         end
 
         set -l dest_dir ( cat $bookmark_path |
-                          sed 's|^\~|/home/'"$USER"'|g' | # Expand ~/
-                          sed '/^\s*$/d' |                # Remove leading whitespace
-                          sed '/^*\s$/d' |                # Remove trailing whitespace
-                          sort | uniq |                   # Remove duplicates
+                          sed 's|^\~|/home/'"$USER"'|' | # Expand ~
+                          sed 's|/$||' |                 # Remove trailing /
+                          sed '/^\s*$/d' |               # Remove leading whitespace
+                          sed '/^*\s$/d' |               # Remove trailing whitespace
+                          sort | uniq |                  # Remove duplicates
                           fzf --preview $preview_string  --prompt="marks> ")
 
         if [ "$dest_dir" != "" ]
