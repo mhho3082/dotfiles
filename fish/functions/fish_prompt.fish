@@ -1,6 +1,7 @@
 set __fish_git_prompt_showcolorhints
 set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showupstream informative
+set __fish_git_prompt_describe_style branch
 set __fish_git_prompt_char_cleanstate ""
 
 function fish_prompt --description 'Informative prompt'
