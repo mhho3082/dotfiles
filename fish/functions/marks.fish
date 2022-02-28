@@ -3,13 +3,13 @@
 # Requires fzf
 
 # Location of bookmark file
-set bookmark_path ~/.cd_bookmarks
+set --global bookmark_path "/home/$USER/.cd_bookmarks"
 
 # Add preview
 if which exa &>/dev/null
-    set preview_string 'exa {} --all --long --header --icons --sort=ext --git'
+    set --global preview_string "exa {} --all --long --header --icons --sort=ext --git"
 else
-    set preview_string 'ls {} -AlhF --group-directories-first'
+    set --global preview_string "ls {} -AlhF --group-directories-first"
 end
 
 # Add completion
