@@ -4,7 +4,16 @@
 set --global --export VISUAL nvim
 set --global --export EDITOR nvim
 
+# Check that `$HOME/.local/bin` exists, or create it
+if [ ! -d $HOME/.local/bin/ ]
+    if [ ! -d $HOME/.local ]
+        mkdir $HOME/.local
+    end
+    mkdir $HOME/.local/bin/
+end
+
 # Add `$HOME/.local/bin` to path
+# This is where the renamed programs are symlinked to
 fish_add_path $HOME/.local/bin
 
 # == Alias ==
