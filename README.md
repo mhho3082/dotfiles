@@ -105,7 +105,11 @@ n +PackerSync
 On Ubuntu/Debian, symlink `fdfind` to `fd`:
 
 ```bash
+# Bash / Zsh
 ln -s $(which fdfind) ~/.local/bin/fd
+
+# Fish
+ln -s (which fdfind) ~/.local/bin/fd
 ```
 
 If with tmux version < 3.1 (check with `tmux -V`),
