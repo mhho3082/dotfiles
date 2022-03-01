@@ -4,9 +4,9 @@
 
 ## Quick start
 
-If you are not `mhho3082`, then I would advise you to
-fork this repo, look through the code, and remove the parts
-you don't need; I can't ensure that my configs will fit your needs.
+If you want to use my config, I would advise you to fork this repo,
+look through the code, and remove the parts you don't need;
+I can't ensure that my configurations will fit your needs.
 
 This repo is designed to be placed in `~/.config/`,
 so to use it on your machine, just clone it:
@@ -20,9 +20,10 @@ git clone https://github.com/mhho3082/dotfiles.git ~/.config/
 ```
 
 If you are having a clean install (say WSL), please:
-1. Get Git working (to a bare minimum, at least)
-2. Clone this repo
-3. Work on installing and setting up other apps
+1. Get (some version of) Git working
+2. Connect the machine to the internet
+3. Clone this repo
+4. Work on installing and setting up other apps
 
 For various frequently used commands and motions,
 please see the folder `./tips/`.
