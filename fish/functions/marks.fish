@@ -3,7 +3,7 @@
 # Requires fzf
 
 # Location of bookmark file
-set --global cd_bookmark_path "/home/$USER/.cd_bookmarks"
+set --global cd_bookmark_path "$HOME/.cd_bookmarks"
 
 # Add preview
 if which exa &>/dev/null
@@ -35,7 +35,7 @@ function marks --description "cd with bookmarks"
         $VISUAL $cd_bookmark_path
 
         # Expand ~
-        sed -i -e 's|^\~|/home/'"$USER"'|' $cd_bookmark_path
+        sed -i -e 's|^\~|'"$HOME"'|' $cd_bookmark_path
 
         # Remove trailing /
         sed -i -e 's|/$||' $cd_bookmark_path
@@ -68,11 +68,11 @@ function marks --description "cd with bookmarks"
         end
 
         set -l dest_dir ( cat $cd_bookmark_path |
-                          sed 's|^\~|/home/'"$USER"'|' | # Expand ~
-                          sed 's|/$||' |                 # Remove trailing /
-                          sed '/^\s*$/d' |               # Remove leading whitespace
-                          sed '/^*\s$/d' |               # Remove trailing whitespace
-                          sort | uniq |                  # Remove duplicates
+                          sed 's|^\~|'"$HOME"'|' | # Expand ~
+                          sed 's|/$||' |           # Remove trailing /
+                          sed '/^\s*$/d' |         # Remove leading whitespace
+                          sed '/^*\s$/d' |         # Remove trailing whitespace
+                          sort | uniq |            # Remove duplicates
                           fzf --preview $cd_bookmark_preview_string  --prompt="marks> ")
 
         if [ "$dest_dir" != "" ]

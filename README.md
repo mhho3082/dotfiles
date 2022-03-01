@@ -13,7 +13,7 @@ so to use it on your machine, just clone it:
 
 ```bash
 # Do backup if needed
-tar -cpzf "/home/$USER/config_backup.tar.gz" "/home/$USER/.config/"
+tar -cpzf "$HOME/config_backup.tar.gz" "$HOME/.config/"
 
 # Clone the repo
 git clone https://github.com/mhho3082/dotfiles.git ~/.config/
