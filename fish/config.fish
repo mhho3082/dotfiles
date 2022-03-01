@@ -38,7 +38,7 @@ alias weather 'curl "v2d.wttr.in/wan+chai"'
 # == FZF ==
 
 # Setup fzf with fd as default source
-set --global --export FZF_DEFAULT_COMMAND 'fd --type f -H -I -E *.*.package -E .svn -E .git -E .hg -E node_modules -E bower_components'
+set --global --export FZF_DEFAULT_COMMAND 'fd --type f -H -I -E "*.*.package" -E ".svn" -E ".git" -E ".hg" -E "node_modules" -E "bower_components"'
 set --global --export FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
 
 # Initiate fzf key bindings
