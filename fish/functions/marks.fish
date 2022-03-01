@@ -19,7 +19,9 @@ complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a 
 complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a remove -d "Remove current pwd from bookmarks"
 
 function marks --description "cd with bookmarks"
-    if begin [ "$argv[1]" = a ]; or [ "$argv[1]" = "add" ]; end # Add pwd to bookmarks
+    if begin
+            [ "$argv[1]" = a ]; or [ "$argv[1]" = add ]
+        end # Add pwd to bookmarks
         # Add only if not found
         if ! grep -Fxq "$PWD" $cd_bookmark_path
             echo $PWD >>$cd_bookmark_path
@@ -30,7 +32,9 @@ function marks --description "cd with bookmarks"
         return
     end
 
-    if begin [ "$argv[1]" = e ]; or [ "$argv[1]" = "edit" ]; end # Edit bookmarks
+    if begin
+            [ "$argv[1]" = e ]; or [ "$argv[1]" = edit ]
+        end # Edit bookmarks
         # Allow editing of bookmarks
         $VISUAL $cd_bookmark_path
 
@@ -45,13 +49,15 @@ function marks --description "cd with bookmarks"
 
         # Remove empty lines
         sed -i '/^$/d' $cd_bookmark_path
-        
+
         # Sort the bookmarks
         sort -o $cd_bookmark_path{,}
         return
     end
 
-    if begin [ "$argv[1]" = r ]; or [ "$argv[1]" = "remove" ]; end # Remove pwd from bookmarks
+    if begin
+            [ "$argv[1]" = r ]; or [ "$argv[1]" = remove ]
+        end # Remove pwd from bookmarks
         # Find and remove pwd (except newline)
         sed -i -e 's|^'"$PWD"'$||' $cd_bookmark_path
 
@@ -73,7 +79,7 @@ function marks --description "cd with bookmarks"
                           sed '/^\s*$/d' |         # Remove leading whitespace
                           sed '/^*\s$/d' |         # Remove trailing whitespace
                           sort | uniq |            # Remove duplicates
-                          fzf --preview $cd_bookmark_preview_string  --prompt="marks> ")
+                          fzf --preview $cd_bookmark_preview_string --prompt="marks> ")
 
         if [ "$dest_dir" != "" ]
             cd $dest_dir

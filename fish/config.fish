@@ -35,22 +35,11 @@ alias ta 'tmux at || tmux new'
 alias wttr 'curl "v2d.wttr.in/wan+chai?format=4"'
 alias weather 'curl "v2d.wttr.in/wan+chai"'
 
-# Default flags
-alias mkdir 'mkdir -p'
-alias ps 'ps -ef'
-alias cp 'cp -r'
-alias scp 'scp -r'
-alias df 'df -h'
-alias du 'du -h -d 2'
-alias free 'free -h'
-alias xsel 'xsel -b'
-alias uptime 'uptime -p'
-alias fd 'fd -H -I'
-
 # == FZF ==
 
 # Setup fzf with fd as default source
-set --global --export FZF_DEFAULT_COMMAND 'fd --type file -H -I'
+set --global --export FZF_DEFAULT_COMMAND 'fd --type f -H -I -E *.*.package -E .svn -E .git -E .hg -E node_modules -E bower_components'
+set --global --export FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
 
 # Initiate fzf key bindings
 # <C-t> - find files
