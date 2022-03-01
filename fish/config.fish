@@ -8,7 +8,7 @@ set --global --export EDITOR nvim
 
 # Ubuntu calls fd as such, so...
 # Note that fish alias are just functions, so this name is not changed for other places
-alias fd 'fdfind -H -I -E ".git"'
+alias fd 'fdfind -H -I -E "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
 
 # == Alias ==
 
@@ -52,7 +52,7 @@ alias uptime 'uptime -p'
 # == FZF ==
 
 # Setup fzf with fd as default source
-set --global --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E ".git"'
+set --global --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
 
 # Initiate fzf key bindings
 # <C-t> - find files
