@@ -1,0 +1,7 @@
+CVS
+*.*.package
+.svn
+.git
+.hg
+node_modules
+bower_components

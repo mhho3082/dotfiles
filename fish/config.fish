@@ -4,11 +4,8 @@
 set --global --export VISUAL nvim
 set --global --export EDITOR nvim
 
-# == Rename programs ==
-
-# Ubuntu calls fd as such, so...
-# Note that fish alias are just functions, so this name is not changed for other places
-alias fd 'fdfind -H -I -E "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
+# Add `$HOME/.local/bin` to path
+fish_add_path $HOME/.local/bin
 
 # == Alias ==
 
@@ -48,11 +45,12 @@ alias du 'du -h -d 2'
 alias free 'free -h'
 alias xsel 'xsel -b'
 alias uptime 'uptime -p'
+alias fd 'fd -H -I'
 
 # == FZF ==
 
 # Setup fzf with fd as default source
-set --global --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
+set --global --export FZF_DEFAULT_COMMAND 'fd --type file -H -I'
 
 # Initiate fzf key bindings
 # <C-t> - find files

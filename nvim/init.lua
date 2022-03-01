@@ -457,11 +457,6 @@ require('telescope').setup {
             },
         },
     },
-    pickers = {
-        find_files = {
-            find_command = { "fdfind", "--type", "f", "-H", "-I", "-E", "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" }
-        },
-    },
     extensions = {
         fzf = {
             fuzzy = true, -- false will only do exact matching

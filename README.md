@@ -37,11 +37,6 @@ please see the folder `./tips/`.
   * Various powerful and ergonomic plugins for Neovim
   * Vim-like key remaps for Tmux - see `./tmux/.tmux.conf`
   * Minimalist UI
-* Minimal setup
-  * Set Fish as the default shell
-  * Change the Git user (in `./git/config`) to yourselves
-  * Sync Neovim's plugins
-  * Log in to GitHub CLI
 
 ## App list
 
@@ -61,7 +56,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - `exa` (`ppa:spvkgn/exa`)
 - `fzf`
 - `ripgrep`
-- `fdfind`
+- `fd` (on Debian/Ubuntu: `fd-find`)
 - `gh` 
   ```
   $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -93,6 +88,11 @@ To set fish as the default shell (from bash / zsh):
 chsh -s `which fish`
 ```
 
+Login to GitHub CLI:
+```bash
+gh auth login
+```
+
 To sync Neovim plugins (from the terminal):
 
 ```bash
@@ -102,10 +102,11 @@ nvim +PackerSync
 n +PackerSync
 ```
 
-(Weird) names for the `fd` tool:
-- Ubuntu/Debian: `fdfind` (Used throughout the config) (for Ubuntu > v19.10)
-- Arch/Manjaro: `fd`
-- Fedora: `fd-find`
+On Ubuntu/Debian, symlink `fdfind` to `fd`:
+
+```bash
+ln -s $(which fdfind) ~/.local/bin/fd
+```
 
 If with tmux version < 3.1 (check with `tmux -V`),
 add a file `~/.tmux.conf`:
