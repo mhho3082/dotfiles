@@ -54,6 +54,12 @@ alias uptime 'uptime -p'
 # Setup fzf with fd as default source
 set --global --export FZF_DEFAULT_COMMAND 'fdfind --type file -H -I -E ".git"'
 
+# Initiate fzf key bindings
+# <C-t> - find files
+# <C-r> - reverse search command history
+# <A-c> - cd to directory
+fzf_key_bindings
+
 # == Interactive settings ==
 
 if status is-interactive
