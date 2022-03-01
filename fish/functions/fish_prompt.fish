@@ -19,16 +19,13 @@ function fish_prompt --description 'Informative prompt'
         set -l statusb_color (set_color --bold $fish_color_status)
         set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
 
-        # User
-        printf '%s%s@%s ' (set_color brblue) $USER (prompt_hostname)
-
-        # pwd (current location)
-        printf '%s%s ' (set_color $fish_color_cwd) $PWD
+        # Current location
+        printf '%s%s ' (set_color brblue) (prompt_pwd)
 
         # Tmux session name
         if type tmux &>/dev/null
             if test -n "$TMUX"
-                printf '%s[tmux:%s%s%s] ' (set_color normal) (set_color brgreen) (tmux display-message -p "#S") (set_color normal)
+                printf '%s(S#%s%s%s) ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
             end
         end
 
