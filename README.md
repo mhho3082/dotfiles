@@ -48,6 +48,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 <details>
 <summary> App List </summary>
 
+- (`curl`)
 - (`tmux`)
 - (`htop`)
 - (`git`) (`ppa:git-core/ppa`)
