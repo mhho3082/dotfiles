@@ -182,7 +182,6 @@ require('packer').startup(function()
 
             -- Use proper cd
             vim.g.nvim_tree_respect_buf_cwd = 1
-            vim.g.nvim_tree_change_dir_global = 1
 
             require("nvim-tree").setup {
                 disable_netrw = false,
