@@ -37,6 +37,6 @@ function fish_prompt --description 'Informative prompt'
     # Pipe status (error code)
     printf '%s ' $pipestatus_string
 
-    # Pointer
+    # Chevron
     printf '\n%s❯%s ' ([ "$last_pipestatus[-1]" -eq 0 ]; and set_color green; or set_color red) (set_color normal)
 end
