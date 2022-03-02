@@ -11,35 +11,32 @@ function fish_prompt --description 'Informative prompt'
     set -l last_pipestatus $pipestatus
     set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
 
+    set -l status_color (set_color $fish_color_status)
+    set -l statusb_color (set_color --bold $fish_color_status)
+    set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
+
     if functions -q fish_is_root_user; and fish_is_root_user
-        printf '%s@%s %s%s%s# ' $USER (prompt_hostname) (set -q fish_color_cwd_root
-                                                         and set_color $fish_color_cwd_root
-                                                         or set_color $fish_color_cwd) \
-            (prompt_pwd) (set_color normal)
-    else
-        set -l status_color (set_color $fish_color_status)
-        set -l statusb_color (set_color --bold $fish_color_status)
-        set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
-
-        # Current location
-        printf '%s%s ' (set_color brblue) (prompt_pwd)
-
-        # Tmux session name
-        if type tmux &>/dev/null
-            if test -n "$TMUX"
-                printf '%s(S#%s%s%s) ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
-            end
-        end
-
-        # Git status
-        if type git &>/dev/null
-            printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^[ \t]*//')
-        end
-
-        # Pipe status (error code)
-        printf '%s ' $pipestatus_string
-
-        # Pointer
-        printf '\n%s❯%s ' ([ "$last_pipestatus[-1]" -eq 0 ]; and set_color green; or set_color red) (set_color normal)
+        printf '%s%s ' (set_color brred) ($USER)
     end
+
+    # Current location
+    printf '%s%s ' (set_color brblue) (prompt_pwd)
+
+    # Tmux session name
+    if type tmux &>/dev/null
+        if test -n "$TMUX"
+            printf '%s(S#%s%s%s) ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
+        end
+    end
+
+    # Git status
+    if type git &>/dev/null
+        printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^[ \t]*//')
+    end
+
+    # Pipe status (error code)
+    printf '%s ' $pipestatus_string
+
+    # Pointer
+    printf '\n%s❯%s ' ([ "$last_pipestatus[-1]" -eq 0 ]; and set_color green; or set_color red) (set_color normal)
 end
