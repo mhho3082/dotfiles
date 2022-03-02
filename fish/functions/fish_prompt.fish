@@ -40,6 +40,6 @@ function fish_prompt --description 'Informative prompt'
         printf '%s ' $pipestatus_string
 
         # Pointer
-        printf '\n> '
+        printf '\n%s❯%s ' ([ $last_pipestatus = 0 ]; and set_color green; or set_color red) (set_color normal)
     end
 end

@@ -51,6 +51,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - (`tmux`)
 - (`htop`)
 - (`git`) (`ppa:git-core/ppa`)
+- (`gcc`)
 - `unzip`
 - `fish` (`ppa:fish-shell/release-3`)
 - `exa` (`ppa:spvkgn/exa`)
