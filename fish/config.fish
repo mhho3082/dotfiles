@@ -27,8 +27,8 @@ alias m marks # see ./functions/marks.fish
 
 # Exa (or ls + tree)
 if which exa &>/dev/null
-    alias l 'exa --all --long --header --icons --sort=type --git'
-    alias ll 'exa --all --long --tree --header --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
+    alias l 'exa --all --long --icons --sort=type --git'
+    alias ll 'exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
 else
     alias l 'ls -AlhF --group-directories-first'
     if which tree &>/dev/null

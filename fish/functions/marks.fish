@@ -7,7 +7,7 @@ set --global cd_bookmark_path "$HOME/.cd_bookmarks"
 
 # Add preview
 if which exa &>/dev/null
-    set --global cd_bookmark_preview_string "exa {} --all --long --header --icons --sort=ext --git"
+    set --global cd_bookmark_preview_string "exa {} --all --long --icons --sort=ext --git"
 else
     set --global cd_bookmark_preview_string "ls {} -AlhF --group-directories-first"
 end
