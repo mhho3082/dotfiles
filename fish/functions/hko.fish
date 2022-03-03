@@ -8,13 +8,13 @@ set -g 9day "https://www.hko.gov.hk/textonly/v2/forecast/nday_v2.htm"
 set -g world "https://www.hko.gov.hk/textonly/v2/other/wwf.htm"
 
 # Add completion
-set -l weather_commands forecast current 9day world
-complete -f -c weather -n "not __fish_seen_subcommand_from $weather_commands" -a forecast -d "Weather forecast"
-complete -f -c weather -n "not __fish_seen_subcommand_from $weather_commands" -a current -d "Current weather"
-complete -f -c weather -n "not __fish_seen_subcommand_from $weather_commands" -a 9day -d "9 day weather forecast"
-complete -f -c weather -n "not __fish_seen_subcommand_from $weather_commands" -a world -d "World weather"
+set -l hko_commands forecast current 9day world
+complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a forecast -d "Weather forecast"
+complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a current -d "Current weather"
+complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a 9day -d "9 day hko forecast"
+complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a world -d "World weather"
 
-function weather -d "Get weather from HKO"
+function hko -d "Get weather from HKO"
     # Pick source
     switch "$argv[1]"
         case forecast
