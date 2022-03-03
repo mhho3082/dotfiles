@@ -33,8 +33,8 @@ function hko -d "Get weather from HKO"
 
     curl -s $link | # Get data
         sed 's|<sup>\*<\/sup>|*|g' | # Remove <sup> tags (IDK why HKO puts it there)
-        sed -e '1,/<pre>/Id' | # Remove html tags at the top
-        sed -e '/<\/pre>/,/<\/html>/Id' | # Remove html tags at the bottom
+        sed -n '/^<pre>/,${p;/^<\/pre>/q}' | # Get everythin within <pre> tags
+        sed '1d;$d' | # Remove the <pre> tags
         sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' | # Remove trailing blank lines
         less -F # Use pager if larger than 1 screen
 end
