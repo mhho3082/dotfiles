@@ -122,6 +122,13 @@ add a file `~/.tmux.conf`:
 source-file ~/.config/tmux/.tmux.conf
 ```
 
+Test for 256-colours for your terminal emulator:
+```bash
+# From https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
+
+curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
+```
+
 If you want to remove the Windows path from the native WSL path,
 add a file with `sudo nano /etc/wsl.conf`:<br>
 (Note that the Neovim `"+` and `"*` registers will stop being linked to the system clipboard,
