@@ -17,24 +17,24 @@ complete -f -c weather -n "not __fish_seen_subcommand_from $weather_commands" -a
 function weather -d "Get weather from HKO"
     # Pick source
     switch "$argv[1]"
-        case "forecast"
+        case forecast
             set -g link $forecast
-        case "current"
+        case current
             set -g link $current
-        case "9day"
+        case 9day
             set -g link $9day
-        case "china"
+        case china
             set -g link $china
-        case "world"
+        case world
             set -g link $world
         case '*'
             set -g link $forecast
     end
 
-    curl -s $link |                         # Get data
-    sed 's|<sup>\*<\/sup>|*|g' |            # Remove <sup> tags (IDK why HKO puts it there)
-    sed -e '1,/<pre>/Id' |                  # Remove html tags at the top
-    sed -e '/<\/pre>/,/<\/html>/Id' |       # Remove html tags at the bottom
-    sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' | # Remove trailing blank lines
-    less -F                                 # Use pager if larger than 1 screen
+    curl -s $link | # Get data
+        sed 's|<sup>\*<\/sup>|*|g' | # Remove <sup> tags (IDK why HKO puts it there)
+        sed -e '1,/<pre>/Id' | # Remove html tags at the top
+        sed -e '/<\/pre>/,/<\/html>/Id' | # Remove html tags at the bottom
+        sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' | # Remove trailing blank lines
+        less -F # Use pager if larger than 1 screen
 end
