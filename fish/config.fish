@@ -40,10 +40,6 @@ end
 alias t tmux
 alias ta 'tmux at || tmux new'
 
-# Weather (short and long versions)
-alias wttr 'curl "v2d.wttr.in/Hong_Kong?format=4"'
-alias weather 'curl "v2d.wttr.in/Hong_Kong"'
-
 # == FZF ==
 
 # Setup fzf with fd as default source
