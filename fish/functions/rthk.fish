@@ -34,6 +34,6 @@ function rthk -d "Get news from RTHK"
     end
 
     curl -s $link |
-        sed -n 's:.*<pubDate>.*, \(.* .*\) .* \(.*\:.*\)\:.*</pubDate>.*<title><\!\[CDATA\[\(.*\)\]\]></title>.*:'(set_color blue)'\1'(set_color green)' \2'(set_color normal)' \3:p' | # Parse headlines
+        sed -n 's:.*<pubDate>.*\, \(.* .*\) .* \(.*\:.*\)\:.*</pubDate>.*<title><\!\[CDATA\[\(.*\)\]\]></title>.*:'(set_color blue)'\1'(set_color green)' \2'(set_color normal)' \3:p' | # Parse headlines
         less -RF # Use pager if larger than 1 screen
 end
