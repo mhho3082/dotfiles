@@ -82,6 +82,18 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 
 </details>
 
+Also are the language servers installed in Neovim through `nvim-lsp-installer`:
+
+<details>
+<summary> Language servers </summary>
+
+- `clangd` (C, C++)
+- `jedi_language_server` (Python)
+- `ltex` (Latex)
+- `sumneko_lua` (Lua)
+
+</details>
+
 ## Notes
 
 To set fish as the default shell (from bash / zsh):
