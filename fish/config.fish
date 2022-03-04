@@ -40,6 +40,13 @@ end
 alias t tmux
 alias ta 'tmux at || tmux new'
 
+# Pretty print paths
+function paths -d 'Pretty print paths'
+    for i in $PATH
+        echo $i
+    end
+end
+
 # == FZF ==
 
 # Setup fzf with fd as default source
