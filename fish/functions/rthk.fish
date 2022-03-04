@@ -38,7 +38,7 @@ function rthk -d "Get news from RTHK"
         sed 's|<item>|\n<item>|g' |
         sed 's|<description>.*<\/description>||g' |
         sed 's|\f||g' |
-        sed -n 's|.*<title>\(.*\)</title>.*<pubDate>.*\, \(.* .*\) .* \(.*:.*\):.*</pubDate>.*|'(set_color blue)'\2'(set_color green)' \3'(set_color normal)' - \1|p' |
+        sed -n 's|.*<title>\(.*\)</title>.*<pubDate>.*, \(.* .*\) .* \(.*:.*\):.*</pubDate>.*|'(set_color blue)'\2'(set_color green)' \3'(set_color normal)' - \1|p' |
         sed '1s|.* - \(.*\)$|\1\n|' |
         sed 's|<\!\[CDATA\[\(.*\)\]\]>|\1|g' |
         sed 's|\(.*\) - \(.*\)$|\1 \2|' |
