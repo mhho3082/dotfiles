@@ -39,7 +39,7 @@ function rthk -d "Get news from RTHK"
         sed 's|<description>.*<\/description>||g' |
         sed 's|\f||g' |
         sed -n 's|.*<title>\(.*\)</title>.*<pubDate>.*, \(.* .*\) .* \(.*:.*\):.*</pubDate>.*|'(set_color blue)'\2'(set_color green)' \3'(set_color normal)' - \1|p' |
-        sed '1s|.* - \(.*\)$|\1\n|' |
+        sed '1s|.* - \(.*\):\(.*\)$|\1:'(set_color cyan)'\2'(set_color normal)'\n|' |
         sed 's|<\!\[CDATA\[\(.*\)\]\]>|\1|g' |
         sed 's|\(.*\) - \(.*\)$|\1 \2|' |
         less -RF # Use pager if larger than 1 screen
