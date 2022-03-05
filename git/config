@@ -27,10 +27,8 @@
 [alias]
     # Short status
     s = status -sb
-    # Show log
-    l = log
     # Show graph
-    ll = log --graph --abbrev-commit --date-order --all
+    l = log --graph --abbrev-commit --date-order --all
 
     goto = checkout
     gobr = checkout -b
