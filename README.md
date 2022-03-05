@@ -134,6 +134,11 @@ add a file `~/.tmux.conf`:
 source-file ~/.config/tmux/.tmux.conf
 ```
 
+Pipe to Windows clipboard from WSL:
+```bash
+echo "Hello world" | clip.exe
+```
+
 Test for 256-colours for your terminal emulator:
 ```bash
 # From https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
