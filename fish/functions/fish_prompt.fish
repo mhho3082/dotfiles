@@ -26,7 +26,7 @@ function fish_prompt --description 'Informative prompt'
     # Tmux session name
     if type tmux &>/dev/null
         if test -n "$TMUX"
-            printf '%s[S|%s%s%s] ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
+            printf '%s[%s%s%s] ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
         end
     end
 
