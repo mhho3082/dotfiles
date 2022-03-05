@@ -17,6 +17,9 @@
 [code]
     editor = nvim
 
+[fetch]
+    prune = true
+
 # ---
 
 # Some ideas from https://github.com/mathiasbynens/dotfiles
