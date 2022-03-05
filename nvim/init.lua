@@ -516,6 +516,9 @@ require("nvim-lsp-installer").on_server_ready(function(server)
             Lua = {
                 diagnostics = {
                     globals = { 'vim', 'use' }
+                },
+                runtime = {
+                    version = "LuaJIT"
                 }
             }
         }
