@@ -8,6 +8,8 @@ C-v - visual block
 "*y - yank to clipboard
 "*p - paste from clipboard
 
+<C-x><C-f> - auto-complete for paths
+
 :set number   - see number row
 :set nonumber - hide number row
 
