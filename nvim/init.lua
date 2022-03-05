@@ -583,12 +583,19 @@ cmp.setup {
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-e>"] = cmp.mapping.close(),
         ["<Tab>"] = cmp.mapping(function(fallback)
-            if require("luasnip").expand_or_jumpable() then
+            if cmp.visible() then
+                local entry = cmp.get_selected_entry()
+                if not entry then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    cmp.confirm()
+                end
+            elseif require("luasnip").expand_or_jumpable() then
                 require("luasnip").expand_or_jump()
             else
                 fallback()
             end
-        end, { "i", "s" }),
+        end, { "i", "s", "c" }),
     },
     sources = {
         { name = "nvim_lsp" },
