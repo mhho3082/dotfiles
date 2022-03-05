@@ -574,13 +574,13 @@ cmp.setup {
         ["<C-d>"] = cmp.mapping.scroll_docs(-4),
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-e>"] = cmp.mapping.close(),
-        ["<Tab>"] = function(fallback)
+        ["<Tab>"] = cmp.mapping(function(fallback)
             if require("luasnip").expand_or_jumpable() then
-                vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-expand-or-jump", true, true, true), "")
+                require("luasnip").expand_or_jump()
             else
                 fallback()
             end
-        end,
+        end, { "i", "s" }),
     },
     sources = {
         { name = "nvim_lsp" },
