@@ -26,13 +26,13 @@ function fish_prompt --description 'Informative prompt'
     # Tmux session name
     if type tmux &>/dev/null
         if test -n "$TMUX"
-            printf '%s(S#%s%s%s) ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
+            printf '%s[S#%s%s%s] ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
         end
     end
 
     # Git status
     if type git &>/dev/null
-        printf '%s%s ' (set_color normal) (fish_git_prompt | sed '1s/^[ \t]*//')
+        printf '%s%s ' (set_color normal) (fish_git_prompt | sed 's/^[ \t]*//' | sed 's/[(]\(.*\)[)]/\[\1\]/')
     end
 
     # Pipe status (error code)
