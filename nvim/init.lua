@@ -118,7 +118,6 @@ require('packer').startup(function()
     --  Auto-complete
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
-    use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-nvim-lua'
     use 'lukas-reineke/cmp-under-comparator'
 
@@ -560,8 +559,17 @@ cmp.setup {
         if in_prompt then -- this will disable cmp in the Telescope window
             return false
         end
+
         local context = require("cmp.config.context")
-        return not (context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment"))
+        if context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment") then
+            return false
+        end
+
+        if context.in_treesitter_capture("string") == true or context.in_syntax_group("String") then
+            return false
+        end
+
+        return true
     end,
     snippet = {
         expand = function(args)
@@ -586,7 +594,6 @@ cmp.setup {
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "nvim_lua" },
-        { name = "path" },
     },
     sorting = {
         comparators = {
