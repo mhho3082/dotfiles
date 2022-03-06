@@ -41,7 +41,7 @@ alias ta 'tmux at || tmux new'
 function paths -d 'Pretty print paths'
     for i in $PATH
         echo $i
-    end
+    end | less -RF
 end
 
 # == FZF ==
