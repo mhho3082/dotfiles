@@ -119,6 +119,7 @@ require('packer').startup(function()
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-nvim-lua'
+    use 'hrsh7th/cmp-path'
     use 'lukas-reineke/cmp-under-comparator'
 
     --  Snippets
@@ -600,6 +601,7 @@ cmp.setup {
     sources = {
         { name = "nvim_lsp" },
         { name = "luasnip" },
+        { name = 'path' },
         { name = "nvim_lua" },
     },
     sorting = {
