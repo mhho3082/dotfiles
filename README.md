@@ -110,10 +110,10 @@ gh auth login
 To set up Neovim plugins for the first time:
 
 ```bash
-nvim +PackerSync +q
+nvim +PackerSync
 
 # Or, if you have the fish alias running
-n +PackerSync +q
+n +PackerSync
 ```
 
 On Ubuntu/Debian, symlink `fdfind` to `fd`:
