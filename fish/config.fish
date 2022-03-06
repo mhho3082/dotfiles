@@ -1,8 +1,10 @@
 # == Environment variables ==
 
 # Let's go Neovim!
-set --global --export VISUAL nvim
-set --global --export EDITOR nvim
+if which nvim &>/dev/null
+    set --global --export VISUAL nvim
+    set --global --export EDITOR nvim
+end
 
 # Check that `$HOME/.local/bin` exists, or create it
 if [ ! -d $HOME/.local/bin/ ]
