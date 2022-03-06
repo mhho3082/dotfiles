@@ -107,13 +107,13 @@ Login to GitHub CLI:
 gh auth login
 ```
 
-To sync Neovim plugins (from the terminal):
+To set up Neovim plugins for the first time:
 
 ```bash
-nvim +PackerSync
+nvim +PackerSync +q
 
 # Or, if you have the fish alias running
-n +PackerSync
+n +PackerSync +q
 ```
 
 On Ubuntu/Debian, symlink `fdfind` to `fd`:
