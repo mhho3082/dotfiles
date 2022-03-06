@@ -30,8 +30,10 @@
     # Show graph
     l = log --graph --abbrev-commit --date-order --all
 
+    # Checkout existing branch
     co = checkout
-    cb = checkout -b
+    # Make and checkout a new branch
+    br = checkout -b
 
     a = add
     aa = add -A
