@@ -6,10 +6,7 @@ set --global --export EDITOR nvim
 
 # Check that `$HOME/.local/bin` exists, or create it
 if [ ! -d $HOME/.local/bin/ ]
-    if [ ! -d $HOME/.local ]
-        mkdir $HOME/.local
-    end
-    mkdir $HOME/.local/bin/
+    mkdir -p $HOME/.local/bin/
 end
 
 # Add `$HOME/.local/bin` to path
