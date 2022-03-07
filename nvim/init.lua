@@ -336,6 +336,7 @@ wk.register({
             b = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "buffer" },
             s = { "<cmd>Telescope live_grep<cr>", "search" },
             c = { "<cmd>Telescope commands<cr>", "commands" },
+            t = {"<cmd>lua require('telescope.builtin').live_grep{default_text='TODO: | FIXME: | NOTE: | BUG: | TEMP:'}<cr>", "todo"},
         },
         w = {
             name = "sidebars",
