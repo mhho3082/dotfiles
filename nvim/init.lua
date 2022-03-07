@@ -566,6 +566,10 @@ cmp.setup {
             return false
         end
 
+        if context.in_treesitter_capture("string") == true or context.in_syntax_group("String") then
+            return false
+        end
+
         return true
     end,
     snippet = {
