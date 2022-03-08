@@ -643,8 +643,8 @@ require('lualine').setup {
     inactive_sections = {
         lualine_a = {},
         lualine_b = {},
-        lualine_c = { '%f %y' },
-        lualine_x = {},
+        lualine_c = { { 'filename', path = 1, symbols = { modified = '' } } },
+        lualine_x = { { 'filetype', colored = false } },
         lualine_y = {},
         lualine_z = {},
     },
