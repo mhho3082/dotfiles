@@ -79,6 +79,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - `clang-format`
 - `llvm`
 - `tldr` (`sudo npm install -g tldr`)
+- `yapf` (on Debian/Ubuntu: `yapf3`)
 
 </details>
 
@@ -117,6 +118,7 @@ n +PackerSync
 ```
 
 On Ubuntu/Debian, symlink `fdfind` to `fd`:
+(Same for `yapf3` to `yapf`)
 
 ```bash
 # Bash / Zsh
