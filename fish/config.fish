@@ -66,7 +66,9 @@ if status is-interactive
     # Commands to run in interactive sessions
 
     # # Auto-launch tmux (if tmux is closed, fish closes too)
-    # if not set -q TMUX
-    #     exec tmux
+    # if which tmux &>/dev/null
+    #     if not set -q TMUX
+    #         exec tmux
+    #     end
     # end
 end
