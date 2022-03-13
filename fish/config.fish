@@ -15,6 +15,9 @@ end
 # This is where the renamed programs are symlinked to
 fish_add_path $HOME/.local/bin
 
+# Use Vi bindings
+fish_vi_key_bindings
+
 # == Alias ==
 
 # Basic shortcuts
