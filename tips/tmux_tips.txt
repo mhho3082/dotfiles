@@ -13,6 +13,7 @@ tmux ls            - list sessions
 <prefix> n/p - next/prev window
 <prefix> l   - prev selected window
 <prefix> ,   - rename window
+<prefix> .   - move window
 <prefix> &   - kill window
 
 <prefix> s         - split
