@@ -123,7 +123,9 @@ On Ubuntu/Debian, symlink `fdfind` to `fd`:
 ```bash
 # Bash / Zsh
 ln -s $(which fdfind) ~/.local/bin/fd
+```
 
+```fish
 # Fish
 ln -s (which fdfind) ~/.local/bin/fd
 ```
