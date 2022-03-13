@@ -395,8 +395,9 @@ wk.register({
             ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
             "format"
         },
-        n = {"<cmd>set number!<cr>", "number row"},
+        n = {"<cmd>set number!<cr>", "number"},
         c = {"<cmd>nohlsearch<cr>", "nohl"},
+        x = {"<cmd>set spell!<cr>", "spell"},
     },
 })
 
