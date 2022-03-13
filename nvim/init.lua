@@ -211,6 +211,12 @@ require('packer').startup(function()
             vim.g.undotree_WindowLayout = 3
         end,
     }
+    use {
+        'liuchengxu/vista.vim',
+        config = function()
+            vim.g.vista_default_executive = 'nvim_lsp'
+        end
+    }
 
     --  Library for other plugins
     use 'nvim-lua/plenary.nvim'
@@ -343,6 +349,7 @@ wk.register({
             d = { "<cmd>NvimTreeToggle<cr>", "directory" },
             u = { "<cmd>UndotreeToggle<cr>", "undo" },
             p = { "<cmd>TroubleToggle<cr>", "problems" },
+            v = { "<cmd>Vista!!<cr>", "vista" },
         },
         p = {
             name = "packer",
@@ -439,7 +446,8 @@ require('auto-session').setup({
         "tabdo NvimTreeClose",
         "tabdo UndotreeHide",
         "tabdo TroubleClose",
-        "tabdo SymbolsOutlineClose"
+        "tabdo SymbolsOutlineClose",
+        "tabdo Vista!"
     }
 })
 
