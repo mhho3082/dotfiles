@@ -38,6 +38,32 @@ function fish_prompt --description 'Informative prompt'
     # Pipe status (error code)
     printf '%s ' $pipestatus_string
 
+    # Next line
+    printf '\n'
+
+    # Vi mode
+    if test "$fish_key_bindings" = fish_vi_key_bindings
+        or test "$fish_key_bindings" = fish_hybrid_key_bindings
+        switch $fish_bind_mode
+            case default
+                set_color --bold red
+                printf 'N'
+            case insert
+                set_color --bold green
+                printf 'I'
+            case replace_one
+                set_color --bold green
+                printf 'R'
+            case replace
+                set_color --bold cyan
+                printf 'R'
+            case visual
+                set_color --bold magenta
+                printf 'V'
+        end
+        set_color normal
+    end
+
     # Chevron
-    printf '\n%s❯%s ' ([ "$last_pipestatus[-1]" -eq 0 ]; and set_color green; or set_color red) (set_color normal)
+    printf '%s❯%s ' ([ "$last_pipestatus[-1]" -eq 0 ]; and set_color green; or set_color red) (set_color normal)
 end
