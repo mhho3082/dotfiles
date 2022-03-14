@@ -656,13 +656,6 @@ require('lualine').setup {
         lualine_y = {},
         lualine_z = {},
     },
-    tabline = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'getcwd' },
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = { 'tabs' },
-    },
+    tabline = {},
     extensions = { 'nvim-tree', 'fugitive' },
 }
