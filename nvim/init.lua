@@ -419,9 +419,6 @@ vim.opt.showmode = false
 vim.opt.cursorline = false
 
 -- Gruvbox theme
--- Windows terminal can't render italics nicely, so it is turned off
-vim.g.gruvbox_italic_comments = false
-vim.g.gruvbox_italic_keywords = false
 vim.g.gruvbox_transparent = true
 vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
 
