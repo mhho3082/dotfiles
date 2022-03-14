@@ -1,11 +1,25 @@
+# pwd length
 set -g fish_prompt_pwd_dir_length 0
 
+# Git prompt setup
 set -g __fish_git_prompt_showcolorhints
 set -g __fish_git_prompt_showstashstate
 set -g __fish_git_prompt_show_informative_status
 set -g __fish_git_prompt_showupstream informative
 set -g __fish_git_prompt_describe_style branch
-set -g __fish_git_prompt_char_cleanstate ""
+
+# Git prompt icons
+set __fish_git_prompt_char_stateseparator ' | '
+set __fish_git_prompt_char_cleanstate ' '
+set __fish_git_prompt_char_dirtystate '✚ '
+set __fish_git_prompt_char_invalidstate '✖  '
+set __fish_git_prompt_char_stagedstate '● '
+set __fish_git_prompt_char_stashstate ' ⚑  '
+set __fish_git_prompt_char_untrackedfiles '… '
+set __fish_git_prompt_char_upstream_ahead ' '
+set __fish_git_prompt_char_upstream_behind ' '
+set __fish_git_prompt_char_upstream_diverged ' <> '
+set __fish_git_prompt_char_upstream_equal ' = ' 
 
 function fish_prompt --description 'Informative prompt'
     #Save the return status of the previous command
