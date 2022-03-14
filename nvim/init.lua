@@ -281,6 +281,7 @@ vim.opt.lazyredraw = true
 ------------
 -- REMAPS --
 ------------
+
 local wk = require("which-key")
 
 -- Setup which-key
