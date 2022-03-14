@@ -9,7 +9,7 @@ set -g __fish_git_prompt_showupstream informative
 set -g __fish_git_prompt_describe_style branch
 
 # Git prompt icons
-set __fish_git_prompt_char_stateseparator ' | '
+set __fish_git_prompt_char_stateseparator ' '
 set __fish_git_prompt_char_cleanstate ' '
 set __fish_git_prompt_char_dirtystate ' '
 set __fish_git_prompt_char_invalidstate ' '
