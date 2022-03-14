@@ -399,6 +399,7 @@ wk.register({
         n = {"<cmd>set number!<cr>", "number"},
         c = {"<cmd>nohlsearch<cr>", "nohl"},
         x = {"<cmd>set spell!<cr>", "spell"},
+        i = {"<cmd>IndentBlanklineToggle<cr>", "indentline"},
     },
 })
 
