@@ -324,7 +324,7 @@ wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 -- LSP mappings
 wk.register({
     ["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Info" },
-    ["H"] = { "<cmd>lua vim.diagnostic.open_float()<CR>", "Hover Issue" },
+    ["J"] = { "<cmd>lua vim.diagnostic.open_float()<CR>", "Hover Issue" },
     ["gr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
     ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" },
     ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto declaration" },
