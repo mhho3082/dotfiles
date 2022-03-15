@@ -32,6 +32,9 @@ require('packer').startup(function()
     use 'ggandor/lightspeed.nvim'
     use 'wellle/targets.vim'
 
+    -- Indent
+    use 'tpope/vim-sleuth'
+
     --  Pairs
     use 'tpope/vim-surround'
     use 'cohama/lexima.vim'
@@ -255,15 +258,6 @@ vim.opt.undodir = vim.fn.stdpath('data') .. "/undodir/"
 
 -- Remove 'c no curly braces' errors
 vim.g.c_no_curly_error = 1
-
--- Set tabs-to-spaces settings
-vim.opt.tabstop = 8 -- Number of columns used to display a tab
-vim.opt.softtabstop = 4 -- Number of spaces for a tab
-vim.opt.shiftwidth = 4 -- Number of spaces for an indent
-vim.opt.expandtab = true
-vim.opt.smarttab = true
-vim.opt.autoindent = true
-vim.opt.smartindent = true
 
 -- Set spelling locale
 vim.opt.spelllang = 'en_gb'
