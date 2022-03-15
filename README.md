@@ -80,6 +80,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - `llvm`
 - `tldr` (`sudo npm install -g tldr`)
 - `yapf` (on Debian/Ubuntu: `yapf3`)
+- `prettierd` (`npm install -g @fsouza/prettierd`)
 
 </details>
 
@@ -92,6 +93,7 @@ Also are the language servers installed in Neovim through `nvim-lsp-installer`:
 - `jedi_language_server` (Python)
 - `ltex` (Grammar checking)
 - `sumneko_lua` (Lua)
+- `html` (HTML)
 
 </details>
 
