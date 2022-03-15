@@ -41,6 +41,7 @@ end
 # Tmux
 alias t tmux
 alias ta 'tmux at || tmux new'
+alias tl 'tmux list-sessions'
 
 # Pretty print paths
 alias paths 'for i in $PATH; echo $i; end | less -RF'
