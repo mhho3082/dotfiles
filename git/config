@@ -41,8 +41,8 @@
 
     # Remove all changes from staging
     unstage = reset --mixed
-    # Remove all changes made
-    discard = reset --hard
+    # Remove all changes made, including untracked files
+    discard = !"git reset --hard; git clean -f"
     # Undo last commit softly
     uncommit = reset HEAD~1 --mixed
 
