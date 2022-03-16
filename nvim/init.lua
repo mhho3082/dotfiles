@@ -272,6 +272,18 @@ end
 -- Lazy redraw
 vim.opt.lazyredraw = true
 
+-- Fix Markdown code block rendering issue
+vim.g.markdown_minlines = 100
+
+-- Add Markdown code block formatting to these languages
+vim.g.markdown_fenced_languages = {
+    'c', 'c++=cpp', 'make', 'cmake',
+    'python', 'java', 'erb=eruby', 'ruby',
+    'javascript', 'js=javascript', 'json=javascript', 'typescript',
+    'bash=sh', 'zsh',
+    'html', 'css',
+}
+
 ------------
 -- REMAPS --
 ------------
