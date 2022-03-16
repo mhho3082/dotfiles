@@ -565,11 +565,13 @@ cmp.setup {
         end
 
         local context = require("cmp.config.context")
-        if context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment") then
+        if context.in_treesitter_capture("comment") == true
+            or context.in_syntax_group("Comment") then
             return false
         end
 
-        if context.in_treesitter_capture("string") == true or context.in_syntax_group("String") then
+        if context.in_treesitter_capture("string") == true
+            or context.in_syntax_group("String") then
             return false
         end
 
@@ -638,7 +640,7 @@ require('lualine').setup {
             { 'filename', path = 1, symbols = { modified = '' } },
             { 'diagnostics', sources = { 'nvim_lsp' } }
         },
-        lualine_x = { 'filetype', 'fileformat', 'encoding', '%3p%%' },
+        lualine_x = { 'filetype', 'fileformat', 'encoding', '%l:%2c' },
         lualine_y = {},
         lualine_z = {},
     },
