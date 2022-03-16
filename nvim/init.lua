@@ -243,6 +243,10 @@ vim.opt.completeopt = 'menuone,noselect'
 vim.opt.hidden = true
 vim.opt.linebreak = true
 
+-- Default indent (sleuth overrides this if indent format found)
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+
 -- No backup (auto-save instead)
 vim.opt.swapfile = false
 vim.opt.backup = false
