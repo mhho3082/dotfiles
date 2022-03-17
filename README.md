@@ -94,6 +94,7 @@ Also are the language servers installed in Neovim through `nvim-lsp-installer`:
 - `ltex` (Grammar checking)
 - `sumneko_lua` (Lua)
 - `html` (HTML)
+- `bashls` (Bash)
 
 </details>
 
