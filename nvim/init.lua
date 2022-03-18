@@ -410,9 +410,9 @@ wk.register({
         q = { "<cmd>qa!<cr>", "quit" },
         a = {
             ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
-            c = {"<cmd>nohlsearch<cr>", "nohl"},
             "format"
         },
+        c = {"<cmd>nohlsearch<cr>", "nohl"},
     },
 })
 
