@@ -401,15 +401,18 @@ wk.register({
             u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "undo stage" },
             r = { "<cmd>Gitsigns reset_hunk<cr>", "reset" },
         },
+        u = {
+            name = "UI",
+            n = {"<cmd>set number!<cr>", "number"},
+            s = {"<cmd>set spell!<cr>", "spell"},
+            i = {"<cmd>IndentBlanklineToggle<cr>", "indentline"},
+        },
         q = { "<cmd>qa!<cr>", "quit" },
         a = {
             ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
+            c = {"<cmd>nohlsearch<cr>", "nohl"},
             "format"
         },
-        n = {"<cmd>set number!<cr>", "number"},
-        c = {"<cmd>nohlsearch<cr>", "nohl"},
-        x = {"<cmd>set spell!<cr>", "spell"},
-        i = {"<cmd>IndentBlanklineToggle<cr>", "indentline"},
     },
 })
 
