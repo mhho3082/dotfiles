@@ -401,8 +401,8 @@ wk.register({
             u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "undo stage" },
             r = { "<cmd>Gitsigns reset_hunk<cr>", "reset" },
         },
-        u = {
-            name = "UI",
+        i = {
+            name = "interface",
             n = {"<cmd>set number!<cr>", "number"},
             s = {"<cmd>set spell!<cr>", "spell"},
             i = {"<cmd>IndentBlanklineToggle<cr>", "indentline"},
