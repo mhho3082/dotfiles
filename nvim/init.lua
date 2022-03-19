@@ -195,9 +195,6 @@ require('packer').startup(function()
                 view = {
                     side = 'right',
                 },
-                filters = {
-                    custom = { ".git" },
-                },
             }
         end
     }
