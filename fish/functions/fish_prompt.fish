@@ -8,19 +8,22 @@ set -g __fish_git_prompt_show_informative_status
 set -g __fish_git_prompt_showupstream informative
 set -g __fish_git_prompt_describe_style branch
 
-# Git prompt icons
-set __fish_git_prompt_char_stateseparator ' '
-set __fish_git_prompt_char_cleanstate ' '
-set __fish_git_prompt_char_dirtystate ' '
-set __fish_git_prompt_char_invalidstate ' '
-set __fish_git_prompt_char_stagedstate ' '
-set __fish_git_prompt_char_stashstate '⚑ '
-set __fish_git_prompt_char_untrackedfiles '… '
-set __fish_git_prompt_char_upstream_prefix ' '
-set __fish_git_prompt_char_upstream_ahead ' '
-set __fish_git_prompt_char_upstream_behind ' '
+# Git prompt state icons
+# Git prompt state icons
+set __fish_git_prompt_char_stateseparator ''
+set __fish_git_prompt_char_cleanstate ''
+set __fish_git_prompt_char_dirtystate '  '
+set __fish_git_prompt_char_invalidstate '  '
+set __fish_git_prompt_char_stagedstate '  '
+set __fish_git_prompt_char_stashstate ' ⚑ '
+set __fish_git_prompt_char_untrackedfiles ' … '
+
+# Git prompt upstream icons
+set __fish_git_prompt_char_upstream_prefix ''
+set __fish_git_prompt_char_upstream_equal ''
+set __fish_git_prompt_char_upstream_ahead '  '
+set __fish_git_prompt_char_upstream_behind '  '
 set __fish_git_prompt_char_upstream_diverged '  '
-set __fish_git_prompt_char_upstream_equal '  '
 
 function fish_prompt --description 'Informative prompt'
     #Save the return status of the previous command
@@ -31,6 +34,14 @@ function fish_prompt --description 'Informative prompt'
     set -l statusb_color (set_color --bold $fish_color_status)
     set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
 
+    # If in Tmux session
+    if type tmux &>/dev/null
+        if test -n "$TMUX"
+            printf '%s %s ' (set_color yellow) (set_color normal)
+        end
+    end
+
+    # If is root user
     if functions -q fish_is_root_user; and fish_is_root_user
         printf '%s%s ' (set_color brred) ($USER)
     end
@@ -38,16 +49,9 @@ function fish_prompt --description 'Informative prompt'
     # Current location
     printf '%s%s ' (set_color brblue) (prompt_pwd)
 
-    # Tmux session name
-    if type tmux &>/dev/null
-        if test -n "$TMUX"
-            printf '%s[%s%s%s] ' (set_color normal) (set_color cyan) (tmux display-message -p "#S") (set_color normal)
-        end
-    end
-
     # Git status
     if type git &>/dev/null
-        printf '%s%s ' (set_color normal) (fish_git_prompt | sed 's/^[ \t]*//' | sed 's/[(]\(.*\)[)]/\[\1\]/')
+        printf '%son %s ' (set_color normal) (fish_git_prompt | sed 's/^[ \t]*//' | sed 's/[(]\(.*\)[)]/\1/')
     end
 
     # Pipe status (error code)
@@ -62,19 +66,19 @@ function fish_prompt --description 'Informative prompt'
         switch $fish_bind_mode
             case default
                 set_color --bold red
-                printf 'N'
+                printf N
             case insert
                 set_color --bold green
-                printf 'I'
+                printf I
             case replace_one
                 set_color --bold green
-                printf 'R'
+                printf R
             case replace
                 set_color --bold cyan
-                printf 'R'
+                printf R
             case visual
                 set_color --bold magenta
-                printf 'V'
+                printf V
         end
         set_color normal
     end
