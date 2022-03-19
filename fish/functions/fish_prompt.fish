@@ -51,7 +51,9 @@ function fish_prompt --description 'Informative prompt'
 
     # Git status
     if type git &>/dev/null
-        printf '%son %s ' (set_color normal) (fish_git_prompt | sed 's/^[ \t]*//' | sed 's/[(]\(.*\)[)]/\1/')
+        if git rev-parse --git-dir &>/dev/null
+            printf '%son %s ' (set_color normal) (fish_git_prompt | sed 's/^[ \t]*//' | sed 's/[(]\(.*\)[)]/\1/')
+        end
     end
 
     # Pipe status (error code)
