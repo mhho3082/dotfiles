@@ -281,7 +281,7 @@ vim.g.markdown_fenced_languages = {
     'c', 'c++=cpp', 'make', 'cmake',
     'python', 'java', 'erb=eruby', 'ruby',
     'javascript', 'js=javascript', 'json=javascript', 'typescript',
-    'bash=sh', 'fish=sh', 'zsh',
+    'bash=sh', 'fish=sh', 'zsh', 'conf',
     'html', 'css',
 }
 
