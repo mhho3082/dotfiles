@@ -478,7 +478,7 @@ require('telescope').setup {
     },
     pickers = {
         find_files = {
-            find_command = { "fd", "--type", "f", "-H", "-I", "-E", "CVS", "-E", "*.*.package", "-E", ".svn", "-E", ".git", "-E", ".hg", "-E", "node_modules", "-E", "bower_components"}
+            find_command = { "fd", "--type", "f", "-H", "-I", "-E", "CVS", "-E", "*.*.package", "-E", ".svn", "-E", ".git", "-E", ".hg", "-E", "node_modules", "-E", "bower_components", "-E", "*.c.o", "-E", "*.c.d"}
         },
     },
     extensions = {
