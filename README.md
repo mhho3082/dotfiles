@@ -81,6 +81,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - `tldr` (`sudo npm install -g tldr`)
 - `yapf` (on Debian/Ubuntu: `yapf3`)
 - `prettierd` (`npm install -g @fsouza/prettierd`)
+- `taplo` (`npm install -g @taplo/cli`)
 
 </details>
 
@@ -95,6 +96,7 @@ Also are the language servers installed in Neovim through `nvim-lsp-installer`:
 - `sumneko_lua` (Lua)
 - `html` (HTML)
 - `bashls` (Bash)
+- `taplo` (TOML)
 
 </details>
 
