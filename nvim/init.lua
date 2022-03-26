@@ -235,10 +235,9 @@ end)
 -- General settings
 vim.opt.mouse = 'a'
 vim.opt.title = true
-vim.opt.signcolumn = 'yes:2'
-vim.opt.completeopt = 'menuone,noselect'
 vim.opt.hidden = true
 vim.opt.linebreak = true
+vim.opt.completeopt = 'menuone,noselect'
 
 -- Default indent (sleuth overrides this if indent format found)
 vim.opt.tabstop = 4
@@ -423,6 +422,7 @@ vim.g.termguicolors = true
 vim.g.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
+vim.opt.signcolumn = 'yes:2'
 
 -- Don't disturb me
 vim.opt.number = false
