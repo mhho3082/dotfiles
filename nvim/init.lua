@@ -235,7 +235,7 @@ end)
 -- General settings
 vim.opt.mouse = 'a'
 vim.opt.title = true
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = 'yes:2'
 vim.opt.completeopt = 'menuone,noselect'
 vim.opt.hidden = true
 vim.opt.linebreak = true
