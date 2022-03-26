@@ -55,8 +55,10 @@
 
     # Remove branch
     r = branch -D
+    # Remove merged branches
+    rm = !"git branch --merged | grep -vE 'main|master|\\*' | xargs -n 1 git branch -D"
 
-    # Show verbose output about tags, branches or remotes
+    # Show verbose data
     tags = tag -l
     branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     remotes = remote --verbose
