@@ -34,6 +34,8 @@
     co = checkout
     # Make and checkout a new branch
     br = checkout -b
+    # Get all recent updates
+    sync = pull --rebase --all
 
     a = add
     aa = add -A
