@@ -1,9 +1,13 @@
 # == Environment variables ==
 
-# Let's go Neovim!
 if which nvim &>/dev/null
+    # Let's go Neovim!
     set --global --export VISUAL nvim
     set --global --export EDITOR nvim
+else
+    # Vim then
+    set --global --export VISUAL vim
+    set --global --export EDITOR vim
 end
 
 # Check that `$HOME/.local/bin` exists, or create it
@@ -45,6 +49,12 @@ alias tl 'tmux list-sessions'
 
 # Pretty print paths
 alias paths 'for i in $PATH; echo $i; end | less -RF'
+
+# WSL-specific alias
+if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null
+    # Open in File Explorer (for WSL)
+    alias explorer 'explorer.exe .; or true'
+end
 
 # == FZF ==
 
