@@ -32,7 +32,7 @@ alias q exit
 alias m marks # see ./functions/marks.fish
 
 # Change everything in directory to LF
-alias lf "dos2unix **"
+alias lf 'dos2unix **'
 
 # Exa (or ls + tree)
 if which exa &>/dev/null
