@@ -13,6 +13,7 @@
 
 [push]
     default = current
+    followTags = true
 
 [code]
     editor = nvim
@@ -31,7 +32,7 @@
     c = commit
     m = merge
 
-    p = push --follow-tags
+    p = push
     pu = pull
 
     cl = clone
