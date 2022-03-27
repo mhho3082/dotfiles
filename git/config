@@ -47,7 +47,7 @@
     # Force local changes up to remotes
     force = push --all --force-with-lease
     # Save and push all temporary changes in case of emergency
-    out = !"git checkout -b \"EMERGENCY-$(date +%Y-%m-%d)\"; git add -A; git commit -m \"EMERGENCY: emergency commit\"; git push --all --force-with-lease"
+    out = !"git checkout -b \"EMERGENCY-$(date +%Y-%m-%d)\"; git add -A; git commit -m \"WIP: emergency commit\"; git push --force"
 
     # Remove all changes from staging
     unstage = reset --mixed
