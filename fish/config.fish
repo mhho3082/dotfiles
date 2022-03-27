@@ -78,4 +78,7 @@ end
 
 if status is-interactive
     # Commands to run in interactive sessions
+
+    # Remove greeting message
+    set fish_greeting ""
 end
