@@ -36,7 +36,7 @@
     pu = pull
 
     cl = clone
-    co = !"git checkout ${1:-main}"
+    co = checkout
     cp = cherry-pick
 
     s = status -sb
