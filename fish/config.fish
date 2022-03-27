@@ -31,6 +31,9 @@ alias c clear
 alias q exit
 alias m marks # see ./functions/marks.fish
 
+# Change everything in directory to LF
+alias lf "dos2unix **"
+
 # Exa (or ls + tree)
 if which exa &>/dev/null
     alias l 'exa --all --long --icons --sort=type --git'
