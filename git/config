@@ -47,7 +47,7 @@
     # Force local changes up to remotes
     force = push --all --force-with-lease
     # Save and push all temporary changes in case of emergency
-    out = !"git checkout -B \"EMERGENCY\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y)\"; git push --force"
+    out = !"git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y)\"; git push --force"
 
     # Remove all changes from staging
     unstage = reset --mixed
@@ -69,8 +69,6 @@
     tags = tag -l
     branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     remotes = remote --verbose
-
-    # List contributors by number of commits
     contributors = shortlog --summary --numbered --no-merges
 
     # Get SHA of head, useful in detached head
