@@ -47,7 +47,7 @@ function fish_prompt --description 'Informative prompt'
     end
 
     # Current location
-    printf '%s%s ' (set_color brblue) (prompt_pwd)
+    printf '%s%s ' (set_color brblue) (prompt_pwd | sed 's|^/mnt/c/|C:/|')
 
     # Git status
     if type git &>/dev/null
