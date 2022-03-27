@@ -43,7 +43,6 @@
     l = log --graph --abbrev-commit --date-order --all
 
     r = branch -d
-    rr = push -d
 
     # Get all recent updates
     sync = pull --rebase --all
