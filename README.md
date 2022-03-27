@@ -82,6 +82,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - `yapf` (on Debian/Ubuntu: `yapf3`)
 - `prettierd` (`npm install -g @fsouza/prettierd`)
 - `taplo` (`npm install -g @taplo/cli`)
+- `dos2unix`
 
 </details>
 
