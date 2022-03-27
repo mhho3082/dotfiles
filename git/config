@@ -36,7 +36,7 @@
     pu = pull
 
     cl = clone
-    co = checkout
+    co = !"git checkout ${1:-main}"
     cp = cherry-pick
 
     s = status -sb
@@ -46,6 +46,8 @@
     sync = pull --rebase --all
     # Force local changes up to remotes
     force = push --all --force-with-lease
+    # Save and push all temporary changes in case of emergency
+    out = !"git checkout -B \"EMERGENCY\"; git add -A; git commit -m \"WIP: emergency commit on $(date +%d/%m/%Y)\"; git push --force"
 
     # Remove all changes from staging
     unstage = reset --mixed
