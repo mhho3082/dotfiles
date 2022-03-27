@@ -42,8 +42,6 @@
     s = status -sb
     l = log --graph --abbrev-commit --date-order --all
 
-    r = branch -d
-
     # Get all recent updates
     sync = pull --rebase --all
     # Force local changes up to remotes
