@@ -554,7 +554,7 @@ require("nvim-lsp-installer").on_server_ready(function(server)
                         "neovim",
                         "fzf", "ripgrep", "fd",
                         "dotfiles", "zsh",
-                        "Ho Man Hin",
+                        "Hin",
                     }
                 }
             }
