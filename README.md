@@ -83,6 +83,7 @@ If it is installed already and still have `ppa:` - it needs upgrading with the P
 - `prettierd` (`npm install -g @fsouza/prettierd`)
 - `taplo` (`npm install -g @taplo/cli`)
 - `dos2unix`
+- `texlive`
 
 </details>
 
@@ -98,6 +99,7 @@ Also are the language servers installed in Neovim through `nvim-lsp-installer`:
 - `html` (HTML)
 - `bashls` (Bash)
 - `taplo` (TOML)
+- `texlab` (Latex)
 
 </details>
 
