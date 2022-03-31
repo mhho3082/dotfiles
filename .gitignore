@@ -1,6 +1,7 @@
 # Things not to be added to the repo
 
-# WSL
+# Microsoft
+*Microsoft*/
 wslu/
 
 # NPM configs
@@ -20,3 +21,14 @@ tmux*.log
 
 # htop
 htop/
+
+# pulse, IDK what it is doing with its binary files
+pulse/
+
+# Libreoffice
+libreoffice/
+
+user-dirs.*
+mimeapps.list
+pavucontrol.ini
+zoomus.conf
