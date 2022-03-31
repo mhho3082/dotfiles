@@ -1,1 +1,4 @@
 @theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+configuration {
+	kb-cancel: "Escape,Ctrl+c,Alt+F1";
+}
