@@ -28,8 +28,7 @@ require('packer').startup(function()
 
     --  EDIT --
 
-    --  Move around
-    use 'ggandor/lightspeed.nvim'
+    --  Targets
     use 'wellle/targets.vim'
 
     -- Indent
