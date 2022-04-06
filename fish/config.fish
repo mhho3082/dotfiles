@@ -81,4 +81,7 @@ if status is-interactive
 
     # Remove greeting message
     set fish_greeting ""
+
+    # Use block cursor
+    set fish_cursor_default block
 end
