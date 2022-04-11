@@ -3,4 +3,5 @@ configuration {
 	kb-cancel: "Escape,Ctrl+c,Alt+F1";
 	show-icons: true;
 	icon-theme: "Tela-manjaro-dark";
+	drun-display-format: "{name}";
 }
