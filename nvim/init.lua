@@ -57,10 +57,7 @@ require('packer').startup(function()
 
     --  Comments
     use {
-        'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end,
+        'tpope/vim-commentary',
     }
 
     --  VIEW --
@@ -83,8 +80,6 @@ require('packer').startup(function()
         run = ':TSUpdate',
         config = function()
             require("nvim-treesitter.configs").setup {
-                -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-                ensure_installed = "maintained",
                 highlight = {
                     -- false will disable the whole extension
                     enable = true,
@@ -180,7 +175,6 @@ require('packer').startup(function()
         config = function()
             -- Highlights
             vim.g.nvim_tree_git_hl = 1
-            vim.g.nvim_tree_indent_markers = 1
 
             -- Use proper cd
             vim.g.nvim_tree_respect_buf_cwd = 1
@@ -193,6 +187,11 @@ require('packer').startup(function()
                 view = {
                     side = 'right',
                 },
+                renderer = {
+                    indent_markers = {
+                        enable = true;
+                    }
+                }
             }
         end
     }
