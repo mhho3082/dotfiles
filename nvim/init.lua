@@ -347,6 +347,7 @@ wk.register({
             b = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "buffer" },
             s = { "<cmd>Telescope live_grep<cr>", "search" },
             c = { "<cmd>Telescope commands<cr>", "commands" },
+            t = { "/\\(TODO:\\|FIX:\\|FIXME:\\|NOTE:\\|BUG:\\|TEMP:\\|HACK:\\|XXX:\\)<cr>", "todo" },
         },
         w = {
             name = "sidebars",
