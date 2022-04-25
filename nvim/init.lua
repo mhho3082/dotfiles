@@ -140,10 +140,6 @@ require('packer').startup(function()
     --  Command aid and remap
     use 'folke/which-key.nvim'
 
-    --  Sessions
-    use 'rmagatti/auto-session'
-    use 'rmagatti/session-lens'
-
     --  Git
     use 'tpope/vim-fugitive'
     use 'tpope/vim-rhubarb'
@@ -361,13 +357,6 @@ wk.register({
             p = { "<cmd>PackerSync<cr>", "sync" },
             s = { "<cmd>PackerStatus<cr>", "status" },
         },
-        s = {
-            name = "session",
-            o = { "<cmd>SearchSession<cr>", "open" },
-            s = { "<cmd>SaveSession<cr>", "save" },
-            r = { "<cmd>RestoreSession<cr>", "restore" },
-            d = { "<cmd>DeleteSession<cr>", "delete" },
-        },
         g = {
             name = "git",
             -- Statuses
@@ -434,31 +423,6 @@ vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble"
 
 vim.cmd [[colorscheme gruvbox-flat]]
 
---------------
--- SESSIONS --
---------------
-
--- Set session options
-vim.opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
-
--- Set up auto session
-require('auto-session').setup({
-    log_level = 'error',
-    auto_session_enable_last_session = false,
-    auto_session_root_dir = vim.fn.stdpath('data') .. "/sessions/",
-    auto_session_enabled = true,
-    auto_save_enabled = true,
-    auto_restore_enabled = true,
-    auto_session_create_enabled = false,
-    pre_save_commands = {
-        "tabdo NvimTreeClose",
-        "tabdo UndotreeHide",
-        "tabdo TroubleClose",
-        "tabdo SymbolsOutlineClose",
-        "tabdo Vista!"
-    }
-})
-
 ---------------
 -- TELESCOPE --
 ---------------
@@ -490,13 +454,6 @@ require('telescope').setup {
 }
 
 require('telescope').load_extension('fzf')
-
-require('session-lens').setup {
-    path_display = { shorten = 5 },
-    previewer = false
-}
-
-require("telescope").load_extension("session-lens")
 
 ---------
 -- LSP --
