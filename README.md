@@ -174,7 +174,7 @@ Remove Windows EOLs from some file
 sed -e 's/\r//g' file
 ```
 
-Symlink renamed programs back to usual, e.g., `fdfind` to `fd`
+Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`
 (common on Debian-based distros, usually not needed for Arch-based distros):
 
 ```bash
