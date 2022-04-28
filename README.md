@@ -100,6 +100,7 @@ If you are stuck using WSL, then your mileage with this repo may vary.
 - Theme and fonts
   - `tela-icon-theme`
   - `whitesur-gtk-theme`
+  - `nordzy-cursors`
   - `noto-fonts`
   - `ttf-ms-fonts`
   - `ttf-fira-code`
