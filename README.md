@@ -22,7 +22,7 @@ cp ~/Documents/dotfiles/git/config ~/.config/git/config
 cp ~/.config/git/config ~/Documents/dotfiles/git/config
 ```
 
-If you are having a clean install (say WSL), please:
+If you are having a clean install, you may:
 
 1. Get Git working
 2. Connect the machine to the internet
@@ -47,12 +47,11 @@ please see the folder `./tips/`.
 
 ## App list
 
-I currently use Manjaro and have thrown Windows out my window (pun intended),
-so many things I would have to install myself is already there,
-so you would find some program with config in this repo,
+I currently use Manjaro and have thrown Windows out of my window (pun intended),
+so many things I would have to install myself is already there.
+You would find some program with configurations in this repo,
 but not listed in the list below (mainly `tmux`).
-If you are on WSL, then either persuade yourselves to switch to Linux,
-or just find and install things as you go.
+If you are stuck using WSL, then your mileage with this repo may vary.
 
 <details>
 <summary> App List </summary>
@@ -108,7 +107,7 @@ or just find and install things as you go.
 
 </details>
 
-Also are the language servers installed in Neovim through `nvim-lsp-installer`:
+Also are some language servers I usually install in Neovim through `nvim-lsp-installer`:
 
 <details>
 <summary> Language servers </summary>
@@ -135,7 +134,7 @@ Login to GitHub CLI:
 gh auth login
 ```
 
-To set up Git and GitHub with GPG keys for commits, see
+To set up Git and GitHub with a GPG key for commits, see
 [this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
 (GPG is usually installed already; install if not.)
 
@@ -153,7 +152,7 @@ nvim +PackerSync
 To set up Cantonese input with Rime, see
 [this page by the makers](https://github.com/rime/rime-cantonese/wiki).
 
-Remove Windows EOLs from any file
+Remove Windows EOLs from some file
 (dos2unix may not be pre-installed):
 
 ```bash
@@ -161,8 +160,8 @@ Remove Windows EOLs from any file
 sed -e 's/\r//g' file
 ```
 
-Symlink renamed programs back to usual,
-e.g., `fdfind` to `fd` (common on Debian-based distros):
+Symlink renamed programs back to usual, e.g., `fdfind` to `fd`
+(common on Debian-based distros, usually not needed for Arch-based distros):
 
 ```bash
 # Bash / Zsh
@@ -174,9 +173,9 @@ ln -s $(which fdfind) ~/.local/bin/fd
 ln -s (which fdfind) ~/.local/bin/fd
 ```
 
-If with tmux version < 3.1 (check with `tmux -V`)
+If you are with tmux version < 3.1 (check with `tmux -V`)
 (common for LTS distros, WSL, or older machines),
-add a file `~/.tmux.conf` to link to` ~/.config`:
+add a file `~/.tmux.conf` with the following text to link to` ~/.config`:
 
 ```tmux
 # Use config in ~/.config/
@@ -186,11 +185,7 @@ source-file ~/.config/tmux/.tmux.conf
 Pipe to clipboard:
 
 ```bash
-# Common linux, with xclip:
 echo "Hello world" | xclip
-
-# WSL:
-echo "Hello world" | clip.exe
 ```
 
 Test for 256-colours for your terminal emulator:
@@ -201,10 +196,8 @@ Test for 256-colours for your terminal emulator:
 curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 ```
 
-If you want to remove the local Windows paths from the WSL paths,
+If you want to remove the local Windows paths from the WSL paths (not advised),
 add a file with `sudo nano /etc/wsl.conf`:
-(Note that the Neovim `"+` and `"*` registers will stop being linked to the system clipboard,
-since the CLI clipboard tool, `win32yank`, is on the Windows paths)
 
 ```
 [interop]

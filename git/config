@@ -2,6 +2,9 @@
     # Please change this to your own user name and email
     name = Max Ho
     email = 73323597+mhho3082@users.noreply.github.com
+	# Please put your GPG key ID here
+	# Find with `gpg --list-keys --keyid-format long`
+    signingkey = E100C05873BB5C21
 
 [core]
     editor = nvim
