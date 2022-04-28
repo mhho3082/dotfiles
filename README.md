@@ -107,6 +107,19 @@ If you are stuck using WSL, then your mileage with this repo may vary.
 
 </details>
 
+The extensions I usually install to my browsers:
+
+<details>
+<summary> Browser extensions </summary>
+
+- `Vimium`
+- `HTTPS Everywhere`
+- `uBlock origin`
+- `Zotero`
+- `Facebook container`
+
+</details>
+
 Also are some language servers I usually install in Neovim through `nvim-lsp-installer`:
 
 <details>
