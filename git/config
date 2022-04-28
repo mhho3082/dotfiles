@@ -1,9 +1,12 @@
 [user]
     # Please change this to your own user name and email
+	# Find GitHub noreply email at your own settings
     name = Max Ho
     email = 73323597+mhho3082@users.noreply.github.com
-	# Please put your GPG key ID here
-	# Find with `gpg --list-keys --keyid-format long`
+
+	# Please put your own GPG key ID here
+	# If no GPG key, generate with `gpg --full-gen-key`
+	# Find key ID with `gpg --list-keys --keyid-format long`
     signingkey = E100C05873BB5C21
 
 [core]
