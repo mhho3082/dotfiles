@@ -13,11 +13,19 @@ so feel free to clone this repo and copy files over there:
 # Clone the repo, e.g., to dotfiles/
 git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
 
-# Copy all files over to ~/.config (backup ~/.config if needed)
+# Copy / update all files non-destructuvely over to ~/.config
+# Will not remove already existing files, but will update them if duplicate
+# (backup ~/.config if needed)
+cd dotfiles
+./copy_to_config.fish
+
+# If fish isn't installed, but you want to copy everything over
+# (warning: this is destructive)
 cp -r ~/Documents/dotfiles/ ~/.config/
 
-# Update the repo from config changes, e.g., git config
-cp ~/.config/git/config ~/Documents/dotfiles/git/config
+# If fish isn't installed, but you want to update particular files
+# e.g., for git/config
+cp ~/Documents/dotfiles/git/config ~/.config/git/config
 ```
 
 If you are having a clean install, you may:
