@@ -12,7 +12,7 @@ set ignore_files copy_to_config.fish README.md tips/*
 mkdir -p "$config_folder"
 
 for i in ** **/.*
-	if [ -f $i ]; and not contains $i $ignore_files
-		cp --parents "$i" "$config_folder"
-	end
+    if [ -f $i ]; and not contains $i $ignore_files
+        cp --parents "$i" "$config_folder"
+    end
 end
