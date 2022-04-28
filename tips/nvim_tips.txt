@@ -23,9 +23,6 @@ C-v - visual block
 
 <A-[hjkl]> - move selection
 
-s...    - multi-char sneak (as operator)
-...z... - sneak (as motion for operator)
-
 gc... - toggle line comment (o/O; gca -> end of line)
 gb... - toggle block comment (gbc -> line)
 
