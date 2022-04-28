@@ -1,7 +1,5 @@
 # Max's dotfiles
 
-**Warning: very unstable, fork/use with care**
-
 ## Quick start
 
 If you want to use my config, I would advise you to fork this repo,
@@ -15,13 +13,10 @@ so feel free to clone this repo and copy files over there:
 # Clone the repo, e.g., to dotfiles/
 git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
 
-# Copy all files over to ~/.config
+# Copy all files over to ~/.config (backup ~/.config if needed)
 cp -r ~/Documents/dotfiles/ ~/.config/
 
-# Move files to the config folder
-cp ~/Documents/dotfiles/git/config ~/.config/git/config
-
-# Update the repo
+# Update the repo from config changes, e.g., git config
 cp ~/.config/git/config ~/Documents/dotfiles/git/config
 ```
 
