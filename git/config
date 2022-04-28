@@ -49,7 +49,16 @@
     cp = cherry-pick
 
     s = status -sb
-    l = log --graph --abbrev-commit --date-order --all
+
+	# https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
+	l = l1
+    l1 = l1-specific --all
+    l2 = l2-specific --all
+    l3 = l3-specific --all
+
+    l1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    l2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    l3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
     # Get all recent updates
     sync = pull --rebase --all
