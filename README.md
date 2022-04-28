@@ -8,82 +8,103 @@ If you want to use my config, I would advise you to fork this repo,
 look through the code, and remove the parts you don't need;
 I can't ensure that my configurations will fit your needs.
 
-This repo is designed to be placed in `~/.config/`,
-so to use it on your machine, just clone it:
+This repo is designed to be utilized with `~/.config/`,
+so feel free to clone this repo and copy files over there:
 
 ```bash
-# Do backup if needed
-tar -cpzf "$HOME/config_backup.tar.gz" "$HOME/.config/"
+# Clone the repo (please do not clone to `~/.config`)
+git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
 
-# Clone the repo
-git clone https://github.com/mhho3082/dotfiles.git ~/.config/
+# Move files to the config folder
+cp ~/Documents/dotfiles/git/config ~/.config/git/config
+
+# Update the repo
+cp ~/.config/git/config ~/Documents/dotfiles/git/config
 ```
 
 If you are having a clean install (say WSL), please:
-1. Get (some version of) Git working
+
+1. Get Git working
 2. Connect the machine to the internet
 3. Clone this repo
-4. Work on installing and setting up other apps
+4. Copy files to` ~/.config`
+5. Work on installing and setting up other apps
+6. Set up GPG key and link it to Git and GitHub
 
 For various frequently used commands and motions,
 please see the folder `./tips/`.
 
 ## Features
 
-* Numerous aliases - see `./fish/config.fish` and `./git/config`
-* Get around your `marks` with fuzzy find (alias `m`)
-  * Bookmarks file in `~/.cd_bookmarks`
-* Powerful setup for Tmux and Neovim
-  * Various powerful and ergonomic plugins for Neovim
-  * Vim-like key remaps for Tmux - see `./tmux/.tmux.conf`
-  * Minimalist UI
+- Efficient aliases and functions
+  - see e.g. `./fish/config.fish` and `./git/config`
+- Get around your `marks` with fuzzy find (alias `m`)
+  - Bookmarks file is `~/.cd_bookmarks`
+- Powerful setup for Tmux and Neovim
+  - Various powerful and ergonomic plugins for Neovim
+  - Vim-like key remaps for Tmux - see `./tmux/.tmux.conf`
+  - Minimalist UI
 
 ## App list
 
-This is listed in the order of installation.
-Those surrounded in brackets are found to be installed already in Ubuntu 20.04 LTS.
-Appended data starting with `ppa:` is the PPA for Ubuntu.
-If it is installed already and still have `ppa:` - it needs upgrading with the PPA.
+I currently use Manjaro and have thrown Windows out my window (pun intended),
+so many things I would have to install myself is already there,
+so you would find some program with config in this repo,
+but not listed in the list below (mainly `tmux`).
+If you are on WSL, then either persuade yourselves to switch to Linux,
+or just find and install things as you go.
 
 <details>
 <summary> App List </summary>
 
-- (`curl`)
-- (`tmux`)
-- (`htop`)
-- (`git`) (`ppa:git-core/ppa`)
-- (`gcc`)
-- `unzip`
-- `fish` (`ppa:fish-shell/release-3`)
-- `exa` (`ppa:spvkgn/exa`)
-- `fzf`
-- `ripgrep`
-- `fd` (on Debian/Ubuntu: `fd-find`)
-- `gh` 
-  ```
-  $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-  $ sudo apt-add-repository https://cli.github.com/packages
-  ```
-- `nodejs`
-  ```
-  $ curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
-  $ sudo apt-get install -y nodejs
-  ```
-- `npm`
-- `python3-venv`
-- `python3-pip`
-- `neovim` (`ppa:neovim-ppa/stable`)
-- `neovim` NodeJS module (`sudo npm install -g neovim`)
-- (`pynvim`) Python module (`pip3 install --upgrade pynvim`)
-- `clang`
-- `clang-format`
-- `llvm`
-- `tldr` (`sudo npm install -g tldr`)
-- `yapf` (on Debian/Ubuntu: `yapf3`)
-- `prettierd` (`npm install -g @fsouza/prettierd`)
-- `taplo` (`npm install -g @taplo/cli`)
-- `dos2unix`
-- `texlive`
+- Coding
+  - `fish`
+  - `nvim`
+  - `github-cli` (`gh` on the command line)
+  - `python`
+  - `nodejs`
+- Command line
+  - `yay`
+  - `exa`
+  - `xclip`
+  - `fd`
+  - `fzf`
+  - `ripgrep`
+- Linters
+  - `clang-format`
+  - `yapf`
+  - `prettierd`
+- Usual stuff
+  - `mupdf`
+  - `firefox`
+  - `libreoffice-fresh`
+  - `discord`
+  - `signal-desktop`
+  - `simplenote-electron-bin`
+- Utilities
+  - `rofi`
+  - `kazam`
+  - `fcitx5` (with `rime` plugin)
+  - `redshift`
+  - `timeshift` (system backup)
+  - `backintime` (user files backup)
+  - `imagewriter`
+- School
+  - `chromium` (since Microsoft apps cannot be logged in on Firefox)
+  - `teams-natifier`
+  - `zoom`
+  - `audacity`
+  - `insomnia`
+  - `logisim`
+  - `qtspim`
+  - `zotero-bin`
+- Theme and fonts
+  - `tela-icon-theme`
+  - `whitesur-gtk-theme`
+  - `noto-fonts`
+  - `ttf-ms-fonts`
+  - `ttf-fira-code`
+  - `ttf-inconsolata`
 
 </details>
 
@@ -96,10 +117,7 @@ Also are the language servers installed in Neovim through `nvim-lsp-installer`:
 - `jedi_language_server` (Python)
 - `ltex` (Grammar checking)
 - `sumneko_lua` (Lua)
-- `html` (HTML)
 - `bashls` (Bash)
-- `taplo` (TOML)
-- `texlab` (Latex)
 
 </details>
 
@@ -112,21 +130,39 @@ chsh -s `which fish`
 ```
 
 Login to GitHub CLI:
+
 ```bash
 gh auth login
 ```
+
+To set up Git and GitHub with GPG keys for commits, see
+[this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
+(GPG is usually installed already; install if not.)
 
 To set up Neovim plugins for the first time:
 
 ```bash
 nvim +PackerSync
 
-# Or, if you have the fish alias running
-n +PackerSync
+# Then wait for Treesitter to compile dozens of parsers
+# (should be quick on locally installed Linux),
+# `:qa!` to quit,
+# then re-open to do whatever you want
 ```
 
-On Ubuntu/Debian, symlink `fdfind` to `fd`:
-(Same for `yapf3` to `yapf`)
+To set up Cantonese input with Rime, see
+[this page by the makers](https://github.com/rime/rime-cantonese/wiki).
+
+Remove Windows EOLs from any file
+(dos2unix may not be pre-installed):
+
+```bash
+# https://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk
+sed -e 's/\r//g' file
+```
+
+Symlink renamed programs back to usual,
+e.g., `fdfind` to `fd` (common on Debian-based distros):
 
 ```bash
 # Bash / Zsh
@@ -138,30 +174,37 @@ ln -s $(which fdfind) ~/.local/bin/fd
 ln -s (which fdfind) ~/.local/bin/fd
 ```
 
-If with tmux version < 3.1 (check with `tmux -V`),
-add a file `~/.tmux.conf`:
+If with tmux version < 3.1 (check with `tmux -V`)
+(common for LTS distros, WSL, or older machines),
+add a file `~/.tmux.conf` to link to` ~/.config`:
 
 ```tmux
 # Use config in ~/.config/
 source-file ~/.config/tmux/.tmux.conf
 ```
 
-Pipe to Windows clipboard from WSL:
+Pipe to clipboard:
+
 ```bash
+# Common linux, with xclip:
+echo "Hello world" | xclip
+
+# WSL:
 echo "Hello world" | clip.exe
 ```
 
 Test for 256-colours for your terminal emulator:
+
 ```bash
 # From https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
 
 curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 ```
 
-If you want to remove the Windows path from the native WSL path,
-add a file with `sudo nano /etc/wsl.conf`:<br>
+If you want to remove the local Windows paths from the WSL paths,
+add a file with `sudo nano /etc/wsl.conf`:
 (Note that the Neovim `"+` and `"*` registers will stop being linked to the system clipboard,
-since the CLI clipboard tool, `win32yank`, is on the Windows side of the path)
+since the CLI clipboard tool, `win32yank`, is on the Windows paths)
 
 ```
 [interop]
