@@ -21,6 +21,12 @@
 [fetch]
     prune = true
 
+[commit]
+    gpgSign = true
+
+[tag]
+    gpgSign = true
+
 # ---
 
 # Some ideas from https://github.com/mathiasbynens/dotfiles
