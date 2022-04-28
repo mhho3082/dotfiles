@@ -31,9 +31,6 @@ alias c clear
 alias q exit
 alias m marks # see ./functions/marks.fish
 
-# Change everything in directory to LF
-alias lf 'dos2unix **'
-
 # Exa (or ls + tree)
 if which exa &>/dev/null
     alias l 'exa --all --long --icons --sort=type --git'
@@ -54,6 +51,7 @@ alias tl 'tmux list-sessions'
 alias paths 'for i in $PATH; echo $i; end | less -RF'
 
 # WSL-specific alias
+# https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null
     # Open in File Explorer (for WSL)
     alias explorer 'explorer.exe .; or true'
