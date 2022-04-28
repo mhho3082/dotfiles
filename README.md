@@ -12,8 +12,11 @@ This repo is designed to be utilized with `~/.config/`,
 so feel free to clone this repo and copy files over there:
 
 ```bash
-# Clone the repo (please do not clone to `~/.config`)
+# Clone the repo, e.g., to dotfiles/
 git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
+
+# Copy all files over to ~/.config
+cp -r ~/Documents/dotfiles/ ~/.config/
 
 # Move files to the config folder
 cp ~/Documents/dotfiles/git/config ~/.config/git/config
