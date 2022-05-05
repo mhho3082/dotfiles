@@ -10,13 +10,9 @@ else
     set --global --export EDITOR vim
 end
 
-# Check that `$HOME/.local/bin` exists, or create it
-if [ ! -d $HOME/.local/bin/ ]
-    mkdir -p $HOME/.local/bin/
-end
-
 # Add `$HOME/.local/bin` to path
 # This is where the renamed programs are symlinked to
+mkdir -p $HOME/.local/bin/
 fish_add_path $HOME/.local/bin
 
 # Use Vi bindings
