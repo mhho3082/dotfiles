@@ -42,5 +42,3 @@ For nvim-tree: See kyazdani42/nvim-tree.lua
 
 :PackerInstall - Install plugins in init.vim
 :PackerSync    - Update and auto-clean plugins
-
-:GenTocGFM - Generate TOC for md
