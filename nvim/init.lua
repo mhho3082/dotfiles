@@ -117,6 +117,7 @@ require('packer').startup(function()
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-nvim-lua'
     use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-cmdline'
     use 'lukas-reineke/cmp-under-comparator'
 
     --  Snippets
@@ -595,6 +596,13 @@ cmp.setup {
         },
     },
 }
+
+-- Command line autocomplete
+cmp.setup.cmdline(':', {
+    sources = {
+        { name = 'cmdline' }
+    },
+})
 
 -------------
 -- LUALINE --
