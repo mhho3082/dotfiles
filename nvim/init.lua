@@ -118,6 +118,7 @@ require('packer').startup(function()
     use 'hrsh7th/cmp-nvim-lua'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-cmdline'
+    use 'hrsh7th/cmp-nvim-lsp-signature-help'
     use 'lukas-reineke/cmp-under-comparator'
 
     --  Snippets
@@ -582,6 +583,7 @@ cmp.setup {
         { name = "luasnip" },
         { name = 'path' },
         { name = "nvim_lua" },
+        { name = 'nvim_lsp_signature_help' },
     },
     sorting = {
         comparators = {
