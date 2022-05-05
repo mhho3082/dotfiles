@@ -599,9 +599,11 @@ cmp.setup {
 
 -- Command line autocomplete
 cmp.setup.cmdline(':', {
-    sources = {
+    sources = cmp.config.sources({
+        { name = 'path' }
+    }, {
         { name = 'cmdline' }
-    },
+    })
 })
 
 -------------
