@@ -44,17 +44,6 @@ require('packer').startup(function()
     -- Move code
     use 'matze/vim-move'
 
-    -- Auto-save
-    use{
-        'Pocco81/AutoSave.nvim',
-        config = function()
-            require("autosave").setup({
-                enabled = true,
-                execution_message = "",
-            })
-        end
-    }
-
     --  Comments
     use {
         'tpope/vim-commentary',
@@ -239,7 +228,7 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
--- No backup (auto-save instead)
+-- No backup
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
@@ -622,7 +611,7 @@ require('lualine').setup {
             { 'diff', symbols = { added = ' ', modified = ' ', removed = ' ' } }
         },
         lualine_c = {
-            { 'filename', path = 1, symbols = { modified = '' } },
+            { 'filename', path = 1 },
             { 'diagnostics', sources = { 'nvim_lsp' } }
         },
         lualine_x = { 'filetype', 'fileformat', 'encoding', '%l:%2c' },
