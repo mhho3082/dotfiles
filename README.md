@@ -137,7 +137,6 @@ Also are some language servers I usually install in Neovim through `nvim-lsp-ins
 - `ltex` (Grammar checking)
 - `sumneko_lua` (Lua)
 - `bashls` (Bash)
-- `eslint` (JavaScript)
 - `tsserver` (JavaScript)
 
 </details>
