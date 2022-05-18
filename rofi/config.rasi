@@ -4,5 +4,4 @@ configuration {
 	show-icons: true;
 	icon-theme: "Tela-manjaro-dark";
 	drun-display-format: "{name}";
-	matching: "glob";
 }
