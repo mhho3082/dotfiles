@@ -51,8 +51,8 @@
 
     s = status -sb
 
-	# https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
-	l = l1
+    # https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
+    l = l1
     l1 = l1-specific --all
     l2 = l2-specific --all
     l3 = l3-specific --all
