@@ -337,7 +337,7 @@ wk.register({
             c = { "<cmd>Telescope commands<cr>", "commands" },
             t = { "/\\(TODO:\\|FIX:\\|FIXME:\\|NOTE:\\|BUG:\\|TEMP:\\|HACK:\\|XXX:\\)<cr>", "todo" },
         },
-        w = {
+        b = {
             name = "sidebars",
             d = { "<cmd>NvimTreeToggle<cr>", "directory" },
             u = { "<cmd>UndotreeToggle<cr>", "undo" },
@@ -382,7 +382,8 @@ wk.register({
             s = {"<cmd>set spell!<cr>", "spell"},
             i = {"<cmd>IndentBlanklineToggle<cr>", "indentline"},
         },
-        q = { "<cmd>qa!<cr>", "quit" },
+        w = { "<cmd>wa<cr>", "save all" },
+        q = { "<cmd>qa<cr>", "quit" },
         a = {
             ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
             "format"
