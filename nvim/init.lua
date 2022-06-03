@@ -118,14 +118,6 @@ require('packer').startup(function()
     --  Format
     use 'sbdchd/neoformat'
 
-    -- Generate Markdown TOC
-    use {
-        'mzlogin/vim-markdown-toc',
-        config = function()
-            vim.g.vmt_cycle_list_item_markers = 1
-        end,
-    }
-
     --  COMMAND TOOLS --
 
     --  Command aid and remap
@@ -160,14 +152,8 @@ require('packer').startup(function()
     use {
         'kyazdani42/nvim-tree.lua',
         config = function()
-            -- Highlights
-            vim.g.nvim_tree_git_hl = 1
-
-            -- Use proper cd
-            vim.g.nvim_tree_respect_buf_cwd = 1
-
             require("nvim-tree").setup {
-                disable_netrw = false,
+                sort_by = "extension",
                 git = {
                     ignore = false,
                 },
@@ -194,12 +180,6 @@ require('packer').startup(function()
             -- Open on the right
             vim.g.undotree_WindowLayout = 3
         end,
-    }
-    use {
-        'liuchengxu/vista.vim',
-        config = function()
-            vim.g.vista_default_executive = 'nvim_lsp'
-        end
     }
 
     --  Library for other plugins
