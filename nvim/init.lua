@@ -322,7 +322,6 @@ wk.register({
             d = { "<cmd>NvimTreeToggle<cr>", "directory" },
             u = { "<cmd>UndotreeToggle<cr>", "undo" },
             p = { "<cmd>TroubleToggle<cr>", "problems" },
-            v = { "<cmd>Vista!!<cr>", "vista" },
         },
         p = {
             name = "packer",
