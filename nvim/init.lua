@@ -527,12 +527,12 @@ cmp.setup {
             require("luasnip").lsp_expand(args.body)
         end,
     },
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
         ["<C-p>"] = cmp.mapping.select_prev_item(),
         ["<C-k>"] = cmp.mapping.select_prev_item(),
         ["<C-n>"] = cmp.mapping.select_next_item(),
         ["<C-j>"] = cmp.mapping.select_next_item(),
-        ["<C-e>"] = cmp.mapping.close(),
+        ["<C-e>"] = cmp.mapping.abort(),
         ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 local entry = cmp.get_selected_entry()
@@ -547,14 +547,14 @@ cmp.setup {
                 fallback()
             end
         end, { "i", "s", "c" }),
-    },
-    sources = {
+    }),
+    sources = cmp.config.sources({
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = 'path' },
         { name = "nvim_lua" },
         { name = 'nvim_lsp_signature_help' },
-    },
+    }),
     sorting = {
         comparators = {
             cmp.config.compare.offset,
