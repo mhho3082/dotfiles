@@ -181,6 +181,12 @@ Remove Windows EOLs from some file
 sed -e 's/\r//g' file
 ```
 
+Use SSH with kitty:
+
+```bash
+kitty +kitten ssh 127.0.0.1 # Replace with ssh address
+```
+
 Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`
 (common on Debian-based distros, usually not needed for Arch-based distros):
 
