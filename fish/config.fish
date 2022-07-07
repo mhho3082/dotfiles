@@ -21,11 +21,20 @@ fish_vi_key_bindings
 # == Alias ==
 
 # Basic shortcuts
-alias g git
-alias n nvim
 alias c clear
 alias q exit
-alias m marks # see ./functions/marks.fish
+if which git &>/dev/null
+    alias g git
+end
+if which nvim &>/dev/null
+    alias n nvim
+end
+if which ranger &>/dev/null
+    alias r ranger
+end
+if test -f ~/.config/fish/functions/marks.fish
+    alias m marks # see ./functions/marks.fish
+end
 
 # Exa (or ls + tree)
 if which exa &>/dev/null
