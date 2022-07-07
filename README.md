@@ -75,6 +75,7 @@ If you are stuck using WSL, then your mileage with this repo may vary.
   - `fd`
   - `fzf`
   - `ripgrep`
+  - `ranger`
 - Linters
   - `clang-format`
   - `yapf`
