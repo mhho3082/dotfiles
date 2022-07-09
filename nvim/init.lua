@@ -376,7 +376,7 @@ vim.g.termguicolors = true
 vim.g.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
-vim.opt.signcolumn = 'yes:2'
+vim.opt.signcolumn = 'yes'
 
 -- Don't disturb me
 vim.opt.number = false
