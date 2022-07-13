@@ -131,7 +131,7 @@ The extensions I usually install to my browsers:
 
 </details>
 
-Also are some language servers I usually install in Neovim through `nvim-lsp-installer`:
+Also are some language servers I have installed in Neovim through `nvim-lsp-installer`:
 
 <details>
 <summary> Language servers </summary>
@@ -141,7 +141,8 @@ Also are some language servers I usually install in Neovim through `nvim-lsp-ins
 - `ltex` (Grammar checking)
 - `sumneko_lua` (Lua)
 - `bashls` (Bash)
-- `tsserver` (JavaScript)
+- `tsserver` (JavaScript and TypeScript)
+- `volar` (Vue)
 
 </details>
 
