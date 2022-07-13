@@ -53,10 +53,11 @@ please see the folder `./tips/`.
 
 ## App list
 
+This is a list of applications I use, many of which daily, others when needed.
 I currently use Manjaro and have thrown Windows out of my window (pun intended),
 so many things I would have to install myself is already there.
 You would find some program with configurations in this repo,
-but not listed in the list below (mainly `tmux`).
+but not listed in the list below (say `tmux`).
 If you are stuck using WSL, then your mileage with this repo may vary.
 
 <details>
@@ -78,15 +79,15 @@ If you are stuck using WSL, then your mileage with this repo may vary.
   - `ranger`
 - Linters
   - `clang-format`
-  - `yapf`
-  - `prettierd`
+  - `yapf` (Python)
+  - `prettierd` (JS and more)
 - Usual stuff
   - `mupdf`
   - `firefox`
+  - `chromium`
   - `libreoffice-fresh`
   - `discord`
   - `signal-desktop`
-  - `simplenote-electron-bin`
 - Utilities
   - `rofi`
   - `kazam`
@@ -95,22 +96,24 @@ If you are stuck using WSL, then your mileage with this repo may vary.
   - `timeshift` (system backup)
   - `backintime` (user files backup)
   - `imagewriter`
+  - `xsane`
 - School
-  - `chromium` (since Microsoft apps cannot be logged in on Firefox)
+  - `zotero-bin`
   - `teams-natifier`
   - `zoom`
-  - `audacity`
-  - `insomnia`
-  - `logisim`
-  - `qtspim`
-  - `zotero-bin`
+  - `simplenote-electron-bin`
+  - installed only when needed:
+    - `audacity`
+    - `insomnia`
+    - `logisim`
+    - `qtspim`
 - Theme and fonts
-  - `tela-icon-theme`
   - `whitesur-gtk-theme`
+  - `tela-icon-theme`
   - `nordzy-cursors`
+  - `ttf-fira-code`
   - `noto-fonts`
   - `ttf-ms-fonts`
-  - `ttf-fira-code`
   - `ttf-inconsolata`
 
 </details>
