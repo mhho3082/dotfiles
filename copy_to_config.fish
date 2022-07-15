@@ -5,7 +5,6 @@
 
 # Do not add quotation marks; fish auto-expands paths here
 set config_folder ~/.config/
-# set config_folder ./temp/
 
 set ignore_files copy_to_config.fish README.md tips/*
 
