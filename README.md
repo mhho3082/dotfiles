@@ -3,15 +3,15 @@
 ## Quick start
 
 If you want to use my config, I would advise you to fork this repo,
-look through the code, and remove the parts you don't need.
+look through the code, and remove the parts you don't need first.
 
 I currently use Manjaro with Xfce,
-and have only tested this config on my own machine;
-if you find any bugs, feel free to file an issue
+and have only tested this config on my own machine.
+If you find any bugs, feel free to file an issue
 (but I cannot promise a response).
 
 ```fish
-# Install git and fish beforehand
+# Make sure git and fish are installed
 git --version
 fish --version
 
@@ -28,12 +28,14 @@ please see the folder `./tips/`.
 
 ## Features
 
-- Quick setup
+- Setup and update with little overhead
 - Efficient aliases and functions with auto-complete
-- Powerful, nearly stand-alone Neovim configuration
-- Minimalist UI
+- Neovim setup with IDE powers and simple controls
+- Minimalist UI for both the command line and desktop
 
 ## App list
+
+The apps that I usually use (some of which I install only when needed):
 
 <details>
 <summary> App List </summary>
@@ -54,9 +56,9 @@ please see the folder `./tips/`.
   - `tmux`
   - `ranger`
 - Linters
-  - `prettierd` (JS and more)
+  - `prettierd`
   - `clang-format`
-  - `yapf` (Python)
+  - `yapf`
 - Usual stuff
   - `mupdf`
   - `firefox`
@@ -71,18 +73,12 @@ please see the folder `./tips/`.
   - `redshift`
   - `timeshift` (system backup)
   - `backintime` (user files backup)
-  - `imagewriter`
   - `xsane`
 - School
   - `zotero-bin`
   - `teams-natifier`
   - `zoom`
   - `simplenote-electron-bin`
-  - installed only when needed:
-    - `audacity`
-    - `insomnia`
-    - `logisim`
-    - `qtspim`
 - Theme and fonts
   - `whitesur-gtk-theme`
   - `tela-icon-theme`
@@ -90,7 +86,6 @@ please see the folder `./tips/`.
   - `ttf-fira-code`
   - `noto-fonts`
   - `ttf-ms-fonts`
-  - `ttf-inconsolata`
 
 </details>
 
@@ -148,6 +143,19 @@ Login to GitHub CLI:
 gh auth login
 ```
 
+Get the fastest download times with `pacman`
+(for Arch-based distros):
+
+```bash
+sudo pacman-mirrors --fasttrack
+```
+
+Get colours in `pacman`'s CLI:
+
+```bash
+sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+```
+
 To set up Git and GitHub with a GPG key for commits, see
 [this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html)
 (GPG is usually installed already; install if not.)
@@ -174,25 +182,25 @@ Remove Windows-style EOLs from a file:
 
 ```bash
 # https://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk
-sed -e 's/\r//g' file.txt
+sed -e 's/\r//g' file.txt # replace with file name
 ```
 
 Use SSH with kitty:
 
 ```bash
-kitty +kitten ssh 127.0.0.1 # Replace with ssh address
+kitty +kitten ssh 127.0.0.1 # replace with ssh address
 ```
 
 Test for 256-colours for your terminal emulator:
 
 ```bash
-# From https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
+# https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
 
 curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 ```
 
 Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`
-(more common on Debian-based distros):
+(issue faced more commonly on Debian-based distros):
 
 ```bash
 # Bash / Zsh
