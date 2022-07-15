@@ -4,10 +4,15 @@ if which nvim &>/dev/null
     # Let's go Neovim!
     set --global --export VISUAL nvim
     set --global --export EDITOR nvim
-else
+else if which vim % >/dev/null
     # Vim then
     set --global --export VISUAL vim
     set --global --export EDITOR vim
+else
+    # really?
+    # (Manjaro does not have Vim pre-installed)
+    set --global --export VISUAL vi
+    set --global --export EDITOR vi
 end
 
 # Add `$HOME/.local/bin` to path
@@ -17,6 +22,9 @@ fish_add_path $HOME/.local/bin
 
 # Use Vi bindings
 fish_vi_key_bindings
+
+# Remove greeting message
+set fish_greeting ""
 
 # == Alias ==
 
@@ -75,13 +83,4 @@ if which fzf &>/dev/null
     # <C-r> - reverse search command history
     # <A-c> - cd to directory
     fzf_key_bindings
-end
-
-# == Interactive settings ==
-
-if status is-interactive
-    # Commands to run in interactive sessions
-
-    # Remove greeting message
-    set fish_greeting ""
 end
