@@ -137,6 +137,12 @@ nvim +PackerSync
 # then open neovim again to do whatever you want
 ```
 
+Source and use the setup for Tmux:
+
+```bash
+echo "source-file ~/.config/tmux/.tmux.conf" > ~/.tmux.conf
+```
+
 Login to GitHub CLI:
 
 ```bash
@@ -162,13 +168,6 @@ To set up Git and GitHub with a GPG key for commits, see
 
 To set up Cantonese input with Rime, see
 [this page by Rime's makers](https://github.com/rime/rime-cantonese/wiki)
-
-If you are with tmux version < 3.1 (check with `tmux -V`)
-(more likely if using LTS distros or WSL):
-
-```bash
-echo "source-file ~/.config/tmux/.tmux.conf" > ~/.tmux.conf
-```
 
 ## Auxiliary scripts
 
