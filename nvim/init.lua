@@ -1,5 +1,6 @@
 -- Warning:
--- If you have LSP server(s) running (which is usually), do not use `:source %`
+-- If you have LSP server(s) running (which should be most of the time),
+-- do not use `:source %` to hot-update the Neovim config
 -- It would create multiple LSP server instances and generate terrible lag
 
 -- Programs needed:
