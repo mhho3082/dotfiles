@@ -3,62 +3,37 @@
 ## Quick start
 
 If you want to use my config, I would advise you to fork this repo,
-look through the code, and remove the parts you don't need;
-I can't ensure that my configurations will fit your needs.
+look through the code, and remove the parts you don't need.
 
-This repo is designed to be utilized with `~/.config/`,
-so feel free to clone this repo and copy files over there:
+I currently use Manjaro with Xfce,
+and have only tested this config on my own machine;
+if you find any bugs, feel free to file an issue
+(but I cannot promise a response).
 
-```bash
-# Clone the repo, e.g., to dotfiles/
+```fish
+# Install git and fish beforehand
+git --version
+fish --version
+
+# Clone the repo
 git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
 
-# Copy / update all files non-destructuvely over to ~/.config
-# Will not remove already existing files, but will update them if duplicate
-# (backup ~/.config if needed)
-cd dotfiles
+# Copy/update ~/.config (backup first if needed)
+cd ~/Documents/dotfiles/
 ./copy_to_config.fish
-
-# If fish isn't installed, but you want to copy everything over
-# (warning: this is destructive)
-cp -r ~/Documents/dotfiles/ ~/.config/
-
-# If fish isn't installed, but you want to update particular files
-# e.g., for git/config
-cp ~/Documents/dotfiles/git/config ~/.config/git/config
 ```
 
-If you are having a clean install, you may:
-
-1. Get Git working
-2. Connect the machine to the internet
-3. Clone this repo
-4. Copy files to` ~/.config`
-5. Work on installing and setting up other apps
-6. Set up GPG key and link it to Git and GitHub
-
-For various frequently used commands and motions,
+For various frequently used (and forgotten) commands and motions,
 please see the folder `./tips/`.
 
 ## Features
 
-- Efficient aliases and functions
-  - see e.g. `./fish/config.fish` and `./git/config`
-- Get around your `marks` with fuzzy find (alias `m`)
-  - Bookmarks file is `~/.cd_bookmarks`
-- Powerful setup for Tmux and Neovim
-  - Various powerful and ergonomic plugins for Neovim
-  - Vim-like key remaps for Tmux - see `./tmux/.tmux.conf`
-  - Minimalist UI
+- Quick setup
+- Efficient aliases and functions with auto-complete
+- Powerful, nearly stand-alone Neovim configuration
+- Minimalist UI
 
 ## App list
-
-This is a list of applications I use, many of which daily, others when needed.
-I currently use Manjaro and have thrown Windows out of my window (pun intended),
-so many things I would have to install myself is already there.
-You would find some program with configurations in this repo,
-but not listed in the list below (say `tmux`).
-If you are stuck using WSL, then your mileage with this repo may vary.
 
 <details>
 <summary> App List </summary>
@@ -76,11 +51,12 @@ If you are stuck using WSL, then your mileage with this repo may vary.
   - `fd`
   - `fzf`
   - `ripgrep`
+  - `tmux`
   - `ranger`
 - Linters
+  - `prettierd` (JS and more)
   - `clang-format`
   - `yapf` (Python)
-  - `prettierd` (JS and more)
 - Usual stuff
   - `mupdf`
   - `firefox`
@@ -131,7 +107,7 @@ The extensions I usually install to my browsers:
 
 </details>
 
-Also are some language servers I have installed in Neovim through `nvim-lsp-installer`:
+Some language servers I have installed in Neovim through `nvim-lsp-installer`:
 
 <details>
 <summary> Language servers </summary>
@@ -146,12 +122,24 @@ Also are some language servers I have installed in Neovim through `nvim-lsp-inst
 
 </details>
 
-## Notes
+## Handy setup scripts
 
-To set fish as the default shell (from bash / zsh):
+Set fish as the default shell (from bash / zsh):
 
 ```bash
 chsh -s `which fish`
+```
+
+Set up Neovim plugins for the first time:
+
+```bash
+# Initiate setup
+nvim +PackerSync
+
+# Wait for Treesitter to compile dozens of parsers
+# (should be quick on locally installed Linux)
+# type `:qa!` to quit
+# then open neovim again to do whatever you want
 ```
 
 Login to GitHub CLI:
@@ -161,29 +149,32 @@ gh auth login
 ```
 
 To set up Git and GitHub with a GPG key for commits, see
-[this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
+[this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html)
 (GPG is usually installed already; install if not.)
 
-To set up Neovim plugins for the first time:
+To set up Cantonese input with Rime, see
+[this page by Rime's makers](https://github.com/rime/rime-cantonese/wiki)
+
+If you are with tmux version < 3.1 (check with `tmux -V`)
+(more likely if using LTS distros or WSL):
 
 ```bash
-nvim +PackerSync
-
-# Then wait for Treesitter to compile dozens of parsers
-# (should be quick on locally installed Linux),
-# `:qa!` to quit,
-# then re-open to do whatever you want
+echo "source-file ~/.config/tmux/.tmux.conf" > ~/.tmux.conf
 ```
 
-To set up Cantonese input with Rime, see
-[this page by the makers](https://github.com/rime/rime-cantonese/wiki).
+## Auxiliary scripts
 
-Remove Windows EOLs from some file
-(dos2unix may not be pre-installed):
+Pipe to clipboard:
+
+```bash
+echo "Hello world" | xclip
+```
+
+Remove Windows-style EOLs from a file:
 
 ```bash
 # https://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk
-sed -e 's/\r//g' file
+sed -e 's/\r//g' file.txt
 ```
 
 Use SSH with kitty:
@@ -192,8 +183,16 @@ Use SSH with kitty:
 kitty +kitten ssh 127.0.0.1 # Replace with ssh address
 ```
 
+Test for 256-colours for your terminal emulator:
+
+```bash
+# From https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
+
+curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
+```
+
 Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`
-(common on Debian-based distros, usually not needed for Arch-based distros):
+(more common on Debian-based distros):
 
 ```bash
 # Bash / Zsh
@@ -205,40 +204,9 @@ ln -s $(which fdfind) ~/.local/bin/fd
 ln -s (which fdfind) ~/.local/bin/fd
 ```
 
-If you are with tmux version < 3.1 (check with `tmux -V`)
-(common for LTS distros, WSL, or older machines),
-add a file `~/.tmux.conf` with the following text to link to` ~/.config`:
-
-```tmux
-# Use config in ~/.config/
-source-file ~/.config/tmux/.tmux.conf
-```
-
-Pipe to clipboard:
-
-```bash
-echo "Hello world" | xclip
-```
-
-Test for 256-colours for your terminal emulator:
-
-```bash
-# From https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
-
-curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
-```
-
-If you want to remove the local Windows paths from the WSL paths (not advised),
-add a file with `sudo nano /etc/wsl.conf`:
-
-```
-[interop]
-appendWindowsPath = false
-```
-
 ## Credits
 
-- Git alias partly from
+- Git alias derived from
   https://github.com/mathiasbynens/dotfiles
 - Tmux status bar based off of
   https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
