@@ -119,7 +119,6 @@ require('packer').startup(function()
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-cmdline'
     use 'hrsh7th/cmp-nvim-lsp-signature-help'
-    use 'lukas-reineke/cmp-under-comparator'
 
     --  Snippets
     use 'L3MON4D3/LuaSnip'
@@ -562,19 +561,7 @@ cmp.setup {
         { name = 'path' },
         { name = "nvim_lua" },
         { name = 'nvim_lsp_signature_help' },
-    }),
-    sorting = {
-        comparators = {
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.score,
-            require "cmp-under-comparator".under,
-            cmp.config.compare.kind,
-            cmp.config.compare.sort_text,
-            cmp.config.compare.length,
-            cmp.config.compare.order,
-        },
-    },
+    })
 }
 
 -- Command line autocomplete
