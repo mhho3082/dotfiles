@@ -5,7 +5,10 @@
 
 -- Programs needed:
 -- unzip (for installation)
--- ripgrep & fd
+-- ripgrep
+-- fd
+
+-- Nice-to-have:
 -- python3, pip3, pynvim module
 -- nodejs, npm, neovim module
 -- gh
@@ -36,19 +39,25 @@ require('packer').startup(function()
     use 'tpope/vim-sleuth'
 
     --  Pairs
-    use 'tpope/vim-surround'
-    use 'cohama/lexima.vim'
-
-    -- Align
-    use 'junegunn/vim-easy-align'
+    use {
+        "kylechui/nvim-surround",
+        config = function()
+            require("nvim-surround").setup {}
+        end
+    }
+    use {
+        "windwp/nvim-autopairs",
+        config = function()
+            require("nvim-autopairs").setup {}
+        end
+    }
 
     -- Move code
+    use 'junegunn/vim-easy-align'
     use 'matze/vim-move'
 
     --  Comments
-    use {
-        'tpope/vim-commentary',
-    }
+    use 'tpope/vim-commentary' -- Running with issues
 
     --  VIEW --
 
@@ -138,8 +147,6 @@ require('packer').startup(function()
             })
         end
     }
-    use 'rbong/vim-flog'
-    use 'pwntester/octo.nvim'
 
     --  Search
     use 'nvim-telescope/telescope.nvim'
