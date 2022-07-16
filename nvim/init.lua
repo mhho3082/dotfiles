@@ -57,7 +57,12 @@ require('packer').startup(function()
     use 'matze/vim-move'
 
     --  Comments
-    use 'tpope/vim-commentary' -- Running with issues
+    use {
+        'numToStr/Comment.nvim',
+        config = function()
+            require('Comment').setup()
+        end
+    }
 
     --  VIEW --
 
