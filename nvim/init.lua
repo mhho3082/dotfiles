@@ -25,8 +25,19 @@ if vim.fn.empty(vim.fn.glob(packer_install_path)) > 0 then
     })
 end
 
+local packer = require('packer')
+
+-- Tell packer to use popups
+packer.init({
+    display = {
+        open_fn = function()
+            return require("packer.util").float({ border = "rounded" })
+        end,
+    },
+})
+
 -- The great plugins list
-require('packer').startup(function()
+packer.startup(function()
     -- Self-manage
     use 'wbthomason/packer.nvim'
 
