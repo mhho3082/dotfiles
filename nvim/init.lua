@@ -646,7 +646,7 @@ require("lualine").setup({
 			{ "filename", path = 1 },
 			{ "diagnostics", sources = { "nvim_lsp" } },
 		},
-		lualine_x = { "filetype", "fileformat", "encoding", "%l:%2c" },
+		lualine_x = { "filetype", "fileformat", "encoding" },
 		lualine_y = {},
 		lualine_z = {},
 	},
