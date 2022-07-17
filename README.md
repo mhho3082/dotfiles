@@ -59,6 +59,7 @@ The apps that I usually use (some of which I install only when needed):
   - `prettierd`
   - `clang-format`
   - `yapf`
+  - `stylua`
 - Usual stuff
   - `mupdf`
   - `firefox`
