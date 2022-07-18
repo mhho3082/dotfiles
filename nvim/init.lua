@@ -43,6 +43,14 @@ packer.init({
 
 -- The great plugins list
 packer.startup(function()
+	-- Speed up plugins' load time (Must be first plugin)
+	use({
+		"lewis6991/impatient.nvim",
+		config = function()
+			require("impatient")
+		end,
+	})
+
 	-- Self-manage
 	use("wbthomason/packer.nvim")
 
@@ -250,6 +258,10 @@ vim.opt.splitright = true
 -- Persistence for undo history
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir/"
+
+-- Use filetype.lua
+vim.g.do_filetype_lua = 1
+vim.g.did_load_filetypes = 0
 
 -- Remove 'c no curly braces' errors
 vim.g.c_no_curly_error = 1
