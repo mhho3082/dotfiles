@@ -131,6 +131,21 @@ packer.startup(function()
   --  LSP
   use("neovim/nvim-lspconfig")
   use("williamboman/nvim-lsp-installer")
+  use({
+    "glepnir/lspsaga.nvim",
+    branch = "main",
+    config = function()
+      local saga = require("lspsaga")
+
+      saga.init_lsp_saga({
+        border_style = "rounded",
+        code_action_icon = " ",
+        code_action_lightbulb = {
+          sign = false,
+        },
+      })
+    end,
+  })
 
   --  Auto-complete
   use("hrsh7th/nvim-cmp")
@@ -343,12 +358,11 @@ wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 
 -- LSP mappings
 wk.register({
-  ["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Info" },
-  ["J"] = { "<cmd>lua vim.diagnostic.open_float()<CR>", "Hover Issue" },
-  ["gr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
-  ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" },
-  ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto declaration" },
-  ["gh"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code action"}
+  ["K"] = { "<cmd>Lspsaga hover_doc<CR>", "Hover Info" },
+  ["J"] = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Hover diagnostics" },
+  ["gr"] = { "<cmd>Lspsaga rename<CR>", "Rename" },
+  ["gd"] = { "<cmd>Lspsaga preview_definition<CR>", "Hover definition" },
+  ["gh"] = { "<cmd>Lspsaga code_action<CR>", "Code action" },
 }, { mode = "n" })
 
 -- The great <leader> remap
