@@ -344,12 +344,12 @@ wk.register({
 
 -- Name the comment motions
 wk.register({
-  ["gb"] = { "Block Comment" },
-  ["gc"] = { "Line Comment" },
+  ["gb"] = { "Block comment" },
+  ["gc"] = { "Line comment" },
 }, { mode = "n" })
 wk.register({
-  ["gb"] = { "Block Comment" },
-  ["gc"] = { "Line Comment" },
+  ["gb"] = { "Block comment" },
+  ["gc"] = { "Line comment" },
 }, { mode = "x" })
 
 -- Use EasyaAlign with ga (e.g., vipga..., gaip...)
@@ -358,7 +358,7 @@ wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 
 -- LSP mappings
 wk.register({
-  ["K"] = { "<cmd>Lspsaga hover_doc<CR>", "Hover Info" },
+  ["K"] = { "<cmd>Lspsaga hover_doc<CR>", "Hover info" },
   ["J"] = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Hover diagnostics" },
   ["gr"] = { "<cmd>Lspsaga rename<CR>", "Rename" },
   ["gd"] = { "<cmd>Lspsaga preview_definition<CR>", "Hover definition" },
