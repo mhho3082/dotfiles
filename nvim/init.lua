@@ -8,11 +8,6 @@
 -- ripgrep
 -- fd
 
--- Nice-to-have:
--- python3, pip3, pynvim module
--- nodejs, npm, neovim module
--- gh
-
 -------------
 -- PLUGINS --
 -------------
