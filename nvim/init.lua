@@ -362,6 +362,7 @@ wk.register({
   ["J"] = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Hover diagnostics" },
   ["gr"] = { "<cmd>Lspsaga rename<CR>", "Rename" },
   ["gd"] = { "<cmd>Lspsaga preview_definition<CR>", "Hover definition" },
+  ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" },
   ["gh"] = { "<cmd>Lspsaga code_action<CR>", "Code action" },
 }, { mode = "n" })
 
