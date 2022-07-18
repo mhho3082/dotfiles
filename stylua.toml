@@ -1,3 +1,4 @@
+# For formatting Lua files in the repo
 # From https://github.com/ellisonleao/gruvbox.nvim/blob/main/stylua.toml
 column_width = 120
 line_endings = "Unix"
