@@ -97,7 +97,10 @@ packer.startup(function()
 	--  Highlight
 	use({
 		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
+		run = function()
+			-- From wiki: https://github.com/nvim-treesitter/nvim-treesitter/wiki/Installation
+			require("nvim-treesitter.install").update({ with_sync = true })
+		end,
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				highlight = {
