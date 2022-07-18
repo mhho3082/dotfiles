@@ -348,6 +348,7 @@ wk.register({
   ["gr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
   ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" },
   ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto declaration" },
+  ["gh"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code action"}
 }, { mode = "n" })
 
 -- The great <leader> remap
