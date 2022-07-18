@@ -394,8 +394,6 @@ wk.register({
     g = {
       name = "git",
       -- Statuses
-      s = { "<cmd>Floggit<cr>", "status" },
-      g = { "<cmd>Flogsplit<cr>", "graph" },
       b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "blame" },
       d = { "<cmd>Gvdiffsplit<cr>", "diff with head" },
       -- Fetch
