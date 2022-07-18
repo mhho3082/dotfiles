@@ -1,5 +1,3 @@
--- Warning: do not use `:source %`, it would duplicate LSP server instances
-
 -- Programs needed:
 -- unzip (for installation)
 -- ripgrep
