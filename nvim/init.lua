@@ -46,6 +46,9 @@ packer.startup(function()
 	-- Self-manage
 	use("wbthomason/packer.nvim")
 
+	-- Test startup time
+	use("dstein64/vim-startuptime")
+
 	--  EDIT --
 
 	--  Targets
