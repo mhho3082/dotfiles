@@ -364,8 +364,10 @@ wk.register({
   ["gd"] = { "<cmd>Lspsaga preview_definition<CR>", "Hover definition" },
   ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" },
   ["gh"] = { "<cmd>Lspsaga code_action<CR>", "Code action" },
-  ["gH"] = { "<cmd>Lspsaga range_code_action<CR>", "Range code action" },
 }, { mode = "n" })
+wk.register({
+  ["gh"] = { ":<C-U>Lspsaga range_code_action<CR>", "Code action" },
+}, { mode = "v" })
 
 -- The great <leader> remap
 wk.register({
