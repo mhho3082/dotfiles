@@ -423,6 +423,7 @@ wk.register({
       name = "interface",
       n = { "<cmd>set number!<cr>", "number" },
       s = { "<cmd>set spell!<cr>", "spell" },
+      w = { "<cmd>set wrap!<cr>", "wrap" },
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
     },
     w = { "<cmd>wa<cr>", "save all" },
