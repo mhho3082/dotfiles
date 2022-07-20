@@ -358,15 +358,15 @@ wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 
 -- LSP mappings
 wk.register({
-  ["K"] = { "<cmd>Lspsaga hover_doc<CR>", "Hover info" },
-  ["J"] = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Hover diagnostics" },
-  ["gr"] = { "<cmd>Lspsaga rename<CR>", "Rename" },
-  ["gd"] = { "<cmd>Lspsaga preview_definition<CR>", "Hover definition" },
-  ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" },
-  ["gh"] = { "<cmd>Lspsaga code_action<CR>", "Code action" },
+  ["K"] = { "<cmd>Lspsaga hover_doc<cr>", "Hover info" },
+  ["J"] = { "<cmd>Lspsaga show_line_diagnostics<cr>", "Hover diagnostics" },
+  ["gr"] = { "<cmd>Lspsaga rename<cr>", "Rename" },
+  ["gd"] = { "<cmd>Lspsaga preview_definition<cr>", "Hover definition" },
+  ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
+  ["gh"] = { "<cmd>Lspsaga code_action<cr>", "Code action" },
 }, { mode = "n" })
 wk.register({
-  ["gh"] = { ":<C-U>Lspsaga range_code_action<CR>", "Code action" },
+  ["gh"] = { ":<C-U>Lspsaga range_code_action<cr>", "Code action" },
 }, { mode = "v" })
 
 -- The great <leader> remap
