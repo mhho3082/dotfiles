@@ -120,6 +120,20 @@ Some language servers I have installed in Neovim through `nvim-lsp-installer`:
 
 ## Handy setup scripts
 
+A safe sequence to bootstrap `yay` from a clean installation
+(for Arch-based distros):
+
+```bash
+sudo pacman-mirrors --fasttrack
+sudo pacman -Syu
+
+sudo pacman --needed -S lib32-glibc glibc
+sudo pacman --needed -S git base-devel
+sudo pacman -S yay
+
+yay -Syu --devel --timeupdate
+```
+
 Set fish as the default shell (from bash / zsh):
 
 ```bash
