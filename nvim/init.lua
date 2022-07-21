@@ -660,14 +660,29 @@ cmp.setup.cmdline(":", {
 -- LUALINE --
 -------------
 
+-- gitsigns integration copied from:
+-- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-branch
+
+-- Gitsigns diff
+local function gitsigns_diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed,
+    }
+  end
+end
+
 -- Boot up lualine
 require("lualine").setup({
   options = { section_separators = "", component_separators = "" },
   sections = {
     lualine_a = { "mode" },
     lualine_b = {
-      { "branch", icon = "" },
-      { "diff", symbols = { added = " ", modified = " ", removed = " " } },
+      { "b:gitsigns_head", icon = "" },
+      { "diff", source = gitsigns_diff_source, symbols = { added = " ", modified = " ", removed = " " } },
     },
     lualine_c = {
       { "filename", path = 1 },
