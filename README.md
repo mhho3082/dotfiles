@@ -152,6 +152,12 @@ nvim +PackerSync
 # Then open neovim again to do whatever you want
 ```
 
+Optimize SSD usage:
+
+```bash
+sudo systemctl enable fstrim.timer
+```
+
 Source and use the setup for Tmux:
 
 ```bash
