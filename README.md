@@ -213,8 +213,7 @@ Test for 256-colours for your terminal emulator:
 curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 ```
 
-Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`
-(issue faced more commonly on Debian-based distros):
+Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`:
 
 ```bash
 # Bash / Zsh
