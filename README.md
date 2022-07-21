@@ -120,6 +120,10 @@ Some language servers I have installed in Neovim through `nvim-lsp-installer`:
 
 ## Handy setup scripts
 
+Note to self:
+If you cannot install Linux, check that:
+- You are using 
+
 A safe sequence to bootstrap `yay` from a clean installation
 (for Arch-based distros):
 
