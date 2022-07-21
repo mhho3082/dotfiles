@@ -120,10 +120,6 @@ Some language servers I have installed in Neovim through `nvim-lsp-installer`:
 
 ## Handy setup scripts
 
-Note to self:
-If you cannot install Linux, check that:
-- You are using 
-
 A safe sequence to bootstrap `yay` from a clean installation
 (for Arch-based distros):
 
@@ -134,6 +130,7 @@ sudo pacman -Syu
 sudo pacman --needed -S lib32-glibc glibc
 sudo pacman --needed -S git base-devel yay
 
+sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
 yay -Syu --devel --timeupdate
 ```
 
@@ -180,7 +177,7 @@ Get the fastest download times with `pacman`
 sudo pacman-mirrors --fasttrack
 ```
 
-Get colours in `pacman`'s CLI:
+Get colours with `pacman` and `yay`:
 
 ```bash
 sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
