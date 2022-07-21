@@ -128,8 +128,7 @@ sudo pacman-mirrors --fasttrack
 sudo pacman -Syu
 
 sudo pacman --needed -S lib32-glibc glibc
-sudo pacman --needed -S git base-devel
-sudo pacman -S yay
+sudo pacman --needed -S git base-devel yay
 
 yay -Syu --devel --timeupdate
 ```
