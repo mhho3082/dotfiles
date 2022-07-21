@@ -148,8 +148,8 @@ nvim +PackerSync
 
 # Wait for Treesitter to compile dozens of parsers
 # (should be quick on locally installed Linux)
-# type `:qa!` to quit
-# then open neovim again to do whatever you want
+# Type `:qa!`, then press enter, to quit
+# Then open neovim again to do whatever you want
 ```
 
 Source and use the setup for Tmux:
