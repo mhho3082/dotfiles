@@ -93,15 +93,7 @@ packer.startup(function()
   })
 
   --  Colorscheme
-  use({
-    "eddyekofo94/gruvbox-flat.nvim",
-    config = function()
-      vim.g.gruvbox_transparent = true
-      vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
-
-      vim.cmd("colorscheme gruvbox-flat")
-    end,
-  })
+  use("eddyekofo94/gruvbox-flat.nvim")
 
   --  Highlight
   use({
@@ -468,6 +460,12 @@ vim.opt.ruler = false
 vim.opt.showcmd = false
 vim.opt.showmode = false
 vim.opt.cursorline = false
+
+-- Gruvbox theme
+vim.g.gruvbox_transparent = true
+vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
+
+vim.cmd([[colorscheme gruvbox-flat]])
 
 ---------------
 -- TELESCOPE --
