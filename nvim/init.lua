@@ -114,6 +114,12 @@ packer.startup(function()
       })
     end,
   })
+  use({
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end,
+  })
 
   --  Statusline and tabline
   use("nvim-lualine/lualine.nvim")
