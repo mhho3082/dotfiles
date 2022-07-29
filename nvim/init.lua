@@ -369,10 +369,11 @@ wk.register({
   ["gr"] = { "<cmd>Lspsaga rename<cr>", "Rename" },
   ["gd"] = { "<cmd>Lspsaga preview_definition<cr>", "Hover definition" },
   ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
-  ["gh"] = { "<cmd>Lspsaga code_action<cr>", "Code action" },
+  ["gh"] = { "<cmd>Lspsaga lsp_finder<cr>", "LSP finder" },
+  ["ca"] = { "<cmd>Lspsaga code_action<cr>", "Code action" },
 }, { mode = "n" })
 wk.register({
-  ["gh"] = { ":<C-U>Lspsaga range_code_action<cr>", "Code action" },
+  ["ca"] = { ":<C-U>Lspsaga range_code_action<cr>", "Code action" },
 }, { mode = "v" })
 
 -- The great <leader> remap
