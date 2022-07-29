@@ -1,7 +1,4 @@
--- Programs needed:
--- unzip (for installation)
--- ripgrep
--- fd
+-- Programs needed: unzip, ripgrep, fd
 
 -------------
 -- PLUGINS --
