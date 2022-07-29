@@ -278,13 +278,6 @@ vim.g.c_no_curly_error = 1
 -- Set spelling locale
 vim.opt.spelllang = "en_gb"
 
--- Set python path
-if vim.loop.os_uname().sysname == "Windows-NT" then
-  vim.g.python3_host_prog = "python"
-else
-  vim.g.python3_host_prog = "/usr/bin/python3"
-end
-
 -- Lazy redraw
 vim.opt.lazyredraw = true
 
