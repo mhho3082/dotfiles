@@ -1,0 +1,3 @@
+ctrl+shift+"="       = increase font size (by 3)
+ctrl+shift+"-"       = decrease font size (by 3)
+ctrl+shift+backspace = reset font size
