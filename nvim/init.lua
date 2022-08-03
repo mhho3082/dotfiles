@@ -423,8 +423,8 @@ wk.register({
       w = { "<cmd>set wrap!<cr>", "wrap" },
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
     },
-    w = { "<cmd>wa<cr>", "save all" },
-    q = { "<cmd>qa<cr>", "quit" },
+    w = { "<cmd>wa!<cr>", "save all" },
+    q = { "<cmd>qa!<cr>", "quit" },
     a = {
       ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
       "format",
