@@ -439,7 +439,7 @@ wk.register({
 
 -- Basic settings
 vim.opt.termguicolors = true
-vim.opt.updatetime = 100
+vim.g.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 vim.opt.signcolumn = "yes"
