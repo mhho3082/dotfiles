@@ -90,7 +90,7 @@ packer.startup(function()
   })
 
   --  Colorscheme
-  use("eddyekofo94/gruvbox-flat.nvim")
+  use("savq/melange")
 
   --  Highlight
   use({
@@ -438,8 +438,8 @@ wk.register({
 -----------
 
 -- Basic settings
-vim.g.termguicolors = true
-vim.g.updatetime = 100
+vim.opt.termguicolors = true
+vim.opt.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 vim.opt.signcolumn = "yes"
@@ -451,11 +451,8 @@ vim.opt.showcmd = false
 vim.opt.showmode = false
 vim.opt.cursorline = false
 
--- Gruvbox theme
-vim.g.gruvbox_transparent = true
-vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
-
-vim.cmd("colorscheme gruvbox-flat")
+-- Use theme
+vim.cmd("colorscheme melange")
 
 ---------------
 -- TELESCOPE --
