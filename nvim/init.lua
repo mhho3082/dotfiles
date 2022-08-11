@@ -422,6 +422,7 @@ wk.register({
       s = { "<cmd>set spell!<cr>", "spell" },
       w = { "<cmd>set wrap!<cr>", "wrap" },
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
+      b = { "<cmd>let &background = ( &background == \"dark\"? \"light\" : \"dark\" )<cr>", "background"}
     },
     w = { "<cmd>wa!<cr>", "save all" },
     q = { "<cmd>qa!<cr>", "quit" },
