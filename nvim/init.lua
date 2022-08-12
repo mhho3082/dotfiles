@@ -360,10 +360,10 @@ wk.register({
   ["gd"] = { "<cmd>Lspsaga preview_definition<cr>", "Hover definition" },
   ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
   ["gh"] = { "<cmd>Lspsaga lsp_finder<cr>", "LSP finder" },
-  ["ca"] = { "<cmd>Lspsaga code_action<cr>", "Code action" },
+  ["<leader>c"] = { "<cmd>Lspsaga code_action<cr>", "Code action" },
 }, { mode = "n" })
 wk.register({
-  ["ca"] = { ":<C-U>Lspsaga range_code_action<cr>", "Code action" },
+  ["<leader>c"] = { ":<C-U>Lspsaga range_code_action<cr>", "Code action" },
 }, { mode = "v" })
 
 -- The great <leader> remap
@@ -430,7 +430,7 @@ wk.register({
       ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
       "format",
     },
-    c = { "<cmd>nohlsearch<cr>", "nohl" },
+    n = { "<cmd>nohlsearch<cr>", "nohl" },
   },
 })
 
