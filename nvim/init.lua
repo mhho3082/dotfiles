@@ -340,12 +340,12 @@ wk.register({
 
 -- Name the comment motions
 wk.register({
-  ["gb"] = { "Block comment" },
-  ["gc"] = { "Line comment" },
+  ["gb"] = { "block comment" },
+  ["gc"] = { "line comment" },
 }, { mode = "n" })
 wk.register({
-  ["gb"] = { "Block comment" },
-  ["gc"] = { "Line comment" },
+  ["gb"] = { "block comment" },
+  ["gc"] = { "line comment" },
 }, { mode = "x" })
 
 -- Use EasyaAlign with ga (e.g., vipga..., gaip...)
@@ -354,16 +354,16 @@ wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 
 -- LSP mappings
 wk.register({
-  ["K"] = { "<cmd>Lspsaga hover_doc<cr>", "Hover info" },
-  ["J"] = { "<cmd>Lspsaga show_line_diagnostics<cr>", "Hover diagnostics" },
-  ["gr"] = { "<cmd>Lspsaga rename<cr>", "Rename" },
-  ["gd"] = { "<cmd>Lspsaga preview_definition<cr>", "Hover definition" },
-  ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
+  ["K"] = { "<cmd>Lspsaga hover_doc<cr>", "hover info" },
+  ["J"] = { "<cmd>Lspsaga show_line_diagnostics<cr>", "hover diagnostics" },
+  ["gr"] = { "<cmd>Lspsaga rename<cr>", "rename" },
+  ["gd"] = { "<cmd>Lspsaga preview_definition<cr>", "hover definition" },
+  ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "goto definition" },
   ["gh"] = { "<cmd>Lspsaga lsp_finder<cr>", "LSP finder" },
-  ["<leader>c"] = { "<cmd>Lspsaga code_action<cr>", "Code action" },
+  ["<leader>c"] = { "<cmd>Lspsaga code_action<cr>", "code action" },
 }, { mode = "n" })
 wk.register({
-  ["<leader>c"] = { ":<C-U>Lspsaga range_code_action<cr>", "Code action" },
+  ["<leader>c"] = { ":<C-U>Lspsaga range_code_action<cr>", "code action" },
 }, { mode = "v" })
 
 -- The great <leader> remap
