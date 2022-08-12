@@ -90,7 +90,7 @@ packer.startup(function()
   })
 
   --  Colorscheme
-  use("savq/melange")
+  use("eddyekofo94/gruvbox-flat.nvim")
 
   --  Highlight
   use({
@@ -422,7 +422,7 @@ wk.register({
       s = { "<cmd>set spell!<cr>", "spell" },
       w = { "<cmd>set wrap!<cr>", "wrap" },
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
-      b = { "<cmd>let &background = ( &background == \"dark\"? \"light\" : \"dark\" )<cr>", "background"}
+      b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "background" },
     },
     w = { "<cmd>wa!<cr>", "save all" },
     q = { "<cmd>qa!<cr>", "quit" },
@@ -453,7 +453,9 @@ vim.opt.showmode = false
 vim.opt.cursorline = false
 
 -- Use theme
-vim.cmd("colorscheme melange")
+vim.g.gruvbox_transparent = true
+vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
+vim.cmd("colorscheme gruvbox-flat")
 
 ---------------
 -- TELESCOPE --
