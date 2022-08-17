@@ -478,7 +478,6 @@ require("telescope").setup({
         "--type",
         "f",
         "-H",
-        "-I",
         "-E",
         "CVS",
         "-E",
