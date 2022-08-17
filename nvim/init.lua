@@ -497,6 +497,7 @@ require("telescope").setup({
         "*.c.o",
         "-E",
         "*.c.d",
+        "--strip-cwd-prefix",
       },
     },
   },
