@@ -361,6 +361,8 @@ wk.register({
   ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "goto definition" },
   ["gh"] = { "<cmd>Lspsaga lsp_finder<cr>", "LSP finder" },
   ["<leader>c"] = { "<cmd>Lspsaga code_action<cr>", "code action" },
+  ["<C-j>"] = {vim.diagnostic.goto_next, "next diagnostic"},
+  ["<C-k>"] = {vim.diagnostic.goto_prev, "prev diagnostic"},
 }, { mode = "n" })
 wk.register({
   ["<leader>c"] = { ":<C-U>Lspsaga range_code_action<cr>", "code action" },
