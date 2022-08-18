@@ -135,21 +135,6 @@ packer.startup(function()
   use("neovim/nvim-lspconfig")
   use("williamboman/nvim-lsp-installer")
   use({
-    "glepnir/lspsaga.nvim",
-    branch = "main",
-    config = function()
-      local saga = require("lspsaga")
-
-      saga.init_lsp_saga({
-        border_style = "rounded",
-        code_action_icon = " ",
-        code_action_lightbulb = {
-          enable = false,
-        },
-      })
-    end,
-  })
-  use({
     "j-hui/fidget.nvim",
     config = function()
       require("fidget").setup()
@@ -360,18 +345,20 @@ wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 
 -- LSP mappings
 wk.register({
-  ["K"] = { "<cmd>Lspsaga hover_doc<cr>", "hover info" },
-  ["J"] = { "<cmd>Lspsaga show_line_diagnostics<cr>", "hover diagnostics" },
-  ["gr"] = { "<cmd>Lspsaga rename<cr>", "rename" },
-  ["gd"] = { "<cmd>Lspsaga preview_definition<cr>", "hover definition" },
-  ["gD"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "goto definition" },
-  ["gh"] = { "<cmd>Lspsaga lsp_finder<cr>", "LSP finder" },
-  ["<leader>c"] = { "<cmd>Lspsaga code_action<cr>", "code action" },
+  ["K"] = { vim.lsp.buf.hover, "hover" },
+  ["J"] = {
+    '<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "single" })<cr>',
+    "diagnostics",
+  },
+  ["gr"] = { vim.lsp.buf.rename, "rename" },
+  ["gd"] = { vim.lsp.buf.definition, "definition" },
+  ["gD"] = { vim.lsp.buf.implementation, "implementation" },
+  ["<leader>c"] = { vim.lsp.buf.code_action, "code action" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
   ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
 }, { mode = "n" })
 wk.register({
-  ["<leader>c"] = { ":<C-U>Lspsaga range_code_action<cr>", "code action" },
+  ["<leader>c"] = { ":<C-U>lua vim.lsp.buf.code_action()<cr>", "code action" },
 }, { mode = "v" })
 
 -- The great <leader> remap
