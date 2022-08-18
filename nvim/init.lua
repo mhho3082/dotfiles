@@ -369,7 +369,6 @@ wk.register({
       name = "find",
       f = { "<cmd>Telescope find_files<cr>", "files" },
       g = { "<cmd>Telescope git_files<cr>", "git files" },
-      r = { "<cmd>Telescope oldfiles<cr>", "recents" },
       b = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "buffer" },
       s = { "<cmd>Telescope live_grep<cr>", "search" },
       c = { "<cmd>Telescope commands<cr>", "commands" },
