@@ -65,13 +65,13 @@ The apps that I usually use (some of which I install only when needed):
   - Rust
     - `rustup`
   - Python
-    - `python`
+    - `pyenv`
     - `yapf`
+  - JS/TS
+    - `nvm`
+    - `prettierd`
   - Lua (Neovim)
     - `stylua`
-  - JS/TS
-    - `nodejs`
-    - `prettierd`
 - Utilities
   - `rofi`
   - `fcitx5`
