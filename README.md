@@ -40,57 +40,53 @@ The apps that I usually use (some of which I install only when needed):
 <details>
 <summary> App List </summary>
 
-- Coding
-  - `fish`
-  - `nvim`
-  - `github-cli` (`gh` on the command line)
-  - `python`
-  - `nodejs`
+- Casual usage
+  - `mupdf`
+  - `firefox`
+  - `discord`
 - Command line
+  - `fish`
   - `yay`
   - `exa`
   - `xclip`
   - `fd`
   - `fzf`
   - `ripgrep`
-  - `tmux`
-  - `ranger`
-- Linters
-  - `prettierd`
-  - `clang-format`
-  - `yapf`
-  - `stylua`
-- Usual stuff
-  - `mupdf`
-  - `firefox`
-  - `chromium`
+- School/Work
+  - `zotero-bin`
   - `libreoffice-fresh`
-  - `discord`
-  - `signal-desktop`
+- Coding
+  - `nvim`
+  - `github-cli` (`gh` in shell)
+  - C/C++
+    - `base-devel`
+    - `llvm`
+    - `clang-format`
+  - Rust
+    - `rustup`
+  - Python
+    - `python`
+    - `yapf`
+  - Lua (Neovim)
+    - `stylua`
+  - JS/TS
+    - `nodejs`
+    - `prettierd`
 - Utilities
   - `rofi`
-  - `kazam`
-  - `fcitx5` (with `rime` plugin)
+  - `fcitx5`
   - `redshift`
   - `timeshift` (system backup)
   - `backintime` (user files backup)
   - `xsane`
-- School
-  - `zotero-bin`
-  - `teams-natifier`
-  - `zoom`
-  - `simplenote-electron-bin`
-- Theme and fonts
-  - `whitesur-gtk-theme`
-  - `tela-icon-theme`
-  - `nordzy-cursors`
+- Themes and fonts
+  - `mojave-gtk-theme`
   - `ttf-fira-code`
-  - `noto-fonts`
   - `ttf-ms-fonts`
 
 </details>
 
-The extensions I usually install to my browsers:
+Some extensions that I auto-install in my browsers:
 
 <details>
 <summary> Browser extensions </summary>
@@ -103,17 +99,20 @@ The extensions I usually install to my browsers:
 
 </details>
 
-Some language servers I have installed in Neovim through `nvim-lsp-installer`:
+I also install language servers in Neovim through `nvim-lsp-installer`,
+and remove them when I don't use related languages.
+I will possibly migrate to `mason.nvim`, but it is hard to say.
 
 <details>
 <summary> Language servers </summary>
 
+- `rust-analyser` (rust)
 - `clangd` (C, C++)
 - `jedi_language_server` (Python)
 - `ltex` (Grammar checking)
 - `sumneko_lua` (Lua)
 - `bashls` (Bash)
-- `tsserver` (JavaScript and TypeScript)
+- `tsserver` (JS, TS)
 - `volar` (Vue)
 
 </details>

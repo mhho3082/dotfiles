@@ -5,7 +5,7 @@
 
     # Please put your GPG key ID here
     # Find with `gpg --list-keys --keyid-format long`
-    signingkey = E100C05873BB5C21
+    signingkey = 41162F86
 
 [core]
     editor = nvim

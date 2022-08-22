@@ -1,7 +1,7 @@
 @theme "/usr/share/rofi/themes/Arc-Dark.rasi"
 configuration {
+    modi: "window,run,ssh,drun";
 	kb-cancel: "Escape,Ctrl+c,Alt+F1";
 	show-icons: true;
-	icon-theme: "Tela-manjaro-dark";
 	drun-display-format: "{name}";
 }
