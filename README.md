@@ -81,6 +81,7 @@ The apps that I usually use (some of which I install only when needed):
   - `xsane`
 - Themes and fonts
   - `mojave-gtk-theme`
+  - `vimix-cursors`
   - `ttf-fira-code`
   - `ttf-ms-fonts`
 
