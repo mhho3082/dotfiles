@@ -107,6 +107,8 @@ packer.startup(function()
 
           -- list of language that will be disabled
           disable = {},
+
+          auto_install = true,
         },
       })
     end,
@@ -156,6 +158,16 @@ packer.startup(function()
 
   --  Format
   use("sbdchd/neoformat")
+
+  -- Rust
+  use({
+    "saecki/crates.nvim",
+    tag = "v0.2.1",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("crates").setup()
+    end,
+  })
 
   --  COMMAND TOOLS --
 
@@ -365,15 +377,6 @@ wk.register({
 wk.register({
   ["<leader>"] = {
     name = "leader",
-    f = {
-      name = "find",
-      f = { "<cmd>Telescope find_files<cr>", "files" },
-      g = { "<cmd>Telescope git_files<cr>", "git files" },
-      b = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "buffer" },
-      s = { "<cmd>Telescope live_grep<cr>", "search" },
-      c = { "<cmd>Telescope commands<cr>", "commands" },
-      t = { "/\\(TODO:\\|FIX:\\|FIXME:\\|NOTE:\\|BUG:\\|TEMP:\\|HACK:\\|XXX:\\)<cr>", "todo" },
-    },
     b = {
       name = "sidebars",
       d = { "<cmd>NvimTreeToggle<cr>", "directory" },
@@ -420,6 +423,7 @@ wk.register({
     },
     w = { "<cmd>wa!<cr>", "save all" },
     q = { "<cmd>qa!<cr>", "quit" },
+    f = { "<cmd>Telescope find_files<cr>", "find files" },
     a = {
       ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
       "format",
@@ -634,6 +638,7 @@ cmp.setup({
     { name = "path" },
     { name = "nvim_lua" },
     { name = "nvim_lsp_signature_help" },
+    { name = "crates" },
   }),
 })
 
