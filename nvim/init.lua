@@ -139,7 +139,14 @@ packer.startup(function()
   use({
     "j-hui/fidget.nvim",
     config = function()
-      require("fidget").setup()
+      require("fidget").setup({
+        text = {
+          spinner = "dots",
+          done = "✔",
+          commenced = "Started",
+          completed = "Completed",
+        },
+      })
     end,
   })
 
