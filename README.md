@@ -97,6 +97,7 @@ Some extensions that I auto-install in my browsers:
 - `uBlock origin`
 - `Zotero`
 - `Facebook container`
+- `Rust Search Extension`
 
 </details>
 
