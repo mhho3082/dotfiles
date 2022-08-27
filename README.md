@@ -101,9 +101,8 @@ Some extensions that I auto-install in my browsers:
 
 </details>
 
-I also install language servers in Neovim through `nvim-lsp-installer`,
+I also install language servers and such in Neovim through `mason.nvim`,
 and remove them when I don't use related languages.
-I will possibly migrate to `mason.nvim`, but it is hard to say.
 
 <details>
 <summary> Language servers </summary>

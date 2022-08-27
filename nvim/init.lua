@@ -134,8 +134,19 @@ packer.startup(function()
   -- COPILOTS --
 
   --  LSP
+  use({
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
+  })
+  use({
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup()
+    end,
+  })
   use("neovim/nvim-lspconfig")
-  use("williamboman/nvim-lsp-installer")
   use({
     "j-hui/fidget.nvim",
     config = function()
@@ -539,64 +550,53 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
--- Register a handler that will be called for each installed server when it's ready
--- (i.e. when installation is finished
---  or if the server is already installed).
-require("nvim-lsp-installer").on_server_ready(function(server)
-  local opts = {}
+-- Setup every LSP server that we may use
 
-  opts.capabilities = capabilities
+require("lspconfig")["sumneko_lua"].setup({
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim", "use" },
+      },
+      runtime = {
+        version = "LuaJIT",
+      },
+    },
+  },
+})
 
-  -- Get sumneko_lua to understand init.lua
-  if server.name == "sumneko_lua" then
-    opts.settings = {
-      Lua = {
-        diagnostics = {
-          globals = { "vim", "use" },
-        },
-        runtime = {
-          version = "LuaJIT",
+require("lspconfig")["ltex"].setup({
+  capabilities = capabilities,
+  settings = {
+    ltex = {
+      language = "en-GB",
+      dictionary = {
+        ["en-GB"] = {
+          "neovim",
+          "fzf",
+          "ripgrep",
+          "fd",
+          "dotfiles",
+          "zsh",
+          "Hin",
         },
       },
-    }
-  end
+    },
+  },
+})
 
-  -- Use British English for prose
-  if server.name == "ltex" then
-    opts.settings = {
-      ltex = {
-        language = "en-GB",
-        dictionary = {
-          ["en-GB"] = {
-            "neovim",
-            "fzf",
-            "ripgrep",
-            "fd",
-            "dotfiles",
-            "zsh",
-            "Hin",
-          },
-        },
+require("lspconfig")["rust_analyzer"].setup({
+  capabilities = capabilities,
+  settings = {
+    ["rust-analyzer"] = {
+      -- Check with Clippy automatically
+      checkOnSave = {
+        command = "clippy",
       },
-    }
-  end
-
-  if server.name == "rust_analyzer" then
-    opts.settings = {
-      ["rust-analyzer"] = {
-        -- Check with Clippy automatically
-        checkOnSave = {
-          command = "clippy",
-        },
-      },
-    }
-  end
-
-  -- This setup() function will take the provided server configuration and decorate it with the necessary properties
-  -- before passing it onwards to lspconfig.
-  -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  server:setup(opts)
-end)
+    },
+  },
+})
 
 ---------
 -- CMP --
