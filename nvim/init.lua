@@ -44,15 +44,15 @@ packer.startup(function()
   -- Test startup time
   use("dstein64/vim-startuptime")
 
-  --  EDIT --
+  -- EDIT --
 
-  --  Targets
+  -- Targets
   use("wellle/targets.vim")
 
   -- Indent
   use("tpope/vim-sleuth")
 
-  --  Pairs
+  -- Pairs
   use({
     "kylechui/nvim-surround",
     config = function()
@@ -70,7 +70,7 @@ packer.startup(function()
   use("junegunn/vim-easy-align")
   use("matze/vim-move")
 
-  --  Comments
+  -- Comments
   use({
     "numToStr/Comment.nvim",
     config = function()
@@ -78,9 +78,9 @@ packer.startup(function()
     end,
   })
 
-  --  VIEW --
+  -- VIEW --
 
-  --  Indent guide
+  -- Indent guide
   use({
     "lukas-reineke/indent-blankline.nvim",
     config = function()
@@ -89,10 +89,10 @@ packer.startup(function()
     end,
   })
 
-  --  Colorscheme
+  -- Colorscheme
   use("eddyekofo94/gruvbox-flat.nvim")
 
-  --  Highlight
+  -- Highlight
   use({
     "nvim-treesitter/nvim-treesitter",
     run = function()
@@ -120,10 +120,10 @@ packer.startup(function()
     end,
   })
 
-  --  Statusline and tabline
+  -- Statusline and tabline
   use("nvim-lualine/lualine.nvim")
 
-  --  Icons
+  -- Icons
   use({
     "kyazdani42/nvim-web-devicons",
     config = function()
@@ -133,13 +133,15 @@ packer.startup(function()
 
   -- COPILOTS --
 
-  --  LSP
+  -- Package manager
   use({
     "williamboman/mason.nvim",
     config = function()
       require("mason").setup()
     end,
   })
+
+  -- LSP
   use({
     "williamboman/mason-lspconfig.nvim",
     config = function()
@@ -147,6 +149,8 @@ packer.startup(function()
     end,
   })
   use("neovim/nvim-lspconfig")
+
+  -- LSP server status
   use({
     "j-hui/fidget.nvim",
     config = function()
@@ -161,7 +165,7 @@ packer.startup(function()
     end,
   })
 
-  --  Auto-complete
+  -- Auto-complete
   use("hrsh7th/nvim-cmp")
   use("hrsh7th/cmp-nvim-lsp")
   use("hrsh7th/cmp-nvim-lua")
@@ -169,12 +173,12 @@ packer.startup(function()
   use("hrsh7th/cmp-cmdline")
   use("hrsh7th/cmp-nvim-lsp-signature-help")
 
-  --  Snippets
+  -- Snippets
   use("L3MON4D3/LuaSnip")
   use("saadparwaiz1/cmp_luasnip")
   use("rafamadriz/friendly-snippets")
 
-  --  Format
+  -- Format
   use("sbdchd/neoformat")
 
   -- Rust
@@ -187,12 +191,12 @@ packer.startup(function()
     end,
   })
 
-  --  COMMAND TOOLS --
+  -- COMMAND TOOLS --
 
-  --  Command aid and remap
+  -- Command aid and remap
   use("folke/which-key.nvim")
 
-  --  Git
+  -- Git
   use("tpope/vim-fugitive")
   use("tpope/vim-rhubarb")
   use({
@@ -211,11 +215,11 @@ packer.startup(function()
     end,
   })
 
-  --  Search
+  -- Search
   use("nvim-telescope/telescope.nvim")
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 
-  --  Trees
+  -- Trees
   use({
     "kyazdani42/nvim-tree.lua",
     config = function()
@@ -249,7 +253,7 @@ packer.startup(function()
     end,
   })
 
-  --  Library for other plugins
+  -- Library for other plugins
   use("nvim-lua/plenary.nvim")
 
   -- Auto-load all the above
