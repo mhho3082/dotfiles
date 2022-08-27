@@ -178,9 +178,6 @@ packer.startup(function()
   use("saadparwaiz1/cmp_luasnip")
   use("rafamadriz/friendly-snippets")
 
-  -- Format
-  use("sbdchd/neoformat")
-
   -- Rust
   use({
     "saecki/crates.nvim",
@@ -385,8 +382,9 @@ wk.register({
     "diagnostics",
   },
   ["gr"] = { vim.lsp.buf.rename, "rename" },
-  ["gd"] = { vim.lsp.buf.definition, "definition" },
-  ["gD"] = { vim.lsp.buf.implementation, "implementation" },
+  ["gd"] = { vim.lsp.buf.definition, "goto definition" },
+  ["gD"] = { vim.lsp.buf.implementation, "goto implementation" },
+  ["<leader>a"] = { vim.lsp.buf.formatting, "format" },
   ["<leader>c"] = { vim.lsp.buf.code_action, "code action" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
   ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
@@ -443,13 +441,9 @@ wk.register({
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
       b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "background" },
     },
-    w = { "<cmd>wa!<cr>", "save all" },
+    w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
-    f = { "<cmd>Telescope find_files<cr>", "find files" },
-    a = {
-      ":let _s=@/ <Bar> :%s/\\s\\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <cr><cmd>Neoformat<cr>",
-      "format",
-    },
+    f = { "<cmd>Telescope find_files<cr>", "find" },
     n = { "<cmd>nohlsearch<cr>", "nohl" },
   },
 })
