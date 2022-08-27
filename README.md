@@ -61,17 +61,12 @@ The apps that I usually use (some of which I install only when needed):
   - C/C++
     - `base-devel`
     - `llvm`
-    - `clang-format`
   - Rust
     - `rustup`
   - Python
     - `pyenv`
-    - `yapf`
   - JS/TS
     - `nvm`
-    - `prettierd`
-  - Lua (Neovim)
-    - `stylua`
 - Utilities
   - `rofi`
   - `fcitx5`
@@ -101,20 +96,16 @@ Some extensions that I auto-install in my browsers:
 
 </details>
 
-I also install language servers and such in Neovim through `mason.nvim`,
-and remove them when I don't use related languages.
+I also install and remove packages in Neovim through `mason.nvim`
+with respect to the languages I am currently working with.
 
 <details>
-<summary> Language servers </summary>
+<summary> Some language servers </summary>
 
 - `rust-analyser` (rust)
-- `clangd` (C, C++)
-- `jedi_language_server` (Python)
+- `lua-language-server` (Lua)
 - `ltex` (Grammar checking)
-- `sumneko_lua` (Lua)
-- `bashls` (Bash)
-- `tsserver` (JS, TS)
-- `volar` (Vue)
+- `clangd` (C, C++)
 
 </details>
 
