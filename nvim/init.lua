@@ -550,53 +550,55 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
--- Setup every LSP server that we may use
+-- Setup all LSP servers installed by Mason
+for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
+  local opts = {}
+  opts.capabilities = capabilities
 
-require("lspconfig")["sumneko_lua"].setup({
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim", "use" },
-      },
-      runtime = {
-        version = "LuaJIT",
-      },
-    },
-  },
-})
-
-require("lspconfig")["ltex"].setup({
-  capabilities = capabilities,
-  settings = {
-    ltex = {
-      language = "en-GB",
-      dictionary = {
-        ["en-GB"] = {
-          "neovim",
-          "fzf",
-          "ripgrep",
-          "fd",
-          "dotfiles",
-          "zsh",
-          "Hin",
+  if server == "rust_analyzer" then
+    opts.settings = {
+      ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy",
         },
       },
-    },
-  },
-})
+    }
+  end
 
-require("lspconfig")["rust_analyzer"].setup({
-  capabilities = capabilities,
-  settings = {
-    ["rust-analyzer"] = {
-      -- Check with Clippy automatically
-      checkOnSave = {
-        command = "clippy",
+  if server == "sumneko_lua" then
+    opts.settings = {
+      Lua = {
+        diagnostics = {
+          globals = { "vim", "use" },
+        },
+        runtime = {
+          version = "LuaJIT",
+        },
       },
-    },
-  },
-})
+    }
+  end
+
+  if server == "ltex" then
+    opts.settings = {
+      ltex = {
+        language = "en-GB",
+        dictionary = {
+          ["en-GB"] = {
+            "neovim",
+            "fzf",
+            "ripgrep",
+            "fd",
+            "dotfiles",
+            "zsh",
+            "Hin",
+          },
+        },
+      },
+    }
+  end
+
+  require("lspconfig")[server].setup(opts)
+end
 
 ---------
 -- CMP --
