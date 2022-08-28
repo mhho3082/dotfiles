@@ -396,6 +396,16 @@ wk.register({
 wk.register({
   ["<leader>"] = {
     name = "leader",
+    -- Basics
+    w = { "<cmd>wa!<cr>", "save" },
+    q = { "<cmd>qa!<cr>", "quit" },
+    -- Telescopes
+    f = { "<cmd>Telescope find_files<cr>", "files" },
+    d = { require("telescope.builtin").diagnostics, "diagnostics" },
+    s = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- sidebar (yeah I know this is weird)
+    u = { "<cmd>UndotreeToggle<cr>", "undotree" },
+    -- Interface
+    n = { "<cmd>nohlsearch<cr>", "nohl" },
     p = {
       name = "packer",
       p = { "<cmd>PackerSync<cr>", "sync" },
@@ -434,16 +444,6 @@ wk.register({
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
       b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "background" },
     },
-    -- Basics
-    w = { "<cmd>wa!<cr>", "save" },
-    q = { "<cmd>qa!<cr>", "quit" },
-    -- Telescopes
-    f = { "<cmd>Telescope find_files<cr>", "files" },
-    d = { require("telescope.builtin").diagnostics, "diagnostics" },
-    s = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- sidebar (yeah I know this is weird)
-    u = { "<cmd>UndotreeToggle<cr>", "undotree" },
-    -- Interface
-    n = { "<cmd>nohlsearch<cr>", "nohl" },
   },
 })
 
