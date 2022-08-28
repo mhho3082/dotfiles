@@ -85,7 +85,7 @@ packer.startup(function()
     "lukas-reineke/indent-blankline.nvim",
     config = function()
       vim.g.indent_blankline_use_treesitter = true
-      vim.g.indent_blankline_buftype_exclude = { "terminal" }
+      vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
     end,
   })
 
