@@ -242,12 +242,6 @@ packer.startup(function()
     end,
   })
   use({
-    "folke/trouble.nvim",
-    config = function()
-      require("trouble").setup({})
-    end,
-  })
-  use({
     "mbbill/undotree",
     config = function()
       -- Open on the right
@@ -387,8 +381,8 @@ wk.register({
     "diagnostics",
   },
   ["gr"] = { vim.lsp.buf.rename, "rename" },
-  ["gd"] = { vim.lsp.buf.definition, "goto definition" },
-  ["gD"] = { vim.lsp.buf.implementation, "goto implementation" },
+  ["gd"] = { require("telescope.builtin").lsp_definitions, "goto definition" },
+  ["gD"] = { require("telescope.builtin").lsp_implementations, "goto implementation" },
   ["<leader>a"] = { vim.lsp.buf.formatting, "format" },
   ["<leader>c"] = { vim.lsp.buf.code_action, "code action" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
@@ -402,12 +396,6 @@ wk.register({
 wk.register({
   ["<leader>"] = {
     name = "leader",
-    b = {
-      name = "sidebars",
-      d = { "<cmd>NvimTreeToggle<cr>", "directory" },
-      u = { "<cmd>UndotreeToggle<cr>", "undo" },
-      p = { "<cmd>TroubleToggle<cr>", "problems" },
-    },
     p = {
       name = "packer",
       p = { "<cmd>PackerSync<cr>", "sync" },
@@ -446,9 +434,15 @@ wk.register({
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
       b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "background" },
     },
+    -- Basics
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
+    -- Telescopes
     f = { "<cmd>Telescope find_files<cr>", "find" },
+    d = { require("telescope.builtin").diagnostics, "diagnostics" },
+    s = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- sidebar (yeah I know this is weird)
+    u = { "<cmd>UndotreeToggle<cr>", "undotree" },
+    -- Interface
     n = { "<cmd>nohlsearch<cr>", "nohl" },
   },
 })
