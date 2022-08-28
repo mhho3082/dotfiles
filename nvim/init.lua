@@ -593,17 +593,26 @@ require("luasnip.loaders.from_vscode").lazy_load()
 
 cmp.setup({
   enabled = function()
+    -- Enable in command mode
+    if vim.api.nvim_get_mode().mode == "c" then
+      return true
+    end
+
+    -- Disable in Telescope window
     local in_prompt = vim.api.nvim_buf_get_option(0, "buftype") == "prompt"
-    if in_prompt then -- this will disable cmp in the Telescope window
+    if in_prompt then
       return false
     end
 
     local context = require("cmp.config.context")
-    if context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment") then
+
+    -- Disable in comments
+    if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
       return false
     end
 
-    if context.in_treesitter_capture("string") == true or context.in_syntax_group("String") then
+    -- Disable in strings
+    if context.in_treesitter_capture("string") or context.in_syntax_group("String") then
       return false
     end
 
