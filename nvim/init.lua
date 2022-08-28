@@ -461,7 +461,7 @@ vim.opt.showmode = false
 vim.opt.cursorline = false
 
 -- Use theme
-vim.g.gruvbox_transparent = true
+vim.g.gruvbox_flat_style = "hard"
 vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
 vim.cmd("colorscheme gruvbox-flat")
 
