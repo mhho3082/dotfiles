@@ -632,6 +632,7 @@ cmp.setup({
     { name = "path" },
     { name = "nvim_lua" },
     { name = "nvim_lsp_signature_help" },
+    { name = "crates" },
   }),
 })
 
