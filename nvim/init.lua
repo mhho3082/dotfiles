@@ -400,7 +400,7 @@ wk.register({
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
     -- Telescopes
-    f = { "<cmd>Telescope find_files<cr>", "files" },
+    f = { require("telescope.builtin").find_files, "files" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
     s = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- sidebar (yeah I know this is weird)
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
