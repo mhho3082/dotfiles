@@ -69,7 +69,7 @@ The apps that I usually use (some of which I install only when needed):
     - `nvm`
 - Utilities
   - `rofi`
-  - `fcitx5`
+  - `fcitx5` + `rime-cantonese`
   - `redshift`
   - `timeshift` (system backup)
   - `backintime` (user files backup)
