@@ -1,0 +1,15 @@
+Basic
+uname -a - basic system info
+inxi     - detailed system info
+htop     - cpu and ram loads
+
+The `ls*` commands
+lscpu    - cpu info
+lsmem    - mem info
+lsusb    - usb info
+lspci    - pci devices info
+
+Misc.
+sensors  - sensor data (e.g., temperature)
+acpi     - battery level
+date     - current time
