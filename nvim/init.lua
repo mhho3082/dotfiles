@@ -269,7 +269,19 @@ vim.opt.hidden = true
 vim.opt.linebreak = true
 vim.opt.completeopt = "menuone,noselect"
 
--- Default indent (sleuth overrides this if indent format found)
+-- Split below (s) and right (v)
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
+-- Ignore case (unless specified) in regex
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- No magic in regex
+vim.opt.magic = false
+
+-- Default indent
+-- (sleuth overrides this if indent format found)
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
@@ -278,10 +290,6 @@ vim.opt.expandtab = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
-
--- Set split directions
-vim.opt.splitbelow = true
-vim.opt.splitright = true
 
 -- Persistence for undo history
 vim.opt.undofile = true
@@ -301,10 +309,8 @@ vim.opt.spelllang = "en_gb"
 -- Lazy redraw
 vim.opt.lazyredraw = true
 
--- Fix Markdown code block rendering issue
+-- Markdown code block rendering
 vim.g.markdown_minlines = 100
-
--- Add Markdown code block formatting to these languages
 vim.g.markdown_fenced_languages = {
   "c",
   "c++=cpp",
