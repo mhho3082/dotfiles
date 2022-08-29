@@ -100,12 +100,17 @@ I also install and remove packages in Neovim through `mason.nvim`
 with respect to the languages I am currently working with.
 
 <details>
-<summary> Some language servers </summary>
+<summary> Some `mason` stuff </summary>
 
-- `rust-analyser` (rust)
-- `lua-language-server` (Lua)
-- `ltex` (Grammar checking)
-- `clangd` (C, C++)
+- Rust
+  - `rust-analyser`
+- Lua
+  - `lua-language-server`
+  - `stylua`
+- C/C++
+  - `clangd`
+- Grammar (Markdown and LaTeX)
+  - `ltex`
 
 </details>
 
