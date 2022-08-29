@@ -67,7 +67,6 @@ packer.startup(function()
   })
 
   -- Move code
-  use("junegunn/vim-easy-align")
   use("matze/vim-move")
 
   -- Comments
@@ -368,10 +367,6 @@ wk.register({
   ["gb"] = { "block comment" },
   ["gc"] = { "line comment" },
 }, { mode = "x" })
-
--- Use EasyaAlign with ga (e.g., vipga..., gaip...)
-wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "n" })
-wk.register({ ["ga"] = { "<Plug>(EasyAlign)", "EasyAlign" } }, { mode = "x" })
 
 -- LSP mappings
 wk.register({
