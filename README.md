@@ -66,7 +66,8 @@ The apps that I usually use (some of which I install only when needed):
   - Python
     - `pyenv`
   - JS/TS
-    - `nvm`
+    - `node`
+    - `npm`
 - Utilities
   - `rofi`
   - `fcitx5` + `rime-cantonese`
