@@ -110,8 +110,9 @@ with respect to the languages I am currently working with.
   - `stylua`
 - C/C++
   - `clangd`
-- Grammar (Markdown and LaTeX)
+- Markdown
   - `ltex`
+  - `prettierd`
 
 </details>
 
