@@ -379,7 +379,7 @@ wk.register({
 wk.register({
   ["K"] = { vim.lsp.buf.hover, "hover" },
   ["J"] = {
-    '<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "single" })<cr>',
+    '<cmd>lua vim.diagnostic.open_float(0, { scope = "cursor" })<cr>',
     "diagnostics",
   },
   ["gr"] = { vim.lsp.buf.rename, "rename" },
