@@ -192,6 +192,10 @@ If you find `xbacklight` not working, switch to `brightnesctl`.
 To fix screen-tearing issues with Ryzen APUs, see
 https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)
 
+After you configure Grub, remember to `grub-mkconfig`,
+then `grub-install`; see
+https://wiki.archlinux.org/title/GRUB#Configuration
+
 ## Auxiliary scripts
 
 Pipe to clipboard:
