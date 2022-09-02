@@ -237,3 +237,5 @@ ln -s (which fdfind) ~/.local/bin/fd
   https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
 - `m` bookmark function inspired by
   https://dmitryfrank.com/articles/shell_shortcuts
+- `i3` config copied from EndeavourOS's default config at
+  https://github.com/endeavouros-team/endeavouros-i3wm-setup
