@@ -179,10 +179,18 @@ sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
 
 To set up Git and GitHub with a GPG key for commits, see
 [this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html)
-(GPG is usually installed already; install if not.)
 
 To set up Cantonese input with Rime, see
 [this page by Rime's makers](https://github.com/rime/rime-cantonese/wiki)
+
+To fix brightness issues
+(esp. brightness drops to minimum when (un)plugging), see
+https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options
+
+If you find `xbacklight` not working, switch to `brightnesctl`.
+
+To fix screen-tearing issues with Ryzen APUs, see
+https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)
 
 ## Auxiliary scripts
 
