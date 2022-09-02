@@ -5,7 +5,7 @@
 If you want to use my config, I would advise you to fork this repo,
 look through the code, and remove the parts you don't need first.
 
-I currently use Manjaro with Xfce,
+I have recently hopped to `EndeavourOS` with i3,
 and have only tested this config on my own machine.
 If you find any bugs, feel free to file an issue
 (but I cannot promise a response).
@@ -48,13 +48,12 @@ The apps that I usually use (some of which I install only when needed):
   - `fish`
   - `yay`
   - `exa`
-  - `xclip`
   - `fd`
   - `fzf`
   - `ripgrep`
 - School/Work
-  - `zotero-bin`
   - `libreoffice-fresh`
+  - `zotero-bin`
 - Coding
   - `nvim`
   - `github-cli` (`gh` in shell)
@@ -64,21 +63,18 @@ The apps that I usually use (some of which I install only when needed):
   - Rust
     - `rustup`
   - Python
-    - `pyenv`
+    - `python`
   - JS/TS
     - `node`
     - `npm`
 - Utilities
+  - `htop`
   - `rofi`
-  - `fcitx5` + `rime-cantonese`
-  - `redshift`
-  - `timeshift` (system backup)
-  - `backintime` (user files backup)
   - `xsane`
-- Themes and fonts
-  - `mojave-gtk-theme`
-  - `vimix-cursors`
-  - `ttf-fira-code`
+  - `fcitx5` + `rime-cantonese`
+  - `brightnessctl`
+- Fonts
+  - `nerd-fonts-fira-code`
   - `ttf-ms-fonts`
 
 </details>
@@ -112,7 +108,7 @@ with respect to the languages I am currently working with.
   - `clangd`
 - Markdown
   - `ltex`
-  - `prettierd`
+  - `prettierd` (needs `node` and `npm`)
 
 </details>
 
@@ -237,5 +233,5 @@ ln -s (which fdfind) ~/.local/bin/fd
   https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
 - `m` bookmark function inspired by
   https://dmitryfrank.com/articles/shell_shortcuts
-- `i3` config copied from EndeavourOS's default config at
+- `i3` config copied from `EndeavourOS`'s default config at
   https://github.com/endeavouros-team/endeavouros-i3wm-setup
