@@ -1,5 +1,16 @@
 # Copied and modified from EndeavourOS's default i3 theme and config
 
+# Stark differences:
+# 
+# Uses backlightctl instead of xbackligh
+#
+# win+s -> split (win+v -> vsplit)
+# win+o -> lock
+# win+e -> tiling, win+t = tabbed, win+g = stacking
+# win+(hjkl) -> vi-like movement
+#
+# And several keybindings removed/diabled 
+
 #######################
 # config starts here: #
 #######################
@@ -181,10 +192,10 @@ bindsym XF86MonBrightnessUp exec brightnessctl set "+10%" && notify-send "Bright
 bindsym XF86MonBrightnessDown exec brightnessctl set "10%-" && notify-send "Brightness - $((100*$(brightnessctl get)/255))%"
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -193,10 +204,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -205,7 +216,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+s split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -214,8 +225,8 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+g layout tabbed
+bindsym $mod+g layout stacking
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -538,8 +549,8 @@ bindsym $mod+d exec rofi -modi drun -show drun \
 
 ## rofi bindings for window menu ($mod+t /F10 optional disabled)
 
-bindsym $mod+t exec rofi -show window \
-		-config ~/.config/rofi/rofidmenu.rasi
+# bindsym $mod+t exec rofi -show window \
+# 		-config ~/.config/rofi/rofidmenu.rasi
 
 # bindsym F10 exec rofi -show window \
 #		-config ~/.config/rofi/rofidmenu.rasi
