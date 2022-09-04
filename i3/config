@@ -2,7 +2,8 @@
 
 # Stark differences:
 # 
-# Uses backlightctl instead of xbackligh
+# Uses backlightctl instead of xbacklight
+# Uses polybar instead of i3bar (config included still)
 #
 # win+s -> split (win+v -> vsplit)
 # win+o -> lock
