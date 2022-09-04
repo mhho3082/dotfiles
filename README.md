@@ -68,6 +68,7 @@ The apps that I usually use (some of which I install only when needed):
     - `node`
     - `npm`
 - Utilities
+  - `polybar`
   - `htop`
   - `rofi`
   - `xsane`
