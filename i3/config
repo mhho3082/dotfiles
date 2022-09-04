@@ -188,8 +188,8 @@ bindsym F1 exec ~/.config/i3/scripts/keyhint-2
 
 # Brightness control
 # Note: xbacklight does not work with AMD systems
-bindsym XF86MonBrightnessUp exec brightnessctl set "+10%" && notify-send "Brightness - $((100*$(brightnessctl get)/255))%"
-bindsym XF86MonBrightnessDown exec brightnessctl set "10%-" && notify-send "Brightness - $((100*$(brightnessctl get)/255))%"
+bindsym XF86MonBrightnessUp exec brightnessctl set "+10%"
+bindsym XF86MonBrightnessDown exec brightnessctl set "10%-"
 
 # change focus
 bindsym $mod+h focus left
