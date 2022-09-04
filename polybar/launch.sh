@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Copied from https://wiki.archlinux.org/title/Polybar
+
 # Terminate already running bar instances
 killall -q polybar
 # If all your bars have ipc enabled, you can also use
