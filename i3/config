@@ -414,6 +414,9 @@ exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
 # Add trackball scrolling for Elecom Huge
 exec --no-startup-id ~/.config/autostart/99-elecom-huge.sh
 
+# Add shading
+exec --no-startup-id redshift
+
 ###############
 # system tray #
 ###############
