@@ -74,6 +74,7 @@ The apps that I usually use (some of which I install only when needed):
   - `xsane`
   - `fcitx5` + `rime-cantonese`
   - `brightnessctl`
+  - `redshift`
 - Fonts
   - `nerd-fonts-fira-code`
   - `ttf-ms-fonts`
