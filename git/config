@@ -37,16 +37,17 @@
 
 [alias]
     b = branch
+    bd = branch -d
     a = add
     aa = add -A
     c = commit
     m = merge
+    # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
+    cd = !"f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)} 2>/dev/null; }; f"
 
     p = push
     pu = pull
 
-    # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
-    cd = !"f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)} 2>/dev/null; }; f"
     cl = clone
     cp = cherry-pick
 
