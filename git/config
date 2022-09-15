@@ -45,7 +45,7 @@
     p = push
     pu = pull
 
-    cd = !"f() { git checkout $1 2>\\dev\\null || git checkout -b $1 2>\\dev\\null; }; f"
+    cd = !"f() { git checkout $1 2>/dev/null || git checkout -b $1 2>/dev/null; }; f"
     cl = clone
     cp = cherry-pick
 
