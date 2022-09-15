@@ -45,11 +45,15 @@
     p = push
     pu = pull
 
-    cd = !"f() { git checkout $1 2>/dev/null || git checkout -b $1 2>/dev/null; }; f"
+    # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
+    cd = !"f() { git checkout ${1:-$(git defaultBranch)} 2>/dev/null || git checkout -b ${1:-$(git defaultBranch)} 2>/dev/null; }; f"
     cl = clone
     cp = cherry-pick
 
     s = status -sb
+
+    # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
+    defaultBranch = !"(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') 2>/dev/null"
 
     # https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
     l = l1
