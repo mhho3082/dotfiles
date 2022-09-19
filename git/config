@@ -116,6 +116,11 @@
 
 # ---
 
+[pager]
+    difftool = true
+
+# ---
+
 [merge]
     tool = nvim
     conflictstyle = diff3
