@@ -86,6 +86,12 @@
     # `git di i` Diff between i revisions ago and current
     di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
+    # Use difftool for the diff
+    # Diff between latest commit and current
+    df = !"git diff-index --quiet HEAD -- || clear; git difftool --patch-with-stat"
+    # `git di i` Diff between i revisions ago and current
+    dfi = !"d() { git difftool --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
     # Remove merged branches
     # (https://dev.to/wojciechko/git-alias-to-delete-merged-branches-3cop)
     cleanup = !"f() { git branch --merged ${1:-main} | grep -E -v \"(^\\*|${1:-main}|main|master|dev)\" | xargs --no-run-if-empty git branch -d;  };f"
@@ -126,10 +132,14 @@
 # ---
 
 [diff]
-    tool = nvimdiff
+    tool = difftastic
 
 [difftool]
     prompt = false
+
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+
 
 [difftool "nvimdiff"]
     cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
