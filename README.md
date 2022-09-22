@@ -57,6 +57,7 @@ The apps that I usually use (some of which I install only when needed):
 - Coding
   - `nvim`
   - `github-cli` (`gh` in shell)
+  - `difftastic`
   - C/C++
     - `base-devel`
     - `llvm`
