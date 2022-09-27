@@ -389,7 +389,7 @@ wk.register({
   ["gr"] = { vim.lsp.buf.rename, "rename" },
   ["gd"] = { require("telescope.builtin").lsp_definitions, "goto definition" },
   ["gD"] = { require("telescope.builtin").lsp_implementations, "goto implementation" },
-  ["<leader>a"] = { vim.lsp.buf.formatting, "format" },
+  ["<leader>v"] = { vim.lsp.buf.formatting, "format" },
   ["<leader>c"] = { vim.lsp.buf.code_action, "code action" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
   ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
@@ -406,9 +406,12 @@ wk.register({
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
     -- Telescopes
-    f = { require("telescope.builtin").find_files, "files" },
+    a = { require("telescope.builtin").lsp_document_symbols, "symbols" }, -- Yup this is weird
+    s = { require("telescope.builtin").live_grep, "search" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
-    s = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- sidebar (yeah I know this is weird)
+    f = { require("telescope.builtin").find_files, "files" },
+    -- Trees
+    t = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- Remember: the `tree` command
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
     n = { "<cmd>nohlsearch<cr>", "nohl" },
@@ -488,6 +491,18 @@ require("telescope").setup({
       i = {
         ["<esc>"] = actions.close,
       },
+    },
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+      "--hidden",
+      "--glob",
+      "!.git/*",
     },
   },
   pickers = {
