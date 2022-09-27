@@ -500,7 +500,8 @@ require("telescope").setup({
       "--line-number",
       "--column",
       "--smart-case",
-      "--hidden",
+      "--fixed-strings", -- no magic
+      "--hidden", -- find hidden files
       "--glob",
       "!.git/*",
     },
