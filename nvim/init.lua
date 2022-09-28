@@ -389,8 +389,8 @@ wk.register({
   ["gr"] = { vim.lsp.buf.rename, "rename" },
   ["gd"] = { require("telescope.builtin").lsp_definitions, "goto definition" },
   ["gD"] = { require("telescope.builtin").lsp_implementations, "goto implementation" },
-  ["<leader>v"] = { vim.lsp.buf.formatting, "format" },
-  ["<leader>c"] = { vim.lsp.buf.code_action, "code action" },
+  ["<leader>k"] = { vim.lsp.buf.formatting, "format" },
+  ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
   ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
 }, { mode = "n" })
