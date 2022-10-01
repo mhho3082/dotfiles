@@ -472,7 +472,7 @@ vim.o.cursorline = false
 -- Use theme
 vim.g.gruvbox_flat_style = "hard"
 vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
-vim.cmd("colorscheme gruvbox-flat")
+vim.cmd.colorscheme("gruvbox-flat")
 
 ---------------
 -- TELESCOPE --
