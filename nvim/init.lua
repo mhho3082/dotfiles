@@ -300,11 +300,6 @@ vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir/"
 
--- Use filetype.lua
--- From https://www.reddit.com/r/neovim/comments/tbo1zo/improve_sourcing_initlua_time/
-vim.g.do_filetype_lua = 1
-vim.g.did_load_filetypes = 0
-
 -- Remove 'c no curly braces' errors
 vim.g.c_no_curly_error = 1
 
