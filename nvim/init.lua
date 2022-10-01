@@ -456,18 +456,18 @@ wk.register({
 -----------
 
 -- Basic settings
-vim.opt.termguicolors = true
+vim.o.termguicolors = true
 vim.g.updatetime = 100
-vim.opt.cmdheight = 1
-vim.opt.laststatus = 2
-vim.opt.signcolumn = "yes"
+vim.o.cmdheight = 1
+vim.o.laststatus = 2
+vim.o.signcolumn = "yes"
 
 -- Don't disturb me
-vim.opt.number = false
-vim.opt.ruler = false
-vim.opt.showcmd = false
-vim.opt.showmode = false
-vim.opt.cursorline = false
+vim.o.number = false
+vim.o.ruler = false
+vim.o.showcmd = false
+vim.o.showmode = false
+vim.o.cursorline = false
 
 -- Use theme
 vim.g.gruvbox_flat_style = "hard"
