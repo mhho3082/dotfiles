@@ -111,8 +111,6 @@ packer.startup(function()
 
           -- list of language that will be disabled
           disable = {},
-
-          auto_install = true,
         },
       })
     end,
@@ -269,7 +267,6 @@ end)
 --------------
 
 -- General settings
-vim.opt.mouse = "a"
 vim.opt.title = true
 vim.opt.hidden = true
 vim.opt.linebreak = true
