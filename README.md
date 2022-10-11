@@ -240,19 +240,6 @@ ln -s $(which fdfind) ~/.local/bin/fd
 ln -s (which fdfind) ~/.local/bin/fd
 ```
 
-I would advise you to change your DNS resolver from your ISP's to
-a public DNS resolver, such as Cloudflare and Google.
-See https://www.linuxfordevices.com/tutorials/linux/change-dns-on-linux
-for how, but as a quick guide:
-
-```bash
-# Instant, but temporary
-sudoedit /etc/resolv.conf
-
-# Permanent
-sudoedit /etc/systemd/resolved.conf
-```
-
 ## Credits
 
 - Git alias derived from
