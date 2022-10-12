@@ -559,6 +559,20 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
         checkOnSave = {
           command = "clippy",
         },
+        imports = {
+          granularity = {
+            group = "module",
+          },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true,
+        },
       },
     }
   end
