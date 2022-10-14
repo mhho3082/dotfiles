@@ -437,6 +437,11 @@ exec --no-startup-id redshift -l $(curl -s "https://location.services.mozilla.co
 # floating rules #
 ##################
 
+# Default floating windows
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="About"] floating enable
+
 # set floating (nontiling) for apps needing it
 for_window [class="Yad" instance="yad"] floating enable
 for_window [class="Galculator" instance="galculator"] floating enable
@@ -449,7 +454,7 @@ for_window [class="qt5ct" instance="qt5ct"] floating enable
 for_window [class="Blueberry.py" instance="blueberry.py"] floating enable
 for_window [class="Bluetooth-sendto" instance="bluetooth-sendto"] floating enable
 for_window [class="Pamac-manager"] floating enable
-for_window [window_role="About"] floating enable
+for_window [instance="Toplevel"] floating enable
 
 # set border of floating window
 for_window [class="urxvt"] border pixel 1
