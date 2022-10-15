@@ -545,8 +545,7 @@ for type, icon in pairs(signs) do
 end
 
 -- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Setup all LSP servers installed by Mason
 for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
