@@ -5,7 +5,7 @@
 If you want to use my config, I would advise you to fork this repo,
 look through the code, and remove the parts you don't need first.
 
-I have recently hopped to `EndeavourOS` with i3,
+I have recently hopped to `EndeavourOS` with `i3wm`,
 and have only tested this config on my own machine.
 If you find any bugs, feel free to file an issue
 (but I cannot promise a response).
@@ -248,5 +248,5 @@ ln -s (which fdfind) ~/.local/bin/fd
   https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
 - `m` bookmark function inspired by
   https://dmitryfrank.com/articles/shell_shortcuts
-- `i3` config copied from `EndeavourOS`'s default config at
+- `i3wm` config copied from `EndeavourOS`'s default config at
   https://github.com/endeavouros-team/endeavouros-i3wm-setup
