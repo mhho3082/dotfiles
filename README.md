@@ -5,11 +5,6 @@
 If you want to use my config, I would advise you to fork this repo,
 look through the code, and remove the parts you don't need first.
 
-I have recently hopped to `EndeavourOS` with `i3wm`,
-and have only tested this config on my own machine.
-If you find any bugs, feel free to file an issue
-(but I cannot promise a response).
-
 ```fish
 # Make sure git and fish are installed
 git --version
