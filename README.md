@@ -77,6 +77,7 @@ The apps that I usually use (some of which I install only when needed):
   - `brightnessctl`
   - `redshift`
 - Fonts
+  - `nerd-fonts-jetbrains-mono`
   - `nerd-fonts-fira-code`
   - `ttf-ms-fonts`
 
