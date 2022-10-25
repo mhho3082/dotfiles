@@ -51,6 +51,7 @@ The apps that I usually use (some of which I install only when needed):
   - `zotero-bin`
 - Coding
   - `nvim`
+  - `just`
   - `github-cli` (`gh` in shell)
   - `difftastic`
   - C/C++
