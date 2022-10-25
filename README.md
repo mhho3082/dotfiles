@@ -6,16 +6,15 @@ If you want to use my config, I would advise you to fork this repo,
 look through the code, and remove the parts you don't need first.
 
 ```fish
-# Make sure git and fish are installed
+# Make sure git is installed
 git --version
-fish --version
 
 # Clone the repo
 git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
 
 # Copy/update ~/.config (backup first if needed)
 cd ~/Documents/dotfiles/
-./copy_to_config.fish
+./copy_to_config.sh
 ```
 
 For various frequently used (and forgotten) commands and motions,
