@@ -72,6 +72,7 @@ The apps that I usually use (some of which I install only when needed):
   - `fcitx5` + `rime-cantonese`
   - `brightnessctl`
   - `redshift`
+  - `qemu-full` + `virt-manager`
 - Fonts
   - `nerd-fonts-jetbrains-mono`
   - `nerd-fonts-fira-code`
