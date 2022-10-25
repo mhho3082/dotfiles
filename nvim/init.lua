@@ -403,6 +403,7 @@ wk.register({
     s = { require("telescope.builtin").live_grep, "search" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
     f = { require("telescope.builtin").find_files, "files" },
+    r = { require("telescope.builtin").resume, "resume search" },
     -- Trees
     t = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- Remember: the `tree` command
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
