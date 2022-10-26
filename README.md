@@ -5,15 +5,13 @@
 If you want to use my config, I would advise you to fork this repo,
 look through the code, and remove the parts you don't need first.
 
-```fish
-# Make sure git is installed
-git --version
-
+```bash
 # Clone the repo
 git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
-
-# Copy/update ~/.config (backup first if needed)
 cd ~/Documents/dotfiles/
+
+# Copy/update to ~/.config (backup first if needed)
+chmod +x ./copy_to_config.sh
 ./copy_to_config.sh
 ```
 
@@ -93,11 +91,13 @@ Some extensions that I auto-install in my browsers:
 
 </details>
 
-I also install and remove packages in Neovim through `mason.nvim`
+I also install some LSP servers in Neovim with `mason.nvim`
 with respect to the languages I am currently working with.
+Some other LSP servers need to be installed natively instead
+and ported into Neovim with `null-ls.nvim`.
 
 <details>
-<summary> Some `mason` stuff </summary>
+<summary> Some LSP servers </summary>
 
 - Rust
   - `rust-analyser`
@@ -108,7 +108,7 @@ with respect to the languages I am currently working with.
   - `clangd`
 - Markdown
   - `ltex`
-  - `prettierd` (needs `node` and `npm`)
+  - `prettierd`
 
 </details>
 
