@@ -10,6 +10,11 @@ if command -v xinput &> /dev/null; then
     num=$(xinput list | grep "ELECOM TrackBall Mouse HUGE TrackBall" | \
         grep "pointer" | grep -Eo "id=[0-9]+" | grep -Eo "[0-9]+")
 
+    if [ -z $num ]; then
+        echo "Elecom Huge not found!"
+        exit 1
+    fi
+
     # Set Fn3 to scroll mode
     xinput set-prop $num 'libinput Button Scrolling Button' 12
     xinput set-prop $num 'libinput Scroll Method Enabled' 0 0 1
