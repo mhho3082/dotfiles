@@ -82,15 +82,15 @@
     uncommit = reset HEAD~1 --mixed
 
     # Diff between latest commit and current
-    d = !"git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat"
+    d = !"git diff --patch-with-stat HEAD"
     # `git di i` Diff between i revisions ago and current
-    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+    di = !"git diff --patch-with-stat HEAD~$1"
 
     # Use difftool for the diff
     # Diff between latest commit and current
-    df = !"git diff-index --quiet HEAD -- || clear; git difftool --patch-with-stat"
+    df = !"git difftool --patch-with-stat HEAD"
     # `git di i` Diff between i revisions ago and current
-    dfi = !"d() { git difftool --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+    dfi = !"git difftool --patch-with-stat HEAD~$1"
 
     # Remove merged branches
     # (https://dev.to/wojciechko/git-alias-to-delete-merged-branches-3cop)
