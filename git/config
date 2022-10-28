@@ -81,16 +81,10 @@
     # Undo last commit softly
     uncommit = reset HEAD~1 --mixed
 
-    # Diff between latest commit and current
-    d = !"git diff --patch-with-stat HEAD"
-    # `git di i` Diff between i revisions ago and current
-    di = !"git diff --patch-with-stat HEAD~$1"
-
-    # Use difftool for the diff
-    # Diff between latest commit and current
-    df = !"git difftool --patch-with-stat HEAD"
-    # `git di i` Diff between i revisions ago and current
-    dfi = !"git difftool --patch-with-stat HEAD~$1"
+    # `git d i` Diff between i revisions ago and current
+    d = !"d() { git diff --patch-with-stat HEAD~${1:-0}; };d"
+    # Use difftool for such diff
+    df = !"d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
 
     # Remove merged branches
     # (https://dev.to/wojciechko/git-alias-to-delete-merged-branches-3cop)
