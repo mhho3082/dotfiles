@@ -419,7 +419,7 @@ exec --no-startup-id ~/.config/autostart/99-elecom-huge.sh
 exec --no-startup-id redshift -l $(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue" | awk 'OFS=":" {print $3,$5}' | tr -d ',}')
 
 # Set default screen brightness
-exec --no-startup-id brightnessctl set "70%"
+exec --no-startup-id brightnessctl set "50%"
 
 ###############
 # system tray #
