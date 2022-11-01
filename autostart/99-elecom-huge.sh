@@ -11,7 +11,7 @@ if command -v xinput &> /dev/null; then
     num=$(xinput list | grep -m 1 "ELECOM TrackBall Mouse HUGE TrackBall" | sed 's/^.*id=\([0-9]*\)[ \t].*$/\1/')
 
     if [ -z $num ]; then
-        echo "Elecom Huge not found!"
+        echo "Elecom Huge not found!" 1>&2
         exit 1
     fi
 
