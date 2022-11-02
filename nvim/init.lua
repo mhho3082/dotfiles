@@ -115,6 +115,17 @@ packer.startup(function()
       })
     end,
   })
+  use({
+    "folke/todo-comments.nvim",
+    config = function()
+      require("todo-comments").setup({
+        signs = false,
+        highlight = {
+          keyword = "bg"
+        }
+      })
+    end,
+  })
 
   -- Statusline and tabline
   use("nvim-lualine/lualine.nvim")
@@ -404,8 +415,9 @@ wk.register({
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
     f = { require("telescope.builtin").find_files, "files" },
     r = { require("telescope.builtin").resume, "resume search" },
+    t = { "<cmd>TodoTelescope<cr>", "todo" },
     -- Trees
-    t = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- Remember: the `tree` command
+    b = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- Remember: side-bar
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
     n = { "<cmd>nohlsearch<cr>", "nohl" },
