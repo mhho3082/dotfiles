@@ -121,8 +121,8 @@ packer.startup(function()
       require("todo-comments").setup({
         signs = false,
         highlight = {
-          keyword = "bg"
-        }
+          keyword = "bg",
+        },
       })
     end,
   })
@@ -234,27 +234,9 @@ packer.startup(function()
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-ui-select.nvim")
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+  use({ "nvim-telescope/telescope-file-browser.nvim" })
 
   -- Trees
-  use({
-    "kyazdani42/nvim-tree.lua",
-    config = function()
-      require("nvim-tree").setup({
-        sort_by = "extension",
-        git = {
-          ignore = false,
-        },
-        view = {
-          side = "right",
-        },
-        renderer = {
-          indent_markers = {
-            enable = true,
-          },
-        },
-      })
-    end,
-  })
   use({
     "mbbill/undotree",
     config = function()
@@ -409,15 +391,15 @@ wk.register({
     -- Basics
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
-    -- Telescopes
-    a = { require("telescope.builtin").lsp_document_symbols, "symbols" }, -- Yup this is weird
+    -- Telescopes (All left hand shorthands)
+    a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
     s = { require("telescope.builtin").live_grep, "search" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
     f = { require("telescope.builtin").find_files, "files" },
     r = { require("telescope.builtin").resume, "resume search" },
     t = { "<cmd>TodoTelescope<cr>", "todo" },
-    -- Trees
-    b = { "<cmd>NvimTreeToggle<cr>", "nvimtree" }, -- Remember: side-bar
+    e = { require("telescope").extensions.file_browser.file_browser, "file browser" },
+    -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
     n = { "<cmd>nohlsearch<cr>", "nohl" },
@@ -534,11 +516,13 @@ require("telescope").setup({
     ["ui-select"] = {
       require("telescope.themes").get_dropdown({}),
     },
+    file_browser = {},
   },
 })
 
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("ui-select")
+require("telescope").load_extension("file_browser")
 
 ---------
 -- LSP --
