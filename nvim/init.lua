@@ -381,7 +381,7 @@ wk.register({
   ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
 }, { mode = "n" })
 wk.register({
-  ["<leader>c"] = { ":<C-U>lua vim.lsp.buf.range_code_action()<cr>", "code action" },
+  ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
 }, { mode = "v" })
 
 -- The great <leader> remap
