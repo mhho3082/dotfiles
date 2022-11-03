@@ -375,13 +375,14 @@ wk.register({
   ["gr"] = { vim.lsp.buf.rename, "rename" },
   ["gd"] = { require("telescope.builtin").lsp_definitions, "goto definition" },
   ["gD"] = { require("telescope.builtin").lsp_implementations, "goto implementation" },
-  ["<leader>k"] = { "<cmd>lua vim.lsp.buf.format{async = true}<cr>", "format" },
   ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
+  ["<leader>k"] = { vim.lsp.buf.format, "format" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
   ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
 }, { mode = "n" })
 wk.register({
   ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
+  ["<leader>k"] = { vim.lsp.buf.format, "format" },
 }, { mode = "v" })
 
 -- The great <leader> remap
