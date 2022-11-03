@@ -367,11 +367,11 @@ wk.register({
 
 -- LSP mappings
 wk.register({
-  ["K"] = { vim.lsp.buf.hover, "hover" },
   ["J"] = {
     '<cmd>lua vim.diagnostic.open_float(0, { scope = "cursor" })<cr>',
     "diagnostics",
   },
+  ["K"] = { vim.lsp.buf.hover, "hover" },
   ["gr"] = { vim.lsp.buf.rename, "rename" },
   ["gd"] = { require("telescope.builtin").lsp_definitions, "goto definition" },
   ["gD"] = { require("telescope.builtin").lsp_implementations, "goto implementation" },
@@ -397,9 +397,9 @@ wk.register({
     s = { require("telescope.builtin").live_grep, "search" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
     f = { require("telescope.builtin").find_files, "files" },
+    e = { require("telescope").extensions.file_browser.file_browser, "file browser" },
     r = { require("telescope.builtin").resume, "resume search" },
     t = { "<cmd>TodoTelescope<cr>", "todo" },
-    e = { require("telescope").extensions.file_browser.file_browser, "file browser" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
