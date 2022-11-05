@@ -16,7 +16,7 @@ end
 set -l bookmark_commands add edit remove
 complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a add -d "Add current pwd to bookmarks"
 complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a edit -d "Edit bookmarks"
-complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a remove -d "Remove current pwd from bookmarks"
+complete -f -c marks -n "not __fish_seen_subcommand_from $bookmark_commands" -a clean -d "Remove invalid directories from bookmarks"
 
 function marks --description "cd with bookmarks"
     if begin
@@ -56,12 +56,16 @@ function marks --description "cd with bookmarks"
     end
 
     if begin
-            [ "$argv[1]" = r ]; or [ "$argv[1]" = remove ]
-        end # Remove pwd from bookmarks
-        # Find and remove pwd (except newline)
-        sed -i -e 's|^'"$PWD"'$||' $cd_bookmark_path
+            [ "$argv[1]" = c ]; or [ "$argv[1]" = clean ]
+        end # Remove invalid pwd from bookmarks
+        # Find and remove invalid directories (except newline)
+        cat $cd_bookmark_path | while read -l line
+            if [ ! -d $line ]
+                sed -i -e 's|^'"$line"'$||' $cd_bookmark_path
+            end
+        end
 
-        # Remove the newline
+        # Remove the newlines
         sed -i '/^$/d' $cd_bookmark_path
         return
     end
