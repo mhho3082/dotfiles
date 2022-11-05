@@ -4,19 +4,18 @@ if which nvim &>/dev/null
     # Let's go Neovim!
     set --global --export VISUAL nvim
     set --global --export EDITOR nvim
-else if which vim % >/dev/null
+else if which vim &>/dev/null
     # Vim then
     set --global --export VISUAL vim
     set --global --export EDITOR vim
 else
-    # really?
-    # (Manjaro does not have Vim pre-installed)
+    # Various Arch-based distros does not have Vim pre-installed
     set --global --export VISUAL vi
     set --global --export EDITOR vi
 end
 
 # Add `$HOME/.local/bin` to path
-# This is where the renamed programs are symlinked to
+# This is where the renamed programs can be symlinked to
 mkdir -p $HOME/.local/bin/
 fish_add_path $HOME/.local/bin
 
@@ -57,8 +56,8 @@ end
 
 # Tmux
 alias t tmux
-alias ta 'tmux at || tmux new'
-alias tl 'tmux list-sessions'
+alias ta 'tmux attach || tmux new'
+alias tl 'tmux ls'
 
 # Pretty print paths
 alias paths 'for i in $PATH; echo $i; end | less -RF'
