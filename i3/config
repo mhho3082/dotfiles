@@ -279,7 +279,7 @@ bindsym XF86AudioPrev exec playerctl previous
 ## App shortcuts
 bindsym $mod+w exec /usr/bin/firefox
 bindsym $mod+n exec /usr/bin/thunar
-bindsym Print exec scrot ~/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved to ~/$(date +"%Y-%m-%d-%T")-screenshot.png"
+bindsym $mod+Print exec scrot ~/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved to ~/$(date +"%Y-%m-%d-%T")-screenshot.png"
 
 # Power Profiles menu switcher (rofi)
 bindsym $mod+Shift+p exec ~/.config/i3/scripts/power-profiles
@@ -424,7 +424,8 @@ exec --no-startup-id brightnessctl set "50%"
 ###############
 # system tray #
 ###############
-# if you do not use dex: exec --no-startup-id dex --autostart --environment i3
+# if you do not use dex:
+exec --no-startup-id dex --autostart --environment i3
 # you need to have tray apps started manually one by one:
 
 # start blueberry app for managing bluetooth devices from tray:
