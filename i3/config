@@ -186,9 +186,6 @@ bindsym $mod+Shift+e exec ~/.config/i3/scripts/powermenu
 # `o` is used to free up `l` for moving
 bindsym $mod+o exec ~/.config/i3/scripts/blur-lock
 
-# reload the configuration file
-bindsym $mod+Shift+c reload
-
 # restart i3 inplace (preserves your layout/session, can be used to update i3)
 bindsym $mod+Shift+r restart
 
@@ -278,7 +275,9 @@ bindsym XF86AudioPrev exec playerctl previous
 
 ## App shortcuts
 bindsym $mod+w exec /usr/bin/firefox
+bindsym $mod+Shift+w exec /usr/bin/firefox -private-window
 bindsym $mod+c exec /usr/bin/chromium
+bindsym $mod+Shift+c exec /usr/bin/chromium --incognito
 bindsym $mod+n exec /usr/bin/thunar
 bindsym $mod+Print exec scrot ~/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved to ~/$(date +"%Y-%m-%d-%T")-screenshot.png"
 
