@@ -278,6 +278,7 @@ bindsym XF86AudioPrev exec playerctl previous
 
 ## App shortcuts
 bindsym $mod+w exec /usr/bin/firefox
+bindsym $mod+c exec /usr/bin/chromium
 bindsym $mod+n exec /usr/bin/thunar
 bindsym $mod+Print exec scrot ~/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved to ~/$(date +"%Y-%m-%d-%T")-screenshot.png"
 
