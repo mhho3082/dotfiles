@@ -56,6 +56,8 @@ The apps that I usually use (some of which I install only when needed):
     - `llvm`
   - Rust
     - `rustup`
+    - `cargo` plugins:
+      - `cargo-edit`
   - Python
     - `python`
   - JS/TS
