@@ -421,6 +421,9 @@ exec --no-startup-id redshift -l $(curl -s "https://location.services.mozilla.co
 # Set default screen brightness
 exec --no-startup-id brightnessctl set "50%"
 
+# Launch fcitx
+exec --no-startup-id fcitx5 -d
+
 ###############
 # system tray #
 ###############
