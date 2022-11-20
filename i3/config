@@ -1,6 +1,6 @@
 # Copied and modified from EndeavourOS's default i3 theme and config
 
-# Stark differences:
+# Main differences:
 # 
 # Uses backlightctl instead of xbacklight
 # Uses polybar instead of i3bar (config included still)
@@ -10,7 +10,7 @@
 # win+e -> tiling, win+t = tabbed, win+g = stacking
 # win+(hjkl) -> vi-like movement
 #
-# And several keybindings removed/diabled 
+# And several keybindings removed/disabled 
 
 #######################
 # config starts here: #
