@@ -72,10 +72,15 @@ packer.startup(function()
   -- EDIT --
 
   -- Indent
-  use("tpope/vim-sleuth")
+  use({
+    "NMAC427/guess-indent.nvim",
+    config = function()
+      require("guess-indent").setup({})
+    end,
+  })
 
   -- Move code
-  use("matze/vim-move")
+  use("booperlv/nvim-gomove")
 
   -- VIEW --
 
