@@ -45,46 +45,37 @@ packer.startup(function()
   -- Self-manage
   use("wbthomason/packer.nvim")
 
+  -- Library for other plugins
+  use("nvim-lua/plenary.nvim")
+
   -- Test startup time
   use("dstein64/vim-startuptime")
 
-  -- EDIT --
-
-  -- Targets
+  -- Swiss army knife
   use({
     "echasnovski/mini.nvim",
     config = function()
+      -- Targets
       require("mini.ai").setup()
+
+      -- Surround
+      require("mini.surround").setup()
+
+      -- Pairs
+      require("mini.pairs").setup()
+
+      -- Comments
+      require("mini.comment").setup()
     end,
   })
+
+  -- EDIT --
 
   -- Indent
   use("tpope/vim-sleuth")
 
-  -- Pairs
-  use({
-    "kylechui/nvim-surround",
-    config = function()
-      require("nvim-surround").setup({})
-    end,
-  })
-  use({
-    "windwp/nvim-autopairs",
-    config = function()
-      require("nvim-autopairs").setup({})
-    end,
-  })
-
   -- Move code
   use("matze/vim-move")
-
-  -- Comments
-  use({
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
-    end,
-  })
 
   -- VIEW --
 
@@ -250,9 +241,6 @@ packer.startup(function()
     end,
   })
 
-  -- Library for other plugins
-  use("nvim-lua/plenary.nvim")
-
   -- Auto-load all the above
   -- if packer is installed for the first time
   if Packer_bootstrap then
@@ -363,12 +351,10 @@ wk.register({
 
 -- Name the comment motions
 wk.register({
-  ["gb"] = { "block comment" },
-  ["gc"] = { "line comment" },
+  ["gc"] = { "comment" },
 }, { mode = "n" })
 wk.register({
-  ["gb"] = { "block comment" },
-  ["gc"] = { "line comment" },
+  ["gc"] = { "comment" },
 }, { mode = "x" })
 
 -- LSP mappings
