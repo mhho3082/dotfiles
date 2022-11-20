@@ -319,7 +319,6 @@ vim.g.markdown_fenced_languages = {
   "bash=sh",
   "fish=sh",
   "zsh",
-  "regex",
   "conf",
   "html",
   "css",
