@@ -38,23 +38,26 @@ packer.init({
 
 -- The great plugins list
 packer.startup(function()
-  -- Speed up plugins' load time (Must be first plugin)
-  use("lewis6991/impatient.nvim")
-
   -- Self-manage
   use("wbthomason/packer.nvim")
 
   -- Library for other plugins
   use("nvim-lua/plenary.nvim")
 
+  -- Speed up plugins' load time
+  -- (Refer to the first function in this config)
+  use("lewis6991/impatient.nvim")
+
   -- Test startup time
   use("dstein64/vim-startuptime")
+
+  -- EDIT --
 
   -- Swiss army knife
   use({
     "echasnovski/mini.nvim",
     config = function()
-      -- Targets
+      -- More targets
       require("mini.ai").setup()
 
       -- Surround
@@ -67,8 +70,6 @@ packer.startup(function()
       require("mini.comment").setup()
     end,
   })
-
-  -- EDIT --
 
   -- Indent
   use({
@@ -101,7 +102,7 @@ packer.startup(function()
   -- Colorscheme
   use("eddyekofo94/gruvbox-flat.nvim")
 
-  -- Highlight
+  -- Syntax highlight
   use({
     "nvim-treesitter/nvim-treesitter",
     run = function()
@@ -120,6 +121,8 @@ packer.startup(function()
       })
     end,
   })
+
+  -- Todo highlight
   use({
     "folke/todo-comments.nvim",
     config = function()
