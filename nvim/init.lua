@@ -79,7 +79,12 @@ packer.startup(function()
   })
 
   -- Move code
-  use("booperlv/nvim-gomove")
+  use({
+    "booperlv/nvim-gomove",
+    config = function()
+      require("gomove").setup()
+    end,
+  })
 
   -- VIEW --
 
