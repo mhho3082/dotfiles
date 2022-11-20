@@ -8,6 +8,10 @@
 -- PLUGINS --
 -------------
 
+-- Speed up plugins' load time
+-- (must install impatient.nvim first)
+require("impatient")
+
 -- Auto-install packer
 local packer_install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(packer_install_path)) > 0 then
@@ -35,12 +39,7 @@ packer.init({
 -- The great plugins list
 packer.startup(function()
   -- Speed up plugins' load time (Must be first plugin)
-  use({
-    "lewis6991/impatient.nvim",
-    config = function()
-      require("impatient")
-    end,
-  })
+  use("lewis6991/impatient.nvim")
 
   -- Self-manage
   use("wbthomason/packer.nvim")
