@@ -279,7 +279,7 @@ bindsym $mod+Shift+w exec /usr/bin/firefox -private-window
 bindsym $mod+c exec /usr/bin/chromium
 bindsym $mod+Shift+c exec /usr/bin/chromium --incognito
 bindsym $mod+n exec /usr/bin/thunar
-bindsym $mod+Print exec scrot ~/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved to ~/$(date +"%Y-%m-%d-%T")-screenshot.png"
+bindsym $mod+Print exec mkdir -p ~/Downloads/ && scrot ~/Downloads/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved at $(date +'%T')"
 
 # Power Profiles menu switcher (rofi)
 bindsym $mod+Shift+p exec ~/.config/i3/scripts/power-profiles
