@@ -51,7 +51,12 @@ packer.startup(function()
   -- EDIT --
 
   -- Targets
-  use("wellle/targets.vim")
+  use({
+    "echasnovski/mini.nvim",
+    config = function()
+      require("mini.ai").setup()
+    end,
+  })
 
   -- Indent
   use("tpope/vim-sleuth")
