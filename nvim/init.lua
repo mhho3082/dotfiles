@@ -100,7 +100,20 @@ packer.startup(function()
   })
 
   -- Colorscheme
-  use("eddyekofo94/gruvbox-flat.nvim")
+  -- use({
+  --   "eddyekofo94/gruvbox-flat.nvim",
+  --   config = function()
+  --     vim.g.gruvbox_flat_style = "hard"
+  --     vim.cmd.colorscheme("gruvbox-flat")
+  --   end,
+  -- })
+  use({
+    "luisiacc/gruvbox-baby",
+    config = function()
+      vim.g.gruvbox_baby_background_color = "dark"
+      vim.cmd.colorscheme("gruvbox-baby")
+    end,
+  })
 
   -- Syntax highlight
   use({
@@ -466,11 +479,6 @@ vim.o.ruler = false
 vim.o.showcmd = false
 vim.o.showmode = false
 vim.o.cursorline = false
-
--- Use theme
-vim.g.gruvbox_flat_style = "hard"
-vim.g.gruvbox_sidebars = { "qf", "vista_kind", "terminal", "undotree", "Trouble", "floggraph", "Outline" }
-vim.cmd.colorscheme("gruvbox-flat")
 
 ---------------
 -- TELESCOPE --
