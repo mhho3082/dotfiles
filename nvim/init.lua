@@ -374,14 +374,6 @@ wk.register({
   ["<C-c>"] = { "<C-[>", "escape" },
 }, { mode = "i" })
 
--- Name the comment motions
-wk.register({
-  ["gc"] = { "comment" },
-}, { mode = "n" })
-wk.register({
-  ["gc"] = { "comment" },
-}, { mode = "x" })
-
 -- LSP mappings
 wk.register({
   ["J"] = {
