@@ -604,6 +604,7 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
             "dotfiles",
             "zsh",
             "Hin",
+            "ArchWiki",
           },
         },
       },

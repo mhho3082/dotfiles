@@ -120,13 +120,20 @@ A safe sequence to bootstrap `yay` from a clean installation
 (for Arch-based distros):
 
 ```bash
+# Add colour to pacman & yay CLIs
+sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+
+# Get fast mirrors
 sudo pacman-mirrors --fasttrack
+
+# Update system
 sudo pacman -Syu
 
+# Install dependencies & yay
 sudo pacman --needed -S lib32-glibc glibc
 sudo pacman --needed -S git base-devel yay
 
-sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+# Init and launch yay for the first time
 yay -Syu --devel --timeupdate
 ```
 
@@ -166,19 +173,6 @@ Login to GitHub CLI:
 gh auth login
 ```
 
-Get the fastest download times with `pacman`
-(for Arch-based distros):
-
-```bash
-sudo pacman-mirrors --fasttrack
-```
-
-Get colours with `pacman` and `yay`:
-
-```bash
-sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
-```
-
 To set up Git and GitHub with a GPG key for commits, see
 [this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html)
 
@@ -187,23 +181,28 @@ To set up Cantonese input with Rime, see
 
 To fix brightness issues
 (esp. brightness drops to minimum when (un)plugging), see
-https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options
+[Backlight on ArchWiki](https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options).
 
-If you find `xbacklight` not working, switch to `brightnesctl`.
+This config uses `brightnessctl` by default;
+if you find `xbacklight` not working, you are advised to switch to `brightnesctl`.
 
 To fix screen-tearing issues with Ryzen APUs, see
-https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)
+[Ryzen on ArchWiki](<https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)>).
 
 After you configure Grub, remember to `grub-mkconfig`,
 then `grub-install`; see
-https://wiki.archlinux.org/title/GRUB#Configuration
+[Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
 
 ## Auxiliary scripts
 
-Pipe to clipboard:
+Pipe from/to clipboard with `xclip`:
 
 ```bash
-echo "Hello world" | xclip
+# Pipe into clipboard
+echo "Hello world" | xclip -sel clip
+
+# Pipe from clipboard
+xclip -out -sel clip | xargs echo
 ```
 
 Remove Windows-style EOLs from a file:
@@ -213,7 +212,7 @@ Remove Windows-style EOLs from a file:
 sed -e 's/\r//g' file.txt # replace with file name
 ```
 
-Use SSH with kitty:
+Use SSH with kitty (if normal SSH does not work for some reason):
 
 ```bash
 kitty +kitten ssh 127.0.0.1 # replace with ssh address
@@ -227,7 +226,7 @@ Test for 256-colours for your terminal emulator:
 curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 ```
 
-Symlink some renamed programs back to usual, e.g., `fdfind` to `fd`:
+Symlink to "rename" programs, e.g., `fdfind` to `fd`:
 
 ```bash
 # Bash / Zsh
