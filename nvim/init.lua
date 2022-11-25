@@ -283,6 +283,21 @@ vim.opt.hidden = true
 vim.opt.linebreak = true
 vim.opt.completeopt = "menuone,noselect"
 
+-- Basic theme settings
+vim.opt.termguicolors = true
+vim.opt.lazyredraw = true
+vim.g.updatetime = 100
+vim.opt.cmdheight = 1
+vim.opt.laststatus = 2
+vim.opt.signcolumn = "yes"
+
+-- Don't disturb me (by default)
+vim.opt.number = false
+vim.opt.ruler = false
+vim.opt.showcmd = false
+vim.opt.showmode = false
+vim.opt.cursorline = false
+
 -- Split below (s) and right (v)
 vim.opt.splitbelow = true
 vim.opt.splitright = true
@@ -314,9 +329,6 @@ vim.g.c_no_curly_error = 1
 
 -- Set spelling locale
 vim.opt.spelllang = "en_gb"
-
--- Lazy redraw
-vim.opt.lazyredraw = true
 
 -- Markdown code block rendering
 vim.g.markdown_minlines = 100
@@ -454,24 +466,6 @@ wk.register({
   },
 })
 
------------
--- THEME --
------------
-
--- Basic settings
-vim.o.termguicolors = true
-vim.g.updatetime = 100
-vim.o.cmdheight = 1
-vim.o.laststatus = 2
-vim.o.signcolumn = "yes"
-
--- Don't disturb me
-vim.o.number = false
-vim.o.ruler = false
-vim.o.showcmd = false
-vim.o.showmode = false
-vim.o.cursorline = false
-
 ---------------
 -- TELESCOPE --
 ---------------
@@ -525,6 +519,7 @@ require("telescope").setup({
   },
 })
 
+-- Load telescope extensions
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("ui-select")
 require("telescope").load_extension("file_browser")
