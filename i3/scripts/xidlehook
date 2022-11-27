@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Configuration for xidlehook, ran by i3
+# Copied and modified from https://gitlab.com/jD91mZM2/xidlehook
+
+# Only exported variables can be used within the timer's command
+# export PRIMARY_DISPLAY="$(xrandr | awk '/ primary/{print $1}')"
+
+if command -v xidlehook
+then
+  # Run xidlehook
+  xidlehook \
+    `# Don't lock when there's a fullscreen application` \
+    --not-when-fullscreen \
+    `# Don't lock when there's audio playing` \
+    --not-when-audio \
+    `# Lock after 60 second` \
+    --timer 60 \
+      '~/.config/i3/scripts/blur-lock' \
+      '' \
+    `# Then suspend 4 minutes after it locks` \
+    --timer 240 \
+      'systemctl suspend' \
+      ''
+else 
+  # Run xautolock if xidlehook not installed
+  xautolock -time 5 -locker "systemctl suspend" -detectsleep
+fi

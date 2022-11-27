@@ -70,6 +70,7 @@ The apps that I usually use (some of which I install only when needed):
   - `xsane`
   - `fcitx5` + `rime-cantonese`
   - `brightnessctl`
+  - `xidlehook`
   - `redshift`
   - `qemu-full` + `virt-manager`
 - Fonts
