@@ -419,7 +419,6 @@ exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
 # exec_always --no-startup-id autotiling
 
 # Run all bash scripts in autostart folder
-# including adding trackball scrolling for Elecom Huge
 exec --no-startup-id run-parts --regex '.*sh$' ~/.config/autostart
 
 # Add shading
