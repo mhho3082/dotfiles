@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Copied from https://wiki.archlinux.org/title/Polybar
 
