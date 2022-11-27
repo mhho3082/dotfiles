@@ -418,8 +418,9 @@ exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
 # `yay -S autotiling ;) (it is in AUR)
 # exec_always --no-startup-id autotiling
 
-# Add trackball scrolling for Elecom Huge
-exec --no-startup-id ~/.config/autostart/99-elecom-huge.sh
+# Run all bash scripts in autostart folder
+# including adding trackball scrolling for Elecom Huge
+exec --no-startup-id run-parts --regex '.*sh$' ~/.config/autostart
 
 # Add shading
 exec --no-startup-id redshift -l $(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue" | awk 'OFS=":" {print $3,$5}' | tr -d ',}')
