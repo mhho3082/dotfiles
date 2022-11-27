@@ -354,7 +354,7 @@ set $ws10 "10"
 #exec_always --no-startup-id picom -b
 #
 # for custom config:
-exec_always --no-startup-id picom --config  ~/.config/picom.conf
+exec_always --no-startup-id picom --config ~/.config/picom.conf
 
 #############################################
 # autostart applications/services on login: #
@@ -433,8 +433,11 @@ exec --no-startup-id fcitx5 -d
 ###############
 # system tray #
 ###############
-# if you do not use dex:
-exec --no-startup-id dex --autostart --environment i3
+
+# If you use dex, the autostarting script
+# is in the previous section.
+
+# If you do not use dex,
 # you need to have tray apps started manually one by one:
 
 # start blueberry app for managing bluetooth devices from tray:
