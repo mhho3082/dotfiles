@@ -96,8 +96,8 @@ Some extensions that I auto-install in my browsers:
 
 I also install some LSP servers in Neovim with `mason.nvim`
 with respect to the languages I am currently working with.
-Some other LSP servers need to be installed natively instead
-and ported into Neovim with `null-ls.nvim`.
+Some other LSP servers need to also be ported into Neovim
+with `null-ls.nvim`; they are marked below.
 
 <details>
 <summary> Some LSP servers </summary>
@@ -106,12 +106,15 @@ and ported into Neovim with `null-ls.nvim`.
   - `rust-analyser`
 - Lua
   - `lua-language-server`
-  - `stylua`
+  - `stylua` (needs `null-ls`)
 - C/C++
   - `clangd`
 - Markdown
   - `ltex`
-  - `prettierd`
+  - `prettierd` (needs `null-ls`)
+- Bash
+  - `bash-language-server`
+  - `shellharden` (needs `null-ls`)
 
 </details>
 
