@@ -3,6 +3,7 @@
 # Main differences:
 # 
 # Uses backlightctl instead of xbacklight
+# Uses xidlehook instead of xautolock
 # Uses polybar instead of i3bar (config included still)
 #
 # win+s -> split (win+v -> vsplit)
@@ -396,9 +397,11 @@ exec --no-startup-id xset s 480 dpms 600 600 600
 # disable power saving (for example if using xscreensaver)
 #exec --no-startup-id xset -dpms
 
-# use xautolock to use autosuspend rules for mobile devices
-# https://wiki.archlinux.org/title/Session_lock#xautolock
-exec --no-startup-id xautolock -time 30 -locker "systemctl suspend"
+# use xidlehook to use autosuspend rules for mobile devices
+# For xautolock: https://wiki.archlinux.org/title/Session_lock#xautolock
+# For xidlehook: https://gitlab.com/jD91mZM2/xidlehook
+# exec --no-startup-id xautolock -time 5 -locker "systemctl suspend" -detectsleep
+exec --no-startup-id ~/.config/i3/scripts/xidlehook
 
 
 # xscreensaver
