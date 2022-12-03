@@ -190,6 +190,7 @@ packer.startup(function()
           require("null-ls").builtins.formatting.prettierd,
           require("null-ls").builtins.formatting.shellharden,
           require("null-ls").builtins.diagnostics.fish,
+          require("null-ls").builtins.formatting.fish_indent,
         },
       })
     end,
