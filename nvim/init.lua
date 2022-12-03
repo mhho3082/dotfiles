@@ -189,6 +189,7 @@ packer.startup(function()
           require("null-ls").builtins.formatting.stylua,
           require("null-ls").builtins.formatting.prettierd,
           require("null-ls").builtins.formatting.shellharden,
+          require("null-ls").builtins.diagnostics.fish,
         },
       })
     end,
