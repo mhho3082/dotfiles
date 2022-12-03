@@ -57,10 +57,9 @@ function fish_prompt --description 'Informative prompt'
     end
 
     # Pipe status (error code)
-    printf '%s ' $pipestatus_string
-
-    # Next line
-    printf '\n'
+    if test -n "$pipestatus_string"
+        printf '%s ' $pipestatus_string
+    end
 
     # Vi mode
     if test "$fish_key_bindings" = fish_vi_key_bindings
