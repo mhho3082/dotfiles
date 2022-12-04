@@ -19,8 +19,8 @@ end
 mkdir -p $HOME/.local/bin/
 fish_add_path $HOME/.local/bin
 
-# Use Vi bindings
-fish_vi_key_bindings
+# Use Vi modes + Emacs bindings
+fish_hybrid_key_bindings
 
 # Remove greeting message
 set fish_greeting ""
