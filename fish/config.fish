@@ -1,10 +1,10 @@
 # == Environment variables ==
 
-if which nvim &>/dev/null
+if command -v nvim &>/dev/null
     # Let's go Neovim!
     set --global --export VISUAL nvim
     set --global --export EDITOR nvim
-else if which vim &>/dev/null
+else if command -v vim &>/dev/null
     # Vim then
     set --global --export VISUAL vim
     set --global --export EDITOR vim
@@ -30,13 +30,13 @@ set fish_greeting ""
 # Basic shortcuts
 alias c clear
 alias q exit
-if which git &>/dev/null
+if command -v git &>/dev/null
     alias g git
 end
-if which nvim &>/dev/null
+if command -v nvim &>/dev/null
     alias n nvim
 end
-if which ranger &>/dev/null
+if command -v ranger &>/dev/null
     alias r ranger
 end
 if test -f ~/.config/fish/functions/marks.fish
@@ -44,12 +44,12 @@ if test -f ~/.config/fish/functions/marks.fish
 end
 
 # Exa (or ls + tree)
-if which exa &>/dev/null
+if command -v exa &>/dev/null
     alias l 'exa --all --long --icons --sort=type --git'
     alias ll 'exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
 else
     alias l 'ls -AlhF --group-directories-first'
-    if which tree &>/dev/null
+    if command -v tree &>/dev/null
         alias ll 'tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
     end
 end
@@ -71,7 +71,7 @@ end
 
 # == FZF ==
 
-if which fzf &>/dev/null
+if command -v fzf &>/dev/null
     # Setup fzf with fd as default source
     set --global --export FZF_DEFAULT_COMMAND 'fd --type f -H -I -E "*.*.package" -E ".svn" -E ".git" -E ".hg" -E "node_modules" -E "bower_components"'
     set --global --export FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"

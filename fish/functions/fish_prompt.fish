@@ -35,7 +35,7 @@ function fish_prompt --description 'Informative prompt'
     set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
 
     # If in Tmux session
-    if type tmux &>/dev/null
+    if command -v tmux &>/dev/null
         if test -n "$TMUX"
             printf '%s %s ' (set_color yellow) (set_color normal)
         end
@@ -50,7 +50,7 @@ function fish_prompt --description 'Informative prompt'
     printf '%s%s ' (set_color brblue) (prompt_pwd | sed 's|^/mnt/c/|C:/|')
 
     # Git status
-    if type git &>/dev/null
+    if command -v git &>/dev/null
         if git rev-parse --git-dir &>/dev/null
             printf '%son %s ' (set_color normal) (fish_git_prompt | sed 's/^[ \t]*//' | sed 's/[(]\(.*\)[)]/\1/')
         end
