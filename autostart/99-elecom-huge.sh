@@ -22,4 +22,6 @@ if command -v xinput &> /dev/null; then
     xinput set-prop "$num" 'libinput Button Scrolling Button' 12
     xinput set-prop "$num" 'libinput Scroll Method Enabled' 0 0 1
     xinput set-button-map "$num" 1 2 3 4 5 6 7 8 9 10 11 2
+else
+    printf "xinput not installed!" >/dev/stderr
 fi
