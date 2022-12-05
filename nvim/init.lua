@@ -203,7 +203,7 @@ packer.startup(function()
       require("fidget").setup({
         text = {
           spinner = "dots",
-          done = "✔",
+          done = "✓",
           commenced = "Started",
           completed = "Completed",
         },
