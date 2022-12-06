@@ -111,10 +111,6 @@ packer.startup(function()
     "luisiacc/gruvbox-baby",
     config = function()
       vim.g.gruvbox_baby_background_color = "dark"
-      vim.g.gruvbox_baby_highlights = {
-        Search = { fg = "#1d2021", bg = "#ebdbb2", style = "NONE" },
-        IncSearch = { fg = "#1d2021", bg = "#ebdbb2", style = "NONE" },
-      }
       vim.cmd.colorscheme("gruvbox-baby")
     end,
   })
