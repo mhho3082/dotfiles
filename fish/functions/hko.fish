@@ -1,40 +1,53 @@
-# Source for using sed to remove trailing blank line
-# sed.sourceforge.net/sed1line.txt
+# Using Hong Kong Observatory's Open Data API:
+# https://data.weather.gov.hk/weatherAPI/doc/HKO_Open_Data_API_Documentation.pdf
 
-# Source webpages to curl from
-set -g forecast "https://www.hko.gov.hk/textonly/v2/forecast/local.htm"
-set -g current "https://www.hko.gov.hk/textonly/v2/forecast/englishwx2.htm"
-set -g 9day "https://www.hko.gov.hk/textonly/v2/forecast/nday_v2.htm"
-set -g world "https://www.hko.gov.hk/textonly/v2/other/wwf.htm"
+# Source URL to curl from (use printf to format options into)
+set -g url "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=%s&lang=%s" # dataType, lang
 
-# Add completion
-set -l hko_commands forecast current 9day world
-complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a forecast -d "Weather forecast"
-complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a current -d "Current weather"
-complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a 9day -d "9 day hko forecast"
-complete -f -c hko -n "not __fish_seen_subcommand_from $hko_commands" -a world -d "World weather"
+# Add completions
+set -l hko_type forecast 9day current warnings info tips
+complete -c hko -f
+complete -c hko -n "not __fish_seen_subcommand_from $hko_type" \
+    -a "forecast 9day current warnings info tips"
 
 function hko -d "Get weather from HKO"
-    # Pick source
+    # Pick data type
     switch "$argv[1]"
         case forecast
-            set -g link $forecast
-        case current
-            set -g link $current
+            set -g type "flw"
         case 9day
-            set -g link $9day
-        case china
-            set -g link $china
-        case world
-            set -g link $world
+            set -g type "fnd"
+        case curr
+        case current
+            set -g type "rhrread"
+        case warnings
+            set -g type "warnsum"
+        case info
+            set -g type "warninginfo"
+        case tips
+            set -g type "swt"
         case '*'
-            set -g link $forecast
+            if test -z "$argv[1]"
+                set -g type "flw"
+            else
+                set -g type "$argv[1]"
+            end
     end
 
-    curl -s $link | # Get data
-        sed 's|<sup>\*<\/sup>|*|g' | # Remove <sup> tags (IDK why HKO puts it there)
-        sed -n '/^<pre>/,${p;/^<\/pre>/q}' | # Get everythin within <pre> tags
-        sed '1d;$d' | # Remove the <pre> tags
-        sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' | # Remove trailing blank lines
+    # Get language
+    switch "$argv[2]"
+        case english
+            set -g lang "en"
+        case '*'
+            if test -z "$argv[2]"
+                set -g lang "en"
+            else
+                set -g lang "$argv[2]"
+            end
+    end
+
+
+    curl -s (printf $url $type $lang) | # Get data
+        python -m json.tool | # Pretty print json
         less -F # Use pager if larger than 1 screen
 end
