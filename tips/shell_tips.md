@@ -1,26 +1,74 @@
+# Shell tips
+
 ## One-liners
 
-Find the largest directories in ~/
+Find the largest files/directories in a directory:
+(Helpful when clearing out disk space)
 
 ```bash
+# Change `~` to the desired directory, or remove for current directory
 du ~ -h -d 1 | sort -hr
 ```
 
-Remove a package fully and safely with `pacman`:
-From [Reddit](https://www.reddit.com/r/archlinux/comments/ki9hmm/how_to_properly_removeuninstall_packagesapps_with/)
+Remove a package completely and safely with `pacman`:
+(From [Reddit](https://www.reddit.com/r/archlinux/comments/ki9hmm/how_to_properly_removeuninstall_packagesapps_with/))
 
 ```bash
+# Replace "package" with package name (fish has auto-complete for this)
+# You can replace `pacman` with `yay` here
 pacman -Runs package
 ```
 
-## Utilities
+Pipe from/to clipboard with `xclip`:
+
+```bash
+# Pipe into clipboard
+echo "Hello world" | xclip -sel clip
+
+# Pipe from clipboard
+xclip -out -sel clip | xargs echo
+```
+
+Remove Windows-style EOLs from a file:
+(From [Stack Overflow](https://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk))
+
+```bash
+sed -e 's/\r//g' file.txt # replace with file name
+```
+
+Use SSH with kitty (if normal SSH does not work for some reason):
+
+```bash
+kitty +kitten ssh 127.0.0.1 # replace with ssh address
+```
+
+Test for 256-colours for your terminal emulator:
+(From [Ask Ubuntu](https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal))
+
+```bash
+curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
+```
+
+Symlink to "rename" programs, e.g., `fdfind` to `fd`:
+
+```bash
+# From Bash / Zsh
+ln -s $(which fdfind) ~/.local/bin/fd
+```
+
+```fish
+# From Fish
+ln -s (which fdfind) ~/.local/bin/fd
+```
+
+## Utility programs
 
 Basic
-`uname -a` - basic system info
+`uname` - basic system info
 `inxi` - detailed system info
 `htop` - CPU and ram loads
 
-The `ls*` commands
+List commands
 `lscpu` - CPU info
 `lsmem` - memory info
 `lsusb` - USB info
