@@ -27,7 +27,8 @@ please see the folder `./tips/`.
 
 ## App list
 
-The apps that I usually use (some of which I install only when needed):
+The apps that I usually use
+(some of which I install only when needed):
 
 <details>
 <summary> App List </summary>
@@ -35,6 +36,7 @@ The apps that I usually use (some of which I install only when needed):
 - Casual usage
   - `mupdf`
   - `firefox`
+  - `chromium`
   - `discord`
 - Command line
   - `fish`
@@ -43,7 +45,7 @@ The apps that I usually use (some of which I install only when needed):
   - `fd`
   - `fzf`
   - `ripgrep`
-- School/Work
+- School
   - `libreoffice-fresh`
   - `zotero-bin`
 - Coding
@@ -51,27 +53,24 @@ The apps that I usually use (some of which I install only when needed):
   - `just`
   - `github-cli` (`gh` in shell)
   - `difftastic`
-  - C/C++
-    - `base-devel`
-    - `llvm`
-  - Rust
+  - `base-devel`
+  - For C/C++
+    - `llvm` (for `clangd` in editors)
+    - `clang-format`
+  - For Rust
     - `rustup`
-    - `cargo` plugins:
-      - `cargo-edit`
-  - Python
-    - `python`
-  - JS/TS
-    - `node`
-    - `npm`
-- Utilities
-  - `polybar`
-  - `htop`
+    - `cargo-edit`
+- Desktop environment setup
+  - `i3-gaps`
   - `rofi`
-  - `xsane`
-  - `fcitx5` + `rime-cantonese`
+  - `polybar`
   - `brightnessctl`
   - `xidlehook`
   - `redshift`
+- Utilities
+  - `htop`
+  - `xsane`
+  - `fcitx5` + `rime-cantonese`
   - `qemu-full` + `virt-manager`
 - Fonts
   - `nerd-fonts-jetbrains-mono`
@@ -80,16 +79,16 @@ The apps that I usually use (some of which I install only when needed):
 
 </details>
 
-Some extensions that I auto-install in my browsers:
+Some extensions that I install in my browsers:
 
 <details>
 <summary> Browser extensions </summary>
 
 - `Vimium`
 - `HTTPS Everywhere`
-- `uBlock origin`
-- `Zotero`
-- `Facebook container`
+- `uBlock Origin`
+- `Zotero Connector`
+- `Facebook Container`
 - `Rust Search Extension`
 
 </details>
@@ -115,6 +114,9 @@ with `null-ls.nvim`; they are marked below.
 - Bash
   - `bash-language-server`
   - `shellharden` (needs `null-ls`)
+- Fish (these come with the `fish` shell)
+  - `fish` (needs `null-ls`)
+  - `fish-indent` (needs `null-ls`)
 
 </details>
 
@@ -177,70 +179,24 @@ Login to GitHub CLI:
 gh auth login
 ```
 
-To set up Git and GitHub with a GPG key for commits, see
-[this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html)
+To set up Git and GitHub with a GPG key for "verified" commits, see
+[this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
 
 To set up Cantonese input with Rime, see
-[this page by Rime's makers](https://github.com/rime/rime-cantonese/wiki)
-
-To fix brightness issues
-(esp. brightness drops to minimum when (un)plugging), see
-[Backlight on ArchWiki](https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options).
+[this page by Rime's makers](https://github.com/rime/rime-cantonese/wiki).
 
 This config uses `brightnessctl` by default;
 if you find `xbacklight` not working, you are advised to switch to `brightnesctl`.
 
+For fixing brightness issues
+(esp. brightness drops to minimum when (un)plugging), see
+[Backlight on ArchWiki](https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options).
+
 To fix screen-tearing issues with Ryzen APUs, see
 [Ryzen on ArchWiki](<https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)>).
 
-After you configure Grub, remember to `grub-mkconfig`,
-then `grub-install`; see
+After you configure Grub, remember to `grub-mkconfig`, then `grub-install`; see
 [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
-
-## Auxiliary scripts
-
-Pipe from/to clipboard with `xclip`:
-
-```bash
-# Pipe into clipboard
-echo "Hello world" | xclip -sel clip
-
-# Pipe from clipboard
-xclip -out -sel clip | xargs echo
-```
-
-Remove Windows-style EOLs from a file:
-
-```bash
-# https://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk
-sed -e 's/\r//g' file.txt # replace with file name
-```
-
-Use SSH with kitty (if normal SSH does not work for some reason):
-
-```bash
-kitty +kitten ssh 127.0.0.1 # replace with ssh address
-```
-
-Test for 256-colours for your terminal emulator:
-
-```bash
-# https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal
-
-curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
-```
-
-Symlink to "rename" programs, e.g., `fdfind` to `fd`:
-
-```bash
-# Bash / Zsh
-ln -s $(which fdfind) ~/.local/bin/fd
-```
-
-```fish
-# Fish
-ln -s (which fdfind) ~/.local/bin/fd
-```
 
 ## Credits
 
