@@ -104,6 +104,6 @@ Misc.
 
 ## Kitty-related key-bindings
 
-- <kbd>Ctrl</kbd> + <kbd>shift</kbd> + <kbd>=</kbd> = increase font size (by 3)
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>=</kbd> = increase font size (by 3)
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>-</kbd> = decrease font size (by 3)
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Backspace</kbd> = reset font size
