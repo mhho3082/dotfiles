@@ -23,10 +23,17 @@ Pipe from/to clipboard with `xclip`:
 
 ```bash
 # Pipe into clipboard
-echo "Hello world" | xclip -sel clip
+echo "Hello world" | xsel -ib
+
+# Or, append into clipboard
+echo "Hello world" | xsel -ab
 
 # Pipe from clipboard
-xclip -out -sel clip | xargs echo
+xsel -ob
+
+# Or, just pipe from/to a file...
+xsel -b < in.txt  # Copy
+xsel -b > out.txt # Paste
 ```
 
 Remove Windows-style EOLs from a file:
