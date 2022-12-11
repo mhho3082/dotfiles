@@ -71,30 +71,30 @@ ln -s (which fdfind) ~/.local/bin/fd
 ## Utility programs
 
 Basic
-`uname` - basic system info
-`inxi` - detailed system info
-`htop` - CPU and ram loads
+- `uname` - basic system info
+- `inxi` - detailed system info
+- `htop` - CPU and ram loads
 
 List commands
-`lscpu` - CPU info
-`lsmem` - memory info
-`lsusb` - USB info
-`lspci` - PCI devices info
+* `lscpu` - CPU info
+* `lsmem` - memory info
+* `lsusb` - USB info
+* `lspci` - PCI devices info
 
 Misc.
-`sensors` - sensor data (e.g., temperature)
-`acpi` - battery level
-`date` - current time
+- `sensors` - sensor data (e.g., temperature)
+- `acpi` - battery level
+- `date` - current time
 
 ## Fish-related key-bindings & commands
 
-`fish_update_completions` - Update auto-complete
+- `fish_update_completions` - Update auto-complete
 
-`fish_vi_key_bindings` - vi mode
-`fish_default_key_bindings` - back to default
+* `fish_vi_key_bindings` - vi mode
+* `fish_default_key_bindings` - back to default
 
-<kbd>Alt</kbd> + <kbd>←</kbd> - previous directory
-<kbd>Alt</kbd> + <kbd>→</kbd> - previous directory
+- <kbd>Alt</kbd> + <kbd>←</kbd> - previous directory
+- <kbd>Alt</kbd> + <kbd>→</kbd> - previous directory
 
-<kbd>Alt</kbd> + <kbd>w</kbd> - what the typed command does
-<kbd>Alt</kbd> + <kbd>s</kbd> - prefix sudo to command
+* <kbd>Alt</kbd> + <kbd>w</kbd> - what the typed command does
+* <kbd>Alt</kbd> + <kbd>s</kbd> - prefix sudo to command
