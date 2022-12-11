@@ -19,7 +19,7 @@ Remove a package completely and safely with `pacman`:
 pacman -Runs package
 ```
 
-Pipe from/to clipboard with `xclip`:
+Pipe from/to clipboard with `xsel`:
 
 ```bash
 # Pipe into clipboard
@@ -101,3 +101,9 @@ Misc.
 
 * <kbd>Alt</kbd> + <kbd>w</kbd> - what the typed command does
 * <kbd>Alt</kbd> + <kbd>s</kbd> - prefix sudo to command
+
+## Kitty-related key-bindings
+
+- <kbd>Ctrl</kbd> + <kbd>shift</kbd> + <kbd>=</kbd> = increase font size (by 3)
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>-</kbd> = decrease font size (by 3)
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Backspace</kbd> = reset font size
