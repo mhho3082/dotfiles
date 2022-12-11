@@ -97,7 +97,7 @@ Misc.
 * `fish_default_key_bindings` - back to default
 
 - <kbd>Alt</kbd> + <kbd>←</kbd> - previous directory
-- <kbd>Alt</kbd> + <kbd>→</kbd> - previous directory
+- <kbd>Alt</kbd> + <kbd>→</kbd> - next directory
 
 * <kbd>Alt</kbd> + <kbd>w</kbd> - what the typed command does
 * <kbd>Alt</kbd> + <kbd>s</kbd> - prefix sudo to command
@@ -107,3 +107,6 @@ Misc.
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>=</kbd> = increase font size (by 3)
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>-</kbd> = decrease font size (by 3)
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Backspace</kbd> = reset font size
+
+* <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> = Copy
+* <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> = Paste
