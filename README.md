@@ -16,7 +16,7 @@ chmod +x ./copy_to_config.sh
 ```
 
 For various frequently used (and forgotten) commands and motions,
-please see the folder `./tips/`.
+please see the folder [`./tips/`](https://github.com/mhho3082/dotfiles/tree/main/tips).
 
 ## Features
 

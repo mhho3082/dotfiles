@@ -71,17 +71,20 @@ ln -s (which fdfind) ~/.local/bin/fd
 ## Utility programs
 
 Basic
+
 - `uname` - basic system info
 - `inxi` - detailed system info
 - `htop` - CPU and ram loads
 
 List commands
-* `lscpu` - CPU info
-* `lsmem` - memory info
-* `lsusb` - USB info
-* `lspci` - PCI devices info
+
+- `lscpu` - CPU info
+- `lsmem` - memory info
+- `lsusb` - USB info
+- `lspci` - PCI devices info
 
 Misc.
+
 - `sensors` - sensor data (e.g., temperature)
 - `acpi` - battery level
 - `date` - current time
