@@ -45,16 +45,16 @@ for other OSes, please refer to respective documentations)
 
 ### Plugin commands
 
+[`nvim-cmp`](https://github.com/hrsh7th/nvim-cmp)
 - `<C-n>` / `<C-p>` - next / previous (in autocomplete)
-  ([`nvim-cmp`](https://github.com/hrsh7th/nvim-cmp))
 
-* `gc` - comment (line)
-  ([`mini.comment`](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-comment.md))
+[`mini.comment`](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-comment.md)
+- `gc` - comment (line)
 
+[`mini.surround`](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-surround.md)
 - `sa` - surround add
 - `sd` - surround delete
 - `sr` - surround replace
-  ([`mini.surround`](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-surround.md))
 
-* `<A-[hjkl]>` - move selection
-  ([`nvim-gomove`](https://github.com/booperlv/nvim-gomove))
+[`nvim-gomove`](https://github.com/booperlv/nvim-gomove)
+- `<A-[hjkl]>` - move selection
