@@ -1,3 +1,5 @@
+# Neovim tips
+
 ## Base setup
 
 Default leader key: <kbd>Space</kbd>
@@ -11,7 +13,7 @@ are enabled using the
 [`mini.ai`](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md)
 plugin.
 
-### In-built commands
+## In-built commands
 
 - `<C-w>` + `[vs]` - split
 - `<C-w>` + `[+-<>]` - resize windows
@@ -28,7 +30,7 @@ for other OSes, please refer to respective documentations)
 * `:term` - Turn current split into terminal buffer
 * `<C-\><C-n>` - Get out of terminal mode
 
-### LSP-related commands
+## LSP-related commands
 
 - `K` - Details
 - `J` - Diagnostics
@@ -43,7 +45,7 @@ for other OSes, please refer to respective documentations)
 * `<Space>j` - Code action
 * `<Space>k` - Format
 
-### Plugin commands
+## Plugin commands
 
 [`nvim-cmp`](https://github.com/hrsh7th/nvim-cmp)
 - `<C-n>` / `<C-p>` - next / previous (in autocomplete)
