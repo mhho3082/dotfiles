@@ -11,7 +11,7 @@ complete -f -c rthk -n "not __fish_seen_subcommand_from $rthk_commands" -a sport
 
 function rthk -d "Get news from RTHK"
     # Source URL to curl from (use printf to format options into)
-    set -f url "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_e%s.xml"
+    set -f url "https://rthk9.rthk.hk/rthk/news/rss/%s_expressnews_%s%s.xml"
     # Pick source
     switch "$argv[1]"
         case local
@@ -32,7 +32,24 @@ function rthk -d "Get news from RTHK"
             end
     end
 
-    curl -X GET -s (printf $url $type) |
+    # Pick language
+    switch "$argv[2]"
+        case english
+            set -f lang1 e
+            set -f lang2 e
+        case chinese
+            set -f lang1 c
+            if test $type != greaterchina
+                set -f lang2 c
+            else
+                set -f lang2 ""
+            end
+        case '*'
+            set -f lang1 e
+            set -f lang2 e
+    end
+
+    curl -X GET -s (printf $url $lang1 $lang2 $type) |
         tr -d '\n' |
         sed 's|<item>|\n<item>|g' |
         sed 's|<description>.*<\/description>||g' |
