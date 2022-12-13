@@ -1,13 +1,6 @@
 # Source for using sed to parse XML
 # https://unix.stackexchange.com/questions/98217/using-sed-to-extract-text-between-2-tags
 
-# Source webpages to curl from
-set -g local "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_elocal.xml"
-set -g china "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_egreaterchina.xml"
-set -g world "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_einternational.xml"
-set -g finance "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_efinance.xml"
-set -g sport "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_esport.xml"
-
 # Add completion
 set -l rthk_commands local china world finance sport
 complete -f -c rthk -n "not __fish_seen_subcommand_from $rthk_commands" -a local -d "Local news"
@@ -17,23 +10,29 @@ complete -f -c rthk -n "not __fish_seen_subcommand_from $rthk_commands" -a finan
 complete -f -c rthk -n "not __fish_seen_subcommand_from $rthk_commands" -a sport -d "Sport news"
 
 function rthk -d "Get news from RTHK"
+    # Source URL to curl from (use printf to format options into)
+    set -f url "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_e%s.xml"
     # Pick source
     switch "$argv[1]"
         case local
-            set -g link $local
+            set -f type local
         case china
-            set -g link $china
+            set -f type greaterchina
         case world
-            set -g link $world
+            set -f type international
         case finance
-            set -g link $finance
+            set -f type finance
         case sport
-            set -g link $sport
+            set -f type sport
         case '*'
-            set -g link $local
+            if test -z "$argv[1]"
+                set -f type local
+            else
+                set -f type "$argv[1]"
+            end
     end
 
-    curl -s $link |
+    curl -X GET -s (printf $url $type) |
         tr -d '\n' |
         sed 's|<item>|\n<item>|g' |
         sed 's|<description>.*<\/description>||g' |

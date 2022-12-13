@@ -1,9 +1,6 @@
 # Using Hong Kong Observatory's Open Data API:
 # https://data.weather.gov.hk/weatherAPI/doc/HKO_Open_Data_API_Documentation.pdf
 
-# Source URL to curl from (use printf to format options into)
-set -g url "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=%s&lang=%s" # dataType, lang
-
 # Add completions
 set -l hko_type forecast 9day current warnings info tips
 complete -c hko -f
@@ -11,6 +8,9 @@ complete -c hko -n "not __fish_seen_subcommand_from $hko_type" \
     -a "forecast 9day current warnings info tips"
 
 function hko -d "Get weather from HKO"
+    # Source URL to curl from (use printf to format options into)
+    set -f url "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=%s&lang=%s" # dataType, lang
+
     # Pick data type
     switch "$argv[1]"
         case forecast
