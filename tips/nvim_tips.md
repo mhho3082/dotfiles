@@ -66,5 +66,5 @@ for other OSes, please refer to respective documentations)
 - `sd` - surround delete
 - `sr` - surround replace
 
-[`nvim-gomove`](https://github.com/booperlv/nvim-gomove)
+[`matze/vim-move`](https://github.com/matze/vim-move)
 - `<A-[hjkl]>` - move selection
