@@ -14,40 +14,48 @@ function hko -d "Get weather from HKO"
     # Pick data type
     switch "$argv[1]"
         case forecast
-            set -g type "flw"
+            set -f type flw
         case 9day
-            set -g type "fnd"
+            set -f type fnd
         case curr
         case current
-            set -g type "rhrread"
+            set -f type rhrread
         case warnings
-            set -g type "warnsum"
+            set -f type warnsum
         case info
-            set -g type "warninginfo"
+            set -f type warninginfo
         case tips
-            set -g type "swt"
+            set -f type swt
         case '*'
             if test -z "$argv[1]"
-                set -g type "flw"
+                set -f type flw
             else
-                set -g type "$argv[1]"
+                set -f type "$argv[1]"
             end
     end
 
     # Get language
     switch "$argv[2]"
         case english
-            set -g lang "en"
+            set -f lang en
+        case traditional
+        case chinese
+            set -f lang tc
+        case simplified
+            set -f lang sc
         case '*'
             if test -z "$argv[2]"
-                set -g lang "en"
+                set -f lang en
             else
-                set -g lang "$argv[2]"
+                set -f lang "$argv[2]"
             end
     end
 
+    # Get data
+    set -f response (curl -X GET -s (printf $url $type $lang))
 
-    curl -s (printf $url $type $lang) | # Get data
-        python -m json.tool | # Pretty print json
-        less -F # Use pager if larger than 1 screen
+    # Pretty-print data
+    echo $response |
+        python -c 'import sys, yaml, json; print(yaml.safe_dump(json.loads(sys.stdin.read()), allow_unicode=True, sort_keys=False))' |
+        less -RF
 end
