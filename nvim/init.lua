@@ -302,13 +302,6 @@ vim.opt.cursorline = false
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- Ignore case (unless specified) in regex
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
--- No magic in regex
-vim.opt.magic = false
-
 -- Default indent
 -- (sleuth overrides this if indent format found)
 vim.opt.tabstop = 4
@@ -486,8 +479,6 @@ require("telescope").setup({
       "--with-filename",
       "--line-number",
       "--column",
-      "--smart-case",
-      "--fixed-strings", -- no magic
       "--hidden", -- find hidden files
       "--glob",
       "!.git/*",
