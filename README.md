@@ -92,6 +92,10 @@ Some extensions that I install in my browsers:
 - `Facebook Container`
 - `Rust Search Extension`
 
+(You may want to also activate additional filter lists in `uBlock Origin`
+for things such as Facebook or cookie banners;
+please refer to their [wiki](https://github.com/gorhill/uBlock/wiki).)
+
 </details>
 
 I also install some LSP servers in Neovim with `mason.nvim`
