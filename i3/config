@@ -10,6 +10,7 @@
 # win+o -> lock
 # win+e -> tiling, win+t = tabbed, win+g = stacking
 # win+(hjkl) -> vi-like movement
+# win+F1 -> help
 #
 # And several keybindings removed/disabled 
 
@@ -191,7 +192,7 @@ bindsym $mod+o exec ~/.config/i3/scripts/blur-lock
 bindsym $mod+Shift+r restart
 
 # keybinding in fancy rofi (automated):
-bindsym F1 exec ~/.config/i3/scripts/keyhint-2
+bindsym $mod+F1 exec ~/.config/i3/scripts/keyhint-2
 # alternative
 # keybinding list in editor:
 # bindsym $mod+F1 exec xed ~/.config/i3/keybindings
