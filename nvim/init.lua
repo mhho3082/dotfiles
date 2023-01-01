@@ -655,7 +655,7 @@ cmp.setup({
         else
           cmp.confirm()
         end
-      elseif require("luasnip").expand_or_jumpable() then
+      elseif require("luasnip").expand_or_locally_jumpable() then
         require("luasnip").expand_or_jump()
       else
         fallback()
