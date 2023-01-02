@@ -36,8 +36,8 @@ end
 if command -v nvim &>/dev/null
     alias n nvim
 end
-if command -v ranger &>/dev/null
-    alias r ranger
+if command -v vifm &>/dev/null
+    alias f vifm
 end
 if test -f ~/.config/fish/functions/marks.fish
     alias m marks # see ./functions/marks.fish
