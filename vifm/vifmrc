@@ -493,6 +493,9 @@ nnoremap <a-o> :sync %c<cr>
 " Swap panes
 nnoremap <c-u> <c-w>x
 
+" Easy quitting
+nnoremap <space>q :quit<cr>
+
 " ------------------------------------------------------------------------------
 " Various customization examples
 " ------------------------------------------------------------------------------
