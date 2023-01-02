@@ -494,7 +494,7 @@ nnoremap <a-o> :sync %c<cr>
 nnoremap <c-u> <c-w>x
 
 " Easy quitting
-nnoremap <space>q :quit<cr>
+nnoremap ,q :quit<cr>
 
 " ------------------------------------------------------------------------------
 " Various customization examples
