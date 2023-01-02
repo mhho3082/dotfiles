@@ -3,7 +3,7 @@
  * Maintainer: joekamprad <joekamprad@endeavouros.com>
  *******************************************************/
 configuration {
-    font:                           "Noto Sans Regular 10";
+    font:                           "JetBrains Mono Nerd Font 12";
     show-icons:                     false;
     icon-theme: 		    "Qogir";
     scroll-method:                  0;
@@ -11,15 +11,15 @@ configuration {
     sidebar-mode: 		    false;
 }
 
-@import "~/.config/rofi/arc_dark_transparent_colors.rasi"
+@import "~/.config/rofi/arc_dark_colors.rasi"
 
 window {
     background-color:               @background;
     border:                         0;
     padding:                        10;
     transparency:                   "real";
-    width:                          120px;
-    location:                       east;
+    width:                          180px;
+    location:                       center;
 /*y-offset:                       18;*/
 /*x-offset:	                    850;*/
 }

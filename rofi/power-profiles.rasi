@@ -4,7 +4,7 @@
  *******************************************************/
 
 configuration {
-    font:                           "Noto Sans Regular 10";
+    font:                           "JetBrains Mono Nerd Font 12";
     show-icons:                     false;
     icon-theme: 					"Qogir";
     scroll-method:                  0;
@@ -22,8 +22,8 @@ window {
     border:                         0;
     padding:                        10;
     transparency:                   "real";
-    width:                          170px;
-    location:                       east;
+    width:                          180px;
+    location:                       center;
     /*y-offset:                       18;*/
     /*x-offset:	                    850;*/
 }
@@ -116,7 +116,7 @@ inputbar {
 }
 textbox-prompt-colon {
     expand:     false;
-    str:        "Set Power Profile:";
+    str:        ":";
     margin:     0px 0.3em 0em 0em ;
     text-color: @normal-foreground;
 }
