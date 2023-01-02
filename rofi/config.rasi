@@ -5,3 +5,4 @@ configuration {
 	show-icons: true;
 	drun-display-format: "{name}";
 }
+/* vim:ft=css */
