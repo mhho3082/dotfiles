@@ -1,8 +1,4 @@
-/*******************************************************
- * ROFI configs i3 powermenu for EndeavourOS
- * Maintainer: joekamprad <joekamprad@endeavouros.com>
- *******************************************************/
-
+/* Modified from Rofi configs i3 powermenu for EndeavourOS */
 configuration {
     font:                           "JetBrains Mono Nerd Font 12";
     show-icons:                     false;
@@ -19,17 +15,21 @@ configuration {
 
 window {
     background-color:               @background;
-    border:                         0;
+    border:                         5px;
+    border-color:                   @background;
+    border-radius:                  10px;
     padding:                        10;
     transparency:                   "real";
     width:                          180px;
     location:                       center;
-    /*y-offset:                       18;*/
-    /*x-offset:	                    850;*/
 }
 listview {
-    lines:                           4;
+    lines:                          4;
     columns:                        1;
+    scrollbar:                      false;
+    border:                         0px;
+    border-color:                   @background;
+    border-radius:                  5px;
 }
 element {
     border:  0;
@@ -120,4 +120,4 @@ textbox-prompt-colon {
     margin:     0px 0.3em 0em 0em ;
     text-color: @normal-foreground;
 }
-/* vim: set ft=css: */
+/* vim: set ft=rasi: */
