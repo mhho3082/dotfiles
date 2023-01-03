@@ -86,9 +86,11 @@ client.background       $bg
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $launcher
 bindsym $mod+n exec $files
-bindsym $mod+o exec $locker
 bindsym $mod+Print exec $screenshot
+
 bindsym $mod+Shift+e exec $powermenu
+bindsym $mod+Shift+o exec $locker
+bindsym $mod+Shift+p exec $powerprofiles
 
 # Web applications
 bindsym $mod+w exec firefox
@@ -144,15 +146,12 @@ bindsym $mod+Shift+space floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
-# focus the parent/child container
-bindsym $mod+a focus parent
+# focus the parent/child container (out-/in-wards)
+bindsym $mod+o focus parent
 bindsym $mod+i focus child
 
 # Suspend
 bindsym $mod+p exec systemctl suspend
-
-# Power profiles switcher menu (rofi)
-bindsym $mod+Shift+p exec $powerprofiles
 
 # Toggle polybar show/hide
 bindsym $mod+b exec polybar-msg cmd toggle
@@ -177,6 +176,7 @@ bindsym XF86AudioMute exec amixer sset Master toggle
 
 # audio control
 bindsym XF86AudioPlay  exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioStop  exec playerctl stop
 bindsym XF86AudioNext  exec playerctl next
 bindsym XF86AudioPrev  exec playerctl previous
@@ -298,9 +298,6 @@ for_window [instance="Toplevel"] floating enable
 
 # set border of floating window
 for_window [class="urxvt"] border pixel 1
-
-# set position of floating window
-for_window [class=".*"] move position center
 
 ##################
 ### Workspaces ###
