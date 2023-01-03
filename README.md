@@ -200,8 +200,10 @@ For fixing brightness issues
 To fix screen-tearing issues with Ryzen APUs, see
 [Ryzen on ArchWiki](<https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)>).
 
-After you configure Grub, remember to `grub-mkconfig`, then `grub-install`; see
-[Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
+After you configure Grub, remember to `grub-mkconfig`, then `grub-install`.
+See [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration);
+a nice example of installing a theme can be seen
+[here](https://github.com/gustawho/grub2-theme-breeze#installation).
 
 ## Credits
 
