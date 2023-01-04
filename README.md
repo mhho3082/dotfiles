@@ -184,11 +184,11 @@ Login to GitHub CLI:
 gh auth login
 ```
 
-To set up Git and GitHub with a GPG key for "verified" commits, see
-[this page by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
+To set up a GPG key for Git and GitHub usage, see
+[How to Sign Git Commits by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
 
 To set up Cantonese input with Rime, see
-[this page by Rime's makers](https://github.com/rime/rime-cantonese/wiki).
+[this wiki page by Rime's makers](https://github.com/rime/rime-cantonese/wiki).
 
 This config uses `brightnessctl` by default;
 if you find `xbacklight` not working, you are advised to switch to `brightnesctl`.
@@ -201,9 +201,9 @@ To fix screen-tearing issues with Ryzen APUs, see
 [Ryzen on ArchWiki](<https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)>).
 
 After you configure Grub, remember to `grub-mkconfig`, then `grub-install`.
-See [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration);
-a nice example of installing a theme can be seen
-[here](https://github.com/gustawho/grub2-theme-breeze#installation).
+See [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
+A nice example of installing a theme can be seen
+[in the Breeze theme README](https://github.com/gustawho/grub2-theme-breeze#installation).
 
 ## Credits
 
