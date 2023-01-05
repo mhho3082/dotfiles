@@ -13,7 +13,7 @@ then
   xidlehook \
     --not-when-fullscreen --not-when-audio \
     --timer 300 \
-      'systemctl suspend' \
+      '~/.config/i3/scripts/blur-lock && systemctl suspend' \
       ''
 else 
   # Run xautolock if xidlehook not installed
