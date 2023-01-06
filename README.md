@@ -61,6 +61,9 @@ The apps that I usually use
   - For Rust
     - `rustup`
     - `cargo-edit`
+  - For JavaScript
+    - `node`
+    - `yarn`
 - Desktop environment setup
   - `i3-gaps`
   - `rofi`
