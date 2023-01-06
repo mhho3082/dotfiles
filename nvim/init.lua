@@ -479,6 +479,7 @@ require("telescope").setup({
       "--with-filename",
       "--line-number",
       "--column",
+      "--smart-case",
       "--hidden", -- find hidden files
       "--glob",
       "!.git/*",
