@@ -199,6 +199,8 @@ if you find `xbacklight` not working, you are advised to switch to `brightnesctl
 For fixing brightness issues
 (esp. brightness drops to minimum when (un)plugging), see
 [Backlight on ArchWiki](https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options).
+You may want to set `acpi_backlight=native` in Grub config, for which see
+[Kernel parameters on ArchWiki](https://wiki.archlinux.org/title/Kernel_parameters).
 
 To fix screen-tearing issues with Ryzen APUs, see
 [Ryzen on ArchWiki](<https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)>).
