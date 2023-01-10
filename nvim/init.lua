@@ -392,7 +392,7 @@ wk.register({
 function TodoTelescope()
   require("telescope.builtin").grep_string({
     prompt_title = "Find Todo",
-    search = "(TODO|NOTE|TEST|TEMP|FIXME|XXX|BUG|DEBUG|HACK|UNDONE)(\\(.*\\))?:",
+    search = "(TODO|NOTE|INFO|TEST|TEMP|FIXME|XXX|BUG|DEBUG|HACK|UNDONE)(\\(.*\\))?:",
     use_regex = true,
   })
 end
