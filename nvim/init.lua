@@ -121,25 +121,13 @@ packer.startup(function()
     end,
     config = function()
       require("nvim-treesitter.configs").setup({
+        ensure_installed = { "c", "lua", "vim", "help", "comment", "markdown", "markdown_inline" },
         highlight = {
           -- false will disable the whole extension
           enable = true,
 
           -- list of language that will be disabled
           disable = {},
-        },
-      })
-    end,
-  })
-
-  -- Todo highlight
-  use({
-    "folke/todo-comments.nvim",
-    config = function()
-      require("todo-comments").setup({
-        signs = false,
-        highlight = {
-          keyword = "bg",
         },
       })
     end,
@@ -399,6 +387,16 @@ wk.register({
   ["<leader>k"] = { vim.lsp.buf.format, "format" },
 }, { mode = "v" })
 
+-- Ideas from https://github.com/folke/todo-comments.nvim/blob/main/lua/telescope/_extensions/todo-comments.lua
+-- But is way lighter
+function TodoTelescope()
+  require("telescope.builtin").grep_string({
+    prompt_title = "Find Todo",
+    search = "(TODO|NOTE|TEST|TEMP|FIXME|XXX|BUG|DEBUG|HACK|UNDONE)(\\(.*\\))?:",
+    use_regex = true,
+  })
+end
+
 -- The great <leader> remap
 wk.register({
   ["<leader>"] = {
@@ -413,7 +411,7 @@ wk.register({
     f = { require("telescope.builtin").find_files, "files" },
     e = { require("telescope").extensions.file_browser.file_browser, "file browser" },
     r = { require("telescope.builtin").resume, "resume search" },
-    t = { "<cmd>TodoTelescope<cr>", "todo" },
+    t = { TodoTelescope, "todo" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
