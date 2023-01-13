@@ -501,7 +501,6 @@ require("telescope").setup({
     file_browser = {
       grouped = true,
       hidden = true,
-      collapse_dirs = true,
     },
   },
 })
