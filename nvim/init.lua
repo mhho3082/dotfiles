@@ -68,6 +68,9 @@ packer.startup(function()
 
       -- Comments
       require("mini.comment").setup()
+
+      -- Align
+      require("mini.align").setup()
     end,
   })
 
