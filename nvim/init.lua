@@ -243,7 +243,7 @@ packer.startup(function()
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-ui-select.nvim")
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-  use({ "nvim-telescope/telescope-file-browser.nvim" })
+  use("nvim-telescope/telescope-file-browser.nvim")
 
   -- Trees
   use({
@@ -404,7 +404,7 @@ wk.register({
     -- Basics
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
-    -- Telescopes (All left hand shorthands)
+    -- Telescopes
     a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
     s = { require("telescope.builtin").live_grep, "search" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
@@ -461,15 +461,8 @@ wk.register({
 -- TELESCOPE --
 ---------------
 
-local actions = require("telescope.actions")
-
 require("telescope").setup({
   defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close,
-      },
-    },
     vimgrep_arguments = {
       "rg",
       "--color=never",
@@ -505,7 +498,11 @@ require("telescope").setup({
     ["ui-select"] = {
       require("telescope.themes").get_dropdown({}),
     },
-    file_browser = {},
+    file_browser = {
+      grouped = true,
+      hidden = true,
+      collapse_dirs = true,
+    },
   },
 })
 
