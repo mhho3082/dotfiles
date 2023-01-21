@@ -383,20 +383,6 @@ wk.register({
   ["<C-c>"] = { "<C-[>", "escape" },
 }, { mode = "i" })
 
--- Use dial.nvim
-wk.register({
-  ["<C-a>"] = { require("dial.map").inc_normal(), "increment" },
-  ["<C-x>"] = { require("dial.map").dec_normal(), "decrement" },
-}, { mode = "n" })
-wk.register({
-  ["<C-a>"] = { require("dial.map").inc_visual(), "increment" },
-  ["<C-x>"] = { require("dial.map").dec_visual(), "decrement" },
-}, { mode = "v" })
-wk.register({
-  ["g<C-a>"] = { require("dial.map").inc_gvisual(), "increment" },
-  ["g<C-x>"] = { require("dial.map").dec_gvisual(), "decrement" },
-}, { mode = "v" })
-
 -- LSP mappings
 wk.register({
   ["J"] = {
@@ -415,6 +401,37 @@ wk.register({
 wk.register({
   ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "format" },
+}, { mode = "v" })
+
+-- Use dial.nvim
+local augend = require("dial.augend")
+require("dial.config").augends:register_group({
+  -- default augends used when no group name is specified
+  default = {
+    augend.integer.alias.decimal,
+    augend.integer.alias.hex,
+    augend.integer.alias.binary,
+    augend.constant.alias.bool,
+    augend.date.alias["%Y/%m/%d"],
+    augend.date.alias["%d/%m/%Y"],
+    augend.date.alias["%Y-%m-%d"],
+    augend.date.alias["%-m/%-d"],
+    augend.date.alias["%H:%M:%S"],
+    augend.date.alias["%H:%M"],
+    -- augend.semver.alias.semver,
+  },
+})
+wk.register({
+  ["<C-a>"] = { require("dial.map").inc_normal(), "increment" },
+  ["<C-x>"] = { require("dial.map").dec_normal(), "decrement" },
+}, { mode = "n" })
+wk.register({
+  ["<C-a>"] = { require("dial.map").inc_visual(), "increment" },
+  ["<C-x>"] = { require("dial.map").dec_visual(), "decrement" },
+}, { mode = "v" })
+wk.register({
+  ["g<C-a>"] = { require("dial.map").inc_gvisual(), "increment" },
+  ["g<C-x>"] = { require("dial.map").dec_gvisual(), "decrement" },
 }, { mode = "v" })
 
 -- Ideas from https://github.com/folke/todo-comments.nvim/blob/main/lua/telescope/_extensions/todo-comments.lua
