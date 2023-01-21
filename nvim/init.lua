@@ -90,6 +90,15 @@ packer.startup(function()
   --Extended C-a and C-x
   use("monaqa/dial.nvim")
 
+  -- Splitjoin
+  use({
+    "Wansmer/treesj",
+    requires = { "nvim-treesitter" },
+    config = function()
+      require("treesj").setup({})
+    end,
+  })
+
   -- VIEW --
 
   -- Indent guide
@@ -402,6 +411,12 @@ wk.register({
   ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "format" },
 }, { mode = "v" })
+
+-- Splitjoin mappings
+wk.register({
+  ["gs"] = { "<cmd>TSJSplit<cr>", "split node" },
+  ["gj"] = { "<cmd>TSJJoin<cr>", "join node" },
+}, { mode = "n" })
 
 -- Use dial.nvim
 local augend = require("dial.augend")
