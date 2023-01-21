@@ -87,6 +87,9 @@ packer.startup(function()
     "matze/vim-move",
   })
 
+  --Extended C-a and C-x
+  use("monaqa/dial.nvim")
+
   -- VIEW --
 
   -- Indent guide
@@ -135,12 +138,12 @@ packer.startup(function()
         incremental_selection = {
           enable = true,
           keymaps = {
-            init_selection = "<CR>",
-            node_incremental = "<CR>",
-            scope_incremental = "<S-CR>",
-            node_decremental = "<BS>",
-          }
-        }
+            init_selection = "<cr>",
+            node_incremental = "<cr>",
+            scope_incremental = "<s-cr>",
+            node_decremental = "<bs>",
+          },
+        },
       })
     end,
   })
@@ -379,6 +382,20 @@ vim.opt.scrolloff = 0
 wk.register({
   ["<C-c>"] = { "<C-[>", "escape" },
 }, { mode = "i" })
+
+-- Use dial.nvim
+wk.register({
+  ["<C-a>"] = { require("dial.map").inc_normal(), "increment" },
+  ["<C-x>"] = { require("dial.map").dec_normal(), "decrement" },
+}, { mode = "n" })
+wk.register({
+  ["<C-a>"] = { require("dial.map").inc_visual(), "increment" },
+  ["<C-x>"] = { require("dial.map").dec_visual(), "decrement" },
+}, { mode = "v" })
+wk.register({
+  ["g<C-a>"] = { require("dial.map").inc_gvisual(), "increment" },
+  ["g<C-x>"] = { require("dial.map").dec_gvisual(), "decrement" },
+}, { mode = "v" })
 
 -- LSP mappings
 wk.register({
