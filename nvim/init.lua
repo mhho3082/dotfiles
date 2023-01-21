@@ -132,6 +132,15 @@ packer.startup(function()
           -- list of language that will be disabled
           disable = {},
         },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<CR>",
+            node_incremental = "<CR>",
+            scope_incremental = "<S-CR>",
+            node_decremental = "<BS>",
+          }
+        }
       })
     end,
   })
