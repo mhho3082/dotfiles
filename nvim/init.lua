@@ -193,7 +193,9 @@ packer.startup(function()
         sources = {
           require("null-ls").builtins.formatting.clang_format,
           require("null-ls").builtins.formatting.stylua,
-          require("null-ls").builtins.formatting.prettierd,
+          require("null-ls").builtins.formatting.prettierd.with({
+            extra_filetypes = { "svelte" },
+          }),
           require("null-ls").builtins.formatting.shellharden,
           require("null-ls").builtins.diagnostics.fish,
           require("null-ls").builtins.formatting.fish_indent,
