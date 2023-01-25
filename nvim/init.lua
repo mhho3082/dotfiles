@@ -282,7 +282,7 @@ vim.opt.termguicolors = true
 vim.opt.lazyredraw = true
 vim.g.updatetime = 100
 vim.opt.cmdheight = 1
-vim.opt.laststatus = 2
+vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
 
 -- Don't disturb me (by default)
@@ -743,7 +743,11 @@ end
 
 -- Boot up lualine
 require("lualine").setup({
-  options = { section_separators = "", component_separators = "" },
+  options = {
+    section_separators = "",
+    component_separators = "",
+    globalstatus = true,
+  },
   sections = {
     lualine_a = { "mode" },
     lualine_b = {
