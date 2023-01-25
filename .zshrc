@@ -20,7 +20,7 @@ SAVEHIST=1000
 # Don't beep
 unsetopt beep
 
-# Use vi bindings 
+# Use vi bindings
 bindkey -v
 
 # == Alias ==
@@ -62,6 +62,9 @@ fi
 # Pretty print paths
 # https://unix.stackexchange.com/questions/80151/show-path-in-a-human-readable-way
 alias paths="tr ':' '\n' <<< \"$PATH\""
+
+# Prepare virtual network for virt-manager
+alias virshprep="sudo virsh net-start default >/dev/null"
 
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
