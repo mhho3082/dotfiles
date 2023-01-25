@@ -230,16 +230,6 @@ packer.startup(function()
   use("saadparwaiz1/cmp_luasnip")
   use("rafamadriz/friendly-snippets")
 
-  -- Rust
-  use({
-    "saecki/crates.nvim",
-    tag = "v0.2.1",
-    requires = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("crates").setup()
-    end,
-  })
-
   -- COMMAND TOOLS --
 
   -- Command aid and remap
@@ -247,7 +237,6 @@ packer.startup(function()
 
   -- Git
   use("tpope/vim-fugitive")
-  use("tpope/vim-rhubarb")
   use({
     "lewis6991/gitsigns.nvim",
     requires = { "nvim-lua/plenary.nvim" },
