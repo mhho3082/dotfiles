@@ -254,15 +254,7 @@ packer.startup(function()
     "lewis6991/gitsigns.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("gitsigns").setup({
-        signs = {
-          add = { text = "┃" },
-          change = { text = "┃" },
-          delete = { text = "▁" },
-          topdelete = { text = "▔" },
-          changedelete = { text = "~" },
-        },
-      })
+      require("gitsigns").setup({})
     end,
   })
 
@@ -501,11 +493,13 @@ wk.register({
     h = {
       name = "git hunks",
       -- View
-      v = { "<cmd>Gitsigns preview_hunk<cr>", "view" },
+      d = { "<cmd>Gitsigns preview_hunk<cr>", "diff" },
+      -- Select
+      v = { "<cmd>Gitsigns select_hunk<cr>", "visual" },
       -- Move
       n = { "<cmd>Gitsigns next_hunk<cr>", "next" },
       p = { "<cmd>Gitsigns prev_hunk<cr>", "previous" },
-      -- Stage
+      -- Stage (or reset)
       s = { "<cmd>Gitsigns stage_hunk<cr>", "stage" },
       u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "undo stage" },
       r = { "<cmd>Gitsigns reset_hunk<cr>", "reset" },
