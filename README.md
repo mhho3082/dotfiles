@@ -39,7 +39,7 @@ The apps that I usually use
   - `chromium`
   - `discord`
 - Command line
-  - `fish`
+  - `zsh`
   - `yay`
   - `exa`
   - `fd`
@@ -151,7 +151,14 @@ sudo pacman --needed -S git base-devel yay
 yay -Syu --devel --timeupdate
 ```
 
-Set fish as the default shell (from bash / zsh):
+Set zsh as the default shell (from bash):
+
+```bash
+chsh -s `which zsh`
+echo "source $HOME/.config/.zshrc" > ~/.zshrc
+```
+
+Or. set fish as the default shell (from bash / zsh):
 
 ```bash
 chsh -s `which fish`
