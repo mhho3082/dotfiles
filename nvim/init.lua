@@ -71,6 +71,9 @@ packer.startup(function()
 
       -- Align
       require("mini.align").setup()
+
+      -- Move code
+      require("mini.move").setup()
     end,
   })
 
@@ -80,11 +83,6 @@ packer.startup(function()
     config = function()
       require("guess-indent").setup({})
     end,
-  })
-
-  -- Move code
-  use({
-    "matze/vim-move",
   })
 
   --Extended C-a and C-x
