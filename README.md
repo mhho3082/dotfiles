@@ -46,6 +46,7 @@ The apps that I usually use
   - `fzf`
   - `ripgrep`
   - `xsel`
+  - `wezterm`
 - School
   - `libreoffice-fresh`
   - `zotero-bin`
