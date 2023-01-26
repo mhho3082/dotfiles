@@ -20,9 +20,6 @@ SAVEHIST=1000
 # Don't beep
 unsetopt beep
 
-# Use vi bindings
-bindkey -v
-
 # == Alias ==
 
 # Basic shortcuts
@@ -87,5 +84,10 @@ fi
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
-plugins=(z git fzf zsh-autosuggestions zsh-syntax-highlighting)
+
+# Plugins
+plugins=(z fzf vi-mode command-not-found zsh-autosuggestions)
+# Must be last of plugins
+plugins+=zsh-syntax-highlighting
+
 source $ZSH/oh-my-zsh.sh
