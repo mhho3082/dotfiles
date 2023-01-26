@@ -20,11 +20,31 @@ SAVEHIST=1000
 # Don't beep
 unsetopt beep
 
+# Change less flags
+# https://unix.stackexchange.com/questions/566943/how-to-set-less-and-lesspipe-correctly
+export LESS=FRX
+
+# == Oh-my-zsh ==
+
+# https://lazyren.github.io/devlog/oh-my-zsh-setup.html
+
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="lukerandall"
+
+# Plugins
+plugins=(z fzf vi-mode command-not-found zsh-autosuggestions)
+# Must be last of plugins
+plugins+=zsh-syntax-highlighting
+
+source $ZSH/oh-my-zsh.sh
+
 # == Alias ==
 
-# Basic shortcuts
+# Utility shortcuts
 alias c="clear"
 alias q="exit"
+
+# Application shortcuts
 if type "git" &>/dev/null; then
     alias g="git"
 fi
@@ -77,17 +97,3 @@ if type "fzf" &>/dev/null; then
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_CTRL_T_OPTS="--preview='less {}'"
 fi
-
-# == Oh-my-zsh ==
-
-# https://lazyren.github.io/devlog/oh-my-zsh-setup.html
-
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
-
-# Plugins
-plugins=(z fzf vi-mode command-not-found zsh-autosuggestions)
-# Must be last of plugins
-plugins+=zsh-syntax-highlighting
-
-source $ZSH/oh-my-zsh.sh
