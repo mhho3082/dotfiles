@@ -111,8 +111,10 @@ fi
 
 autoload -Uz vcs_info
 
-local GIT_CLEAN="%F{green} %f"
+local GIT_CLEAN="%F{green}ﱣ %f"
+local GIT_STAGED="%F{magenta} %f"
 local GIT_DIRTY="%F{red} %f"
+
 local GIT_REBASE=" "
 local GIT_UNPULLED="⇣"
 local GIT_UNPUSHED="⇡"
@@ -126,6 +128,8 @@ _git_branch() {
 _git_dirty() {
     if test -z "$(git status --porcelain --ignore-submodules)"; then
         echo $GIT_CLEAN
+    elif test -n "$(git diff --name-only --cached)"; then
+        echo $GIT_STAGED
     else
         echo $GIT_DIRTY
     fi
