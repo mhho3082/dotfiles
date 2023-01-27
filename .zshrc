@@ -113,7 +113,7 @@ autoload -Uz vcs_info
 
 local GIT_CLEAN="%F{green}ﱣ %f"
 local GIT_STAGED="%F{blue} %f"
-local GIT_STAGED_DIRTY="%F{yellow} %f"
+local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
 
 local GIT_REBASE=" "
