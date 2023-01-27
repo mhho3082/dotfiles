@@ -77,8 +77,11 @@ if type "tmux" &>/dev/null; then
 fi
 
 # Pretty print paths
-# https://unix.stackexchange.com/questions/80151/show-path-in-a-human-readable-way
-alias paths="tr ':' '\n' <<< \"$PATH\""
+paths() {
+    for i in $path; do
+        echo $i
+    done
+}
 
 # Prepare virtual network for virt-manager
 alias virshprep="sudo virsh net-start default >/dev/null"
