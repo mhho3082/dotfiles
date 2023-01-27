@@ -112,6 +112,7 @@ fi
 autoload -Uz vcs_info
 
 local GIT_CLEAN="%F{green}ﱣ %f"
+local GIT_STASHED="%F{blue}ﱡ %f"
 local GIT_STAGED="%F{blue} %f"
 local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
@@ -128,7 +129,11 @@ _git_branch() {
 
 _git_dirty() {
     if test -z "$(git status --porcelain --ignore-submodules)"; then
-        echo $GIT_CLEAN
+        if test -n "$(git stash list)"; then
+            echo $GIT_STASHED
+        else
+            echo $GIT_CLEAN
+        fi
     elif test -z "$(git diff --name-only)"; then
         echo $GIT_STAGED
     elif test -n "$(git diff --name-only --cached)"; then
