@@ -129,7 +129,7 @@ _git_branch() {
 
 _git_dirty() {
     if test -z "$(git status --porcelain --ignore-submodules)"; then
-        if test -n "$(git stash list)"; then
+        if test -n "$(git stash list -1)"; then
             echo $GIT_STASHED
         else
             echo $GIT_CLEAN
