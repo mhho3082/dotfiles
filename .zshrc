@@ -31,7 +31,8 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 
-# Don't beep
+# Change zsh options
+setopt correct
 unsetopt beep
 
 # Change less flags
