@@ -119,8 +119,8 @@ _setup_ps1() {
     vcs_info
 
     # Chevron (with vi mode indication) setup
-    GLYPH=" "
-    [ "x$KEYMAP" = "xvicmd" ] && GLYPH=" "
+    GLYPH=" "
+    [ "x$KEYMAP" = "xvicmd" ] && GLYPH=" "
 
     # Jobs
     PS1="%(1j.%F{cyan}[%j]%f .)"
