@@ -134,7 +134,7 @@ _git_dirty() {
         else
             echo $GIT_CLEAN
         fi
-    elif test -n "$(git status -u --porcelain --ignore-submodules)"; then
+    elif test -n "$(git ls-files --others --exclude-standard)"; then
         echo $GIT_DIRTY
     elif test -z "$(git diff --name-only)"; then
         echo $GIT_STAGED
