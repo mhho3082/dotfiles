@@ -153,6 +153,7 @@ _git_rebase_check() {
 }
 
 _git_remote_check() {
+    git symbolic-ref refs/remotes/origin/HEAD &>/dev/null || return
     local_commit=$(git rev-parse @ 2>&1)
     remote_commit=$(git rev-parse @{u} 2>&1)
     common_base=$(git merge-base @ @{u} 2>&1) # last common commit
@@ -176,7 +177,7 @@ _git_symbol() {
 
 _git_info() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        echo "$(_git_symbol)%F{242}$(_git_branch)%f $(_git_dirty)"
+        echo "%F{242}$(_git_symbol)$(_git_branch)%f $(_git_dirty)"
     fi
 }
 
