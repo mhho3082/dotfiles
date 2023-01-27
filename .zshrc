@@ -112,7 +112,8 @@ fi
 autoload -Uz vcs_info
 
 local GIT_CLEAN="%F{green}ﱣ %f"
-local GIT_STAGED="%F{magenta} %f"
+local GIT_STAGED="%F{blue} %f"
+local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
 
 local GIT_REBASE=" "
@@ -128,8 +129,10 @@ _git_branch() {
 _git_dirty() {
     if test -z "$(git status --porcelain --ignore-submodules)"; then
         echo $GIT_CLEAN
-    elif test -n "$(git diff --name-only --cached)"; then
+    elif test -z "$(git diff --name-only)"; then
         echo $GIT_STAGED
+    elif test -n "$(git diff --name-only --cached)"; then
+        echo $GIT_STAGED_DIRTY
     else
         echo $GIT_DIRTY
     fi
@@ -166,7 +169,7 @@ _git_symbol() {
 
 _git_info() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        echo "$(_git_symbol)%F{242}$(_git_branch)%f  $(_git_dirty)"
+        echo "$(_git_symbol)%F{242}$(_git_branch)%f $(_git_dirty)"
     fi
 }
 
