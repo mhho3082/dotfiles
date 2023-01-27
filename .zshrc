@@ -3,10 +3,12 @@
 # https://lazyren.github.io/devlog/oh-my-zsh-setup.html
 
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="lukerandall"
+
+# Turn off completion issues with `sudo -E -s`
+export ZSH_DISABLE_COMPFIX=true
 
 # Plugins
-plugins=(z fzf vi-mode command-not-found zsh-autosuggestions)
+plugins=(z fzf command-not-found zsh-autosuggestions)
 # Must be last of plugins
 plugins+=zsh-syntax-highlighting
 
@@ -33,6 +35,8 @@ SAVEHIST=1000
 
 # Change zsh options
 setopt correct
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
 unsetopt beep
 
 # Change less flags
@@ -87,12 +91,65 @@ paths() {
 # Prepare virtual network for virt-manager
 alias virshprep="sudo virsh net-start default >/dev/null"
 
+# Change to superuser
+alias superuser="sudo -Eks"
+
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
     # Open in File Explorer (for WSL)
     alias explorer='explorer.exe .; or true'
 fi
+
+# == Prompt ==
+
+# https://zserge.com/posts/terminal/
+# https://voracious.dev/blog/a-guide-to-customizing-the-zsh-shell-prompt
+# https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
+
+autoload -Uz vcs_info
+
+zstyle ':vcs_info:*' stagedstr '%F{green}●%f '
+zstyle ':vcs_info:*' unstagedstr '%F{yellow}●%f '
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git*' formats "%F{blue}%b%f %u%c"
+
+_setup_ps1() {
+    # Set up vcs info
+    vcs_info
+
+    # Chevron (with vi mode indication) setup
+    GLYPH=" "
+    [ "x$KEYMAP" = "xvicmd" ] && GLYPH=" "
+
+    # Jobs
+    PS1="%(1j.%F{cyan}[%j]%f .)"
+
+    # pwd
+    PS1+="%F{blue}%(4~|.../%3~|%~)%f"
+
+    # Superuser flag
+    PS1+="%(!. %F{red}#%f.)"
+
+    # Chevron
+    PS1+=" %(?.%F{blue}.%F{red})$GLYPH%f "
+
+    # RHS prompt: git info
+    RPROMPT="$vcs_info_msg_0_"
+}
+_setup_ps1
+
+# Vi mode
+zle-keymap-select () {
+    _setup_ps1
+    zle reset-prompt
+}
+zle -N zle-keymap-select
+zle-line-init () {
+    zle -K viins
+}
+zle -N zle-line-init
+bindkey -v
 
 # == FZF ==
 
