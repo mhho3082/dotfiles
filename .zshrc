@@ -113,7 +113,7 @@ autoload -Uz vcs_info
 
 local GIT_CLEAN="%F{green} %f"
 local GIT_DIRTY="%F{red} %f"
-local GIT_REBASE="%F{magenta}卑%f"
+local GIT_REBASE=" "
 local GIT_UNPULLED="⇣"
 local GIT_UNPUSHED="⇡"
 
