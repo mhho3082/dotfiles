@@ -116,6 +116,7 @@ local GIT_STASHED="%F{blue}ﱡ %f"
 local GIT_STAGED="%F{blue} %f"
 local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
+local GIT_UNTRACKED="%F{red}喝%f"
 
 local GIT_REBASE=" "
 local GIT_UNPULLED="⇣"
@@ -135,7 +136,7 @@ _git_dirty() {
             echo $GIT_CLEAN
         fi
     elif test -n "$(git ls-files --others --exclude-standard)"; then
-        echo $GIT_DIRTY
+        echo $GIT_UNTRACKED
     elif test -z "$(git diff --name-only)"; then
         echo $GIT_STAGED
     elif test -n "$(git diff --name-only --cached)"; then
