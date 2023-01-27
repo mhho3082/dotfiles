@@ -37,6 +37,7 @@ SAVEHIST=1000
 setopt correct
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
+setopt prompt_subst
 unsetopt beep
 
 # Change less flags
@@ -106,13 +107,64 @@ fi
 # https://zserge.com/posts/terminal/
 # https://voracious.dev/blog/a-guide-to-customizing-the-zsh-shell-prompt
 # https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
+# https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
 autoload -Uz vcs_info
 
-zstyle ':vcs_info:*' stagedstr '%F{green}●%f'
-zstyle ':vcs_info:*' unstagedstr '%F{yellow}●%f'
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git*' formats "%F{blue}%b%f %u%c"
+local GIT_CLEAN="%F{green} %f"
+local GIT_DIRTY="%F{red} %f"
+local GIT_REBASE="%F{magenta}卑%f"
+local GIT_UNPULLED="⇣"
+local GIT_UNPUSHED="⇡"
+
+_git_branch() {
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+        ref=$(git rev-parse --short HEAD 2> /dev/null) || return
+    echo "${ref#refs/heads/}"
+}
+
+_git_dirty() {
+    if test -z "$(git status --porcelain --ignore-submodules)"; then
+        echo $GIT_CLEAN
+    else
+        echo $GIT_DIRTY
+    fi
+}
+
+_git_rebase_check() {
+    git_dir=$(git rev-parse --git-dir)
+    if test -d "$git_dir/rebase-merge" -o -d "$git_dir/rebase-apply"; then
+        echo "$GIT_REBASE"
+    fi
+}
+
+_git_remote_check() {
+    local_commit=$(git rev-parse @ 2>&1)
+    remote_commit=$(git rev-parse @{u} 2>&1)
+    common_base=$(git merge-base @ @{u} 2>&1) # last common commit
+
+    if [[ $local_commit == $remote_commit ]]; then
+        echo ""
+    else
+        if [[ $common_base == $remote_commit ]]; then
+            echo "$GIT_UNPUSHED"
+        elif [[ $common_base == $local_commit ]]; then
+            echo "$GIT_UNPULLED"
+        else
+            echo "$GIT_UNPUSHED $GIT_UNPULLED"
+        fi
+    fi
+}
+
+_git_symbol() {
+    echo "$(_git_rebase_check) $(_git_remote_check) "
+}
+
+_git_info() {
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        echo "$(_git_symbol)%F{242}$(_git_branch)%f  $(_git_dirty)"
+    fi
+}
 
 _setup_ps1() {
     # Set up vcs info
@@ -135,7 +187,7 @@ _setup_ps1() {
     PS1+=" %(?.%F{blue}.%F{red})$GLYPH%f "
 
     # RHS prompt: git info
-    RPROMPT="$vcs_info_msg_0_"
+    RPROMPT="$(_git_info)"
 }
 _setup_ps1
 
