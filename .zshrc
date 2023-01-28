@@ -7,6 +7,10 @@ export ZSH="$HOME/.oh-my-zsh"
 # Turn off completion issues with `sudo -E -s`
 export ZSH_DISABLE_COMPFIX=true
 
+# Turn on compinit
+autoload -U compinit && compinit
+zstyle ':completion:*' menu select
+
 # Plugins
 plugins=(z fzf command-not-found zsh-autosuggestions)
 # Must be last of plugins
