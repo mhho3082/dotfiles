@@ -233,6 +233,10 @@ zle-line-init () {
 zle -N zle-line-init
 bindkey -v
 
+# Common emacs bindings for vi mode
+bindkey '^A'      beginning-of-line
+bindkey '^E'      end-of-line
+
 # == FZF ==
 
 if type "fzf" &>/dev/null; then
