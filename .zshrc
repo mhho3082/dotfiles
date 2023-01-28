@@ -135,7 +135,7 @@ _git_branch() {
     echo "${ref#refs/heads/}"
 }
 
-_git_dirty() {
+_git_status() {
     if test -z "$(git status --porcelain --ignore-submodules)"; then
         if test -n "$(git stash list -1)"; then
             echo $GIT_STASHED
@@ -187,7 +187,7 @@ _git_symbol() {
 
 _git_info() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        echo "$(_git_symbol)%F{242}$(_git_branch)%f $(_git_dirty)"
+        echo "$(_git_symbol)%F{242}$(_git_branch)%f $(_git_status)"
     fi
 }
 
@@ -216,7 +216,8 @@ _setup_ps1() {
 }
 _setup_ps1
 
-# Vi mode
+# == Vi mode ==
+
 zle-keymap-select () {
     _setup_ps1
     zle reset-prompt
