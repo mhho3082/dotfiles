@@ -59,7 +59,7 @@
     pu = pull
 
     s = stash --include-untracked
-    si = stash --include-untracked --patch
+    si = stash --patch
     sp = stash pop
 
     m = merge
