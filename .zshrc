@@ -116,8 +116,6 @@ fi
 # https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
 # https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
-autoload -Uz vcs_info
-
 local GIT_CLEAN="%F{green}ﱣ %f"
 local GIT_STASHED="%F{blue}ﱡ %f"
 local GIT_STAGED="%F{blue} %f"
@@ -192,9 +190,6 @@ _git_info() {
 }
 
 _setup_ps1() {
-    # Set up vcs info
-    vcs_info
-
     # Chevron (with vi mode indication) setup
     GLYPH=" "
     [ "x$KEYMAP" = "xvicmd" ] && GLYPH=" "
