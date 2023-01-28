@@ -117,7 +117,7 @@ fi
 # https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
 local GIT_CLEAN="%F{green}ﱣ %f"
-local GIT_STASHED="%F{blue}ﱡ %f"
+local GIT_STASHED="%F{blue}ﱢ %f"
 local GIT_STAGED="%F{blue} %f"
 local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
