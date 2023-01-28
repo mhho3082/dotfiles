@@ -47,6 +47,7 @@
     c = commit
     ci = commit --interactive
 
+    co = checkout
     cl = clone
     cp = cherry-pick
 
