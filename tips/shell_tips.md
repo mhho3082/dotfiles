@@ -68,6 +68,16 @@ ln -s $(which fdfind) ~/.local/bin/fd
 ln -s (which fdfind) ~/.local/bin/fd
 ```
 
+Background / foreground jobs:
+
+```bash
+# create a job to background
+nvim &
+
+# Pull the background job to foreground
+fg
+```
+
 ## Utility programs
 
 Basic
