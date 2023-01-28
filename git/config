@@ -36,22 +36,34 @@
 # Some ideas from https://github.com/mathiasbynens/dotfiles
 
 [alias]
-    b = branch
-    bd = branch -d
     a = add
-    aa = add -A
-    c = commit
-    m = merge
-    # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
-    cd = !"f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)} 2>/dev/null; }; f"
+    aa = add --all
+    ai = add --interactive
+    ap = add --patch
 
-    p = push
-    pu = pull
+    b = branch
+    bd = branch --delete
+
+    c = commit
+    ci = commit --interactive
 
     cl = clone
     cp = cherry-pick
 
-    s = status -sb
+    # `git d i` Diff between i revisions ago and current
+    d = !"d() { git diff --patch-with-stat HEAD~${1:-0}; };d"
+    # Use difftool for such diff
+    df = !"d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
+
+    p = push
+    pu = pull
+
+    m = merge
+    s = status --short --branch
+    w = whatchanged
+
+    # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
+    cd = !"f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)} 2>/dev/null; }; f"
 
     # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
     # Also handles repos without remote by responding the config's default branch instead
@@ -74,27 +86,35 @@
     # Save and push all temporary changes in case of emergency
     emergency = !"git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force"
 
+    # https://gggritso.com/human-git-aliases
     # Remove all changes from staging
-    unstage = reset --mixed
+    unstage = reset --mixed HEAD --
     # Remove all changes made, including untracked files
-    discard = !"git reset --hard; git clean -f"
+    discard = !"git reset --hard HEAD && git clean -d -f"
     # Undo last commit softly
     uncommit = reset HEAD~1 --mixed
+    # Amend the recent commit
+    amend = commit --amend
 
-    # `git d i` Diff between i revisions ago and current
-    d = !"d() { git diff --patch-with-stat HEAD~${1:-0}; };d"
-    # Use difftool for such diff
-    df = !"d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
+    # https://www.reddit.com/r/programming/comments/1febgy/handy_git_tips_to_stop_you_getting_fired/
+    # Handle merge conflicts easily
+    ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
     # Remove merged branches
     # (https://dev.to/wojciechko/git-alias-to-delete-merged-branches-3cop)
     cleanup = !"f() { git branch --merged ${1:-main} | grep -E -v \"(^\\*|${1:-main}|main|master|dev)\" | xargs --no-run-if-empty git branch -d;  };f"
+
+    # Remove unused objects in the .git directory
+    prune = gc --prune=now --aggressive
 
     # Show verbose data
     tags = tag -l
     branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     remotes = remote --verbose
     contributors = shortlog --summary --numbered --no-merges
+    stashes = stash list
+    latest = log -1 HEAD --stat
 
     # Get SHA of head, useful in detached head
     sha = rev-parse --short HEAD
