@@ -58,8 +58,11 @@
     p = push
     pu = pull
 
+    s = stash --include-untracked
+    si = stash --include-untracked --patch
+    sp = stash pop
+
     m = merge
-    s = status --short --branch
     w = whatchanged
 
     # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
@@ -109,6 +112,7 @@
     prune = gc --prune=now --aggressive
 
     # Show verbose data
+    stat = status --short --branch
     tags = tag -l
     branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     remotes = remote --verbose
