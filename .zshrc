@@ -123,13 +123,22 @@ local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
 local GIT_UNTRACKED="%F{red}喝%f"
 
-local GIT_REBASE=" "
 local GIT_UNPULLED="⇣"
 local GIT_UNPUSHED="⇡"
+local GIT_REBASE=" "
+local GIT_DETACHED=" "
 
 _git_branch() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || \
         ref=$(git rev-parse --short HEAD 2> /dev/null) || return
+
+    # Handle detached head
+    if [ $(git rev-parse --abbrev-ref --symbolic-full-name HEAD) = "HEAD" ]; then
+        echo "$GIT_DETACHED${ref#refs/heads/}"
+        return
+    fi
+
+    # Normal branch
     echo "${ref#refs/heads/}"
 }
 
