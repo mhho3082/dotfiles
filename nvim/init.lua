@@ -312,6 +312,9 @@ vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir/"
 
+-- Allow to read project-local configs
+vim.opt.exrc = true
+
 -- Remove 'c no curly braces' errors
 vim.g.c_no_curly_error = 1
 
