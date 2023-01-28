@@ -99,6 +99,9 @@ alias virshprep="sudo virsh net-start default >/dev/null"
 # Change to superuser
 alias superuser="sudo -Eks"
 
+# Run every autostart script
+alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
+
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
