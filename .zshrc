@@ -238,6 +238,7 @@ _setup_ps1
 
 # == Vi mode ==
 
+# Update prompt when changing modes
 zle-keymap-select () {
     _setup_ps1
     zle reset-prompt
@@ -247,11 +248,27 @@ zle-line-init () {
     zle -K viins
 }
 zle -N zle-line-init
+
+# Use vi mode
 bindkey -v
 
 # Common emacs bindings for vi mode
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
+
+# Add ^Z-fg
+# https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]] && [[ -n ${jobstates[(r)s*]} ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 
 # == FZF ==
 
