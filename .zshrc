@@ -4,6 +4,11 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 
+# Auto-install omz if needd
+if ! test -d $ZSH; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
 # Turn off completion issues with `sudo -E -s`
 export ZSH_DISABLE_COMPFIX=true
 
@@ -259,13 +264,13 @@ bindkey '^E' end-of-line
 # Add ^Z-fg
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
-  if [[ $#BUFFER -eq 0 ]] && [[ -n ${jobstates[(r)s*]} ]]; then
-    BUFFER="fg"
-    zle accept-line
-  else
-    BUFFER+=""
-    zle end-of-line
-  fi
+    if [[ $#BUFFER -eq 0 ]] && [[ -n ${jobstates[(r)s*]} ]]; then
+        BUFFER="fg"
+        zle accept-line
+    else
+        BUFFER+=""
+        zle end-of-line
+    fi
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
