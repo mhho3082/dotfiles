@@ -263,8 +263,8 @@ fancy-ctrl-z () {
     BUFFER="fg"
     zle accept-line
   else
-    zle push-input
-    zle clear-screen
+    BUFFER+=""
+    zle end-of-line
   fi
 }
 zle -N fancy-ctrl-z
