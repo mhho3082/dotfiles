@@ -4,9 +4,26 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 
-# Auto-install omz if needd
+# Auto-install omz if needed
 if ! test -d $ZSH; then
+    export RUNZSH=no
+    export KEEP_ZSHRC=yes
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+    # Force-link the zshrc to this one
+    echo "source ~/.config/.zshrc" > ~/.zshrc
+fi
+
+# Auto-install external plugins if needed
+
+# zsh-autosuggestions
+if ! test -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+
+# zsh-syntax-highlighting
+if ! test -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
 # Turn off completion issues with `sudo -E -s`
