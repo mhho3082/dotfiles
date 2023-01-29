@@ -29,8 +29,8 @@ zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
 plugins=(z fzf command-not-found zsh-autosuggestions)
-# Must be last of plugins
-plugins+=zsh-syntax-highlighting
+plugins+=(gh fd ripgrep rsync rust yarn)
+plugins+=zsh-syntax-highlighting # Must be last of plugins
 
 source $ZSH/oh-my-zsh.sh
 
