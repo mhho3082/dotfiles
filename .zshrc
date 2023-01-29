@@ -9,7 +9,23 @@ export ZSH_DISABLE_COMPFIX=true
 
 # Turn on compinit
 autoload -U compinit && compinit
+
+# Modify zsh completion
+# https://thevaluable.dev/zsh-completion-guide-examples/
 zstyle ':completion:*' menu select
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' complete-options true
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+zstyle ':completion:*' list-suffixes
+zstyle ':completion:*' expand prefix suffix
+
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:descriptions' format "%F{yellow}%B--- %d%b"
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format "%F{red}No matches for:%f %d"
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
 plugins=(z fzf command-not-found zsh-autosuggestions)
