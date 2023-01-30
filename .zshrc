@@ -95,6 +95,10 @@ unsetopt beep
 # https://unix.stackexchange.com/questions/566943/how-to-set-less-and-lesspipe-correctly
 export LESS=FRX
 
+# Add local scripts to interactive shell
+fpath+=~/.config/scripts
+autoload -U ~/.config/scripts/*(.:t)
+
 # == Alias ==
 
 # Utility shortcuts

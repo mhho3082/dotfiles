@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Using Hong Kong Observatory's Open Data API
+# https://data.weather.gov.hk/weatherAPI/doc/HKO_Open_Data_API_Documentation.pdf
+
+# Source URL to curl from (use printf to format options into)
+local url="https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=%s&lang=%s" # dataType, lang
+
+# Get type
+local type
+case "$1" in
+    forecast)
+        type=flw
+        ;;
+    9day)
+        type=fnd
+        ;;
+    curr | current)
+        type=rhrread
+        ;;
+    warnings)
+        type=warnsum
+        ;;
+    info)
+        type=warninginfo
+        ;;
+    tips)
+        type=swt
+        ;;
+    *)
+        if test -z "$1"; then
+            type=flw
+        else
+            type="$1"
+        fi
+esac
+
+# Get language
+local lang
+case "$2" in
+    english | en | eng)
+        lang=en
+        ;;
+    traditional | chinese | zh)
+        lang=tc
+        ;;
+    simplified | cn)
+        lang=sc
+        ;;
+    *)
+        if test -z "$2"; then
+            lang=en
+        else
+            lang="$2"
+        fi
+esac
+
+# Curl for data and pretty print
+curl -X GET -s $(printf $url $type $lang) |
+python -c 'import sys, yaml, json; print(yaml.safe_dump(json.loads(sys.stdin.read()), allow_unicode=True, sort_keys=False))' |
+less -RF
