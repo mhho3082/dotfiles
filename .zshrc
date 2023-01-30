@@ -16,15 +16,24 @@ fi
 
 # Auto-install external plugins if needed
 
-# zsh-autosuggestions
-if ! test -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-fi
-
-# zsh-syntax-highlighting
-if ! test -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-fi
+# Modified from https://github.com/mattmc3/zsh_unplugged
+function plugin-load {
+    local repo plugdir initfile
+    ZPLUGINDIR=${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins
+    for repo in $@; do
+        plugdir=$ZPLUGINDIR/${repo:t}
+        initfile=$plugdir/${repo:t}.plugin.zsh
+        if [[ ! -d $plugdir ]]; then
+            echo "Cloning $repo..."
+            git clone -q --depth 1 --recursive --shallow-submodules https://github.com/$repo $plugdir
+        fi
+    done
+}
+local repos=(
+    zsh-users/zsh-autosuggestions
+    zsh-users/zsh-syntax-highlighting
+)
+plugin-load $repos
 
 # Turn off completion issues with `sudo -E -s`
 export ZSH_DISABLE_COMPFIX=true
