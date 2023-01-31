@@ -14,6 +14,7 @@ do
     if ! test -f "$original_file" || ! cmp -s "$file" "$original_file"
     then
         # Copy the file over, creating parent folders if necessary
+        echo "copying $file to $config_folder"
         cp --parents "$file" "$config_folder" 2>/dev/null
     fi
 
