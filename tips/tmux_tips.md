@@ -9,7 +9,7 @@
 
 ## Prefix-based key-bindings
 
-* `<prefix>` = `<C-a>` (can change)
+* `<prefix>` = `<C-Space>` (can change)
 
 - `<prefix> w` - list sessions (and windows)
 - `<prefix> d` - detach session
