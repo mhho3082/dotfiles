@@ -167,9 +167,9 @@ fi
 # https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
 # https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
-local GIT_CLEAN="%F{green}ﱣ %f"
-local GIT_STASHED="%F{blue}ﱢ %f"
-local GIT_STAGED="%F{blue} %f"
+local GIT_CLEAN="%F{blue}ﱣ %f"
+local GIT_STASHED="%F{green}ﱢ %f"
+local GIT_STAGED="%F{green} %f"
 local GIT_STAGED_DIRTY="%F{yellow} %f"
 local GIT_DIRTY="%F{red} %f"
 local GIT_UNTRACKED="%F{red}喝%f"
