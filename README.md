@@ -75,7 +75,9 @@ The apps that I usually use
 - Utilities
   - `htop`
   - `xsane`
-  - `fcitx5` + `rime-cantonese`
+  - `fcitx5`
+    - `fcitx5-rime` + `rime-cantonese` (Cantonese)
+    - `fcitx5-mozc` (Japanese)
   - `qemu-full` + `virt-manager`
 - Fonts
   - `nerd-fonts-jetbrains-mono`
