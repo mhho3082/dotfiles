@@ -642,6 +642,16 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
     }
   end
 
+  if server == "jdtls" then
+    opts.settings = {
+      java = {
+        format = {
+          enabled = false,
+        },
+      },
+    }
+  end
+
   require("lspconfig")[server].setup(opts)
 end
 
@@ -756,7 +766,11 @@ require("lualine").setup({
     lualine_a = { "mode" },
     lualine_b = {
       { "b:gitsigns_head", icon = "" },
-      { "diff", source = gitsigns_diff_source, symbols = { added = " ", modified = " ", removed = " " } },
+      {
+        "diff",
+        source = gitsigns_diff_source,
+        symbols = { added = " ", modified = " ", removed = " " },
+      },
     },
     lualine_c = {
       { "filename", path = 1 },
