@@ -40,6 +40,7 @@
     aa = add --all
     ai = add --interactive
     ap = add --patch
+    an = add --all --intent-to-add # Add new: for adding (but not staging) new files
 
     b = branch
     bd = branch --delete
