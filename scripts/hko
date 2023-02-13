@@ -56,6 +56,11 @@ case "$2" in
 esac
 
 # Curl for data and pretty print
-curl -X GET -s $(printf $url $type $lang) |
-python -c 'import sys, yaml, json; print(yaml.safe_dump(json.loads(sys.stdin.read()), allow_unicode=True, sort_keys=False))' |
-less -RF
+local output=$(curl -X GET -s $(printf $url $type $lang))
+if type jq &>/dev/null; then
+    echo $output | jq  --color-output . | less -RF
+else
+    echo $output |
+    python -c 'import sys, yaml, json; print(yaml.safe_dump(json.loads(sys.stdin.read()), allow_unicode=True, sort_keys=False))' |
+    less -RF
+fi
