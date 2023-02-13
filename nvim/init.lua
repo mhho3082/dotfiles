@@ -441,6 +441,7 @@ function TodoTelescope()
     prompt_title = "Find Todo",
     search = "(TODO|NOTE|INFO|TEST|TEMP|FIXME|XXX|BUG|DEBUG|HACK|UNDONE)(\\(.*\\))?:",
     use_regex = true,
+    additional_args = { "--trim" },
   })
 end
 
