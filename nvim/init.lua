@@ -609,7 +609,7 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
     }
   end
 
-  if server == "sumneko_lua" then
+  if server == "lua_ls" then
     opts.settings = {
       Lua = {
         diagnostics = {
