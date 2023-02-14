@@ -294,9 +294,14 @@ bindkey '^E' end-of-line
 # Add ^Z-fg
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
-    if [[ $#BUFFER -eq 0 ]] && [[ -n ${jobstates[(r)s*]} ]]; then
-        BUFFER="fg"
-        zle accept-line
+    if [[ $#BUFFER -eq 0 ]]; then
+        if [[ -n ${jobstates[(r)s*]} ]]; then
+            BUFFER="fg"
+            zle accept-line
+        else
+            BUFFER="nvim"
+            zle accept-line
+        fi
     else
         BUFFER+=""
         zle end-of-line
