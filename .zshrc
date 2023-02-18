@@ -153,6 +153,14 @@ alias superuser="sudo -Eks"
 # Run every autostart script
 alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 
+# Rapidly re-install (i.e., update) a AUR git repository,
+# of which the version is not actively tracked on AUR (e.g., neovim nightly)
+function yay-reinstall {
+    sudo true
+    yay -Runs --noconfirm $1
+    yay -S --noconfirm $1
+}
+
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
