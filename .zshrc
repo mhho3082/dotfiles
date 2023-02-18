@@ -157,9 +157,13 @@ alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 # of which the version is not actively tracked on AUR (e.g., neovim nightly)
 function yay-reinstall {
     sudo true
-    yay -Runs --noconfirm $1
-    yay -S --noconfirm $1
+    for var in "$@"
+    do
+        yay -Runs --noconfirm $var
+        yay -S --noconfirm $var
+    done
 }
+compdef _pactree yay-reinstall
 
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
