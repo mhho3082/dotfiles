@@ -153,14 +153,22 @@ alias superuser="sudo -Eks"
 # Run every autostart script
 alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 
-# Rapidly re-install (i.e., update) a AUR git repository,
-# of which the version is not actively tracked on AUR (e.g., neovim nightly)
+# Rapidly re-install (i.e., update) AUR git repositorys,
+# of which the version is not actively tracked on AUR
+# (e.g., neovim nightly: neovim-nightly-bin)
 function yay-reinstall {
-    sudo true
-    for var in "$@"
-    do
-        yay -Runs --noconfirm $var
-        yay -S --noconfirm $var
+    for package in "$@"; do
+        if pacman -Qi $package &>/dev/null; then
+            sudo true
+            print -P "%F{green}Reinstalling %F{cyan}$package%f"
+            local old_ver=$(pacman -Q $package | grep -o "[0-9]\+.[0-9]\+.*")
+            yay -Runs --noconfirm $package >/dev/null
+            yay -S --noconfirm $package >/dev/null
+            local new_ver=$(pacman -Q $package | grep -o "[0-9]\+.[0-9]\+.*")
+            print -P "%F{green}Reinstalled %F{cyan}$package%F{green} from %F{white}$old_ver%F{green} to %F{white}$new_ver%f"
+        else
+            print -P "%F{red}$package not installed!%f" >/dev/stderr
+        fi
     done
 }
 compdef _pactree yay-reinstall
