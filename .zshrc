@@ -160,7 +160,7 @@ function yay-reinstall {
     for package in "$@"; do
         if pacman -Qi $package &>/dev/null; then
             sudo true
-            print -P "%F{green}Reinstalling %F{cyan}$package%f"
+            print -P "%F{green}Reinstalling %F{cyan}$package%F{green}...%f"
             local old_ver=$(pacman -Q $package | grep -o "[0-9]\+.[0-9]\+.*")
             yay -Runs --noconfirm $package >/dev/null
             yay -S --noconfirm $package >/dev/null
