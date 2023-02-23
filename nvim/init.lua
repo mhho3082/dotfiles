@@ -378,6 +378,20 @@ wk.register({
   ["<C-c>"] = { "<C-[>", "escape" },
 }, { mode = "i" })
 
+-- Add easy copy/paste to system clipboard
+wk.register({
+  ["gy"] = { '"+y', "Copy to clipboard" },
+  ["gY"] = { '"+Y', "Copy to clipboard" },
+  ["gp"] = { '"+p', "Paste from clipboard" },
+  ["gP"] = { '"+P', "Paste from clipboard" },
+}, { mode = "n" })
+wk.register({
+  ["gy"] = { '"+y', "Copy to clipboard" },
+  ["gY"] = { '"+Y', "Copy to clipboard" },
+  ["gp"] = { '"+p', "Paste from clipboard" },
+  ["gP"] = { '"+P', "Paste from clipboard" },
+}, { mode = "v" })
+
 -- LSP mappings
 wk.register({
   ["J"] = {
