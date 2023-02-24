@@ -153,6 +153,9 @@ alias superuser="sudo -Eks"
 # Run every autostart script
 alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 
+# Get sizes of different directories / files in current directory
+alias sizes="du -h -d 1 | sort -hr | less"
+
 # Rapidly re-install (i.e., update) AUR git repositorys,
 # of which the version is not actively tracked on AUR
 # (e.g., neovim nightly: neovim-nightly-bin)
