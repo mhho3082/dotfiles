@@ -154,6 +154,7 @@ alias superuser="sudo -Eks"
 alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 
 # Get sizes of different directories / files in current directory
+# https://superuser.com/questions/605414/how-to-merge-ls-commands-colors-with-the-output-of-find-or-du
 function sizes {
     paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
 }
