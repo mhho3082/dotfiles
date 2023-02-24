@@ -173,6 +173,21 @@ function yay-reinstall {
 }
 compdef _pactree yay-reinstall
 
+# Quickly create files with their parent directories too
+# https://news.ycombinator.com/item?id=9869706
+# From https://news.ycombinator.com/item?id=9869231
+function create {
+    if [ $# -lt 1 ]; then
+        echo "Missing argument";
+        return 1;
+    fi
+
+    for f in "$@"; do
+        mkdir -p -- "$(dirname -- "$f")"
+        touch -- "$f"
+    done
+}
+
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
