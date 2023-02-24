@@ -307,9 +307,18 @@ zle -N zle-line-init
 # Use vi mode
 bindkey -v
 
-# Common emacs bindings for vi mode
+# Ctrl-a/e for beginning/end of line
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
+
+# Ctrl-n/p for history
+# https://apple.stackexchange.com/questions/426084/zsh-how-do-i-get-ctrl-p-and-ctrl-n-keys-to-perform-history-search-backward-forw
+bindkey '^P' history-beginning-search-backward
+bindkey '^N' history-beginning-search-forward
+
+# Ctrl-u/k for delete to beginning/end of line
+bindkey '^U' backward-kill-line
+bindkey '^K' kill-line
 
 # Add ^Z-fg
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
