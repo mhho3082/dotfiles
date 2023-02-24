@@ -154,7 +154,7 @@ alias superuser="sudo -Eks"
 alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 
 # Get sizes of different directories / files in current directory
-alias sizes="du -h -d 1 | sort -hr | less"
+alias sizes="paste <(du -axh -d 1 2>/dev/null | sed 's/\\s.*//') <(ls --color=always -1 --almost-all -U) | sort -k1 -hr | less"
 
 # Rapidly re-install (i.e., update) AUR git repositorys,
 # of which the version is not actively tracked on AUR
