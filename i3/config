@@ -133,10 +133,10 @@ bindsym $mod+s split h
 bindsym $mod+v split v
 
 # resize
-bindsym $mod+comma resize shrink width 10 px or 10 ppt
-bindsym $mod+period resize grow width 10 px or 10 ppt
-bindsym $mod+minus resize shrink height 10 px or 10 ppt
-bindsym $mod+equal resize grow height 10 px or 10 ppt
+bindsym $mod+comma resize shrink width 5 px or 5 ppt
+bindsym $mod+period resize grow width 5 px or 5 ppt
+bindsym $mod+minus resize shrink height 5 px or 5 ppt
+bindsym $mod+equal resize grow height 5 px or 5 ppt
 
 # change container layout
 bindsym $mod+g layout stacking
