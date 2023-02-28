@@ -159,7 +159,23 @@ function sizes {
     paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
 }
 
-# Rapidly re-install (i.e., update) AUR git repositorys,
+# Update the computer (and reboot if necessary)
+# https://bbs.archlinux.org/viewtopic.php?id=173508
+function yay-update {
+    # Update (and also downgrade if needed)
+    yay -Syyuu --noconfirm
+
+    # Check and reboot if needed
+    local s1=$(pacman -Q linux | cut -d " " -f 2 | sed 's/\./-/g')
+    local s2=$(uname -r | sed 's/\n//' | sed 's/\./-/g')
+    if [[ $s1 > $s2 ]]; then
+        reboot
+    else
+        print -P "%F{green}No need to reboot%f"
+    fi
+}
+
+# Re-install (i.e., update) AUR git repositories,
 # of which the version is not actively tracked on AUR
 # (e.g., neovim nightly: neovim-nightly-bin)
 function yay-reinstall {
