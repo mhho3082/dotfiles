@@ -157,7 +157,7 @@ bindsym $mod+o focus parent
 bindsym $mod+i focus child
 
 # Suspend
-bindsym $mod+p exec $locker && systemctl suspend
+bindsym $mod+p exec systemctl suspend
 
 # Toggle polybar show/hide
 bindsym $mod+b exec polybar-msg cmd toggle
