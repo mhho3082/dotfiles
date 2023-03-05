@@ -99,6 +99,12 @@ export LESS=FRX
 fpath+=~/.config/scripts
 autoload -U ~/.config/scripts/*(.:t)
 
+# Add gem path if any
+if type "ruby" &>/dev/null; then
+    export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+    path+="$GEM_HOME/bin"
+fi
+
 # == Alias ==
 
 # Utility shortcuts
@@ -160,7 +166,9 @@ function sizes {
 }
 
 # Update the computer (and reboot if necessary)
+# Needs to install lsof
 # https://bbs.archlinux.org/viewtopic.php?id=173508
+# https://unix.stackexchange.com/questions/630626/how-can-i-check-if-a-reboot-is-required-on-arch-linux
 function yay-update {
     # Update (and also downgrade if needed)
     yay -Syyuu --noconfirm
@@ -168,7 +176,8 @@ function yay-update {
     # Check and reboot if needed
     local s1=$(pacman -Q linux | cut -d " " -f 2 | sed 's/\./-/g')
     local s2=$(uname -r | sed 's/\n//' | sed 's/\./-/g')
-    if [[ $s1 > $s2 ]]; then
+    local libs=$(lsof -n +c 0 2> /dev/null | grep 'DEL.*lib')
+    if [[ $s1 > $s2 || -n $libs ]]; then
         reboot
     else
         print -P "%F{green}No need to reboot%f"

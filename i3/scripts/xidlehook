@@ -8,14 +8,14 @@
 
 if command -v xidlehook
 then
-  # Run xidlehook
-  # At 5 minute - suspend
-  xidlehook \
-    --not-when-fullscreen --not-when-audio \
-    --timer 300 \
-      '~/.config/i3/scripts/blur-lock && systemctl suspend' \
-      ''
-else 
-  # Run xautolock if xidlehook not installed
-  xautolock -time 5 -locker "systemctl suspend" -detectsleep
+    # Run xidlehook
+    # At 5 minute - suspend
+    xidlehook \
+        --not-when-fullscreen --not-when-audio \
+        --timer 300 \
+        'systemctl suspend' \
+        ''
+else
+    # Run xautolock if xidlehook not installed
+    xautolock -time 5 -locker "systemctl suspend" -detectsleep
 fi
