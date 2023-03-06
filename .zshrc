@@ -174,7 +174,7 @@ function yay-update {
     yay -Syyuu --noconfirm
 
     # Check and reboot if needed
-    local s1=$(pacman -Q linux | cut -d " " -f 2 | sed 's/\./-/g')
+    local s1=$(file /boot/vmlinuz* | sed 's/.*version \([^ ]*\).*/\1/' | sed 's/\./-/g')
     local s2=$(uname -r | sed 's/\n//' | sed 's/\./-/g')
     local libs=$(lsof -n +c 0 2> /dev/null | grep 'DEL.*lib')
     if [[ $s1 > $s2 || -n $libs ]]; then
