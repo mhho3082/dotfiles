@@ -1,0 +1,21 @@
+# Open in full-width mode
+set adjust-open width
+
+# Begin in inverted greyscale colors
+set recolor true
+# Keep text colors
+set recolor-keephue true
+# Keep image colors
+set recolor-reverse-video true
+
+# Copy to clipboard
+set selection-clipboard clipboard
+
+# Modify first-page in side-by-side mode
+# (use d to enter / leave side-by-side mode)
+map D set "first-page-column 1:1"
+map <C-d> set "first-page-column 1:2"
+
+# Use mupdf-like keybindings
+map I recolor
+map b scroll full-up
