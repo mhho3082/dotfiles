@@ -90,6 +90,7 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt prompt_subst
 unsetopt beep
+unsetopt autocd
 
 # Change less flags
 # https://unix.stackexchange.com/questions/566943/how-to-set-less-and-lesspipe-correctly
