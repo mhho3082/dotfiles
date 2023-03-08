@@ -78,15 +78,7 @@ packer.startup(function()
   })
 
   -- Indent
-  use({
-    "NMAC427/guess-indent.nvim",
-    config = function()
-      require("guess-indent").setup({})
-    end,
-  })
-
-  --Extended C-a and C-x
-  use("monaqa/dial.nvim")
+  use("tpope/vim-sleuth")
 
   -- Splitjoin
   use({
@@ -110,18 +102,14 @@ packer.startup(function()
   })
 
   -- Colorscheme
-  -- use({
-  --   "eddyekofo94/gruvbox-flat.nvim",
-  --   config = function()
-  --     vim.g.gruvbox_flat_style = "hard"
-  --     vim.cmd.colorscheme("gruvbox-flat")
-  --   end,
-  -- })
   use({
-    "luisiacc/gruvbox-baby",
+    "sainnhe/gruvbox-material",
     config = function()
-      vim.g.gruvbox_baby_background_color = "dark"
-      vim.cmd.colorscheme("gruvbox-baby")
+      vim.background = "dark"
+      vim.g.gruvbox_material_background = "hard"
+      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_dim_inactive_windows = 1
+      vim.cmd.colorscheme("gruvbox-material")
     end,
   })
 
@@ -138,7 +126,6 @@ packer.startup(function()
         highlight = {
           -- false will disable the whole extension
           enable = true,
-
           -- list of language that will be disabled
           disable = {},
         },
@@ -417,37 +404,6 @@ wk.register({
   ["gs"] = { "<cmd>TSJSplit<cr>", "split node" },
   ["gj"] = { "<cmd>TSJJoin<cr>", "join node" },
 }, { mode = "n" })
-
--- Use dial.nvim
-local augend = require("dial.augend")
-require("dial.config").augends:register_group({
-  -- default augends used when no group name is specified
-  default = {
-    augend.integer.alias.decimal,
-    augend.integer.alias.hex,
-    augend.integer.alias.binary,
-    augend.constant.alias.bool,
-    augend.date.alias["%Y/%m/%d"],
-    augend.date.alias["%d/%m/%Y"],
-    augend.date.alias["%Y-%m-%d"],
-    augend.date.alias["%-m/%-d"],
-    augend.date.alias["%H:%M:%S"],
-    augend.date.alias["%H:%M"],
-    -- augend.semver.alias.semver,
-  },
-})
-wk.register({
-  ["<C-a>"] = { require("dial.map").inc_normal(), "increment" },
-  ["<C-x>"] = { require("dial.map").dec_normal(), "decrement" },
-}, { mode = "n" })
-wk.register({
-  ["<C-a>"] = { require("dial.map").inc_visual(), "increment" },
-  ["<C-x>"] = { require("dial.map").dec_visual(), "decrement" },
-}, { mode = "v" })
-wk.register({
-  ["g<C-a>"] = { require("dial.map").inc_gvisual(), "increment" },
-  ["g<C-x>"] = { require("dial.map").dec_gvisual(), "decrement" },
-}, { mode = "v" })
 
 -- Ideas from https://github.com/folke/todo-comments.nvim/blob/main/lua/telescope/_extensions/todo-comments.lua
 -- But is way lighter
