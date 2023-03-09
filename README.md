@@ -98,6 +98,9 @@ Some extensions that I install in my browsers:
 - `Facebook Container`
 - `Rust Search Extension`
 
+Gruvbox theme is installed from
+https://github.com/teatwig/gruvbox-firefox-themes
+
 (You may want to also activate additional filter lists in `uBlock Origin`
 for things such as Facebook or cookie banners;
 please refer to their [wiki](https://github.com/gorhill/uBlock/wiki).)
