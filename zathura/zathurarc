@@ -3,19 +3,31 @@ set adjust-open width
 
 # Begin in inverted greyscale colors
 set recolor true
-# Keep text colors
-set recolor-keephue true
-# Keep image colors
-set recolor-reverse-video true
+set recolor-keephue true       # Keep text colors
+set recolor-reverse-video true # Keep image colors
+
+# Use gruvbox (hard) colors for recolor
+set recolor-lightcolor "#1d2021" # background
+set recolor-darkcolor "#fbf1c7"  # foreground
 
 # Copy to clipboard
 set selection-clipboard clipboard
 
 # Modify first-page in side-by-side mode
 # (use d to enter / leave side-by-side mode)
-map D set "first-page-column 1:1"
-map <C-d> set "first-page-column 1:2"
+map v toggle_page_mode
+map V set "first-page-column 1:1"
+map <C-V> set "first-page-column 1:2"
+
+# Use tildes in file names
+set window-title-home-tilde true
+set statusbar-home-tilde true
+
+# Hide statusbar by default
+set guioptions ""
 
 # Use mupdf-like keybindings
 map I recolor
 map b scroll full-up
+map d scroll half-down
+map u scroll half-up
