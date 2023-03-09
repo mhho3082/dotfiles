@@ -60,21 +60,29 @@ for_window [class="^.*"] border pixel 1
 # Default font
 font pango: Noto Sans Regular 10
 
-# Colour variables
-set_from_resource $bg     color0 #0a0a0a
-set_from_resource $fg     color7 #c8c8c8
-set_from_resource $color1 color1 #a54242
-set_from_resource $color4 color4 #5f819d
+# Using gruvbox hard dark
+# Modified from https://gist.github.com/Cardoso1994/80641d652a4adcf6c8f718ebc3770ab9
+
+# Colour variables (from base16: 0, 7, 8, 9, A, B, C, D, E, F)
+set $bg       #1d2021
+set $fg       #fbf1c7
+set $red      #fb4934
+set $orange   #fe8019
+set $yellow   #fabd2f
+set $green    #b8bb26
+set $cyan     #8ec07c
+set $blue     #83a598
+set $purple   #d3869b
+set $brown    #d65d0e
 
 # Set up Colours
-#                       |---- Titlebar ----|  |---- Frame ----|
-# Class                 Border  Backgr. Text  Indicator Border
-client.focused          $color1 $color1 $fg   $color4   $color1
-client.focused_inactive $color1 $bg     $fg   $color4   $bg
-client.unfocused        $color1 $bg     $fg   $color4   $bg
-client.urgent           $bg     $bg     $fg   $color4   $bg
-client.placeholder      $bg     $bg     $fg   $color4   $bg
-
+#                       |-------- Titlebar --------|    |----- Frame -----|
+# Class                 Border      Background  Text    Indicator   Child Border
+client.focused          $blue       $blue       $bg     $blue       $blue
+client.focused_inactive $aqua       $aqua       $bg     $aqua       $aqua
+client.unfocused        $bg         $bg         $bg     $bg         $bg
+client.urgent           $red        $red        $bg     $red        $red
+client.placeholder      $bg         $bg         $bg     $bg         $bg
 client.background       $bg
 
 ###################
