@@ -607,6 +607,7 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
             "Hin",
             "ArchWiki",
             "newpage",
+            "gruvbox",
           },
         },
         checkFrequency = "save",
