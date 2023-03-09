@@ -1,5 +1,6 @@
-# Open in full-width mode
-set adjust-open width
+# Open in fit-width mode
+set adjust-open best-fit
+set pages-per-row 1
 
 # Begin in inverted greyscale colors
 set recolor true
@@ -14,10 +15,10 @@ set recolor-darkcolor "#fbf1c7"  # foreground
 set selection-clipboard clipboard
 
 # Modify first-page in side-by-side mode
-# (use d to enter / leave side-by-side mode)
+# (use v to enter / leave side-by-side mode)
 map v toggle_page_mode
 map V set "first-page-column 1:1"
-map <C-V> set "first-page-column 1:2"
+map <C-v> set "first-page-column 1:2"
 
 # Use tildes in file names
 set window-title-home-tilde true
