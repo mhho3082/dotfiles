@@ -1,8 +1,8 @@
-@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+@theme "/usr/share/rofi/themes/gruvbox-dark-hard.rasi"
 configuration {
     modi:                "window,run,ssh,drun";
-	kb-cancel:           "Escape,Ctrl+c,Alt+F1";
-	show-icons:          true;
-	drun-display-format: "{name}";
+    kb-cancel:           "Escape,Ctrl+c,Alt+F1";
+    show-icons:          true;
+    drun-display-format: "{name}";
 }
 /* vim: set ft=rasi: */
