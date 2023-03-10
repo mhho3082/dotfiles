@@ -83,6 +83,10 @@ The apps that I usually use
   - `nerd-fonts-jetbrains-mono`
   - `nerd-fonts-fira-code`
   - `ttf-ms-fonts`
+- Themes
+  - `gruvbox-material-gtk-theme-git`
+  - `gruvbox-material-icon-theme-git`
+  - `fcitx5-gruvbox-dark-theme-git`
 
 </details>
 
