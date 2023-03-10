@@ -2,9 +2,9 @@
 set adjust-open best-fit
 set pages-per-row 1
 
-# Use gruvbox (hard) colors
+# Use gruvbox (hard) colors for pdf display
 set recolor-lightcolor "#1d2021" # background
-set recolor-darkcolor "#fbf1c7"  # foreground
+set recolor-darkcolor "#ebdbb2"  # foreground
 set recolor true                 # Begin in recolored mode
 set recolor-keephue true         # Keep text colors
 set recolor-reverse-video true   # Keep image colors
