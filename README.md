@@ -85,7 +85,7 @@ The apps that I usually use
   - `ttf-ms-fonts`
 - Themes
   - `gruvbox-material-gtk-theme-git`
-  - `gruvbox-material-icon-theme-git`
+  - `eos-qogir-icons`
   - `fcitx5-gruvbox-dark-theme-git`
 
 </details>
