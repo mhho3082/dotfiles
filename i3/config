@@ -85,32 +85,36 @@ client.urgent           $red        $red        $bg     $red        $red
 client.placeholder      $bg         $bg         $bg     $bg         $bg
 client.background       $bg
 
-###################
-### Keybindings ###
-###################
+###############################
+### Application Keybindings ###
+###############################
 
-# Application shortcuts
-
+# Common applications
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $launcher
 bindsym $mod+n exec $files
 bindsym $mod+Print exec $screenshot
 
-bindsym $mod+Shift+e exec $powermenu
-bindsym $mod+Shift+o exec $locker
-bindsym $mod+Shift+p exec $powerprofiles
-
-# Web applications
+# Web applications (with private modes)
 bindsym $mod+w exec firefox
 bindsym $mod+Shift+w exec firefox -private-window
 bindsym $mod+c exec chromium
 bindsym $mod+Shift+c exec chromium --incognito
 
-# kill focused window
-bindsym $mod+q kill
+# Power utilities
+bindsym $mod+Shift+e exec $powermenu
+bindsym $mod+Shift+o exec $locker
+bindsym $mod+Shift+p exec $powerprofiles
 
 # keybinding in fancy rofi (automated):
-bindsym $mod+F1 exec $help_keybinds
+bindsym $mod+Shift+slash exec $help_keybinds
+
+# Toggle polybar show/hide
+bindsym $mod+b exec polybar-msg cmd toggle
+
+######################
+### i3 Keybindings ###
+######################
 
 # change focus
 bindsym $mod+h focus left
@@ -151,6 +155,9 @@ bindsym $mod+g layout stacking
 bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
+# kill focused window
+bindsym $mod+q kill
+
 # Toggle fullscreen mode
 bindsym $mod+f fullscreen toggle
 
@@ -163,12 +170,6 @@ bindsym $mod+space focus mode_toggle
 # focus the parent/child container (out-/in-wards)
 bindsym $mod+o focus parent
 bindsym $mod+i focus child
-
-# Suspend
-bindsym $mod+p exec systemctl suspend
-
-# Toggle polybar show/hide
-bindsym $mod+b exec polybar-msg cmd toggle
 
 # restart i3 inplace (preserves your layout/session, can be used to update i3)
 bindsym $mod+Shift+r restart
