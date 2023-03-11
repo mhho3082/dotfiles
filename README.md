@@ -34,9 +34,9 @@ The apps that I usually use
 <summary> App List </summary>
 
 - Casual usage
-  - `mupdf`
   - `firefox`
   - `chromium`
+  - `zathura`
   - `discord`
 - Command line
   - `zsh`
