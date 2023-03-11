@@ -66,7 +66,8 @@ The apps that I usually use
     - `node`
     - `yarn`
 - Desktop environment setup
-  - `i3-gaps`
+  - `i3-wm`
+  - `i3lock`
   - `rofi`
   - `polybar`
   - `brightnessctl`
