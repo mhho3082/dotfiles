@@ -42,6 +42,7 @@ set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
 set $powerprofiles ~/.config/i3/scripts/power-profiles
 set $screenshot flameshot gui
+set $screenshot_clipboard flameshot gui -c
 
 ############
 ### Gaps ###
@@ -95,6 +96,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+d exec $launcher
 bindsym $mod+n exec $files
 bindsym $mod+Print exec $screenshot
+bindsym $mod+Shift+Print exec $screenshot_clipboard
 
 # Web applications (with private modes)
 bindsym $mod+w exec firefox
