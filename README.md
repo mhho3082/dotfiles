@@ -80,6 +80,7 @@ The apps that I usually use
     - `fcitx5-rime` + `rime-cantonese` (Cantonese)
     - `fcitx5-mozc` (Japanese)
   - `qemu-full` + `virt-manager`
+  - `flameshot`
 - Fonts
   - `nerd-fonts-jetbrains-mono`
   - `nerd-fonts-fira-code`
