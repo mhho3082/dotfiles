@@ -12,6 +12,7 @@
 # xbacklight -> backlightctl
 # xautolock  -> xidlehook
 # i3bar      -> polybar
+# scrot      -> flameshot
 
 # You are advised to read through the keybindings before using this config
 
@@ -40,7 +41,7 @@ set $locker ~/.config/i3/scripts/blur-lock
 set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
 set $powerprofiles ~/.config/i3/scripts/power-profiles
-set $screenshot mkdir -p ~/Downloads/ && scrot ~/Downloads/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved at $(date +'%T')"
+set $screenshot flameshot gui
 
 ############
 ### Gaps ###
