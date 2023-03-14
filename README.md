@@ -28,7 +28,9 @@ please see the folder [`./tips/`](https://github.com/mhho3082/dotfiles/tree/main
 ## App list
 
 The apps that I usually use
-(some of which I install only when needed):
+(some of which I install only when needed),
+which may take additional setup to install
+(please refer to their respective documentation):
 
 <details>
 <summary> App List </summary>
@@ -92,6 +94,7 @@ The apps that I usually use
   - `eos-qogir-icons`
   - `fcitx5-gruvbox-dark-theme-git`
   - `grub-theme-vimix`
+  - `lightdm-webkit-theme-litarvan`
 
 </details>
 
