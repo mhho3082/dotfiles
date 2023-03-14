@@ -44,6 +44,7 @@ The apps that I usually use
   - `exa`
   - `fd`
   - `fzf`
+  - `vifm`
   - `ripgrep`
   - `xsel`
   - `wezterm`
@@ -80,6 +81,7 @@ The apps that I usually use
     - `fcitx5-rime` + `rime-cantonese` (Cantonese)
     - `fcitx5-mozc` (Japanese)
   - `qemu-full` + `virt-manager`
+  - `pandoc` + `texlive-most`
   - `flameshot`
 - Fonts
   - `nerd-fonts-jetbrains-mono`
@@ -89,6 +91,7 @@ The apps that I usually use
   - `gruvbox-material-gtk-theme-git`
   - `eos-qogir-icons`
   - `fcitx5-gruvbox-dark-theme-git`
+  - `grub-theme-vimix`
 
 </details>
 
