@@ -205,6 +205,11 @@ function yay-reinstall {
 }
 compdef _pactree yay-reinstall
 
+# Remove orphan packages
+function yay-autoremove {
+    yay -Runs $(yay -Qdt | cut -d ' ' -f 1)
+}
+
 # Quickly create files with their parent directories too
 # https://news.ycombinator.com/item?id=9869706
 # From https://news.ycombinator.com/item?id=9869231
