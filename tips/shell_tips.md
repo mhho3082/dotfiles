@@ -19,6 +19,12 @@ Remove a package completely and safely with `pacman`:
 pacman -Runs package
 ```
 
+Show all installed packages:
+
+```bash
+pacman -Qet
+```
+
 Pipe from/to clipboard with `xsel`:
 
 ```bash
