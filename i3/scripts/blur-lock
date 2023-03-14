@@ -5,5 +5,5 @@ SCREENSHOT="scrot -z $PICTURE"
 
 $SCREENSHOT
 convert $PICTURE -scale 10% -scale 1000% $PICTURE
-i3lock -i $PICTURE
+i3lock -e -i $PICTURE
 rm $PICTURE
