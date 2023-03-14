@@ -3,9 +3,7 @@
 PICTURE=/tmp/i3lock.png
 SCREENSHOT="scrot -z $PICTURE"
 
-BLUR="5x4"
-
 $SCREENSHOT
-convert $PICTURE -blur $BLUR $PICTURE
+convert $PICTURE -scale 10% -scale 1000% $PICTURE
 i3lock -i $PICTURE
 rm $PICTURE
