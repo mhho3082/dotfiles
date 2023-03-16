@@ -5,8 +5,9 @@ config_folder=~/.config/
 mkdir -p "$config_folder"
 
 # For every file in this folder
-for file in $(find -type f | sed "/copy_to_config.*/d" | \
-    sed "/README.*/d" | sed "/tips\//d" | sed "/\.git\//d")
+for file in $(find -type f | \
+    sed "/copy_to_config.*/d" | sed "/README.*/d" | sed "/.stylua.*/d" | \
+    sed "/tips\//d" | sed "/\.git\//d")
 do
     original_file="${config_folder}/${file}"
 
