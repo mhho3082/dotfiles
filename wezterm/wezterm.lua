@@ -11,7 +11,7 @@ return {
   -- Handle i3wm properly
   adjust_window_size_when_changing_font_size = false,
   keys = {
-    -- Add back copy/paste
+    -- Copy/paste
     {
       key = "c",
       mods = "CTRL|SHIFT",
@@ -22,6 +22,7 @@ return {
       mods = "CTRL|SHIFT",
       action = wezterm.action.PasteFrom("Clipboard"),
     },
+    -- Change font size
     {
       key = "-",
       mods = "CTRL",
@@ -36,6 +37,17 @@ return {
       key = "0",
       mods = "CTRL",
       action = wezterm.action.ResetFontSize,
+    },
+    -- Scroll up/down
+    {
+      key = "PageUp",
+      mods = "CTRL",
+      action = wezterm.action.ScrollByPage(-1),
+    },
+    {
+      key = "PageDown",
+      mods = "CTRL",
+      action = wezterm.action.ScrollByPage(1),
     },
   },
 }
