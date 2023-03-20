@@ -225,6 +225,12 @@ function create {
     done
 }
 
+# Get the IP address in the form 192.168.x.y
+# https://unix.stackexchange.com/questions/119269/how-to-get-ip-address-using-shell-script
+function ip-addr {
+    ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'
+}
+
 # WSL-specific alias
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
