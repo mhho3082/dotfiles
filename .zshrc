@@ -169,19 +169,26 @@ function sizes {
 # Update the computer (and reboot if necessary)
 # Needs to install lsof
 # https://bbs.archlinux.org/viewtopic.php?id=173508
-# https://unix.stackexchange.com/questions/630626/how-can-i-check-if-a-reboot-is-required-on-arch-linux
+# https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
 function yay-update {
-    # Update (and also downgrade if needed)
-    yay -Syyuu --noconfirm
+    # Check if updates (and reboot) is needed
+    local updates=$(checkupdates)
 
-    # Check and reboot if needed
-    local s1=$(file /boot/vmlinuz* | sed 's/.*version \([^ ]*\).*/\1/' | sed 's/\./-/g')
-    local s2=$(uname -r | sed 's/\n//' | sed 's/\./-/g')
-    local libs=$(lsof -n +c 0 2> /dev/null | grep 'DEL.*lib')
-    if [[ $s1 > $s2 || -n $libs ]]; then
-        reboot
+    # Words to check for in updates
+    local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
+
+    if [[ -n $updates ]]; then
+        # Update (and also downgrade if needed)
+        yay -Syyuu --noconfirm
+
+        if [[ $updates =~ $reboot_check ]]; then
+            reboot
+        else
+            print -P "%F{green}No need to reboot%f"
+
+        fi
     else
-        print -P "%F{green}No need to reboot%f"
+        print -P "%F{green}No need to update%f"
     fi
 }
 
