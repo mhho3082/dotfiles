@@ -41,12 +41,10 @@ return {
     -- Scroll up/down
     {
       key = "PageUp",
-      mods = "CTRL",
       action = wezterm.action.ScrollByPage(-0.5),
     },
     {
       key = "PageDown",
-      mods = "CTRL",
       action = wezterm.action.ScrollByPage(0.5),
     },
   },
