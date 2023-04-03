@@ -39,6 +39,7 @@ which may take additional setup to install
   - `firefox`
   - `chromium`
   - `zathura`
+    - `zathura-pdf-mupdf`
   - `discord`
 - Command line
   - `zsh`
