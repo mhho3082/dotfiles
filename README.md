@@ -71,6 +71,7 @@ which may take additional setup to install
 - Desktop environment setup
   - `i3-wm`
   - `i3lock`
+  - `feh`
   - `rofi`
   - `polybar`
   - `brightnessctl`

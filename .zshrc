@@ -393,7 +393,7 @@ fancy-ctrl-z () {
             BUFFER="fg"
             zle accept-line
         else
-            BUFFER="nvim"
+            BUFFER="$VISUAL"
             zle accept-line
         fi
     else
