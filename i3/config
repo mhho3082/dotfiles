@@ -221,9 +221,10 @@ exec --no-startup-id numlockx on
 # Use arandr script to set up displays
 exec --no-startup-id ~/.screenlayout/monitor.sh
 
-# set wallpaper
-exec --no-startup-id nitrogen --restore
-#exec --no-startup-id feh --bg-fill /usr/share/endeavouros/backgrounds/endeavouros_i3.png
+# Set wallpaper
+# (If this doesn't work, just run feh --bg-[method] [your wallpaper]
+# which will generate ~/.fehbg)
+exec --no-startup-id ~/.fehbg
 
 # set powersavings for display
 # exec --no-startup-id xset s 480 dpms 600 600 600
