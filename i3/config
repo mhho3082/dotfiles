@@ -81,8 +81,8 @@ set $brown    #d65d0e
 #                       |-------- Titlebar --------|    |----- Frame -----|
 # Class                 Border      Background  Text    Indicator   Child Border
 client.focused          $blue       $blue       $bg     $blue       $blue
-client.focused_inactive $aqua       $aqua       $bg     $aqua       $aqua
-client.unfocused        $bg         $bg         $blue   $bg         $bg
+client.focused_inactive $aqua       $aqua       $bg     $fg         $bg
+client.unfocused        $bg         $bg         $aqua   $bg         $bg
 client.urgent           $red        $red        $bg     $red        $red
 client.placeholder      $bg         $bg         $bg     $bg         $bg
 client.background       $bg
