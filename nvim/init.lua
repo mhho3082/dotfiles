@@ -121,7 +121,7 @@ packer.startup(function()
     end,
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "help", "comment", "markdown", "markdown_inline" },
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "comment", "markdown", "markdown_inline" },
         highlight = {
           -- false will disable the whole extension
           enable = true,
@@ -149,6 +149,45 @@ packer.startup(function()
     "kyazdani42/nvim-web-devicons",
     config = function()
       require("nvim-web-devicons").setup({})
+    end,
+  })
+
+  -- Statuscol
+  -- https://github.com/luukvbaal/statuscol.nvim/issues/43
+  use({
+    "luukvbaal/statuscol.nvim",
+    config = function()
+      local builtin = require("statuscol.builtin")
+      -- local builtin = require("statuscol.builtin")
+      require("statuscol").setup({
+        segments = {
+          {
+            sign = {
+              name = { "GitSigns*" },
+              maxwidth = 1,
+              auto = true,
+            },
+            click = "v:lua.ScSa",
+          },
+          {
+            sign = {
+              name = { "Diagnostic" },
+              maxwidth = 1,
+              auto = true,
+            },
+            click = "v:lua.ScSa",
+          },
+          {
+            text = { builtin.lnumfunc, " " },
+            condition = { true, builtin.not_empty },
+            click = "v:lua.ScLa",
+          },
+          {
+            text = { builtin.foldfunc, " " },
+            click = "v:lua.ScFa",
+          },
+        },
+      })
     end,
   })
 
@@ -663,11 +702,6 @@ cmp.setup({
 
     -- Disable in comments
     if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
-      return false
-    end
-
-    -- Disable in strings
-    if context.in_treesitter_capture("string") or context.in_syntax_group("String") then
       return false
     end
 
