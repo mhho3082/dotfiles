@@ -232,6 +232,13 @@ packer.startup(function()
       require("gitsigns").setup({})
     end,
   })
+  use({
+    "sindrets/diffview.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("diffview").setup()
+    end,
+  })
 
   -- Search
   use("nvim-telescope/telescope.nvim")
@@ -443,7 +450,7 @@ wk.register({
       name = "git",
       -- Statuses
       b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "blame" },
-      d = { "<cmd>Gvdiffsplit<cr>", "diff with head" },
+      d = { "<cmd>DiffviewOpen<cr>", "diff with head" }, -- Or Gvdiffsplit
       -- Fetch
       f = { "<cmd>G fetch<cr>", "fetch" },
       m = { "<cmd>G merge<cr>", "merge" },
