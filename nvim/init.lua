@@ -595,6 +595,9 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
         runtime = {
           version = "LuaJIT",
         },
+        format = {
+          enable = false,
+        },
       },
     }
   end
