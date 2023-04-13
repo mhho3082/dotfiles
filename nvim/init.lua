@@ -178,6 +178,14 @@ packer.startup(function()
             click = "v:lua.ScSa",
           },
           {
+            sign = {
+              name = { ".*" },
+              maxwidth = 1,
+              auto = true,
+            },
+            click = "v:lua.ScSa",
+          },
+          {
             text = { builtin.lnumfunc },
             condition = { true },
             click = "v:lua.ScLa",
