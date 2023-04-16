@@ -263,12 +263,13 @@ source ~/gitstatus/gitstatus.plugin.zsh
 local GIT_CLEAN="%F{blue}ﱣ %f"
 local GIT_STASHED="%F{green}ﱢ %f"
 local GIT_STAGED="%F{green} %f"
+local GIT_STAGED_UNTRACKED="%F{yellow}喝%f"
 local GIT_STAGED_UNSTAGED="%F{yellow} %f"
-local GIT_UNSTAGED="%F{red} %f"
 local GIT_UNTRACKED="%F{red}喝%f"
+local GIT_UNSTAGED="%F{red} %f"
 
-local GIT_UNPULLED="⇣"
-local GIT_UNPUSHED="⇡"
+local GIT_BEHIND="⇣"
+local GIT_AHEAD="⇡"
 local GIT_REBASE=" "
 local GIT_DETACHED=" "
 
@@ -293,15 +294,26 @@ _setup_ps1() {
     # Modified from https://github.com/romkatv/gitstatus
     RPROMPT=''
     if gitstatus_query MY && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
-        RPROMPT=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}  # escape %
-        if (( VCS_STATUS_NUM_UNTRACKED )); then
+        RPROMPT=""
+
+        # Inter-branch status
+        (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD$VCS_STATUS_COMMITS_AHEAD"
+        (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND$VCS_STATUS_COMMITS_BEHIND"
+
+        # Branch name
+        RPROMPT+=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}  # escape %
+
+        # Within-branch status
+        if (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNTRACKED )); then
+            RPROMPT+=" $GIT_STAGED_UNTRACKED"
+        elif (( VCS_STATUS_NUM_UNTRACKED )); then
             RPROMPT+=" $GIT_UNTRACKED"
         elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED )); then
             RPROMPT+=" $GIT_STAGED_UNSTAGED"
-        elif (( VCS_STATUS_NUM_STAGED )); then
-            RPROMPT+=" $GIT_STAGED"
         elif (( VCS_STATUS_NUM_UNSTAGED )); then
             RPROMPT+=" $GIT_UNSTAGED"
+        elif (( VCS_STATUS_NUM_STAGED )); then
+            RPROMPT+=" $GIT_STAGED"
         else
             RPROMPT+=" $GIT_CLEAN"
         fi
