@@ -297,8 +297,12 @@ _setup_ps1() {
         RPROMPT=""
 
         # Inter-branch status
-        (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD$VCS_STATUS_COMMITS_AHEAD"
-        (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND$VCS_STATUS_COMMITS_BEHIND"
+        (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD"
+        (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
+
+        if [ -n RPROMPT ]; then
+            PROMPT+=" "
+        fi
 
         # Branch name
         RPROMPT+="%F{242}"
