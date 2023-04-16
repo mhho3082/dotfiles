@@ -261,7 +261,6 @@ fi
 source ~/gitstatus/gitstatus.plugin.zsh
 
 local GIT_CLEAN="%F{blue}ﱣ %f"
-local GIT_STASHED="%F{green}ﱢ %f"
 local GIT_STAGED="%F{green} %f"
 local GIT_STAGED_UNTRACKED="%F{yellow}喝%f"
 local GIT_STAGED_UNSTAGED="%F{yellow} %f"
@@ -270,6 +269,7 @@ local GIT_UNSTAGED="%F{red} %f"
 
 local GIT_BEHIND="⇣"
 local GIT_AHEAD="⇡"
+local GIT_STASHED="󰈻 "
 local GIT_REBASE=" "
 local GIT_DETACHED=" "
 
@@ -299,6 +299,7 @@ _setup_ps1() {
         # Inter-branch status
         (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD"
         (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
+        (( VCS_STATUS_STASHES )) && RPROMPT+="$GIT_STASHED"
 
         if [ -n $RPROMPT ]; then
             RPROMPT+=" "
