@@ -167,7 +167,7 @@ function sizes {
 }
 
 # Update the computer (and reboot if necessary)
-# Needs to install lsof
+# Needs checkupdates
 # https://bbs.archlinux.org/viewtopic.php?id=173508
 # https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
 function yay-update {
