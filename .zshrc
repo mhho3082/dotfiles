@@ -300,8 +300,8 @@ _setup_ps1() {
         (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD"
         (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
 
-        if [ -n RPROMPT ]; then
-            PROMPT+=" "
+        if [ -n $RPROMPT ]; then
+            RPROMPT+=" "
         fi
 
         # Branch name
