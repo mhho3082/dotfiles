@@ -252,6 +252,14 @@ fi
 # https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
 # https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
+# Get utility functions from https://github.com/romkatv/gitstatus working
+if [ ! -d ~/gitstatus ]; then
+    git clone --depth=1 https://github.com/romkatv/gitstatus.git ~/gitstatus >/dev/null
+else
+    git -C ~/gitstatus pull >/dev/null
+fi
+source ~/gitstatus/gitstatus.plugin.zsh
+
 local GIT_CLEAN="%F{blue}ﱣ %f"
 local GIT_STASHED="%F{green}ﱢ %f"
 local GIT_STAGED="%F{green} %f"
@@ -263,76 +271,6 @@ local GIT_UNPULLED="⇣"
 local GIT_UNPUSHED="⇡"
 local GIT_REBASE=" "
 local GIT_DETACHED=" "
-
-_git_branch() {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-        ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-
-    # Handle detached head
-    if [ $(git rev-parse --abbrev-ref --symbolic-full-name HEAD) = "HEAD" ]; then
-        echo "$GIT_DETACHED${ref#refs/heads/}"
-        return
-    fi
-
-    # Normal branch
-    echo "${ref#refs/heads/}"
-}
-
-_git_status() {
-    if test -z "$(git status --porcelain --ignore-submodules)"; then
-        if test -n "$(git stash list -1)"; then
-            echo $GIT_STASHED
-        else
-            echo $GIT_CLEAN
-        fi
-    elif test -n "$(git ls-files --others --exclude-standard)"; then
-        echo $GIT_UNTRACKED
-    elif test -z "$(git diff --name-only)"; then
-        echo $GIT_STAGED
-    elif test -n "$(git diff --name-only --cached)"; then
-        echo $GIT_STAGED_DIRTY
-    else
-        echo $GIT_DIRTY
-    fi
-}
-
-_git_rebase_check() {
-    git_dir=$(git rev-parse --git-dir)
-    if test -d "$git_dir/rebase-merge" -o -d "$git_dir/rebase-apply"; then
-        echo "$GIT_REBASE"
-    fi
-}
-
-_git_remote_check() {
-    # Check that a remote repo do exist
-    git symbolic-ref refs/remotes/origin/HEAD &>/dev/null || return
-
-    local_commit=$(git rev-parse @ 2>&1)
-    remote_commit=$(git rev-parse @{u} 2>&1)
-    common_base=$(git merge-base @ @{u} 2>&1) # last common commit
-
-    if [[ $local_commit == $remote_commit ]]; then
-        echo ""
-    else
-        if [[ $common_base == $remote_commit ]]; then
-            echo "$GIT_UNPUSHED"
-        elif [[ $common_base == $local_commit ]]; then
-            echo "$GIT_UNPULLED"
-        else
-            echo "$GIT_UNPUSHED $GIT_UNPULLED"
-        fi
-    fi
-}
-
-_git_symbol() {
-    echo "$(_git_rebase_check) $(_git_remote_check) "
-}
-
-_git_info() {
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-        echo "$(_git_symbol)%F{242}$(_git_branch)%f $(_git_status)"
-    fi
-}
 
 _setup_ps1() {
     # Chevron (with vi mode indication) setup
@@ -352,9 +290,20 @@ _setup_ps1() {
     PS1+=" %(?.%F{blue}.%F{red})$GLYPH%f "
 
     # RHS prompt: git info
-    RPROMPT="$(_git_info)"
+    # Modified from https://github.com/romkatv/gitstatus
+    RPROMPT=''
+    if gitstatus_query MY && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
+        RPROMPT=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}  # escape %
+        (( VCS_STATUS_NUM_STAGED    )) && RPROMPT+=" $GIT_STAGED"
+        (( VCS_STATUS_NUM_UNSTAGED  )) && RPROMPT+=" $GIT_DIRTY"
+        (( VCS_STATUS_NUM_UNTRACKED )) && RPROMPT+=" $GIT_UNTRACKED"
+    fi
+
+    setopt no_prompt_{bang,subst} prompt_percent  # enable/disable correct prompt expansions
 }
-_setup_ps1
+gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _setup_ps1
 
 # == Vi mode ==
 
