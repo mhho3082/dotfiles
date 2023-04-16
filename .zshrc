@@ -262,10 +262,10 @@ source ~/gitstatus/gitstatus.plugin.zsh
 
 local GIT_CLEAN="%F{blue}ﱣ %f"
 local GIT_STAGED="%F{green} %f"
-local GIT_STAGED_UNTRACKED="%F{yellow}喝%f"
+local GIT_UNSTAGED="%F{red} %f"
 local GIT_STAGED_UNSTAGED="%F{yellow} %f"
 local GIT_UNTRACKED="%F{red}喝%f"
-local GIT_UNSTAGED="%F{red} %f"
+local GIT_STAGED_UNTRACKED="%F{yellow}喝%f"
 
 local GIT_BEHIND="⇣"
 local GIT_AHEAD="⇡"
