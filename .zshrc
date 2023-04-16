@@ -301,7 +301,9 @@ _setup_ps1() {
         (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND$VCS_STATUS_COMMITS_BEHIND"
 
         # Branch name
+        RPROMPT+="%F{242}"
         RPROMPT+=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}  # escape %
+        RPROMPT+="%f"
 
         # Within-branch status
         if (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNTRACKED )); then
