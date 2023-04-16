@@ -15,6 +15,9 @@
 [init]
     defaultBranch = main
 
+[pull]
+    rebase = true
+
 [push]
     default = current
     followTags = true
