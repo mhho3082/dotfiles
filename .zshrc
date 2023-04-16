@@ -302,6 +302,12 @@ _setup_ps1() {
             RPROMPT+=" "
         fi
 
+        # Currently running action
+        if (( VCS_STATUS_ACTION )); then
+            RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
+            (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="%F{red} %f"
+        fi
+
         # Branch name
         # Modified from https://github.com/romkatv/gitstatus/blob/master/gitstatus.prompt.zsh
         if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
