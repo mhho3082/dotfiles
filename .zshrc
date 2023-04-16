@@ -307,7 +307,13 @@ _setup_ps1() {
 
         # Branch name
         RPROMPT+="%F{242}"
-        RPROMPT+=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}  # escape %
+        if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
+            RPROMPT+=${${VCS_STATUS_LOCAL_BRANCH}//\%/%%} # escape %
+        elif [[ -n $VCS_STATUS_TAG ]]; then
+            RPROMPT+="#${${VCS_STATUS_TAG}//\%/%%}" # escape %
+        else
+            RPROMPT+="@${${VCS_STATUS_COMMIT:0:8}//\%/%%}" # escape %
+        fi
         RPROMPT+="%f"
 
         # Within-branch status
