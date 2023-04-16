@@ -321,6 +321,8 @@ _setup_ps1() {
         # Within-branch status
         if (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNTRACKED )); then
             RPROMPT+=" $GIT_STAGED_UNTRACKED"
+        elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED_DELETED )); then # deleted is also a type of untracked
+            RPROMPT+=" $GIT_STAGED_UNTRACKED"
         elif (( VCS_STATUS_NUM_UNTRACKED )); then
             RPROMPT+=" $GIT_UNTRACKED"
         elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED )); then
