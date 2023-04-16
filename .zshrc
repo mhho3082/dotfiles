@@ -255,8 +255,6 @@ fi
 # Get utility functions from https://github.com/romkatv/gitstatus working
 if [ ! -d ~/gitstatus ]; then
     git clone --depth=1 https://github.com/romkatv/gitstatus.git ~/gitstatus >/dev/null
-else
-    git -C ~/gitstatus pull >/dev/null
 fi
 source ~/gitstatus/gitstatus.plugin.zsh
 
