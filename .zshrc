@@ -303,7 +303,7 @@ _setup_ps1() {
         elif (( VCS_STATUS_NUM_UNSTAGED )); then
             RPROMPT+=" $GIT_UNSTAGED"
         else
-            PROMPT+=" $GIT_CLEAN"
+            RPROMPT+=" $GIT_CLEAN"
         fi
     fi
 
