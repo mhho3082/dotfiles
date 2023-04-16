@@ -271,7 +271,6 @@ local GIT_BEHIND="⇣"
 local GIT_AHEAD="⇡"
 local GIT_STASHED="󰈻 "
 local GIT_REBASE=" "
-local GIT_DETACHED=" "
 
 _setup_ps1() {
     # Chevron (with vi mode indication) setup
@@ -306,15 +305,14 @@ _setup_ps1() {
         fi
 
         # Branch name
-        RPROMPT+="%F{242}"
+        # Modified from https://github.com/romkatv/gitstatus/blob/master/gitstatus.prompt.zsh
         if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
-            RPROMPT+=${${VCS_STATUS_LOCAL_BRANCH}//\%/%%} # escape %
+            RPROMPT+="%F{242}${${VCS_STATUS_LOCAL_BRANCH}//\%/%%}%f"
         elif [[ -n $VCS_STATUS_TAG ]]; then
-            RPROMPT+="#${${VCS_STATUS_TAG}//\%/%%}" # escape %
+            RPROMPT+="#%F{242}${${VCS_STATUS_TAG}//\%/%%}%f"
         else
-            RPROMPT+="@${${VCS_STATUS_COMMIT:0:8}//\%/%%}" # escape %
+            RPROMPT+="@%F{242}${${VCS_STATUS_COMMIT:0:8}//\%/%%}%f"
         fi
-        RPROMPT+="%f"
 
         # Within-branch status
         if (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNTRACKED )); then
