@@ -252,7 +252,7 @@ fi
 # https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
 # https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
-# Get utility functions from https://github.com/romkatv/gitstatus working
+# Get utility functions from https://github.com/romkatv/gitstatus
 if [ ! -d ~/gitstatus ]; then
     git clone --depth=1 https://github.com/romkatv/gitstatus.git ~/gitstatus >/dev/null
 fi
