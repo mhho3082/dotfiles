@@ -263,8 +263,8 @@ source ~/gitstatus/gitstatus.plugin.zsh
 local GIT_CLEAN="%F{blue}ﱣ %f"
 local GIT_STASHED="%F{green}ﱢ %f"
 local GIT_STAGED="%F{green} %f"
-local GIT_STAGED_DIRTY="%F{yellow} %f"
-local GIT_DIRTY="%F{red} %f"
+local GIT_STAGED_UNSTAGED="%F{yellow} %f"
+local GIT_UNSTAGED="%F{red} %f"
 local GIT_UNTRACKED="%F{red}喝%f"
 
 local GIT_UNPULLED="⇣"
@@ -294,9 +294,17 @@ _setup_ps1() {
     RPROMPT=''
     if gitstatus_query MY && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
         RPROMPT=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}  # escape %
-        (( VCS_STATUS_NUM_STAGED    )) && RPROMPT+=" $GIT_STAGED"
-        (( VCS_STATUS_NUM_UNSTAGED  )) && RPROMPT+=" $GIT_DIRTY"
-        (( VCS_STATUS_NUM_UNTRACKED )) && RPROMPT+=" $GIT_UNTRACKED"
+        if (( VCS_STATUS_NUM_UNTRACKED )); then
+            RPROMPT+=" $GIT_UNTRACKED"
+        elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED )); then
+            RPROMPT+=" $GIT_STAGED_UNSTAGED"
+        elif (( VCS_STATUS_NUM_STAGED )); then
+            RPROMPT+=" $GIT_STAGED"
+        elif (( VCS_STATUS_NUM_UNSTAGED )); then
+            RPROMPT+=" $GIT_UNSTAGED"
+        else
+            PROMPT+=" $GIT_CLEAN"
+        fi
     fi
 
     setopt no_prompt_{bang,subst} prompt_percent  # enable/disable correct prompt expansions
