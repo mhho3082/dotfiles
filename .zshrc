@@ -268,7 +268,8 @@ local GIT_STAGED_UNTRACKED="%F{yellow}喝%f"
 local GIT_BEHIND="⇣"
 local GIT_AHEAD="⇡"
 local GIT_STASHED="󰈻 "
-local GIT_REBASE=" "
+
+local GIT_CONFLICT="%F{red}  %f"
 
 _setup_ps1() {
     # Chevron (with vi mode indication) setup
@@ -305,7 +306,7 @@ _setup_ps1() {
         # Currently running action
         if (( VCS_STATUS_ACTION )); then
             RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
-            (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="%F{red} %f"
+            (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="$GIT_CONFLICT"
         fi
 
         # Branch name
