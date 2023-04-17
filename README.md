@@ -81,6 +81,8 @@ which may take additional setup to install
 - Utilities
   - `htop`
   - `xsane`
+  - `pinta` for casual image editing
+    (or `krita` for serious drawing)
   - `fcitx5`
     - `fcitx5-rime` + `rime-cantonese` (Cantonese)
     - `fcitx5-mozc` (Japanese)
