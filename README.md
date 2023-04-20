@@ -53,6 +53,7 @@ which may take additional setup to install
   - `wezterm`
 - School
   - `libreoffice-fresh`
+    - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
   - `zotero-bin`
 - Coding
   - `nvim`
