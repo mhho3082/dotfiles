@@ -267,6 +267,8 @@ if [ ! -d ~/gitstatus ]; then
 fi
 source ~/gitstatus/gitstatus.plugin.zsh
 
+local GLYPH=" "
+
 local GIT_CLEAN="%F{blue}ﱣ %f"
 local GIT_STAGED="%F{green} %f"
 local GIT_UNSTAGED="%F{red} %f"
@@ -281,10 +283,6 @@ local GIT_STASHED="󰈻 "
 local GIT_CONFLICT="%F{red}  %f"
 
 _setup_ps1() {
-    # Chevron (with vi mode indication) setup
-    GLYPH=" "
-    [ "x$KEYMAP" = "xvicmd" ] && GLYPH=" "
-
     # Jobs
     PS1="%(1j.%F{cyan}[%j]%f .)"
 
@@ -354,19 +352,37 @@ add-zsh-hook precmd _setup_ps1
 
 # == Vi mode ==
 
-# Update prompt when changing modes
+# Use vi mode
+bindkey -v
+
+# https://unix.stackexchange.com/questions/433273/changing-cursor-style-based-on-mode-in-both-zsh-and-vim
+local CURSOR_NORMAL='\e[2 q'
+local CURSOR_INSERT='\e[6 q'
+
+# Change cursor upon changing modes
 zle-keymap-select () {
-    _setup_ps1
-    zle reset-prompt
+    if [[ ${KEYMAP} == vicmd ]] ||
+    [[ $1 = 'block' ]]; then
+        echo -ne $CURSOR_NORMAL
+    elif [[ ${KEYMAP} == main ]] ||
+    [[ ${KEYMAP} == viins ]] ||
+    [[ ${KEYMAP} = '' ]] ||
+    [[ $1 = 'beam' ]]; then
+        echo -ne $CURSOR_INSERT
+    fi
 }
 zle -N zle-keymap-select
+
 zle-line-init () {
     zle -K viins
 }
 zle -N zle-line-init
 
-# Use vi mode
-bindkey -v
+# Fix cursor (block / bar) in Vi normal / insert mode
+_default_cursor() {
+    echo -ne $CURSOR_INSERT
+}
+precmd_functions+=(_default_cursor)
 
 # Ctrl-a/e for beginning/end of line
 bindkey '^A' beginning-of-line
