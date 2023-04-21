@@ -125,11 +125,6 @@ fi
 if type "yarn" &>/dev/null; then
     alias y="yarn"
 fi
-if type "xdg-open" &>/dev/null; then
-    alias o="xdg-open"
-elif type "open" &>/dev/null; then
-    alias o="open"
-fi
 
 # Exa (or ls + tree)
 if type "exa" &>/dev/null; then
@@ -149,8 +144,17 @@ if type "tmux" &>/dev/null; then
     alias tl="tmux ls"
 fi
 
+# Open and disown
+function o {
+    if type "xdg-open" &>/dev/null; then
+        xdg-open "$1" &>/dev/null & disown
+    elif type "open" &>/dev/null; then
+        open "$1" &>/dev/null & disown
+    fi
+}
+
 # Pretty print paths
-paths() {
+function paths {
     for i in $path; do
         echo $i
     done
