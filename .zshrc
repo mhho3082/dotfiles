@@ -125,6 +125,11 @@ fi
 if type "yarn" &>/dev/null; then
     alias y="yarn"
 fi
+if type "xdg-open" &>/dev/null; then
+    alias o="xdg-open"
+elif type "open" &>/dev/null; then
+    alias o="open"
+fi
 
 # Exa (or ls + tree)
 if type "exa" &>/dev/null; then
