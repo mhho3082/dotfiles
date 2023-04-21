@@ -111,6 +111,7 @@ Some extensions that I install in my browsers:
 - `Vimium`
 - `HTTPS Everywhere`
 - `uBlock Origin`
+- `Dark Reader`
 - `Zotero Connector`
 - `Facebook Container`
 - `Rust Search Extension`
