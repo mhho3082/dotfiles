@@ -315,7 +315,7 @@ _setup_ps1() {
         (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
         (( VCS_STATUS_STASHES )) && RPROMPT+="$GIT_STASHED"
 
-        if [ -n $RPROMPT ]; then
+        if [[ -n $RPROMPT ]]; then
             RPROMPT+=" "
         fi
 
