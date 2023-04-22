@@ -306,10 +306,8 @@ _setup_ps1() {
 
     # RHS prompt: git info
     # Modified from https://github.com/romkatv/gitstatus
-    RPROMPT=''
+    RPROMPT=""
     if gitstatus_query MY && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
-        RPROMPT=""
-
         # Inter-branch status
         (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD"
         (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
