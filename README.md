@@ -46,6 +46,7 @@ which may take additional setup to install
   - `yay`
   - `exa`
   - `fd`
+  - `zoxide`
   - `fzf`
   - `vifm`
   - `ripgrep`

@@ -59,9 +59,15 @@ zstyle ':completion:*:warnings' format "%F{red}No matches for:%f %d"
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
-plugins=(z fzf command-not-found zsh-autosuggestions)
+plugins=(fzf command-not-found zsh-autosuggestions)
 plugins+=(gh fd ripgrep rsync rust yarn)
 plugins+=zsh-syntax-highlighting # Must be last of plugins
+
+# Add compdef for zoxide
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/zoxide/zoxide.plugin.zsh
+if (( $+commands[zoxide] )); then
+    eval "$(zoxide init zsh)"
+fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -113,21 +119,21 @@ alias c="clear"
 alias q="exit"
 
 # Application shortcuts
-if type "git" &>/dev/null; then
+if (( $+commands[git] )); then
     alias g="git"
 fi
-if type "nvim" &>/dev/null; then
+if (( $+commands[nvim] )); then
     alias n="nvim"
 fi
-if type "vifm" &>/dev/null; then
+if (( $+commands[vifm] )); then
     alias f="vifm"
 fi
-if type "yarn" &>/dev/null; then
+if (( $+commands[yarn] )); then
     alias y="yarn"
 fi
 
 # Exa (or ls + tree)
-if type "exa" &>/dev/null; then
+if (( $+commands[yarn] )); then
     alias l='exa --all --long --icons --sort=type --git'
     alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
 else
@@ -138,7 +144,7 @@ else
 fi
 
 # Tmux
-if type "tmux" &>/dev/null; then
+if (( $+commands[tmux] )); then
     alias t="tmux"
     alias ta="tmux attach || tmux new"
     alias tl="tmux ls"
@@ -146,9 +152,9 @@ fi
 
 # Open and disown
 function o {
-    if type "xdg-open" &>/dev/null; then
+    if (( $+commands["xdg-open"] )); then
         xdg-open "$1" &>/dev/null & disown
-    elif type "open" &>/dev/null; then
+    elif (( $+commands[open] )); then
         open "$1" &>/dev/null & disown
     fi
 }
