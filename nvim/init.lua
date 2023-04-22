@@ -595,7 +595,7 @@ vim.diagnostic.config({
 })
 
 -- Use nerd font for gutter signs
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = "󰋽 " }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -790,7 +790,7 @@ require("lualine").setup({
   sections = {
     lualine_a = { "mode" },
     lualine_b = {
-      { "b:gitsigns_head", icon = "" },
+      { "b:gitsigns_head", icon = "" },
       {
         "diff",
         source = gitsigns_diff_source,
