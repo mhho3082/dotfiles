@@ -360,7 +360,7 @@ local CURSOR_NORMAL='\e[2 q'
 local CURSOR_INSERT='\e[6 q'
 
 # Change cursor upon changing modes
-zle-keymap-select () {
+function zle-keymap-select {
     if [[ ${KEYMAP} == vicmd ]] ||
     [[ $1 = 'block' ]]; then
         echo -ne $CURSOR_NORMAL
@@ -373,13 +373,13 @@ zle-keymap-select () {
 }
 zle -N zle-keymap-select
 
-zle-line-init () {
+function zle-line-init {
     zle -K viins
 }
 zle -N zle-line-init
 
-# Fix cursor (block / bar) in Vi normal / insert mode
-_default_cursor() {
+# Default in insert mode cursor
+function _default_cursor {
     echo -ne $CURSOR_INSERT
 }
 precmd_functions+=(_default_cursor)
