@@ -282,6 +282,10 @@ local GIT_STASHED="󰈻 "
 
 local GIT_CONFLICT="%F{red}  %f"
 
+local GIT_GITHUB=" "
+local GIT_GITLAB=" "
+local GIT_BITBUCKET="󰂨 "
+
 _setup_ps1() {
     # Jobs
     PS1="%(1j.%F{cyan}[%j]%f .)"
@@ -311,9 +315,20 @@ _setup_ps1() {
         fi
 
         # Currently running action
-        if (( VCS_STATUS_ACTION )); then
+        if [[ -n $VCS_STATUS_ACTION ]]; then
             RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
             (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="$GIT_CONFLICT"
+        fi
+
+        # Check if remote exists
+        if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
+            if [[ $VCS_STATUS_REMOTE_URL =~ "github" ]]; then
+                RPROMPT+="%F{242}$GIT_GITHUB%f"
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitlab" ]]; then
+                RPROMPT+="%F{242}$GIT_GITLAB%f"
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "bitbucket" ]]; then
+                RPROMPT+="%F{242}$GIT_BITBUCKET%f"
+            fi
         fi
 
         # Branch name
