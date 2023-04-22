@@ -44,6 +44,11 @@ set $powerprofiles ~/.config/i3/scripts/power-profiles
 set $screenshot flameshot gui
 set $screenshot_clipboard flameshot gui -c
 
+# Modify caps lock script (set empty to ignore)
+# https://superuser.com/questions/519994/how-to-swap-escape-and-caps-lock
+# Also see https://man.archlinux.org/man/xkeyboard-config.7.html
+set $modify_caps_lock setxkbmap -option caps:escape_shifted_capslock
+
 ############
 ### Gaps ###
 ############
@@ -249,6 +254,9 @@ exec --no-startup-id brightnessctl set "50%"
 
 # Launch fcitx for Rime
 exec --no-startup-id fcitx5 -d
+
+# Modify caps lock
+exec --no-startup-id $modify_caps_lock
 
 # Run bar (polybar)
 exec_always --no-startup-id $bar
