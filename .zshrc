@@ -273,7 +273,8 @@ if [ ! -d ~/gitstatus ]; then
 fi
 source ~/gitstatus/gitstatus.plugin.zsh
 
-local GLYPH=" "
+local GLYPH=" "
+local SUPERUSER_GLYPH=" "
 
 local GIT_CLEAN="%F{blue}󰝥 %f"
 local GIT_STAGED="%F{green}󰋘 %f"
@@ -300,11 +301,8 @@ _setup_ps1() {
     # pwd
     PS1+="%F{blue}%(4~|.../%3~|%~)%f"
 
-    # Superuser flag
-    PS1+="%(!. %F{red}#%f.)"
-
-    # Chevron
-    PS1+=" %(?.%F{blue}.%F{red})$GLYPH%f "
+    # Glyph (special glyph for superuser)
+    PS1+=" %(!.%(?.%F{blue}.%F{red})$SUPERUSER_GLYPH%f .%(?.%F{blue}.%F{red})$GLYPH%f )"
 
     # RHS prompt: git info
     # Modified from https://github.com/romkatv/gitstatus
