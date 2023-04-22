@@ -152,10 +152,10 @@ fi
 
 # Open and disown
 function o {
-    if (( $+commands["xdg-open"] )); then
-        xdg-open "$1" &>/dev/null & disown
+    if (( $+commands[xdg-open] )); then
+        xdg-open "$@" &>/dev/null & disown
     elif (( $+commands[open] )); then
-        open "$1" &>/dev/null & disown
+        open "$@" &>/dev/null & disown
     fi
 }
 
