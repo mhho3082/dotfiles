@@ -59,8 +59,8 @@ zstyle ':completion:*:warnings' format "%F{red}No matches for:%f %d"
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
-plugins=(fzf command-not-found zsh-autosuggestions)
-plugins+=(gh fd ripgrep rsync rust yarn)
+plugins=(fzf command-not-found zsh-autosuggestions) # Add functionalities
+plugins+=(gh fd ripgrep rust) # For command auto-completion
 plugins+=zsh-syntax-highlighting # Must be last of plugins
 
 # Add compdef for zoxide
