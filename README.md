@@ -52,9 +52,10 @@ which may take additional setup to install
   - `ripgrep`
   - `xsel`
   - `wezterm`
-  - `pyradio`
-  - `yt-dlp` + `mpv`
-    - `mpv-uosc-git` for `mpv`'s GUI
+  - `mpv`
+    - `mpv-uosc-git`
+    - `pyradio`
+    - `yt-dlp`
 - School
   - `libreoffice-fresh`
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
