@@ -116,6 +116,7 @@ fi
 
 # Utility shortcuts
 alias c="clear"
+alias d="disown"
 alias q="exit"
 
 # Application shortcuts
