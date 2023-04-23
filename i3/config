@@ -100,8 +100,8 @@ client.background       $bg
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $launcher
 bindsym $mod+n exec $files
-bindsym $mod+Print exec $screenshot
-bindsym $mod+Shift+Print exec $screenshot_clipboard
+bindsym $mod+u exec $screenshot
+bindsym $mod+Shift+u exec $screenshot_clipboard
 
 # Web applications (with private modes)
 bindsym $mod+w exec firefox
