@@ -54,6 +54,7 @@ which may take additional setup to install
   - `wezterm`
   - `mpv`
     - `mpv-uosc-git`
+      - `mpv-thumbfast-git`
     - `pyradio`
     - `yt-dlp`
 - School
