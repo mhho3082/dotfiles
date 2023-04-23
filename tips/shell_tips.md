@@ -84,6 +84,13 @@ nvim &
 fg
 ```
 
+List all single-letter shortcuts:
+(Helpful to prevent conflicts with new ones)
+
+```bash
+alias | grep '^[a-z]='; functions | grep '^[a-z] '
+```
+
 ## Utility programs
 
 Basic

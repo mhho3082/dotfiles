@@ -167,6 +167,13 @@ function paths {
     done
 }
 
+# Play YouTube video (or files, or whatever) with MPV in separate window
+if (( $+commands[mpv] )); then
+    function p {
+        mpv "$@" &>/dev/null & disown
+    }
+fi
+
 # Prepare virtual network for virt-manager
 alias virshprep="sudo virsh net-start default >/dev/null"
 
