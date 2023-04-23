@@ -167,10 +167,46 @@ function paths {
     done
 }
 
+# https://stackoverflow.com/questions/3183444/check-for-valid-link-url
+local URL_REGEX='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
+
 # Play YouTube video (or files, or whatever) with MPV in separate window
 if (( $+commands[mpv] )); then
     function p {
-        mpv "$@" &>/dev/null & disown
+        # Get video/audio path
+        local src_paths
+        if [ $# -eq 0 ]; then
+            # Grab from clipboard
+            if (( $+commands[xsel] )); then
+                src_paths=$(xsel -ob)
+            elif (( $+commands[pbpaste] )); then
+                src_paths=$(pbpaste)
+            elif (( $+commands[xclip] )); then
+                src_paths=$(xclip -selection clipboard -o)
+            else
+                echo "We cannot get data from your system clipboard! Please consider installing xsel, pbcopy (for macOS), or xclip." >/dev/stderr
+                return 1
+            fi
+        else
+            # Use provided
+            src_paths=$@
+        fi
+
+        for src_path in `echo $src_paths`; do
+            if [[ $src_path =~ $URL_REGEX ]]; then # URL
+            elif [[ -f $src_path ]] || [[ -d $src_path ]]; then # Existing file or directory
+            else
+                echo "We do not think your link '$src_path' is valid as a URL or file path! Please check!" >/dev/stderr
+                return 1
+            fi
+        done
+
+        echo "About to play:"
+        for src_path in `echo $src_paths`; do
+            echo "- $src_path"
+        done
+
+        mpv $src_paths &>/dev/null & disown
     }
 fi
 
