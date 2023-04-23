@@ -52,6 +52,7 @@ which may take additional setup to install
   - `ripgrep`
   - `xsel`
   - `wezterm`
+  - `pyradio`
 - School
   - `libreoffice-fresh`
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
@@ -80,6 +81,7 @@ which may take additional setup to install
   - `brightnessctl`
   - `xidlehook`
   - `redshift`
+  - `networkmanager-dispatcher-ntpd`
 - Utilities
   - `htop`
   - `xsane`
