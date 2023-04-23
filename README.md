@@ -85,7 +85,7 @@ which may take additional setup to install
   - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
   - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
   - [`redshift`](http://jonls.dk/redshift/)
-  - `networkmanager-dispatcher-ntpd`
+  - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - Utilities
   - [`htop`](https://htop.dev/)
   - [`xsane`](http://www.sane-project.org/)
