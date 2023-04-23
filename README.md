@@ -54,6 +54,7 @@ which may take additional setup to install
   - `wezterm`
   - `pyradio`
   - `yt-dlp` + `mpv`
+    - `mpv-uosc-git` for `mpv`'s GUI
 - School
   - `libreoffice-fresh`
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
