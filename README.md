@@ -53,7 +53,7 @@ which may take additional setup to install
   - `xsel`
   - `wezterm`
   - `pyradio`
-  - `yewtube-git` + `yt-dlp` + `mpv`
+  - `yt-dlp` + `mpv`
 - School
   - `libreoffice-fresh`
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
