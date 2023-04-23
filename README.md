@@ -36,77 +36,78 @@ which may take additional setup to install
 <summary> App List </summary>
 
 - Casual usage
-  - `firefox`
-  - `chromium`
-  - `zathura`
-    - `zathura-pdf-mupdf`
-  - `discord`
+  - [`firefox`](https://www.mozilla.org/en-US/firefox/)
+  - [`chromium`](https://www.chromium.org/Home/)
+  - [`zathura`](https://pwmt.org/projects/zathura/)
+    - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
+  - [`discord`](https://discord.com/)
 - Command line
-  - `zsh`
-  - `yay`
-  - `exa`
-  - `fd`
-  - `zoxide`
-  - `fzf`
-  - `vifm`
-  - `ripgrep`
-  - `xsel`
-  - `wezterm`
-  - `mpv`
-    - `mpv-uosc-git`
-      - `mpv-thumbfast-git`
-    - `pyradio`
-    - `yt-dlp`
+  - [`zsh`](https://zsh.sourceforge.io/)
+  - [`yay`](https://github.com/Jguer/yay)
+  - [`exa`](https://github.com/ogham/exa)
+  - [`fd`](https://github.com/sharkdp/fd)
+  - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
+  - [`fzf`](https://github.com/junegunn/fzf)
+  - [`vifm`](https://github.com/vifm/vifm)
+  - [`ripgrep`](https://github.com/BurntSushi/ripgrep)
+  - [`xsel`](https://github.com/kfish/xsel)
+  - [`wezterm`](https://github.com/wez/wezterm)
+  - [`mpv`](https://github.com/mpv-player/mpv)
+    - [`mpv-uosc-git`](https://github.com/tomasklaen/uosc)
+      - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
+    - [`pyradio`](https://github.com/coderholic/pyradio)
+    - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
 - School
-  - `libreoffice-fresh`
+  - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
-  - `zotero-bin`
+  - [`zotero-bin`](https://www.zotero.org/)
 - Coding
-  - `nvim`
-  - `just`
-  - `github-cli` (`gh` in shell)
-  - `difftastic`
-  - `base-devel`
+  - [`nvim`](https://neovim.io/)
+  - [`just`](https://github.com/casey/just)
+  - [`github-cli`](https://cli.github.com/) (`gh` in shell)
+  - [`difftastic`](https://github.com/Wilfred/difftastic)
+  - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
   - For C/C++
-    - `llvm` (for `clangd` in editors)
-    - `clang-format`
+    - [`llvm`](https://llvm.org/) (for `clangd` in editors)
+    - [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html)
   - For Rust
-    - `rustup`
-    - `cargo-edit`
+    - [`rustup`](https://rustup.rs/)
+    - [`cargo-edit`](https://github.com/killercup/cargo-edit)
   - For JavaScript
-    - `node`
-    - `yarn`
+    - [`node`](https://nodejs.org/en)
+    - [`yarn`](https://yarnpkg.com/)
 - Desktop environment setup
-  - `i3-wm`
-  - `i3lock`
-  - `feh`
-  - `rofi`
-  - `polybar`
-  - `brightnessctl`
-  - `xidlehook`
-  - `redshift`
+  - [`i3-wm`](https://i3wm.org/)
+  - [`i3lock`](https://github.com/i3/i3lock)
+  - [`feh`](https://feh.finalrewind.org/)
+  - [`rofi`](https://github.com/davatorium/rofi)
+  - [`polybar`](https://github.com/polybar/polybar)
+  - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
+  - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
+  - [`redshift`](http://jonls.dk/redshift/)
   - `networkmanager-dispatcher-ntpd`
 - Utilities
-  - `htop`
-  - `xsane`
-  - `pinta` for casual image editing
-    (or `krita` for serious drawing)
-  - `fcitx5`
-    - `fcitx5-rime` + `rime-cantonese` (Cantonese)
-    - `fcitx5-mozc` (Japanese)
-  - `qemu-full` + `virt-manager`
-  - `pandoc` + `texlive-most`
-  - `flameshot`
+  - [`htop`](https://htop.dev/)
+  - [`xsane`](http://www.sane-project.org/)
+  - [`pinta`](https://www.pinta-project.com/) for casual image editing
+    (or [`krita`](https://krita.org/) for serious drawing)
+  - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
+    - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
+      [`rime-cantonese`](https://github.com/rime/rime-cantonese) (Cantonese)
+    - [`fcitx5-mozc`](https://github.com/google/mozc) (Japanese)
+  - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
+  - [`pandoc`](https://pandoc.org/) + [`texlive-most`](https://tug.org/texlive/)
+  - [`flameshot`](https://flameshot.org/)
 - Fonts
-  - `nerd-fonts-jetbrains-mono`
-  - `nerd-fonts-fira-code`
-  - `ttf-ms-fonts`
+  - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
+  - [`nerd-fonts-fira-code`](https://github.com/tonsky/FiraCode)
+  - [`ttf-ms-fonts`](https://wiki.archlinux.org/title/Microsoft_fonts)
 - Themes
-  - `gruvbox-material-gtk-theme-git`
-  - `eos-qogir-icons`
-  - `fcitx5-gruvbox-dark-theme-git`
-  - `grub-theme-vimix`
-  - `lightdm-webkit-theme-litarvan`
+  - [`gruvbox-material-gtk-theme-git`](https://github.com/TheGreatMcPain/gruvbox-material-gtk)
+  - [`eos-qogir-icons`](https://github.com/vinceliuice/Qogir-icon-theme)
+  - [`fcitx5-gruvbox-dark-theme-git`](https://github.com/pu-007/fcitx5-gruvbox-dark-theme)
+  - [`grub-theme-vimix`](https://github.com/Se7endAY/grub2-theme-vimix)
+  - [`lightdm-webkit-theme-litarvan`](https://github.com/Litarvan/lightdm-webkit-theme-litarvan)
 
 </details>
 
