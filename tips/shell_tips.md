@@ -14,7 +14,7 @@ Remove a package completely and safely with `pacman`:
 (From [Reddit](https://www.reddit.com/r/archlinux/comments/ki9hmm/how_to_properly_removeuninstall_packagesapps_with/))
 
 ```bash
-# Replace "package" with package name (fish has auto-complete for this)
+# Replace "package" with package name
 # You can replace `pacman` with `yay` here
 pacman -Runs package
 ```
@@ -49,12 +49,6 @@ Remove Windows-style EOLs from a file:
 sed -e 's/\r//g' file.txt # replace with file name
 ```
 
-Use SSH with kitty (if normal SSH does not work for some reason):
-
-```bash
-kitty +kitten ssh 127.0.0.1 # replace with ssh address
-```
-
 Test for 256-colours for your terminal emulator:
 (From [Ask Ubuntu](https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal))
 
@@ -65,13 +59,7 @@ curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1
 Symlink to "rename" programs, e.g., `fdfind` to `fd`:
 
 ```bash
-# From Bash / Zsh
 ln -s $(which fdfind) ~/.local/bin/fd
-```
-
-```fish
-# From Fish
-ln -s (which fdfind) ~/.local/bin/fd
 ```
 
 Background / foreground jobs:
@@ -111,25 +99,3 @@ Misc.
 - `sensors` - sensor data (e.g., temperature)
 - `acpi` - battery level
 - `date` - current time
-
-## Fish-related key-bindings & commands
-
-- `fish_update_completions` - Update auto-complete
-
-* `fish_vi_key_bindings` - vi mode
-* `fish_default_key_bindings` - back to default
-
-- <kbd>Alt</kbd> + <kbd>←</kbd> - previous directory
-- <kbd>Alt</kbd> + <kbd>→</kbd> - next directory
-
-* <kbd>Alt</kbd> + <kbd>w</kbd> - what the typed command does
-* <kbd>Alt</kbd> + <kbd>s</kbd> - prefix sudo to command
-
-## Kitty-related key-bindings
-
-- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>=</kbd> = increase font size (by 3)
-- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>-</kbd> = decrease font size (by 3)
-- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Backspace</kbd> = reset font size
-
-* <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> = Copy
-* <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> = Paste

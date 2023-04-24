@@ -230,8 +230,6 @@ packer.startup(function()
             extra_filetypes = { "svelte" },
           }),
           require("null-ls").builtins.formatting.beautysh,
-          require("null-ls").builtins.diagnostics.fish,
-          require("null-ls").builtins.formatting.fish_indent,
         },
       })
     end,

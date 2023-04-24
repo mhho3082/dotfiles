@@ -154,9 +154,6 @@ with `null-ls.nvim`; they are marked below.
 - Bash
   - `bash-language-server`
   - `shellharden` (needs `null-ls`)
-- Fish (these come with the `fish` shell)
-  - `fish` (needs `null-ls`)
-  - `fish-indent` (needs `null-ls`)
 
 </details>
 
@@ -188,12 +185,6 @@ Set zsh as the default shell (from bash):
 ```bash
 chsh -s `which zsh`
 echo "source $HOME/.config/.zshrc" > ~/.zshrc
-```
-
-Or. set fish as the default shell (from bash / zsh):
-
-```bash
-chsh -s `which fish`
 ```
 
 Set up Neovim plugins for the first time:
