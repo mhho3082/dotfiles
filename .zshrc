@@ -401,10 +401,10 @@ _setup_ps1() {
             RPROMPT+=" $GIT_STAGED_UNTRACKED"
         elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED_DELETED )); then # deleted is also a type of untracked
             RPROMPT+=" $GIT_STAGED_UNTRACKED"
-        elif (( VCS_STATUS_NUM_UNTRACKED )); then
-            RPROMPT+=" $GIT_UNTRACKED"
         elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED )); then
             RPROMPT+=" $GIT_STAGED_UNSTAGED"
+        elif (( VCS_STATUS_NUM_UNTRACKED )) || (( VCS_STATUS_NUM_UNSTAGED_DELETED )); then
+            RPROMPT+=" $GIT_UNTRACKED"
         elif (( VCS_STATUS_NUM_UNSTAGED )); then
             RPROMPT+=" $GIT_UNSTAGED"
         elif (( VCS_STATUS_NUM_STAGED )); then
