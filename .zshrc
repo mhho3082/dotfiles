@@ -114,12 +114,12 @@ fi
 
 # == Alias ==
 
-# Utility shortcuts
+# Utility shortahnds
 alias c="clear"
 alias d="disown"
 alias q="exit"
 
-# Application shortcuts
+# Application shorthands
 if (( $+commands[git] )); then
     alias g="git"
 fi
@@ -209,6 +209,29 @@ if (( $+commands[mpv] )); then
         mpv $src_paths &>/dev/null & disown
     }
 fi
+
+# Get n-letters long alias and functions
+# (helpful to get a wider picture)
+function shorthands {
+    # Use 1 if none provided
+    local length=${1:-1}
+
+    # Generate grep checker
+    local letters=$(printf '[a-z]%.0s' {1..$length})
+
+    # Get alias with correct length
+    print -P '%F{cyan}alias%f'
+    alias | grep '^'$letters'=' | grep '^'$letters
+
+    # Get functions with correct length
+    print -P '\n%F{cyan}functions%f'
+    for f in $(print -l ${(ok)functions} | grep '^'$letters'$'); do
+        if ! [[ $(type $f) =~ ".*is an alias for.*" ]]; then
+            type $f | grep '^'$letters
+        fi
+    done
+}
+
 
 # Prepare virtual network for virt-manager
 alias virshprep="sudo virsh net-start default >/dev/null"
