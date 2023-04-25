@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-PICTURE=/tmp/i3lock.png
-SCREENSHOT="scrot -z $PICTURE"
-
-$SCREENSHOT
-convert $PICTURE -scale 10% -scale 1000% $PICTURE
-i3lock -e -i $PICTURE
-rm $PICTURE
