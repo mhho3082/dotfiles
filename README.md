@@ -217,6 +217,13 @@ Login to GitHub CLI:
 gh auth login
 ```
 
+Set up `betterlockscreen`:
+
+```bash
+# This would update the cached image
+betterlockscreen -u "/path/to/img.jpg"
+```
+
 To set up a GPG key for Git and GitHub usage, see
 [How to Sign Git Commits by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
 
