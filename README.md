@@ -250,3 +250,5 @@ A nice example of installing a theme can be seen
   https://dmitryfrank.com/articles/shell_shortcuts
 - `i3wm` config copied from `EndeavourOS`'s default config at
   https://github.com/endeavouros-team/endeavouros-i3wm-setup
+- Caps-lock to escape remap + escape to backtick remap derived from
+  https://unix.stackexchange.com/questions/692851/
