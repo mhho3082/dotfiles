@@ -78,7 +78,7 @@ which may take additional setup to install
     - [`yarn`](https://yarnpkg.com/)
 - Desktop environment setup
   - [`i3-wm`](https://i3wm.org/)
-  - [`i3lock`](https://github.com/i3/i3lock)
+  - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
   - [`feh`](https://feh.finalrewind.org/)
   - [`rofi`](https://github.com/davatorium/rofi)
   - [`polybar`](https://github.com/polybar/polybar)

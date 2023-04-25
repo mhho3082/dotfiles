@@ -37,7 +37,7 @@ set $bar ~/.config/polybar/launch.sh
 
 # Scripts
 set $help_keybinds ~/.config/i3/scripts/keyhint-2
-set $locker ~/.config/i3/scripts/blur-lock
+set $locker betterlockscreen -l dim
 set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
 set $powerprofiles ~/.config/i3/scripts/power-profiles
