@@ -57,6 +57,7 @@ which may take additional setup to install
       - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
     - [`pyradio`](https://github.com/coderholic/pyradio)
     - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
+- [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
 - School
   - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
@@ -68,7 +69,7 @@ which may take additional setup to install
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
   - For C/C++
-    - [`llvm`](https://llvm.org/) (for `clangd` in editors)
+    - [`llvm`](https://llvm.org/) (for [`clangd`](https://clangd.llvm.org/) in editors)
     - [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html)
   - For Rust
     - [`rustup`](https://rustup.rs/)
