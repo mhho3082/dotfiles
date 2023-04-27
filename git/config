@@ -63,6 +63,7 @@
 
     p = push
     pu = pull
+    ps = pull --rebase --autostash
 
     s = stash --include-untracked
     si = stash --patch
