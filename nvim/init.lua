@@ -89,6 +89,19 @@ packer.startup(function()
     end,
   })
 
+  -- File browser
+  use({
+    "stevearc/oil.nvim",
+    config = function()
+      require("oil").setup({
+        view_options = {
+          -- Show files and directories that start with "."
+          show_hidden = true,
+        },
+      })
+    end,
+  })
+
   -- VIEW --
 
   -- Indent guide
@@ -289,7 +302,6 @@ packer.startup(function()
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-ui-select.nvim")
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-  use("nvim-telescope/telescope-file-browser.nvim")
 
   -- Trees
   use({
@@ -456,6 +468,11 @@ wk.register({
   ["gj"] = { "<cmd>TSJJoin<cr>", "join node" },
 }, { mode = "n" })
 
+-- Click '-' in any buffer to open its parent directory in oil.nvim
+wk.register({
+  ["-"] = { require("oil").open, "Open parent directory" },
+}, { mode = "n" })
+
 -- Ideas from https://github.com/folke/todo-comments.nvim/blob/main/lua/telescope/_extensions/todo-comments.lua
 -- But is way lighter
 function TodoTelescope()
@@ -479,9 +496,10 @@ wk.register({
     s = { require("telescope.builtin").live_grep, "search" },
     d = { require("telescope.builtin").diagnostics, "diagnostics" },
     f = { require("telescope.builtin").find_files, "files" },
-    e = { require("telescope").extensions.file_browser.file_browser, "file browser" },
     r = { require("telescope.builtin").resume, "resume search" },
     t = { TodoTelescope, "todo" },
+    -- File browser
+    e = { require("oil").open_float, "file browser" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
@@ -570,17 +588,12 @@ require("telescope").setup({
     ["ui-select"] = {
       require("telescope.themes").get_dropdown({}),
     },
-    file_browser = {
-      grouped = true,
-      hidden = true,
-    },
   },
 })
 
 -- Load telescope extensions
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("ui-select")
-require("telescope").load_extension("file_browser")
 
 ---------
 -- LSP --
