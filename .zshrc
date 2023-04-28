@@ -274,25 +274,13 @@ function yay-update {
     fi
 }
 
-# Re-install (i.e., update) AUR git repositories,
-# of which the version is not actively tracked on AUR
+# Specifically update a package
+# helpful for packages not actively tracked on AUR
 # (e.g., neovim nightly: neovim-nightly-bin)
-function yay-reinstall {
-    for package in "$@"; do
-        if pacman -Qi $package &>/dev/null; then
-            sudo true
-            print -P "%F{green}Reinstalling %F{cyan}$package%F{green}...%f"
-            local old_ver=$(pacman -Q $package | grep -o "[0-9]\+.[0-9]\+.*")
-            yay -Runs --noconfirm $package >/dev/null
-            yay -S --noconfirm $package >/dev/null
-            local new_ver=$(pacman -Q $package | grep -o "[0-9]\+.[0-9]\+.*")
-            print -P "%F{green}Reinstalled %F{cyan}$package%F{green} from %F{white}$old_ver%F{green} to %F{white}$new_ver%f"
-        else
-            print -P "%F{red}$package not installed!%f" >/dev/stderr
-        fi
-    done
+function yay-forceupdate {
+    yay --noconfirm -S $@
 }
-compdef _pactree yay-reinstall
+compdef _pactree yay-forceupdate
 
 # Remove orphan packages
 function yay-autoremove {
