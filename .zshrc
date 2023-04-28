@@ -227,7 +227,13 @@ function shorthands {
     print -P '\n%F{cyan}functions%f'
     for f in $(print -l ${(ok)functions} | grep '^'$letters'$'); do
         if ! [[ $(type $f) =~ ".*is an alias for.*" ]]; then
-            type $f | grep '^'$letters
+            # Get function definition
+            local definition=$(functions $f | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
+            if [[ ${#definition} -ge 50 ]]; then
+                echo "$(echo $definition | head -c 50)..." | grep '^'$letters
+            else
+                echo $definition | grep '^'$letters
+            fi
         fi
     done
 }
