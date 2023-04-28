@@ -72,6 +72,12 @@ nvim &
 fg
 ```
 
+Reduce yay cache:
+
+```bash
+yay -Sc
+```
+
 ## Utility programs
 
 Basic
