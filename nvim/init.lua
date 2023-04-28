@@ -102,6 +102,15 @@ packer.startup(function()
     end,
   })
 
+  -- Undo tree
+  use({
+    "mbbill/undotree",
+    config = function()
+      -- Open on the right
+      vim.g.undotree_WindowLayout = 3
+    end,
+  })
+
   -- VIEW --
 
   -- Indent guide
@@ -302,15 +311,6 @@ packer.startup(function()
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-ui-select.nvim")
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-
-  -- Trees
-  use({
-    "mbbill/undotree",
-    config = function()
-      -- Open on the right
-      vim.g.undotree_WindowLayout = 3
-    end,
-  })
 
   -- Auto-load all the above
   -- if packer is installed for the first time
