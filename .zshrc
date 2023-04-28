@@ -261,7 +261,7 @@ function yay-update {
 
     if [[ -n $updates ]]; then
         # Update (and also downgrade if needed)
-        yay -Syyuu --noconfirm
+        yay -Syu --noconfirm
 
         if [[ $updates =~ $reboot_check ]]; then
             reboot
