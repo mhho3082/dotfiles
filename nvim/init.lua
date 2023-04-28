@@ -492,18 +492,31 @@ wk.register({
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
     -- Telescopes
-    a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
-    s = { require("telescope.builtin").live_grep, "search" },
-    d = { require("telescope.builtin").diagnostics, "diagnostics" },
     f = { require("telescope.builtin").find_files, "files" },
-    r = { require("telescope.builtin").resume, "resume search" },
-    t = { TodoTelescope, "todo" },
-    -- File browser
-    e = { require("oil").open_float, "file browser" },
+    s = {
+      name = "search",
+      a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
+      s = { require("telescope.builtin").live_grep, "search" },
+      d = { require("telescope.builtin").diagnostics, "diagnostics" },
+      t = { TodoTelescope, "todo" },
+      r = { require("telescope.builtin").resume, "resume search" },
+    },
+    -- File browser (oil)
+    o = { require("oil").open_float, "file browser" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "undotree" },
     -- Interface
     n = { "<cmd>nohlsearch<cr>", "nohl" },
+    t = {
+      name = "tabs",
+      h = { "<cmd>tabprev<cr>", "previous" },
+      l = { "<cmd>tabnext<cr>", "next" },
+      H = { "<cmd>tabfirst<cr>", "first" },
+      L = { "<cmd>tablast<cr>", "last" },
+      n = { "<cmd>tabnew<cr>", "new" },
+      c = { "<cmd>tabclose<cr>", "close" },
+      o = { "<cmd>tabonly<cr>", "close all others" },
+    },
     p = {
       name = "packer",
       p = { "<cmd>PackerSync<cr>", "sync" },
