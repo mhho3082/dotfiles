@@ -46,6 +46,7 @@ which may take additional setup to install
   - [`yay`](https://github.com/Jguer/yay)
   - [`exa`](https://github.com/ogham/exa)
   - [`fd`](https://github.com/sharkdp/fd)
+  - [`sd`](https://github.com/chmln/sd)
   - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
   - [`fzf`](https://github.com/junegunn/fzf)
   - [`vifm`](https://github.com/vifm/vifm)
