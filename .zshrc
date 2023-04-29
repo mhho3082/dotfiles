@@ -206,7 +206,10 @@ if (( $+commands[mpv] )); then
             echo "- $src_path"
         done
 
-        mpv $src_paths --no-terminal & disown
+        # https://www.reddit.com/r/mpv/comments/tjzka5/how_to_get_auto_generated_english_subtitles_in/
+        mpv \
+            --ytdl-raw-options='sub-langs="en,en-orig,en-uk,en-us,zh,zh-hans,zh-hant,zh-cn,zh-tw,zh-hk,ja",write-sub=,write-auto-sub=' \
+            --no-terminal $src_paths & disown
     }
 fi
 
