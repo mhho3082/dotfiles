@@ -15,7 +15,7 @@ backlights=($(brightnessctl --list | grep "'backlight'" | sed "s/.*'\([^']*\)'.*
 set_brightness() {
     for backlight in "${backlights[@]}"
     do
-        brightnessctl set $1 &
+        brightnessctl --device=$backlight set $1 &
     done
 }
 
