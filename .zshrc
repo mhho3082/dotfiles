@@ -206,7 +206,7 @@ if (( $+commands[mpv] )); then
             echo "- $src_path"
         done
 
-        mpv $src_paths &>/dev/null & disown
+        mpv $src_paths --no-terminal & disown
     }
 fi
 
@@ -360,10 +360,11 @@ _setup_ps1() {
     PS1="%(1j.%F{cyan}[%j]%f .)"
 
     # pwd
-    PS1+="%F{blue}%(4~|.../%3~|%~)%f"
+    PS1+="%F{blue}%(4~|.../%3~|%~)%f "
 
     # Glyph (special glyph for superuser)
-    PS1+=" %(!.%(?.%F{blue}.%F{red})$SUPERUSER_GLYPH%f .%(?.%F{blue}.%F{red})$GLYPH%f )"
+    # Turn red if previous command return != 0
+    PS1+="%(?.%F{blue}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
 
     # RHS prompt: git info
     # Modified from https://github.com/romkatv/gitstatus
