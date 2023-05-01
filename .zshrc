@@ -355,6 +355,8 @@ local GIT_CONFLICT="%F{red}  %f"
 
 local GIT_GITHUB=" "
 local GIT_GITLAB=" "
+local GIT_GITEA="󰶞 "
+local GIT_GOGS=" "
 local GIT_BITBUCKET="󰂨 "
 local GIT_BASIC_REMOTE=" "
 
@@ -391,11 +393,15 @@ _setup_ps1() {
         # Check if remote exists
         if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
             # Show correct hosting service icon if appropriate
-            if [[ $VCS_STATUS_REMOTE_URL =~ "github" ]]; then
+            if [[ $VCS_STATUS_REMOTE_URL =~ "github.com" ]]; then
                 RPROMPT+="%F{242}$GIT_GITHUB%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitlab" ]]; then
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitlab.com" ]]; then
                 RPROMPT+="%F{242}$GIT_GITLAB%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "bitbucket" ]]; then
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" ]]; then
+                RPROMPT+="%F{242}$GIT_GITEA%f"
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "gogs.io" ]]; then
+                RPROMPT+="%F{242}$GIT_GOGS%f"
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "bitbucket.org" ]]; then
                 RPROMPT+="%F{242}$GIT_BITBUCKET%f"
             else
                 RPROMPT+="%F{242}$GIT_BASIC_REMOTE%f"
