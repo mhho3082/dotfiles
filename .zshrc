@@ -397,7 +397,7 @@ _setup_ps1() {
                 RPROMPT+="%F{242}$GIT_GITHUB%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "gitlab.com" ]]; then
                 RPROMPT+="%F{242}$GIT_GITLAB%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" ]]; then
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" || $VCS_STATUS_REMOTE_URL =~ "codeberg.org" ]]; then
                 RPROMPT+="%F{242}$GIT_GITEA%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "gogs.io" ]]; then
                 RPROMPT+="%F{242}$GIT_GOGS%f"
