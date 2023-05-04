@@ -356,6 +356,7 @@ local GIT_CONFLICT="%F{red}  %f"
 local GIT_GITHUB=" "
 local GIT_GITLAB=" "
 local GIT_NOTABUG="󱇪 "
+local GIT_CODEBERG=" "
 local GIT_GITEA="󰶞 "
 local GIT_GOGS=" "
 local GIT_BITBUCKET="󰂨 "
@@ -400,7 +401,9 @@ _setup_ps1() {
                 RPROMPT+="%F{242}$GIT_GITLAB%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "notabug.org" ]]; then
                 RPROMPT+="%F{242}$GIT_NOTABUG%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" || $VCS_STATUS_REMOTE_URL =~ "codeberg.org" ]]; then
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "codeberg.org" ]]; then
+                RPROMPT+="%F{242}$GIT_CODEBERG%f"
+            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" ]]; then
                 RPROMPT+="%F{242}$GIT_GITEA%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "gogs.io" ]]; then
                 RPROMPT+="%F{242}$GIT_GOGS%f"
