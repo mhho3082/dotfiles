@@ -353,14 +353,14 @@ local GIT_STASHED="󰈻 "
 
 local GIT_CONFLICT="%F{red}  %f"
 
-local GIT_GITHUB=" "
-local GIT_GITLAB=" "
-local GIT_NOTABUG="󱇪 "
-local GIT_CODEBERG=" "
-local GIT_GITEA="󰶞 "
-local GIT_GOGS=" "
-local GIT_BITBUCKET="󰂨 "
-local GIT_BASIC_REMOTE=" "
+local GIT_ICONS_GITHUB=" "
+local GIT_ICONS_GITLAB=" "
+local GIT_ICONS_NOTABUG="󱇪 "
+local GIT_ICONS_CODEBERG=" "
+local GIT_ICONS_GITEA="󰶞 "
+local GIT_ICONS_GOGS=" "
+local GIT_ICONS_BITBUCKET="󰂨 "
+local GIT_ICONS_BASIC_REMOTE=" "
 
 _setup_ps1() {
     # Jobs
@@ -396,21 +396,21 @@ _setup_ps1() {
         if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
             # Show correct hosting service icon if appropriate
             if [[ $VCS_STATUS_REMOTE_URL =~ "github.com" ]]; then
-                RPROMPT+="%F{242}$GIT_GITHUB%f"
+                RPROMPT+="%F{242}$GIT_ICONS_GITHUB%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "gitlab.com" ]]; then
-                RPROMPT+="%F{242}$GIT_GITLAB%f"
+                RPROMPT+="%F{242}$GIT_ICONS_GITLAB%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "notabug.org" ]]; then
-                RPROMPT+="%F{242}$GIT_NOTABUG%f"
+                RPROMPT+="%F{242}$GIT_ICONS_NOTABUG%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "codeberg.org" ]]; then
-                RPROMPT+="%F{242}$GIT_CODEBERG%f"
+                RPROMPT+="%F{242}$GIT_ICONS_CODEBERG%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" ]]; then
-                RPROMPT+="%F{242}$GIT_GITEA%f"
+                RPROMPT+="%F{242}$GIT_ICONS_GITEA%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "gogs.io" ]]; then
-                RPROMPT+="%F{242}$GIT_GOGS%f"
+                RPROMPT+="%F{242}$GIT_ICONS_GOGS%f"
             elif [[ $VCS_STATUS_REMOTE_URL =~ "bitbucket.org" ]]; then
-                RPROMPT+="%F{242}$GIT_BITBUCKET%f"
+                RPROMPT+="%F{242}$GIT_ICONS_BITBUCKET%f"
             else
-                RPROMPT+="%F{242}$GIT_BASIC_REMOTE%f"
+                RPROMPT+="%F{242}$GIT_ICONS_BASIC_REMOTE%f"
             fi
 
             # Show remote name if different
