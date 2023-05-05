@@ -143,6 +143,8 @@ with `null-ls.nvim`; they are marked below.
 <details>
 <summary> Some LSP servers </summary>
 
+- HTML
+  - `emmet-ls`
 - Rust
   - `rust-analyser`
 - Lua
