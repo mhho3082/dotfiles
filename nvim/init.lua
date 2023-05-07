@@ -766,23 +766,6 @@ cmp.setup({
     ["<C-j>"] = cmp.mapping.select_next_item(),
     ["<C-e>"] = cmp.mapping.abort(),
     ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      local luasnip = require("luasnip")
-      if luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-
-    ["<C-Tab>"] = cmp.mapping(function(fallback)
-      local luasnip = require("luasnip")
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
   }),
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
