@@ -132,6 +132,11 @@ fi
 if (( $+commands[yarn] )); then
     alias y="yarn"
 fi
+if (( $+commands[trash] )); then
+    alias r="trash"
+else
+    alias r="rm -i"
+fi
 
 # Exa (or ls + tree)
 if (( $+commands[exa] )); then
