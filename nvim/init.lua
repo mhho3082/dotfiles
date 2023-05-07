@@ -111,6 +111,8 @@ packer.startup(function()
           -- Show files and directories that start with "."
           show_hidden = true,
         },
+        -- Deleted files will be removed with the `trash-put` command
+        delete_to_trash = true,
       })
     end,
   })
