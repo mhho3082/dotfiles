@@ -76,11 +76,11 @@ nnoremap = zz
 
 # GUI color settings
 # Color scheme: Base16 Eighties (https://github.com/chriskempson/base16)
-set completion-css=color:#d3d0c8;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
-set completion-hover-css=color:#d3d0c8;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
-set completion-selected-css=color:#d3d0c8;background-color:#515151;font:12pt JetBrainsMono Nerd Font;
-set input-css=color:#d3d0c8;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
-set input-error-css=color:#f2777a;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
-set status-css=color:#ffcc66;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
-set status-ssl-css=color:#99cc99;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
-set status-ssl-invalid-css=color:#f2777a;background-color:#393939;font:12pt JetBrainsMono Nerd Font;
+set completion-css=color:#ebdbb2;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
+set completion-hover-css=color:#ebdbb2;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
+set completion-selected-css=color:#ebdbb2;background-color:#504945;font:12pt JetBrainsMono Nerd Font;
+set input-css=color:#ebdbb2;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
+set input-error-css=color:#fb4934;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
+set status-css=color:#fabd2f;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
+set status-ssl-css=color:#83a598;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
+set status-ssl-invalid-css=color:#fb4934;background-color:#3c3836;font:12pt JetBrainsMono Nerd Font;
