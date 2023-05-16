@@ -49,30 +49,63 @@ set monospace-font-size=12
 # Default Full-Content zoom level in percent. Default is 100.
 set default-zoom=100
 
-# Shortcuts allow the opening of an URI built up from a named template with
-# additional parameters.
+# Search shortcuts: e.g., d something
+# -- Search
 # Duckduckgo
-shortcut-add d=https://www.duckduckgo.com/?q=$0
+shortcut-add dd=https://www.duckduckgo.com/?q=$0
 # Duckduckgo (lite)
-shortcut-add dl=https://lite.duckduckgo.com/lite/?q=$0
+shortcut-add ddl=https://lite.duckduckgo.com/lite/?q=$0
 # Google
-shortcut-add g=https://www.google.com/search?q=$0
-# YouTube
-shortcut-add y=http://www.youtube.com/results?search_query=$0
+shortcut-add gl=https://encrypted.google.com/search?q=$0
 # Wikipedia
-shortcut-add w=https://en.wikipedia.org/w/index.php?search=$0
+shortcut-add wk=https://en.wikipedia.org/w/index.php?search=$0
+# -- View
+# YouTube
+shortcut-add yt=http://www.youtube.com/results?search_query=$0
+# Invidious (better YouTube UI)
+shortcut-add ytl=https://yewtu.be/search?q=$0
+# -- References
 # Arch Wiki
 shortcut-add aw=https://wiki.archlinux.org/index.php?search=$0
+# Arch Man pages
+shortcut-add man=https://man.archlinux.org/search?q=$0
+# AUR
+shortcut-add aur=https://aur.archlinux.org/packages?O=0&K=$0
+# Stack overflow
+shortcut-add so=https://stackoverflow.com/search?q=$0
+# Wolfram Alpha
+shortcut-add wa=http://www.wolframalpha.com/input/?i=$0
+# GitHub
+shortcut-add gh=https://github.com/search?q=$0
 
 # Set the shortcut as the default, that is the shortcut to be used if no
 # shortcut is given and the string to open is not an URI.
-shortcut-default d
+shortcut-default dd
+
+# Bookmark shortcuts
+# PolyU link to old BlackBoard website
+shortcut-add bb=https://learn.polyu.edu.hk/webapps/portal/execute/tabs/tabAction?tab_tab_group_id=_1_1
 
 # Map page zoom in normal mode to keys commonly used across applications
+# Open bookmarks
+nnoremap b :open !
+nnoremap B :tabopen !
+# Easier scrolling
+nnoremap d <C-d>
+nnoremap u <C-u>
+# Jump around history
+nnoremap H <C-o>
+nnoremap L <C-i>
+# Unclose
+nnoremap x u
+nnoremap X U
 # + (zoom in), - (zoom out), = (zoom reset)
 nnoremap + zI
 nnoremap - zO
 nnoremap = zz
+# Quit
+nnoremap q :quit<CR>
+nnoremap Q :quit!<CR>
 
 # GUI color settings
 # Color scheme: Base16 Eighties (https://github.com/chriskempson/base16)
