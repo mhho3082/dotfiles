@@ -38,9 +38,6 @@ which may take additional setup to install
 - Casual usage
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
-  - [`vimb`](https://fanglingsu.github.io/vimb/)
-    - [`wyebadblock-git`](https://github.com/jun7/wyebadblock)
-      (Needs linking to `vimb`, see GitHub README)
   - [`zathura`](https://pwmt.org/projects/zathura/)
     - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
   - [`discord`](https://discord.com/)
