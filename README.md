@@ -118,13 +118,12 @@ Some extensions that I install in my browsers:
 <details>
 <summary> Browser extensions </summary>
 
-- `Vimium`
+- [`Vimium`](https://addons.mozilla.org/en-US/firefox/addon/vimium-ff/)
 - `HTTPS Everywhere`
-- `uBlock Origin`
-- `Dark Reader`
+- [`uBlock Origin`](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)
+- [`Dark Background and Light Text`](https://addons.mozilla.org/en-US/firefox/addon/dark-background-light-text/)
 - `Zotero Connector`
 - `Facebook Container`
-- `Rust Search Extension`
 
 Gruvbox theme is installed from
 https://github.com/teatwig/gruvbox-firefox-themes
