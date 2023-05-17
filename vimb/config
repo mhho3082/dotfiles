@@ -27,56 +27,42 @@ set webgl=true
 # While typing a search command, show where the pattern typed so far matches.
 set incsearch=true
 
-# The font family to use as the default for content that does not specify a
-# font.
+# Enable plugins
+set plugins=true
+
+# Configure fonts.
 set default-font=Noto Sans
-
-# The font family used as the default for content using monospace font.
 set monospace-font=JetBrainsMono Nerd Font
-
-# The font family used as the default for content using sans-serif font.
 set sans-serif-font=Noto Sans
-
-# The font family used as the default for content using serif font.
 set serif-font=Noto Serif
-
-# The default font size used to display text.
 set font-size=15
-
-# Default font size for the monospace font.
 set monospace-font-size=12
 
-# Default Full-Content zoom level in percent. Default is 100.
+# Default Full-Content zoom level in percent.
 set default-zoom=100
+
+# Configure hinting mode.
+set hint-keys=asdfg;lkjh
+set hint-match-element=false
+set hint-keys-same-length=true
 
 # Search shortcuts: e.g., d something
 # -- Search
-# Duckduckgo
 shortcut-add dd=https://www.duckduckgo.com/?q=$0
-# Duckduckgo (lite)
 shortcut-add ddl=https://lite.duckduckgo.com/lite/?q=$0
-# Google
 shortcut-add gl=https://encrypted.google.com/search?q=$0
-# Wikipedia
 shortcut-add wk=https://en.wikipedia.org/w/index.php?search=$0
 # -- View
-# YouTube
 shortcut-add yt=http://www.youtube.com/results?search_query=$0
-# Invidious (better YouTube UI)
 shortcut-add ytl=https://yewtu.be/search?q=$0
 # -- References
-# Arch Wiki
 shortcut-add aw=https://wiki.archlinux.org/index.php?search=$0
-# Arch Man pages
 shortcut-add man=https://man.archlinux.org/search?q=$0
-# AUR
 shortcut-add aur=https://aur.archlinux.org/packages?O=0&K=$0
-# Stack overflow
 shortcut-add so=https://stackoverflow.com/search?q=$0
-# Wolfram Alpha
 shortcut-add wa=http://www.wolframalpha.com/input/?i=$0
-# GitHub
 shortcut-add gh=https://github.com/search?q=$0
+shortcut-add di=https://dictionary.cambridge.org/search/direct/?datasetsearch=english&q=$0
 
 # Set the shortcut as the default, that is the shortcut to be used if no
 # shortcut is given and the string to open is not an URI.
