@@ -107,7 +107,8 @@ bindsym $mod+Shift+c exec chromium --incognito
 # Power utilities
 bindsym $mod+Shift+e exec $powermenu
 bindsym $mod+Shift+o exec $locker
-bindsym $mod+Shift+p exec $powerprofiles
+bindsym $mod+Shift+p exec systemctl suspend
+bindsym $mod+p exec $powerprofiles
 
 # keybinding in fancy rofi (automated):
 bindsym $mod+Shift+slash exec $help_keybinds
