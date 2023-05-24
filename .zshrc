@@ -266,7 +266,7 @@ function sizes {
 # Needs checkupdates
 # https://bbs.archlinux.org/viewtopic.php?id=173508
 # https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
-function yay-update {
+function paru-update {
     # Check if updates (and reboot) is needed
     local updates=$(checkupdates)
 
@@ -275,7 +275,7 @@ function yay-update {
 
     if [[ -n $updates ]]; then
         # Update (and also downgrade if needed)
-        yay -Syu --noconfirm
+        paru -Syu --noconfirm
 
         if [[ $updates =~ $reboot_check ]]; then
             reboot
@@ -291,14 +291,14 @@ function yay-update {
 # Specifically update a package
 # helpful for packages not actively tracked on AUR
 # (e.g., neovim nightly: neovim-nightly-bin)
-function yay-forceupdate {
-    yay --noconfirm -S $@
+function paru-forceupdate {
+    paru --noconfirm -S $@
 }
-compdef _pactree yay-forceupdate
+compdef _pactree paru-forceupdate
 
 # Remove orphan packages
-function yay-autoremove {
-    yay -Runs $(yay -Qdt | cut -d ' ' -f 1)
+function paru-autoremove {
+    paru -Runs $(paru -Qdt | cut -d ' ' -f 1)
 }
 
 # Quickly create files with their parent directories too

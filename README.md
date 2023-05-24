@@ -43,7 +43,7 @@ which may take additional setup to install
   - [`discord`](https://discord.com/)
 - Command line
   - [`zsh`](https://zsh.sourceforge.io/)
-  - [`yay`](https://github.com/Jguer/yay)
+  - [`paru`](https://github.com/Morganamilo/paru)
   - [`exa`](https://github.com/ogham/exa)
   - [`fd`](https://github.com/sharkdp/fd)
   - [`sd`](https://github.com/chmln/sd)
