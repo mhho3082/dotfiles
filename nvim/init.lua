@@ -200,15 +200,20 @@ packer.startup(function()
         segments = {
           {
             sign = {
-              name = { "GitSigns*" },
+              name = { "Diagnostic" },
               maxwidth = 1,
               auto = true,
             },
             click = "v:lua.ScSa",
           },
           {
+            text = { builtin.lnumfunc },
+            condition = { true },
+            click = "v:lua.ScLa",
+          },
+          {
             sign = {
-              name = { "Diagnostic" },
+              name = { "GitSigns*" },
               maxwidth = 1,
               auto = true,
             },
@@ -221,15 +226,6 @@ packer.startup(function()
               auto = true,
             },
             click = "v:lua.ScSa",
-          },
-          {
-            text = { builtin.lnumfunc },
-            condition = { true },
-            click = "v:lua.ScLa",
-          },
-          {
-            text = { builtin.foldfunc },
-            click = "v:lua.ScFa",
           },
         },
       })
@@ -413,6 +409,22 @@ vim.g.markdown_fenced_languages = {
   "yaml",
 }
 
+-- Assuming number is on, toggle to relativenumber in normal mode
+vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+  callback = function()
+    if vim.wo.number == true then
+      vim.wo.relativenumber = false
+    end
+  end,
+})
+vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+  callback = function()
+    if vim.wo.number == true then
+      vim.wo.relativenumber = true
+    end
+  end,
+})
+
 ------------
 -- REMAPS --
 ------------
@@ -566,7 +578,7 @@ wk.register({
     },
     i = {
       name = "interface",
-      n = { "<cmd>set number!<cr>", "number" },
+      n = { "<cmd>set number! relativenumber!<cr>", "number" },
       s = { "<cmd>set spell!<cr>", "spell" },
       w = { "<cmd>set wrap!<cr>", "wrap" },
       i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
@@ -631,6 +643,7 @@ require("telescope").load_extension("ui-select")
 -- It is too disturbing to workflow
 vim.diagnostic.config({
   virtual_text = false,
+  severity_sort = true,
 })
 
 -- Use nerd font for gutter signs
