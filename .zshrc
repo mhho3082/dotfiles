@@ -280,6 +280,9 @@ function paru-update {
         if [[ $updates =~ $reboot_check ]]; then
             reboot
         else
+            # Re-configure external devices
+            xmodmap ~/.Xmodmap &>/dev/null
+            autostart &>/dev/null
             print -P "%F{green}No need to reboot%f"
 
         fi
