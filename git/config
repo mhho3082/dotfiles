@@ -44,7 +44,11 @@
     ai = add --interactive
     ap = add --patch
     an = add --all --intent-to-add # Add new: for adding (but not staging) new files
-    acp = !"git add -A && git commit && git push" # Simple commit tool
+
+    # Simple commit tool
+    acp = !"git add -A && git commit && git push"
+    # Do not open editor for the commit message
+    acpm = !"f() { [ -n \"$1\" ] && git add -A && git commit -m \"$@\" && git push; }; f"
 
     b = branch
     bd = branch --delete
