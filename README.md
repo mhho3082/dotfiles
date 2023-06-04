@@ -30,7 +30,7 @@ please see the folder [`./tips/`](https://github.com/mhho3082/dotfiles/tree/main
 The apps that I usually use
 (some of which I install only when needed),
 which may take additional setup to install
-(please refer to their respective documentation):
+(please kindly refer to their respective documentation):
 
 <details>
 <summary> App List </summary>
@@ -46,7 +46,6 @@ which may take additional setup to install
   - [`paru`](https://github.com/Morganamilo/paru)
   - [`exa`](https://github.com/ogham/exa)
   - [`fd`](https://github.com/sharkdp/fd)
-  - [`sd`](https://github.com/chmln/sd)
   - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
   - [`fzf`](https://github.com/junegunn/fzf)
   - [`vifm`](https://github.com/vifm/vifm)
@@ -56,16 +55,14 @@ which may take additional setup to install
   - [`mpv`](https://github.com/mpv-player/mpv)
     - [`mpv-uosc-git`](https://github.com/tomasklaen/uosc)
       - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
-    - [`pyradio`](https://github.com/coderholic/pyradio)
     - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
-- [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
+  - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
 - School
   - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
   - [`zotero-bin`](https://www.zotero.org/)
 - Coding
   - [`nvim`](https://neovim.io/)
-  - [`just`](https://github.com/casey/just)
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
@@ -89,17 +86,17 @@ which may take additional setup to install
   - [`redshift`](http://jonls.dk/redshift/)
   - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - Utilities
+  - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
+    - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
+      [`rime-cantonese`](https://github.com/rime/rime-cantonese) (for Cantonese)
+    - [`fcitx5-mozc`](https://github.com/google/mozc) (for Japanese)
+  - [`flameshot`](https://flameshot.org/)
   - [`htop`](https://htop.dev/)
   - [`xsane`](http://www.sane-project.org/)
   - [`pinta`](https://www.pinta-project.com/) for casual image editing
     (or [`krita`](https://krita.org/) for serious drawing)
-  - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
-    - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
-      [`rime-cantonese`](https://github.com/rime/rime-cantonese) (Cantonese)
-    - [`fcitx5-mozc`](https://github.com/google/mozc) (Japanese)
-  - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
   - [`pandoc`](https://pandoc.org/) + [`texlive-most`](https://tug.org/texlive/)
-  - [`flameshot`](https://flameshot.org/)
+  - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
 - Fonts
   - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
   - [`nerd-fonts-fira-code`](https://github.com/tonsky/FiraCode)
@@ -125,8 +122,7 @@ Some extensions that I install in my browsers:
 - `Zotero Connector`
 - `Facebook Container`
 
-Gruvbox theme is installed from
-https://github.com/teatwig/gruvbox-firefox-themes
+Gruvbox theme for browsers used is [`teatwig/gruvbox-firefox-themes`](https://github.com/teatwig/gruvbox-firefox-themes)
 
 (You may want to also activate additional filter lists in `uBlock Origin`
 for things such as Facebook or cookie banners;
@@ -231,7 +227,7 @@ To set up a GPG key for Git and GitHub usage, see
 [How to Sign Git Commits by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
 
 To set up Cantonese input with Rime, see
-[this wiki page by Rime's makers](https://github.com/rime/rime-cantonese/wiki).
+[the `rime-cantonese` wiki page by Rime's makers](https://github.com/rime/rime-cantonese/wiki).
 
 This config uses `brightnessctl` by default;
 if you find `xbacklight` not working, you are advised to switch to `brightnesctl`.
