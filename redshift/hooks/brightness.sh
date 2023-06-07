@@ -10,7 +10,7 @@ brightness_day='70%'
 brightness_transition='50%'
 brightness_night='30%'
 # Adjust this grep to filter only the backlights you want to adjust
-backlights=($(brightnessctl --list | grep "'backlight'" | sed "s/.*'\([^']*\)'.*/\1/"))
+backlights=($(brightnessctl --list | grep "'backlight'" | sed "s/Device '\([^']*\)'.*/\1/"))
 
 set_brightness() {
     for backlight in "${backlights[@]}"
