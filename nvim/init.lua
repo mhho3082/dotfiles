@@ -282,6 +282,7 @@ packer.startup(function()
   -- LSP server status
   use({
     "j-hui/fidget.nvim",
+    tag = "legacy",
     config = function()
       require("fidget").setup({
         text = {
