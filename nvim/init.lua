@@ -532,14 +532,11 @@ wk.register({
     q = { "<cmd>qa!<cr>", "quit" },
     -- Telescopes
     f = { require("telescope.builtin").find_files, "files" },
-    s = {
-      name = "search",
-      a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
-      s = { require("telescope.builtin").live_grep, "search" },
-      d = { require("telescope.builtin").diagnostics, "diagnostics" },
-      t = { TodoTelescope, "todo" },
-      r = { require("telescope.builtin").resume, "resume search" },
-    },
+    a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
+    s = { require("telescope.builtin").live_grep, "search" },
+    d = { require("telescope.builtin").diagnostics, "diagnostics" },
+    x = { TodoTelescope, "todo" }, -- "Marked"
+    r = { require("telescope.builtin").resume, "resume search" },
     -- File browser (oil)
     o = { require("oil").open_float, "file browser" },
     -- Undo tree
