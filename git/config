@@ -95,6 +95,14 @@
     # whatchanged
     w = log --all --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --no-merges
 
+    # Helpful lists
+    # List the affected files and their statuses
+    stat = status --short --branch
+    # List the amount of changes per file
+    changes = diff --stat
+    # list conflicted files
+    conflicts = diff --name-only --diff-filter=U
+
     # Get all recent updates
     sync = pull --rebase --all
     # Force local changes up to remotes
@@ -125,7 +133,6 @@
     autoclean = gc --prune=now --aggressive
 
     # Show verbose data
-    stat = !"git diff --stat"
     tags = tag -l
     branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
     remotes = remote --verbose
