@@ -276,8 +276,9 @@ function paru-update {
     if [[ -n $updates ]]; then
         # Update (and also downgrade if needed)
         paru -Syu --noconfirm
+        check=$?
 
-        if [[ $updates =~ $reboot_check ]]; then
+        if [[ $updates =~ $reboot_check && $check = 0 ]]; then
             reboot
         else
             # Re-configure external devices
