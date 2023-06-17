@@ -278,14 +278,20 @@ function paru-update {
         paru -Syu --noconfirm
         check=$?
 
-        if [[ $updates =~ $reboot_check && $check = 0 ]]; then
-            reboot
+        if [[ $check = 0 ]]; then
+            if [[ $updates =~ $reboot_check ]]; then
+                reboot
+            else
+                # Re-configure external devices
+                xmodmap ~/.Xmodmap &>/dev/null
+                autostart &>/dev/null
+                print -P "%F{green}No need to reboot%f"
+            fi
         else
             # Re-configure external devices
             xmodmap ~/.Xmodmap &>/dev/null
             autostart &>/dev/null
-            print -P "%F{green}No need to reboot%f"
-
+            print -P "%F{red}Paru failed!%f"
         fi
     else
         print -P "%F{green}No need to update%f"
