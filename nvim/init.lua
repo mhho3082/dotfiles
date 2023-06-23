@@ -63,9 +63,6 @@ packer.startup(function()
       -- Surround
       require("mini.surround").setup()
 
-      -- Pairs
-      require("mini.pairs").setup()
-
       -- Comments
       require("mini.comment").setup()
 
@@ -99,6 +96,20 @@ packer.startup(function()
     requires = { "nvim-treesitter" },
     config = function()
       require("treesj").setup({})
+    end,
+  })
+
+  -- Pairs
+  use({
+    "windwp/nvim-autopairs",
+    config = function()
+      require("nvim-autopairs").setup({})
+    end,
+  })
+  use({
+    "windwp/nvim-ts-autotag",
+    config = function()
+      require("nvim-ts-autotag").setup()
     end,
   })
 
@@ -267,7 +278,7 @@ packer.startup(function()
       require("null-ls").setup({
         sources = {
           require("null-ls").builtins.diagnostics.zsh,
-          require("null-ls").builtins.diagnostics.eslint,
+          -- require("null-ls").builtins.diagnostics.eslint,
           require("null-ls").builtins.formatting.clang_format,
           require("null-ls").builtins.formatting.stylua,
           require("null-ls").builtins.formatting.prettierd.with({
