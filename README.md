@@ -97,6 +97,7 @@ which may take additional setup to install
     (or [`krita`](https://krita.org/) for serious drawing)
   - [`pandoc`](https://pandoc.org/) + [`texlive-most`](https://tug.org/texlive/)
   - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
+  - [`bashmount`](https://github.com/jamielinux/bashmount) for handling USB
 - Fonts
   - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
   - [`nerd-fonts-fira-code`](https://github.com/tonsky/FiraCode)
