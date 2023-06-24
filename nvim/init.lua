@@ -362,6 +362,7 @@ vim.opt.title = true
 vim.opt.hidden = true
 vim.opt.linebreak = true
 vim.opt.completeopt = "menuone,noselect"
+vim.opt.mousemodel = "extend"
 
 -- Basic theme settings
 vim.opt.termguicolors = true
