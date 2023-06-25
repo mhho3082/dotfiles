@@ -70,7 +70,16 @@ packer.startup(function()
       require("mini.align").setup()
 
       -- Move code
-      require("mini.move").setup()
+      require("mini.move").setup({
+        mappings = {
+          -- Disable using <M-_> for moving in normal mode
+          -- To prevent colliding with inter-window movements
+          line_left = "",
+          line_right = "",
+          line_down = "",
+          line_up = "",
+        },
+      })
 
       -- Multi-line f/t
       require("mini.jump").setup({
@@ -492,6 +501,14 @@ wk.register({
   ["gp"] = { '"+p', "Paste from clipboard" },
   ["gP"] = { '"+P', "Paste from clipboard" },
 }, { mode = "v" })
+
+-- Move around windows with <M-_> in normal mode
+wk.register({
+  ["<M-h>"] = { "<C-w>h", "Move to left window" },
+  ["<M-j>"] = { "<C-w>j", "Move to lower window" },
+  ["<M-k>"] = { "<C-w>k", "Move to upper window" },
+  ["<M-l>"] = { "<C-w>l", "Move to right window" },
+}, { mode = "n" })
 
 -- LSP mappings
 wk.register({
