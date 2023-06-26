@@ -502,12 +502,16 @@ wk.register({
   ["gP"] = { '"+P', "Paste from clipboard" },
 }, { mode = "v" })
 
--- Move around windows with <M-_> in normal mode
+-- Operate on windows with <M-_> in normal mode
+-- (<M-_> is used to move code in visual mode)
 wk.register({
   ["<M-h>"] = { "<C-w>h", "Move to left window" },
   ["<M-j>"] = { "<C-w>j", "Move to lower window" },
   ["<M-k>"] = { "<C-w>k", "Move to upper window" },
   ["<M-l>"] = { "<C-w>l", "Move to right window" },
+  ["<M-v>"] = { "<C-w>v", "Split vertically" },
+  ["<M-s>"] = { "<C-w>s", "Split" },
+  ["<M-c>"] = { "<C-w>c", "Close window" },
 }, { mode = "n" })
 
 -- LSP mappings
