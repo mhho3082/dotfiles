@@ -233,20 +233,20 @@ packer.startup(function()
             sign = {
               name = { "Diagnostic" },
               maxwidth = 1,
-              auto = true,
+              colwidth = 1,
             },
             click = "v:lua.ScSa",
           },
           {
             text = { builtin.lnumfunc },
-            condition = { true },
+            condition = { builtin.not_empty },
             click = "v:lua.ScLa",
           },
           {
             sign = {
               name = { "GitSigns*" },
               maxwidth = 1,
-              auto = true,
+              colwidth = 1,
             },
             click = "v:lua.ScSa",
           },
