@@ -226,7 +226,6 @@ packer.startup(function()
     "luukvbaal/statuscol.nvim",
     config = function()
       local builtin = require("statuscol.builtin")
-      -- local builtin = require("statuscol.builtin")
       require("statuscol").setup({
         segments = {
           {
