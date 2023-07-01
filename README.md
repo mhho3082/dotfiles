@@ -35,32 +35,21 @@ which may take additional setup to install
 <details>
 <summary> App List </summary>
 
-- Casual usage
-  - [`firefox`](https://www.mozilla.org/en-US/firefox/)
-  - [`chromium`](https://www.chromium.org/Home/)
-  - [`zathura`](https://pwmt.org/projects/zathura/)
-    - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
-  - [`discord`](https://discord.com/)
-- Command line
+- CLI apps
   - [`zsh`](https://zsh.sourceforge.io/)
   - [`paru`](https://github.com/Morganamilo/paru)
   - [`exa`](https://github.com/ogham/exa)
   - [`fd`](https://github.com/sharkdp/fd)
   - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
   - [`fzf`](https://github.com/junegunn/fzf)
-  - [`vifm`](https://github.com/vifm/vifm)
   - [`ripgrep`](https://github.com/BurntSushi/ripgrep)
   - [`xsel`](https://github.com/kfish/xsel)
   - [`wezterm`](https://github.com/wez/wezterm)
-  - [`mpv`](https://github.com/mpv-player/mpv)
-    - [`mpv-uosc-git`](https://github.com/tomasklaen/uosc)
-      - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
-    - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
   - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
-- School
-  - [`libreoffice-fresh`](https://www.libreoffice.org/)
-    - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
-  - [`zotero-bin`](https://www.zotero.org/)
+- TUI apps
+  - [`vifm`](https://github.com/vifm/vifm) for filesystem
+  - [`bashmount`](https://github.com/jamielinux/bashmount) for USB
+  - [`bluetuith`](https://github.com/darkhz/bluetuith) for Bluetooth
 - Coding
   - [`nvim`](https://neovim.io/)
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
@@ -75,6 +64,16 @@ which may take additional setup to install
   - For JavaScript
     - [`node`](https://nodejs.org/en)
     - [`yarn`](https://yarnpkg.com/)
+- Writing
+  - [`libreoffice-fresh`](https://www.libreoffice.org/)
+    - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
+  - [`zotero-bin`](https://www.zotero.org/)
+- Casual usage
+  - [`firefox`](https://www.mozilla.org/en-US/firefox/)
+  - [`chromium`](https://www.chromium.org/Home/)
+  - [`zathura`](https://pwmt.org/projects/zathura/)
+    - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
+  - [`discord`](https://discord.com/)
 - Desktop environment setup
   - [`i3-wm`](https://i3wm.org/)
   - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
@@ -97,7 +96,10 @@ which may take additional setup to install
     (or [`krita`](https://krita.org/) for serious drawing)
   - [`pandoc`](https://pandoc.org/) + [`texlive-most`](https://tug.org/texlive/)
   - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
-  - [`bashmount`](https://github.com/jamielinux/bashmount) for handling USB
+  - [`mpv`](https://github.com/mpv-player/mpv)
+    - [`mpv-uosc-git`](https://github.com/tomasklaen/uosc)
+      - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
+    - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
 - Fonts
   - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
   - [`nerd-fonts-fira-code`](https://github.com/tonsky/FiraCode)
