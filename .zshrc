@@ -298,11 +298,16 @@ function paru-update {
     fi
 }
 
-# Specifically update a package
-# helpful for packages not actively tracked on AUR
-# (e.g., neovim nightly: neovim-nightly-bin)
+# Specifically force-update package(s)
+# helpful for packages not actively tracked on AUR (e.g., neovim-nightly-bin)
 function paru-forceupdate {
-    paru --noconfirm -S $@
+    if [ -n "$1" ]; then
+        # Update specified packages
+        paru --noconfirm -S $@
+    else
+        # Update packages that are likely not actively tracked
+        paru --noconfirm -S $(paru -Qq | grep '\-git') $(paru -Qq | grep 'nightly')
+    fi
 }
 compdef _pactree paru-forceupdate
 
@@ -316,8 +321,8 @@ function paru-autoremove {
 # From https://news.ycombinator.com/item?id=9869231
 function create {
     if [ $# -lt 1 ]; then
-        echo "Missing argument";
-        return 1;
+        echo "Missing argument"
+        return 1
     fi
 
     for f in "$@"; do
