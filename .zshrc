@@ -165,6 +165,19 @@ function o {
     fi
 }
 
+# Generate ".." shortcuts
+# (since paths are set to not be considered executables by themselves)
+for i in {1..9}; do
+    local alias_name="."
+    local relative_path=""
+    for j in `seq $i`; do
+        alias_name+='.'
+        relative_path+='../'
+    done
+    local line="alias $alias_name='cd $relative_path'"
+    eval $line
+done
+
 # Pretty print paths
 function paths {
     for i in $path; do
