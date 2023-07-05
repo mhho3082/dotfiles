@@ -141,7 +141,7 @@ fi
 # Exa (or ls + tree)
 if (( $+commands[exa] )); then
     alias l='exa --all --long --icons --sort=type --git'
-    alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components"'
+    alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next"'
 else
     alias l='ls -AlhF --group-directories-first'
     if (( $+commands[tree] )); then
