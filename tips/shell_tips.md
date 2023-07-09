@@ -2,6 +2,12 @@
 
 ## One-liners
 
+Read the system log:
+
+```bash
+journalctl -xe
+```
+
 Find the largest files/directories in a directory:
 (Helpful when clearing out disk space)
 
