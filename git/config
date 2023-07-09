@@ -143,6 +143,10 @@
     # Get SHA of head, useful in detached head
     sha = rev-parse --short HEAD
 
+    # Make an archive of the current repo
+    # (ignoring uncommitted changes)
+    quick-archive = !"git archive --format=zip --output ../$(git rev-parse --show-toplevel | xargs basename).zip $(git default-branch)"
+
 # ---
 
 [log]
