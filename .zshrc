@@ -185,6 +185,13 @@ function paths {
     done
 }
 
+# Wezterm
+if (( $+commands[wezterm] )); then
+    # Create a new instance of wezterm with the same directory
+    # (nice to have for tiling window managers, e.g., i3wm)
+    alias wezterm-split="wezterm start --cwd ."
+fi
+
 # https://stackoverflow.com/questions/3183444/check-for-valid-link-url
 local URL_REGEX='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
 
