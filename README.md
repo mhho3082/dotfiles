@@ -55,6 +55,7 @@ which may take additional setup to install
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
+  - [`ngrok`](https://ngrok.com/)
   - For C/C++
     - [`llvm`](https://llvm.org/) (for [`clangd`](https://clangd.llvm.org/) in editors)
     - [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html)
@@ -100,6 +101,7 @@ which may take additional setup to install
     - [`mpv-uosc-git`](https://github.com/tomasklaen/uosc)
       - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
     - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
+  - [`ventoy`](https://www.ventoy.net)
 - Fonts
   - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
   - [`nerd-fonts-fira-code`](https://github.com/tonsky/FiraCode)
