@@ -377,9 +377,6 @@ if [ ! -d ~/gitstatus ]; then
 fi
 source ~/gitstatus/gitstatus.plugin.zsh
 
-local GLYPH=""
-local SUPERUSER_GLYPH=""
-
 local GIT_CLEAN="%F{blue}󰝥 %f"
 local GIT_STAGED="%F{green}󰋘 %f"
 local GIT_UNSTAGED="%F{red}󰋙 %f"
@@ -402,7 +399,14 @@ local GIT_ICONS_GOGS=" "
 local GIT_ICONS_BITBUCKET="󰂨 "
 local GIT_ICONS_BASIC_REMOTE=" "
 
+local GLYPH=""
+local SUPERUSER_GLYPH=""
+local TMUX_GLYPH="%F{green}%f"
+local VENV_GLYPH="%F{yellow}%f"
+
 _setup_ps1() {
+    ## PS1 ##
+
     # Jobs
     PS1="%(1j.%F{cyan}[%j]%f .)"
 
@@ -411,12 +415,19 @@ _setup_ps1() {
 
     # Is in tmux?
     if [ -n "$TMUX" ]; then
-        PS1+="%F{magenta}%f "
+        PS1+="$TMUX_GLYPH "
+    fi
+
+    # Is in Python venv?
+    if [ -n "$VIRTUAL_ENV" ]; then
+        PS1+="$VENV_GLYPH "
     fi
 
     # Glyph (special glyph for superuser)
     # Turn red if previous command return != 0
-    PS1+="%(?.%F{blue}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
+    PS1+="%(?.%F{cyan}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
+
+    ## RPROMPT ##
 
     # RHS prompt: git info
     # Modified from https://github.com/romkatv/gitstatus
