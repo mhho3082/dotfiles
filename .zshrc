@@ -409,6 +409,11 @@ _setup_ps1() {
     # pwd
     PS1+="%F{blue}%(4~|.../%3~|%~)%f "
 
+    # Is in tmux?
+    if [ -n "$TMUX" ]; then
+        PS1+="%F{magenta}%f "
+    fi
+
     # Glyph (special glyph for superuser)
     # Turn red if previous command return != 0
     PS1+="%(?.%F{blue}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
