@@ -9,52 +9,30 @@
 -------------
 
 -- Speed up plugins' load time
--- (must install impatient.nvim first)
-require("impatient")
+vim.loader.enable()
 
 -- Auto-install packer
-local packer_install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if vim.fn.empty(vim.fn.glob(packer_install_path)) > 0 then
-  Packer_bootstrap = vim.fn.system({
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
     "git",
     "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    packer_install_path,
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
   })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local packer = require("packer")
-
--- Tell packer to use popups
-packer.init({
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "rounded" })
-    end,
-  },
-})
+local lazy = require("lazy")
 
 -- The great plugins list
-packer.startup(function()
-  -- Self-manage
-  use("wbthomason/packer.nvim")
-
-  -- Library for other plugins
-  use("nvim-lua/plenary.nvim")
-
-  -- Speed up plugins' load time
-  -- (Refer to the first function in this config)
-  use("lewis6991/impatient.nvim")
-
-  -- Test startup time
-  use("dstein64/vim-startuptime")
-
+lazy.setup({
   -- EDIT --
 
   -- Swiss army knife
-  use({
+  {
     "echasnovski/mini.nvim",
     config = function()
       -- More targets
@@ -94,36 +72,36 @@ packer.startup(function()
         },
       })
     end,
-  })
+  },
 
   -- Indent
-  use("tpope/vim-sleuth")
+  "tpope/vim-sleuth",
 
   -- Splitjoin
-  use({
+  {
     "Wansmer/treesj",
-    requires = { "nvim-treesitter" },
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("treesj").setup({})
     end,
-  })
+  },
 
   -- Pairs
-  use({
+  {
     "windwp/nvim-autopairs",
     config = function()
       require("nvim-autopairs").setup({})
     end,
-  })
-  use({
+  },
+  {
     "windwp/nvim-ts-autotag",
     config = function()
       require("nvim-ts-autotag").setup()
     end,
-  })
+  },
 
   -- File browser
-  use({
+  {
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup({
@@ -135,19 +113,19 @@ packer.startup(function()
         delete_to_trash = true,
       })
     end,
-  })
+  },
 
   -- Undo tree
-  use({
+  {
     "mbbill/undotree",
     config = function()
       -- Open on the right
       vim.g.undotree_WindowLayout = 3
     end,
-  })
+  },
 
   -- Move around better
-  use({
+  {
     "chrisgrieser/nvim-spider",
     config = function()
       vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", { desc = "Spider-w" })
@@ -155,22 +133,22 @@ packer.startup(function()
       vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>", { desc = "Spider-b" })
       vim.keymap.set({ "n", "o", "x" }, "ge", "<cmd>lua require('spider').motion('ge')<CR>", { desc = "Spider-ge" })
     end,
-  })
+  },
 
   -- VIEW --
 
   -- Indent guide
-  use({
+  {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
       require("indent_blankline").setup({
         use_treesitter = true,
       })
     end,
-  })
+  },
 
   -- Colorscheme
-  use({
+  {
     "sainnhe/gruvbox-material",
     config = function()
       vim.background = "dark"
@@ -178,15 +156,12 @@ packer.startup(function()
       vim.g.gruvbox_material_better_performance = 1
       vim.cmd.colorscheme("gruvbox-material")
     end,
-  })
+  },
 
   -- Syntax highlight
-  use({
+  {
     "nvim-treesitter/nvim-treesitter",
-    run = function()
-      -- From wiki: https://github.com/nvim-treesitter/nvim-treesitter/wiki/Installation
-      require("nvim-treesitter.install").update({ with_sync = true })
-    end,
+    build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = { "c", "lua", "vim", "vimdoc", "comment", "markdown", "markdown_inline" },
@@ -207,82 +182,38 @@ packer.startup(function()
         },
       })
     end,
-  })
+  },
 
   -- Statusline and tabline
-  use("nvim-lualine/lualine.nvim")
+  "nvim-lualine/lualine.nvim",
 
   -- Icons
-  use({
+  {
     "kyazdani42/nvim-web-devicons",
     config = function()
       require("nvim-web-devicons").setup({})
     end,
-  })
-
-  -- Statuscol
-  -- https://github.com/luukvbaal/statuscol.nvim/issues/43
-  use({
-    "luukvbaal/statuscol.nvim",
-    config = function()
-      local builtin = require("statuscol.builtin")
-      require("statuscol").setup({
-        segments = {
-          {
-            sign = {
-              name = { "Diagnostic" },
-              maxwidth = 1,
-              colwidth = 1,
-              auto = true,
-            },
-            click = "v:lua.ScSa",
-          },
-          {
-            text = { builtin.lnumfunc },
-            condition = { builtin.not_empty },
-            click = "v:lua.ScLa",
-          },
-          {
-            sign = {
-              name = { "GitSigns*" },
-              maxwidth = 1,
-              colwidth = 1,
-              auto = true,
-            },
-            click = "v:lua.ScSa",
-          },
-          {
-            sign = {
-              name = { ".*" },
-              maxwidth = 1,
-              auto = true,
-            },
-            click = "v:lua.ScSa",
-          },
-        },
-      })
-    end,
-  })
+  },
 
   -- COPILOTS --
 
   -- Package manager
-  use({
+  {
     "williamboman/mason.nvim",
     config = function()
       require("mason").setup()
     end,
-  })
+  },
 
   -- LSP
-  use({
+  {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup()
     end,
-  })
-  use("neovim/nvim-lspconfig")
-  use({
+  },
+  "neovim/nvim-lspconfig",
+  {
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
       require("null-ls").setup({
@@ -298,10 +229,10 @@ packer.startup(function()
         },
       })
     end,
-  })
+  },
 
   -- LSP server status
-  use({
+  {
     "j-hui/fidget.nvim",
     tag = "legacy",
     config = function()
@@ -314,54 +245,51 @@ packer.startup(function()
         },
       })
     end,
-  })
+  },
 
   -- Auto-complete
-  use("hrsh7th/nvim-cmp")
-  use("hrsh7th/cmp-nvim-lsp")
-  use("hrsh7th/cmp-nvim-lua")
-  use("hrsh7th/cmp-path")
-  use("hrsh7th/cmp-cmdline")
-  use("hrsh7th/cmp-nvim-lsp-signature-help")
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-nvim-lua",
+  "hrsh7th/cmp-path",
+  "hrsh7th/cmp-cmdline",
+  "hrsh7th/cmp-nvim-lsp-signature-help",
 
   -- Snippets
-  use("L3MON4D3/LuaSnip")
-  use("saadparwaiz1/cmp_luasnip")
-  use("rafamadriz/friendly-snippets")
+  "L3MON4D3/LuaSnip",
+  "saadparwaiz1/cmp_luasnip",
+  "rafamadriz/friendly-snippets",
 
   -- COMMAND TOOLS --
 
   -- Command aid and remap
-  use("folke/which-key.nvim")
+  "folke/which-key.nvim",
 
   -- Git
-  use("tpope/vim-fugitive")
-  use({
+  "tpope/vim-fugitive",
+  {
     "lewis6991/gitsigns.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("gitsigns").setup({})
     end,
-  })
-  use({
+  },
+  {
     "sindrets/diffview.nvim",
-    requires = "nvim-lua/plenary.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("diffview").setup()
     end,
-  })
+  },
 
   -- Search
-  use("nvim-telescope/telescope.nvim")
-  use("nvim-telescope/telescope-ui-select.nvim")
-  use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-
-  -- Auto-load all the above
-  -- if packer is installed for the first time
-  if Packer_bootstrap then
-    require("packer").sync()
-  end
-end)
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-telescope/telescope-ui-select.nvim", "nvim-telescope/telescope-fzf-native.nvim" },
+  },
+  "nvim-telescope/telescope-ui-select.nvim",
+  { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = false },
+})
 
 --------------
 -- SETTINGS --
@@ -732,7 +660,7 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
     opts.settings = {
       Lua = {
         diagnostics = {
-          globals = { "vim", "use" },
+          globals = { "vim" },
         },
         runtime = {
           version = "LuaJIT",
