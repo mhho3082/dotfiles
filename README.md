@@ -44,7 +44,6 @@ which may take additional setup to install
   - [`fzf`](https://github.com/junegunn/fzf)
   - [`ripgrep`](https://github.com/BurntSushi/ripgrep)
   - [`xsel`](https://github.com/kfish/xsel)
-  - [`wezterm`](https://github.com/wez/wezterm)
   - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
 - TUI apps
   - [`vifm`](https://github.com/vifm/vifm) for filesystem
@@ -55,13 +54,9 @@ which may take additional setup to install
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
-  - [`ngrok`](https://ngrok.com/)
   - For C/C++
     - [`llvm`](https://llvm.org/) (for [`clangd`](https://clangd.llvm.org/) in editors)
     - [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html)
-  - For Rust
-    - [`rustup`](https://rustup.rs/)
-    - [`cargo-edit`](https://github.com/killercup/cargo-edit)
   - For JavaScript
     - [`node`](https://nodejs.org/en)
     - [`yarn`](https://yarnpkg.com/)
@@ -77,6 +72,7 @@ which may take additional setup to install
   - [`discord`](https://discord.com/)
 - Desktop environment setup
   - [`i3-wm`](https://i3wm.org/)
+  - [`wezterm`](https://github.com/wez/wezterm)
   - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
   - [`feh`](https://feh.finalrewind.org/)
   - [`rofi`](https://github.com/davatorium/rofi)

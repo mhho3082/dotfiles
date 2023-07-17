@@ -377,8 +377,8 @@ if [ ! -d ~/gitstatus ]; then
 fi
 source ~/gitstatus/gitstatus.plugin.zsh
 
-local GLYPH=" "
-local SUPERUSER_GLYPH=" "
+local GLYPH=""
+local SUPERUSER_GLYPH=""
 
 local GIT_CLEAN="%F{blue}󰝥 %f"
 local GIT_STAGED="%F{green}󰋘 %f"
