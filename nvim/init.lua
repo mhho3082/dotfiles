@@ -412,6 +412,10 @@ vim.g.mapleader = " "
 vim.opt.timeoutlen = 500
 vim.opt.scrolloff = 0
 
+-- Move cursor by display lines by default
+vim.keymap.set({ "n", "i", "v", "o", "x" }, "j", "gj", { noremap = true, silent = true })
+vim.keymap.set({ "n", "i", "v", "o", "x" }, "k", "gk", { noremap = true, silent = true })
+
 -- Fix lua API keyboard interrupt issue
 wk.register({
   ["<C-c>"] = { "<C-[>", "escape" },
