@@ -496,6 +496,7 @@ wk.register({
     -- Basics
     w = { "<cmd>wa!<cr>", "save" },
     q = { "<cmd>qa!<cr>", "quit" },
+    c = { '<cmd>let @+ = expand("%:p")<cr><cmd>echo expand("%:p")<cr>', "copy filename" },
     -- Telescopes
     f = { require("telescope.builtin").find_files, "files" },
     a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
