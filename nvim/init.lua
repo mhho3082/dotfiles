@@ -520,10 +520,10 @@ wk.register({
       c = { "<cmd>tabclose<cr>", "close" },
       o = { "<cmd>tabonly<cr>", "close all others" },
     },
-    p = {
-      name = "packer",
-      p = { "<cmd>PackerSync<cr>", "sync" },
-      s = { "<cmd>PackerStatus<cr>", "status" },
+    l = {
+      name = "lazy",
+      l = { "<cmd>Lazy sync<cr>", "sync" },
+      u = { "<cmd>Lazy update<cr>", "update" },
     },
     g = {
       name = "git",
