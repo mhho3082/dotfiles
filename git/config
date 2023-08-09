@@ -65,15 +65,19 @@
     # Use difftool for such diff
     df = !"d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
 
+    m = merge
+
     p = push
     pu = pull
+    # Stash changes away before pull
     ps = pull --rebase --autostash
+    # The more aggressive version
+    pss = !"git stash; git pull --rebase; git stash pop"
 
-    s = stash --include-untracked
+    s = stash
+    sn = stash --include-untracked # Stash, with new files
     si = stash --patch
     sp = stash pop
-
-    m = merge
 
     # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
     cd = !"f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)} 2>/dev/null; }; f"
@@ -99,7 +103,7 @@
     # List the affected files and their statuses
     stat = status --short --branch
     # List the amount of changes per file
-    changes = diff --stat
+    changes = !"d() { git diff --stat HEAD~${1:-0}; };d"
     # list conflicted files
     conflicts = diff --name-only --diff-filter=U
 
