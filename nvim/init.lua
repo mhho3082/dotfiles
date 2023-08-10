@@ -262,7 +262,7 @@ lazy.setup({
 
   -- COMMAND TOOLS --
 
-  -- Command aid and remap
+  -- Command aid and keymaps
   "folke/which-key.nvim",
 
   -- Git
@@ -387,9 +387,9 @@ vim.api.nvim_create_autocmd({ "InsertLeave" }, {
   end,
 })
 
-------------
--- REMAPS --
-------------
+-------------
+-- KEYMAPS --
+-------------
 
 local wk = require("which-key")
 
@@ -418,7 +418,7 @@ vim.keymap.set({ "n", "v", "o", "x" }, "k", "gk", { noremap = true, silent = tru
 
 -- Fix lua API keyboard interrupt issue
 wk.register({
-  ["<C-c>"] = { "<C-[>", "escape" },
+  ["<C-c>"] = { "<C-[>", "Escape" },
 }, { mode = "i" })
 
 -- Add easy copy/paste to system clipboard
@@ -451,31 +451,31 @@ wk.register({
 wk.register({
   ["J"] = {
     '<cmd>lua vim.diagnostic.open_float(0, { scope = "cursor" })<cr>',
-    "diagnostics",
+    "Diagnostics",
   },
-  ["K"] = { vim.lsp.buf.hover, "hover" },
-  ["gr"] = { vim.lsp.buf.rename, "rename" },
-  ["gd"] = { require("telescope.builtin").lsp_definitions, "goto definition" },
-  ["gD"] = { require("telescope.builtin").lsp_implementations, "goto implementation" },
-  ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
-  ["<leader>k"] = { vim.lsp.buf.format, "format" },
-  ["<C-j>"] = { vim.diagnostic.goto_next, "next diagnostic" },
-  ["<C-k>"] = { vim.diagnostic.goto_prev, "prev diagnostic" },
+  ["K"] = { vim.lsp.buf.hover, "Hover" },
+  ["gr"] = { vim.lsp.buf.rename, "Rename" },
+  ["gd"] = { require("telescope.builtin").lsp_definitions, "Goto definition" },
+  ["gD"] = { require("telescope.builtin").lsp_implementations, "Goto implementation" },
+  ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
+  ["<leader>k"] = { vim.lsp.buf.format, "Format" },
+  ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
+  ["<C-k>"] = { vim.diagnostic.goto_prev, "Prev diagnostic" },
 }, { mode = "n" })
 wk.register({
-  ["<leader>j"] = { vim.lsp.buf.code_action, "code action" },
-  ["<leader>k"] = { vim.lsp.buf.format, "format" },
+  ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
+  ["<leader>k"] = { vim.lsp.buf.format, "Format" },
 }, { mode = "v" })
 
 -- Splitjoin mappings
 wk.register({
-  ["gs"] = { "<cmd>TSJSplit<cr>", "split node" },
-  ["gj"] = { "<cmd>TSJJoin<cr>", "join node" },
+  ["gs"] = { require("treesj").split, "Split" },
+  ["gj"] = { require("treesj").join, "Join" },
 }, { mode = "n" })
 
 -- Click '-' in any buffer to open its parent directory in oil.nvim
 wk.register({
-  ["-"] = { require("oil").open, "Open parent directory" },
+  ["-"] = { require("oil").open, "Open oil.nvim" },
 }, { mode = "n" })
 
 -- Ideas from https://github.com/folke/todo-comments.nvim/blob/main/lua/telescope/_extensions/todo-comments.lua
@@ -489,76 +489,73 @@ function TodoTelescope()
   })
 end
 
--- The great <leader> remap
+-- The great <leader> keymap
 wk.register({
   ["<leader>"] = {
     name = "leader",
     -- Basics
-    w = { "<cmd>wa!<cr>", "save" },
-    q = { "<cmd>qa!<cr>", "quit" },
-    c = { '<cmd>let @+ = expand("%:p")<cr><cmd>echo expand("%:p")<cr>', "copy filename" },
+    w = { "<cmd>wa!<cr>", "Save" },
+    q = { "<cmd>qa!<cr>", "Quit" },
+    c = { '<cmd>let @+ = expand("%:p")<cr><cmd>echo expand("%:p")<cr>', "Copy filename" },
+    n = { "<cmd>nohlsearch<cr>", "Nohl" },
     -- Telescopes
-    f = { require("telescope.builtin").find_files, "files" },
-    a = { require("telescope.builtin").lsp_document_symbols, "symbols" },
-    s = { require("telescope.builtin").live_grep, "search" },
-    d = { require("telescope.builtin").diagnostics, "diagnostics" },
+    f = { require("telescope.builtin").find_files, "Files" },
+    a = { require("telescope.builtin").lsp_document_symbols, "Symbols" },
+    s = { require("telescope.builtin").live_grep, "Search" },
+    d = { require("telescope.builtin").diagnostics, "Diagnostics" },
     x = { TodoTelescope, "todo" }, -- "Marked"
-    r = { require("telescope.builtin").resume, "resume search" },
-    -- File browser (oil)
-    o = { require("oil").open_float, "file browser" },
+    r = { require("telescope.builtin").resume, "Resume search" },
     -- Undo tree
-    u = { "<cmd>UndotreeToggle<cr>", "undotree" },
-    -- Interface
-    n = { "<cmd>nohlsearch<cr>", "nohl" },
+    u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
     t = {
       name = "tabs",
-      h = { "<cmd>tabprev<cr>", "previous" },
-      l = { "<cmd>tabnext<cr>", "next" },
-      H = { "<cmd>tabfirst<cr>", "first" },
-      L = { "<cmd>tablast<cr>", "last" },
-      n = { "<cmd>tabnew<cr>", "new" },
-      c = { "<cmd>tabclose<cr>", "close" },
-      o = { "<cmd>tabonly<cr>", "close all others" },
+      h = { "<cmd>tabprev<cr>", "Previous" },
+      l = { "<cmd>tabnext<cr>", "Next" },
+      H = { "<cmd>tabfirst<cr>", "First" },
+      L = { "<cmd>tablast<cr>", "Last" },
+      n = { "<cmd>tabnew<cr>", "New" },
+      c = { "<cmd>tabclose<cr>", "Close" },
+      o = { "<cmd>tabonly<cr>", "Close all others" },
     },
     l = {
       name = "lazy",
-      l = { "<cmd>Lazy sync<cr>", "sync" },
-      u = { "<cmd>Lazy update<cr>", "update" },
+      l = { "<cmd>Lazy sync<cr>", "Sync" },
+      u = { "<cmd>Lazy update<cr>", "Update" },
     },
     g = {
       name = "git",
       -- Statuses
-      b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "blame" },
-      d = { "<cmd>DiffviewOpen<cr>", "diff with head" }, -- Or Gvdiffsplit
+      b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame" },
+      d = { "<cmd>DiffviewOpen<cr>", "Diff with head" }, -- Or Gvdiffsplit
       -- Fetch
-      f = { "<cmd>G fetch<cr>", "fetch" },
-      m = { "<cmd>G merge<cr>", "merge" },
+      f = { "<cmd>G fetch<cr>", "Fetch" },
+      m = { "<cmd>G merge<cr>", "Merge" },
       -- Commit
-      a = { "<cmd>G add %<cr>", "add file" },
-      c = { "<cmd>G commit<cr>", "commit" },
-      p = { "<cmd>G push<cr>", "push" },
+      a = { "<cmd>G add %<cr>", "Add file" },
+      c = { "<cmd>G commit<cr>", "Commit" },
+      p = { "<cmd>G push<cr>", "Push" },
     },
     h = {
       name = "git hunks",
       -- View
-      d = { "<cmd>Gitsigns preview_hunk<cr>", "diff" },
+      d = { "<cmd>Gitsigns preview_hunk<cr>", "Diff" },
       -- Select
-      v = { "<cmd>Gitsigns select_hunk<cr>", "visual" },
+      v = { "<cmd>Gitsigns select_hunk<cr>", "Visual" },
       -- Move
-      n = { "<cmd>Gitsigns next_hunk<cr>", "next" },
-      p = { "<cmd>Gitsigns prev_hunk<cr>", "previous" },
+      n = { "<cmd>Gitsigns next_hunk<cr>", "Next" },
+      p = { "<cmd>Gitsigns prev_hunk<cr>", "Previous" },
       -- Stage (or reset)
-      s = { "<cmd>Gitsigns stage_hunk<cr>", "stage" },
-      u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "undo stage" },
-      r = { "<cmd>Gitsigns reset_hunk<cr>", "reset" },
+      s = { "<cmd>Gitsigns stage_hunk<cr>", "Stage" },
+      u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "Undo stage" },
+      r = { "<cmd>Gitsigns reset_hunk<cr>", "Reset" },
     },
     i = {
       name = "interface",
-      n = { "<cmd>set number! relativenumber!<cr>", "number" },
-      s = { "<cmd>set spell!<cr>", "spell" },
-      w = { "<cmd>set wrap!<cr>", "wrap" },
-      i = { "<cmd>IndentBlanklineToggle<cr>", "indentline" },
-      b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "background" },
+      n = { "<cmd>set number! relativenumber!<cr>", "Number" },
+      s = { "<cmd>set spell!<cr>", "Spell" },
+      w = { "<cmd>set wrap!<cr>", "Wrap" },
+      i = { "<cmd>IndentBlanklineToggle<cr>", "Indentline" },
+      b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "Background" },
     },
   },
 })
