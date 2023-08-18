@@ -25,6 +25,9 @@ config.disable_default_key_bindings = true
 -- Handle i3wm properly
 config.adjust_window_size_when_changing_font_size = false
 
+-- Disable IME
+config.use_ime = false
+
 config.keys = {
   -- Copy/paste
   {
