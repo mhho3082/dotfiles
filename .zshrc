@@ -351,10 +351,19 @@ function create {
     done
 }
 
-# Get the IP address in the form 192.168.x.y
+# Get the IP address of this machine
 # https://unix.stackexchange.com/questions/119269/how-to-get-ip-address-using-shell-script
 function ip-addr {
-    ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'
+    # Get all IP addresses for this machine
+    local all_ips=($(ip addr show | perl -nle 's/inet (\S+)/print $1/e'))
+
+    # Get the main outbound IP address
+    local out_ip=$(ip route get 1.1.1.1 | perl -nle 's/src (\S+)/print $1/e')
+
+    # Highlight the main outbound IP address group in print
+    for ip_addr in $all_ips; do
+        [[ $ip_addr =~ $out_ip ]] && print -P '%F{cyan}'$ip_addr'%f' || echo $ip_addr
+    done
 }
 
 # WSL-specific alias
