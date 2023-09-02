@@ -361,7 +361,7 @@ function ip-addr {
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
     # Open in File Explorer (for WSL)
-    alias explorer='explorer.exe .; or true'
+    alias explorer='explorer.exe .; || true'
 fi
 
 # == Prompt ==
