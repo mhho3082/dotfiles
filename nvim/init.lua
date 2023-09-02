@@ -309,16 +309,14 @@ lazy.setup({
 
   -- Search
   {
-    "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-ui-select.nvim",
-      "nvim-telescope/telescope-fzf-native.nvim",
-    },
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "kyazdani42/nvim-web-devicons" }, -- Or nvim-tree/nvim-web-devicons
+    config = function()
+      -- calling `setup` is optional for customization
+      require("fzf-lua").setup({})
+    end,
   },
-  "nvim-telescope/telescope-ui-select.nvim",
-  { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = false },
 })
 
 --------------
@@ -485,8 +483,8 @@ wk.register({
   },
   ["K"] = { vim.lsp.buf.hover, "Hover" },
   ["gr"] = { vim.lsp.buf.rename, "Rename" },
-  ["gd"] = { require("telescope.builtin").lsp_definitions, "Goto definition" },
-  ["gD"] = { require("telescope.builtin").lsp_implementations, "Goto implementation" },
+  ["gd"] = { require("fzf-lua").lsp_definitions, "Goto definition" },
+  ["gD"] = { require("fzf-lua").lsp_implementations, "Goto implementation" },
   ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "Format" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
@@ -508,17 +506,6 @@ wk.register({
   ["-"] = { require("oil").open, "Open oil.nvim" },
 }, { mode = "n" })
 
--- Ideas from https://github.com/folke/todo-comments.nvim/blob/main/lua/telescope/_extensions/todo-comments.lua
--- But is way lighter
-function TodoTelescope()
-  require("telescope.builtin").grep_string({
-    prompt_title = "Find Todo",
-    search = "(TODO|NOTE|INFO|TEST|TEMP|FIXME|XXX|BUG|DEBUG|HACK|UNDONE)(\\(.*\\))?:",
-    use_regex = true,
-    additional_args = { "--trim" },
-  })
-end
-
 -- The great <leader> keymap
 wk.register({
   ["<leader>"] = {
@@ -529,12 +516,11 @@ wk.register({
     c = { '<cmd>let @+ = expand("%:p")<cr><cmd>echo expand("%:p")<cr>', "Copy filename" },
     n = { "<cmd>nohlsearch<cr>", "Nohl" },
     -- Telescopes
-    f = { require("telescope.builtin").find_files, "Files" },
-    a = { require("telescope.builtin").lsp_document_symbols, "Symbols" },
-    s = { require("telescope.builtin").live_grep, "Search" },
-    d = { require("telescope.builtin").diagnostics, "Diagnostics" },
-    x = { TodoTelescope, "todo" }, -- "Marked"
-    r = { require("telescope.builtin").resume, "Resume search" },
+    f = { require("fzf-lua").files, "Files" },
+    a = { require("fzf-lua").lsp_document_symbols, "Symbols" },
+    s = { require("fzf-lua").live_grep, "Search" },
+    d = { require("fzf-lua").diagnostics_workspace, "Diagnostics" },
+    r = { require("fzf-lua").resume, "Resume search" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
     t = {
@@ -589,54 +575,6 @@ wk.register({
     },
   },
 })
-
----------------
--- TELESCOPE --
----------------
-
-require("telescope").setup({
-  defaults = {
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--smart-case",
-      "--hidden", -- find hidden files
-      "--glob",
-      "!.git/*",
-    },
-  },
-  pickers = {
-    find_files = {
-      find_command = {
-        "fd",
-        "--type",
-        "f",
-        "-H",
-        "--strip-cwd-prefix",
-      },
-    },
-  },
-  extensions = {
-    fzf = {
-      fuzzy = true, -- false will only do exact matching
-      override_generic_sorter = true, -- override the generic sorter
-      override_file_sorter = true, -- override the file sorter
-      case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-      -- the default case_mode is "smart_case"
-    },
-    ["ui-select"] = {
-      require("telescope.themes").get_dropdown({}),
-    },
-  },
-})
-
--- Load telescope extensions
-require("telescope").load_extension("fzf")
-require("telescope").load_extension("ui-select")
 
 ---------
 -- LSP --
