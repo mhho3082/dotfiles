@@ -484,7 +484,7 @@ wk.register({
   ["K"] = { vim.lsp.buf.hover, "Hover" },
   ["gr"] = { vim.lsp.buf.rename, "Rename" },
   ["gd"] = { require("fzf-lua").lsp_definitions, "Goto definition" },
-  ["gD"] = { require("fzf-lua").lsp_implementations, "Goto implementation" },
+  ["gD"] = { require("fzf-lua").lsp_references, "Goto references" },
   ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "Format" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
