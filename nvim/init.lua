@@ -285,7 +285,12 @@ lazy.setup({
   -- Search
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-telescope/telescope-ui-select.nvim", "nvim-telescope/telescope-fzf-native.nvim" },
+    branch = "0.1.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "nvim-telescope/telescope-fzf-native.nvim",
+    },
   },
   "nvim-telescope/telescope-ui-select.nvim",
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = false },
