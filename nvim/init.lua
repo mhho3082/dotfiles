@@ -164,7 +164,32 @@ lazy.setup({
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "comment", "markdown", "markdown_inline" },
+        ensure_installed = {
+          -- Common programming languages
+          "c",
+          "cpp",
+          "python",
+          "java",
+          "javascript",
+          "typescript",
+          "jsdoc",
+          "vue",
+          "svelte",
+          -- Common scripting languages
+          "html",
+          "css",
+          "scss",
+          "lua",
+          "json",
+          "jsonc",
+          "bash",
+          "markdown",
+          "markdown_inline",
+          -- Vim-specific languages
+          "vim",
+          "vimdoc",
+          "comment",
+        },
         highlight = {
           -- false will disable the whole extension
           enable = true,
