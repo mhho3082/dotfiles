@@ -45,6 +45,7 @@ which may take additional setup to install
   - [`ripgrep`](https://github.com/BurntSushi/ripgrep)
   - [`xsel`](https://github.com/kfish/xsel)
   - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
+  - [`trash-cli`](https://github.com/andreafrancia/trash-cli)
 - TUI apps
   - [`vifm`](https://github.com/vifm/vifm) for filesystem
   - [`bashmount`](https://github.com/jamielinux/bashmount) for USB
@@ -54,6 +55,7 @@ which may take additional setup to install
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
+  - [`httpie`](https://httpie.io/cli)
   - For C/C++
     - [`llvm`](https://llvm.org/) (for [`clangd`](https://clangd.llvm.org/) in editors)
     - [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html)
@@ -91,12 +93,8 @@ which may take additional setup to install
   - [`xsane`](http://www.sane-project.org/)
   - [`pinta`](https://www.pinta-project.com/) for casual image editing
     (or [`krita`](https://krita.org/) for serious drawing)
-  - [`pandoc`](https://pandoc.org/) + [`texlive-most`](https://tug.org/texlive/)
   - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
-  - [`mpv`](https://github.com/mpv-player/mpv)
-    - [`mpv-uosc-git`](https://github.com/tomasklaen/uosc)
-      - [`mpv-thumbfast-git`](https://github.com/po5/thumbfast)
-    - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
+  - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
   - [`ventoy`](https://www.ventoy.net)
 - Fonts
   - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
