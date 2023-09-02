@@ -315,6 +315,7 @@ lazy.setup({
     config = function()
       -- calling `setup` is optional for customization
       require("fzf-lua").setup({})
+      require("fzf-lua").register_ui_select()
     end,
   },
 })
