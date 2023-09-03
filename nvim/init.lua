@@ -596,39 +596,25 @@ for type, icon in pairs(signs) do
 end
 
 -- Add additional capabilities supported by nvim-cmp
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+-- Set up LSP server with CMP capabilities and additional settings.
+local function setup_lsp_server(server_name, settings)
+  local opts = {}
+  opts.capabilities = cmp_capabilities
+  opts.settings = settings or {}
+  require("lspconfig")[server_name].setup(opts)
+end
 
 -- Setup all LSP servers installed by Mason
-for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
-  local opts = {}
-  opts.capabilities = capabilities
-
-  if server == "rust_analyzer" then
-    opts.settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-        },
-        imports = {
-          granularity = {
-            group = "module",
-          },
-          prefix = "self",
-        },
-        cargo = {
-          buildScripts = {
-            enable = true,
-          },
-        },
-        procMacro = {
-          enable = true,
-        },
-      },
-    }
-  end
-
-  if server == "lua_ls" then
-    opts.settings = {
+require("mason-lspconfig").setup_handlers({
+  -- Default handler
+  function(server_name)
+    setup_lsp_server(server_name)
+  end,
+  -- Specific handlers
+  ["lua_ls"] = function()
+    setup_lsp_server("lua_ls", {
       Lua = {
         diagnostics = {
           globals = { "vim" },
@@ -640,44 +626,29 @@ for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
           enable = false,
         },
       },
-    }
-  end
-
-  if server == "ltex" then
-    opts.settings = {
+    })
+  end,
+  ["ltex"] = function()
+    setup_lsp_server("ltex", {
       ltex = {
         language = "en-GB",
         dictionary = {
-          ["en-GB"] = {
-            "neovim",
-            "fzf",
-            "ripgrep",
-            "fd",
-            "dotfiles",
-            "zsh",
-            "Hin",
-            "ArchWiki",
-            "newpage",
-            "gruvbox",
-          },
+          ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
         },
         checkFrequency = "save",
       },
-    }
-  end
-
-  if server == "jdtls" then
-    opts.settings = {
+    })
+  end,
+  ["jdtls"] = function()
+    setup_lsp_server("jdtls", {
       java = {
         format = {
           enabled = false,
         },
       },
-    }
-  end
-
-  require("lspconfig")[server].setup(opts)
-end
+    })
+  end,
+})
 
 ---------
 -- CMP --
