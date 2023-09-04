@@ -662,6 +662,9 @@ require("mason-lspconfig").setup_handlers({
       svelte = {
         require("efmls-configs.formatters.prettier_d"),
       },
+      markdown = {
+        require("efmls-configs.formatters.prettier_d"),
+      },
     })
 
     local efmls_config = {
