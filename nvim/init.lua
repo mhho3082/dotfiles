@@ -239,21 +239,9 @@ lazy.setup({
   },
   "neovim/nvim-lspconfig",
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    config = function()
-      require("null-ls").setup({
-        sources = {
-          require("null-ls").builtins.diagnostics.zsh,
-          -- require("null-ls").builtins.diagnostics.eslint,
-          require("null-ls").builtins.formatting.clang_format,
-          require("null-ls").builtins.formatting.stylua,
-          require("null-ls").builtins.formatting.prettierd.with({
-            extra_filetypes = { "svelte" },
-          }),
-          require("null-ls").builtins.formatting.beautysh,
-        },
-      })
-    end,
+    "creativenull/efmls-configs-nvim",
+    version = "v1.x.x", -- version is optional, but recommended
+    dependencies = { "neovim/nvim-lspconfig" },
   },
 
   -- LSP server status
@@ -662,6 +650,37 @@ require("mason-lspconfig").setup_handlers({
         },
       },
     })
+  end,
+  ["efm"] = function()
+    -- Special null-ls-like LSP server
+    -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
+
+    -- Use default settings
+    local languages = require("efmls-configs.defaults").languages()
+    languages = vim.tbl_extend("force", languages, {
+      -- Add pretter_d to svelte
+      svelte = {
+        require("efmls-configs.formatters.prettier_d"),
+      },
+    })
+
+    local efmls_config = {
+      filetypes = vim.tbl_keys(languages),
+      capabilities = cmp_capabilities,
+      settings = {
+        rootMarkers = { ".git/" },
+        languages = languages,
+      },
+      init_options = {
+        documentFormatting = true,
+        documentRangeFormatting = true,
+      },
+    }
+
+    require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, {
+      -- Pass your custom lsp config below like on_attach and capabilities
+      capabilities = cmp_capabilities,
+    }))
   end,
 })
 
