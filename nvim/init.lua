@@ -517,7 +517,6 @@ wk.register({
     -- Basics
     w = { "<cmd>wa!<cr>", "Save" },
     q = { "<cmd>qa!<cr>", "Quit" },
-    c = { '<cmd>let @+ = expand("%:p")<cr><cmd>echo expand("%:p")<cr>', "Copy filename" },
     n = { "<cmd>nohlsearch<cr>", "Nohl" },
     -- Telescopes
     f = { require("fzf-lua").files, "Files" },
@@ -580,6 +579,19 @@ wk.register({
   },
 })
 
+--------------
+-- COMMANDS --
+--------------
+
+-- These are all custom commands to complete simple tasks
+
+-- Copy the full path of currently open file to system clipboard.
+vim.api.nvim_create_user_command("CopyFilename", function()
+  local filename = vim.fn.expand("%:p")
+  vim.fn.setreg("+", filename)
+  print(filename)
+end, {})
+
 ---------
 -- LSP --
 ---------
@@ -592,7 +604,7 @@ vim.diagnostic.config({
 })
 
 -- Use nerd font for gutter signs
-local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = "󰋽 " }
+local signs = { Error = "󰅚", Warn = "󰀪", Hint = "󰌶", Info = "󰋽" }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -704,7 +716,6 @@ cmp.setup({
     { name = "path" },
     { name = "nvim_lua" },
     { name = "nvim_lsp_signature_help" },
-    { name = "crates" },
   }),
 })
 
