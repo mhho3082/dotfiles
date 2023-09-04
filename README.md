@@ -131,27 +131,30 @@ please refer to their [wiki](https://github.com/gorhill/uBlock/wiki).)
 
 I also install some LSP servers in Neovim with `mason.nvim`
 with respect to the languages I am currently working with.
-Some other LSP servers need to also be ported into Neovim
-with `null-ls.nvim`; they are marked below.
+Some other LSP servers need to also be ported using `efm`;
+they are marked below.
 
 <details>
 <summary> Some LSP servers </summary>
 
+- General
+  - `efm`
+- JS/TS
+  - `tsserver`
+  - `prettierd` (needs `efm`)
 - HTML
   - `emmet-ls`
-- Rust
-  - `rust-analyser`
+  - `css-lsp`
 - Lua
   - `lua-language-server`
-  - `stylua` (needs `null-ls`)
+  - `stylua` (needs `efm`)
 - C/C++
   - `clangd`
 - Markdown
   - `ltex`
-  - `prettierd` (needs `null-ls`)
 - Bash
   - `bash-language-server`
-  - `shellharden` (needs `null-ls`)
+  - `beautysh`
 
 </details>
 
