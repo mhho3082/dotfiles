@@ -442,8 +442,11 @@ vim.opt.timeoutlen = 500
 vim.opt.scrolloff = 0
 
 -- Move cursor by display lines by default
-vim.keymap.set({ "n", "v", "o", "x" }, "j", "gj", { noremap = true, silent = true })
-vim.keymap.set({ "n", "v", "o", "x" }, "k", "gk", { noremap = true, silent = true })
+local swap_move_cursor = { "j", "k", "0", "^", "$" }
+for _, ops in ipairs(swap_move_cursor) do
+  vim.keymap.set({ "n", "v", "o", "x" }, ops, "g" .. ops, { noremap = true, silent = true })
+  vim.keymap.set({ "n", "v", "o", "x" }, "g" .. ops, ops, { noremap = true, silent = true })
+end
 
 -- Fix lua API keyboard interrupt issue
 wk.register({
