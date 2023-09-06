@@ -71,6 +71,7 @@ which may take additional setup to install
   - [`chromium`](https://www.chromium.org/Home/)
   - [`zathura`](https://pwmt.org/projects/zathura/)
     - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
+    - [`zaread`](https://github.com/paoloap/zaread)
   - [`discord`](https://discord.com/)
 - Desktop environment setup
   - [`i3-wm`](https://i3wm.org/)
