@@ -665,6 +665,9 @@ require("mason-lspconfig").setup_handlers({
       markdown = {
         require("efmls-configs.formatters.prettier_d"),
       },
+      css = {
+        require("efmls-configs.formatters.prettier_d"),
+      },
     })
 
     local efmls_config = {
