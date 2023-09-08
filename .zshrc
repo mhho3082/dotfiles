@@ -141,7 +141,7 @@ fi
 # Exa (or ls + tree)
 if (( $+commands[exa] )); then
     alias l='exa --all --long --icons --sort=type --git'
-    alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next"'
+    alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|venv"'
 else
     alias l='ls -AlhF --group-directories-first'
     if (( $+commands[tree] )); then
@@ -190,6 +190,9 @@ if (( $+commands[wezterm] )); then
     # Create a new instance of wezterm with the same directory
     # (nice to have for tiling window managers, e.g., i3wm)
     alias wezterm-split="wezterm start --cwd ."
+
+    # Show images in the terminal
+    alias imgcat="wezterm imgcat"
 fi
 
 # https://stackoverflow.com/questions/3183444/check-for-valid-link-url
