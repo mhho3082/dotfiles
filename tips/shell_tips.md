@@ -84,6 +84,13 @@ Reduce yay cache:
 yay -Sc
 ```
 
+Fix cannot update `npm` by `pacman`:
+
+```bash
+# https://bbs.archlinux.org/viewtopic.php?id=272138
+pacman --overwrite "*" -S npm
+```
+
 ## Utility programs
 
 Basic
