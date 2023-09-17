@@ -7,8 +7,8 @@
 # Set brightness values for each status.
 # Range from 0% to 100%, and 0 to 255, are valid
 brightness_day='70%'
-brightness_transition='50%'
-brightness_night='30%'
+brightness_transition='60%'
+brightness_night='50%'
 # Adjust this grep to filter only the backlights you want to adjust
 backlights=($(brightnessctl --list | grep "'backlight'" | sed "s/Device '\([^']*\)'.*/\1/"))
 
