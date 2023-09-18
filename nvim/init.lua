@@ -503,7 +503,7 @@ wk.register({
   ["<leader>"] = {
     name = "leader",
     -- Basics
-    w = { "<cmd>wa!<cr>", "Save" },
+    w = { "<cmd>bufdo silent! w<cr>", "Save all" }, -- Save all buffers, except [no name] buffers
     q = { "<cmd>qa!<cr>", "Quit" },
     n = { "<cmd>nohlsearch<cr>", "Nohl" },
     -- Telescopes
