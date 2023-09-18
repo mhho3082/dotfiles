@@ -139,16 +139,16 @@ they are marked below.
 <summary> Some LSP servers </summary>
 
 - General
-  - `efm`
+  - `efm` (needs `go` installed)
 - JS/TS
   - `tsserver`
-  - `prettierd` (needs `efm`)
+  - `prettierd` (through `efm`)
 - HTML
   - `emmet-ls`
   - `css-lsp`
 - Lua
   - `lua-language-server`
-  - `stylua` (needs `efm`)
+  - `stylua` (through `efm`)
 - C/C++
   - `clangd`
 - Markdown
