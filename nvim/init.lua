@@ -632,6 +632,29 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
+  ["rust_analyzer"] = function()
+    setup_lsp_server("rust_analyzer", {
+      ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy",
+        },
+        imports = {
+          granularity = {
+            group = "module",
+          },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true,
+        },
+      },
+    })
+  end,
   ["ltex"] = function()
     setup_lsp_server("ltex", {
       ltex = {
