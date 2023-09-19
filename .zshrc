@@ -211,15 +211,15 @@ function shorthands {
 
     # Get functions with correct length
     local functions_list=$(for f in $(print -l ${(ok)functions} | grep '^'$letters'$'); do
-        if ! [[ $(type $f) =~ ".*is an alias for.*" ]]; then
-            # Get function definition
-            local definition=$(functions $f | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
-            if [[ ${#definition} -ge 50 ]]; then
-                echo "$(echo $definition | head -c 50)..."
-            else
-                echo $definition
+            if ! [[ $(type $f) =~ ".*is an alias for.*" ]]; then
+                # Get function definition
+                local definition=$(functions $f | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
+                if [[ ${#definition} -ge 50 ]]; then
+                    echo "$(echo $definition | head -c 50)..."
+                else
+                    echo $definition
+                fi
             fi
-        fi
     done)
 
     # Print functions if any
