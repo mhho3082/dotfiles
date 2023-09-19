@@ -504,7 +504,7 @@ wk.register({
   ["<leader>"] = {
     name = "leader",
     -- Basics
-    w = { "<cmd>bufdo silent! w<cr>", "Save all" }, -- Save all buffers, except [no name] buffers
+    w = { "<cmd>w!<cr>", "Save" },
     q = { "<cmd>qa!<cr>", "Quit" },
     n = { "<cmd>nohlsearch<cr>", "Nohl" },
     -- Telescopes
@@ -668,6 +668,15 @@ require("mason-lspconfig").setup_handlers({
       },
       css = {
         require("efmls-configs.formatters.prettier_d"),
+      },
+      bash = {
+        require("efmls-configs.formatters.beautysh"),
+      },
+      sh = {
+        require("efmls-configs.formatters.beautysh"),
+      },
+      zsh = {
+        require("efmls-configs.formatters.beautysh"),
       },
     })
 
