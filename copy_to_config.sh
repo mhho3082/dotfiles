@@ -11,9 +11,9 @@ files=$(find -type f | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
 for file in $files
 do
     if [[ $file == "./.Xmodmap" ]]; then
-        original_file="$HOME/${file}"
+        original_file=$(realpath "${HOME}/${file}")
     else
-        original_file="${config_folder}/${file}"
+        original_file=$(realpath "${config_folder}/${file}")
     fi
 
     # Check if the file is different
