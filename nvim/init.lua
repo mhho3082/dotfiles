@@ -1,8 +1,9 @@
 -- Programs needed: unzip, ripgrep, fd
 
 -- Notes: (for particular LSP services)
--- `prettierd` requires that nodejs and npm be installed locally
--- `jdtls` (Java LSP) only works with projects, e.g., Gradle or Maven
+-- `prettierd` requires that `nodejs` and `npm` be installed globally
+-- `efm` requires that `go` be installed globally
+-- `jdtls` (Java LSP) only works with projects
 
 -------------
 -- PLUGINS --
