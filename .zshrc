@@ -126,6 +126,11 @@ fi
 if (( $+commands[nvim] )); then
     alias n="nvim"
 fi
+if (( $+commands[vim] )); then
+    alias v="vim"
+elif (( $+commands[vi] )); then
+    alias v="vi"
+fi
 if (( $+commands[vifm] )); then
     alias f="vifm"
 fi
@@ -143,7 +148,7 @@ if (( $+commands[exa] )); then
     alias l='exa --all --long --icons --sort=type --git'
     alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|venv"'
 else
-    alias l='ls -AlhF --group-directories-first'
+    alias l='ls -AlhF --group-directories-first --color=auto'
     if (( $+commands[tree] )); then
         alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
     fi
@@ -155,15 +160,6 @@ if (( $+commands[tmux] )); then
     alias ta="tmux attach || tmux new"
     alias tl="tmux ls"
 fi
-
-# Open and disown
-function o {
-    if (( $+commands[xdg-open] )); then
-        xdg-open "$@" &>/dev/null & disown
-    elif (( $+commands[open] )); then
-        open "$@" &>/dev/null & disown
-    fi
-}
 
 # Generate ".." shortcuts
 # (since paths are set to not be considered executables by themselves)
@@ -195,52 +191,6 @@ if (( $+commands[wezterm] )); then
     alias imgcat="wezterm imgcat"
 fi
 
-# https://stackoverflow.com/questions/3183444/check-for-valid-link-url
-local URL_REGEX='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
-
-# Play YouTube video (or files, or whatever) with MPV in separate window
-if (( $+commands[mpv] )); then
-    function p {
-        # Get video/audio path
-        local src_paths
-        if [ $# -eq 0 ]; then
-            # Grab from clipboard
-            if (( $+commands[xsel] )); then
-                src_paths=$(xsel -ob)
-            elif (( $+commands[pbpaste] )); then
-                src_paths=$(pbpaste)
-            elif (( $+commands[xclip] )); then
-                src_paths=$(xclip -selection clipboard -o)
-            else
-                echo "We cannot get data from your system clipboard! Please consider installing xsel, pbcopy (for macOS), or xclip." >/dev/stderr
-                return 1
-            fi
-        else
-            # Use provided
-            src_paths=$@
-        fi
-
-        for src_path in `echo $src_paths`; do
-            if [[ $src_path =~ $URL_REGEX ]]; then # URL
-            elif [[ -f $src_path ]] || [[ -d $src_path ]]; then # Existing file or directory
-            else
-                echo "We do not think your link '$src_path' is valid as a URL or file path! Please check!" >/dev/stderr
-                return 1
-            fi
-        done
-
-        echo "About to play:"
-        for src_path in `echo $src_paths`; do
-            echo "- $src_path"
-        done
-
-        # https://www.reddit.com/r/mpv/comments/tjzka5/how_to_get_auto_generated_english_subtitles_in/
-        mpv \
-            --ytdl-raw-options='sub-langs="en,en-orig,en-uk,en-us,zh,zh-hans,zh-hant,zh-cn,zh-tw,zh-hk,ja",write-sub=,write-auto-sub=' \
-            --no-terminal $src_paths & disown
-    }
-fi
-
 # Get n-letters long alias and functions
 # (helpful to get a wider picture)
 function shorthands {
@@ -251,24 +201,34 @@ function shorthands {
     local letters=$(printf '[a-z]%.0s' {1..$length})
 
     # Get alias with correct length
-    print -P '%F{cyan}alias%f'
-    alias | grep '^'$letters'=' | grep '^'$letters
+    local alias_list=$(alias | grep '^'$letters'=')
+
+    # Print alias if any
+    if [[ -n $alias_list ]]; then
+        print -P '%F{cyan}alias%f'
+        echo $alias_list | grep '^'$letters
+    fi
 
     # Get functions with correct length
-    print -P '\n%F{cyan}functions%f'
-    for f in $(print -l ${(ok)functions} | grep '^'$letters'$'); do
+    local functions_list=$(for f in $(print -l ${(ok)functions} | grep '^'$letters'$'); do
         if ! [[ $(type $f) =~ ".*is an alias for.*" ]]; then
             # Get function definition
             local definition=$(functions $f | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
             if [[ ${#definition} -ge 50 ]]; then
-                echo "$(echo $definition | head -c 50)..." | grep '^'$letters
+                echo "$(echo $definition | head -c 50)..."
             else
-                echo $definition | grep '^'$letters
+                echo $definition
             fi
         fi
-    done
-}
+    done)
 
+    # Print functions if any
+    if [[ -n $functions_list ]]; then
+        print -P '\n%F{cyan}functions%f'
+        echo $functions_list | grep '^'$letters
+    fi
+
+}
 
 # Prepare virtual network for virt-manager
 alias virshprep="sudo virsh net-start default >/dev/null"
@@ -337,21 +297,6 @@ compdef _pactree paru-forceupdate
 # Remove orphan packages
 function paru-autoremove {
     paru -Runs $(paru -Qdt | cut -d ' ' -f 1)
-}
-
-# Quickly create files with their parent directories too
-# https://news.ycombinator.com/item?id=9869706
-# From https://news.ycombinator.com/item?id=9869231
-function create {
-    if [ $# -lt 1 ]; then
-        echo "Missing argument"
-        return 1
-    fi
-
-    for f in "$@"; do
-        mkdir -p -- "$(dirname -- "$f")"
-        touch -- "$f"
-    done
 }
 
 # Get the IP address of this machine
