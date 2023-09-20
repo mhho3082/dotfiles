@@ -161,6 +161,13 @@ if (( $+commands[tmux] )); then
     alias tl="tmux ls"
 fi
 
+# Zathura / Zaread
+if (( $+commands[zaread] )); then
+    alias za='local f=$(fzf); zaread $f & disown'
+elif (( $+commands[zathura] )); then
+    alias za='local f=$(fzf); zathura $f & disown'
+fi
+
 # Generate ".." shortcuts
 # (since paths are set to not be considered executables by themselves)
 for i in {1..9}; do
