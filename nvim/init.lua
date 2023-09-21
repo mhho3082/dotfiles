@@ -581,6 +581,12 @@ vim.api.nvim_create_user_command("CopyFilename", function()
   print(filename)
 end, {})
 
+-- Replace all the text in the buffer with that of the system clipboard.
+-- Helpful when you have copied the text to a somewhere else for modification and want to update back.
+vim.api.nvim_create_user_command("ReplaceWithClipboard", function()
+  vim.api.nvim_command("silent %delete _ | silent put + | 1delete")
+end, {})
+
 ---------
 -- LSP --
 ---------
