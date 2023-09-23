@@ -499,7 +499,7 @@ wk.register({
 }, { mode = "n" })
 
 -- A function to search for TODOs and more
-function FindTodo()
+local function FindTodo()
   -- Based on treesitter
   -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
   local tags = {
