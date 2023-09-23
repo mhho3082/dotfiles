@@ -498,6 +498,48 @@ wk.register({
   ["-"] = { require("oil").open, "Open oil.nvim" },
 }, { mode = "n" })
 
+-- A function to search for TODOs and more
+function FindTodo()
+  -- Based on treesitter
+  -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
+  local tags = {
+    -- Todo
+    "TODO",
+    "WIP",
+    -- Note
+    "NOTE",
+    "XXX",
+    "INFO",
+    "DOCS",
+    "PERF",
+    "TEST",
+    -- Warning
+    "HACK",
+    "WARNING",
+    "WARN",
+    "FIX",
+    -- Danger
+    "FIXME",
+    "BUG",
+    "ERROR",
+  }
+
+  -- From VS Code Todo Tree's default regex
+  -- https://github.com/Gruntfuggly/todo-tree/issues/526
+  local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
+
+  -- From fzf-lua's default ripgrep arguments
+  -- https://github.com/ibhagwan/fzf-lua/blob/main/doc/fzf-lua.txt
+  local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e"
+
+  -- Actually initiate the search
+  require("fzf-lua").fzf_exec("rg " .. rg_args .. " '" .. regexp .. "'", {
+    prompt = "Find TODOs> ",
+    actions = require("fzf-lua").defaults.actions.files,
+    previewer = "builtin",
+  })
+end
+
 -- The great <leader> keymap
 wk.register({
   ["<leader>"] = {
@@ -512,6 +554,7 @@ wk.register({
     s = { require("fzf-lua").live_grep, "Search" },
     d = { require("fzf-lua").diagnostics_workspace, "Diagnostics" },
     r = { require("fzf-lua").resume, "Resume search" },
+    x = { FindTodo, "Find TODOs" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
     t = {
