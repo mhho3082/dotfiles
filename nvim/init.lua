@@ -554,7 +554,7 @@ wk.register({
     s = { require("fzf-lua").live_grep, "Search" },
     d = { require("fzf-lua").diagnostics_workspace, "Diagnostics" },
     r = { require("fzf-lua").resume, "Resume search" },
-    x = { FindTodo, "Find TODOs" },
+    e = { FindTodo, "Find TODOs" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
     t = {
