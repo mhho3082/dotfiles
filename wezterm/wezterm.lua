@@ -10,6 +10,11 @@ end
 -- Use JetBrains Mono, which is built-in
 config.font = wezterm.font("JetBrains Mono")
 
+-- Or use FiraCode, which is also built-in; stylistic sets can be enabled
+-- https://github.com/tonsky/FiraCode/wiki/How-to-enable-stylistic-sets#wezs-terminal
+-- config.font = wezterm.font("FiraCode")
+-- config.harfbuzz_features = { "zero", "ss01", "ss03", "ss05", "ss06", "ss08" }
+
 -- Disable the tab bar
 config.enable_tab_bar = false
 
