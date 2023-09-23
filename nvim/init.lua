@@ -83,7 +83,9 @@ lazy.setup({
     "Wansmer/treesj",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("treesj").setup({})
+      require("treesj").setup({
+        use_default_keymaps = false,
+      })
     end,
   },
 
@@ -548,6 +550,7 @@ wk.register({
     w = { "<cmd>w!<cr>", "Save" },
     q = { "<cmd>qa!<cr>", "Quit" },
     n = { "<cmd>nohlsearch<cr>", "Nohl" },
+    m = { "<cmd>make<cr>", "Make" },
     -- Telescopes
     f = { require("fzf-lua").files, "Files" },
     a = { require("fzf-lua").lsp_document_symbols, "Symbols" },
