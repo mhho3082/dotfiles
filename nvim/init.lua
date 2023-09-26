@@ -550,7 +550,9 @@ wk.register({
     w = { "<cmd>w!<cr>", "Save" },
     q = { "<cmd>qa!<cr>", "Quit" },
     n = { "<cmd>nohlsearch<cr>", "Nohl" },
+    -- Make
     m = { "<cmd>make<cr>", "Make" },
+    c = { "<cmd>make clean<cr>", "Make clean" },
     -- Telescopes
     f = { require("fzf-lua").files, "Files" },
     a = { require("fzf-lua").lsp_document_symbols, "Symbols" },
