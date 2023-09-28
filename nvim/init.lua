@@ -144,10 +144,12 @@ lazy.setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
-      require("indent_blankline").setup({
-        use_treesitter = true,
+      require("ibl").setup({
+        indent = { char = "│" },
+        scope = { show_start = false },
       })
     end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
 
   -- Colorscheme
