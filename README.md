@@ -66,6 +66,8 @@ which may take additional setup to install
   - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
   - [`zotero-bin`](https://www.zotero.org/)
+  - [`pandoc-bin`](https://pandoc.org/)
+    - [`meta-group-texlive-most`](https://tug.org/texlive/)
 - Casual usage
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
