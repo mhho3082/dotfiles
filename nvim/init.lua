@@ -146,7 +146,7 @@ lazy.setup({
     config = function()
       require("ibl").setup({
         indent = { char = "│" },
-        scope = { show_start = false },
+        scope = { enabled = false },
       })
     end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
