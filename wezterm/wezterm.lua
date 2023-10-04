@@ -8,10 +8,13 @@ if wezterm.config_builder then
 end
 
 -- Use JetBrains Mono, which is built-in
+-- Emojis will need Noto Emoji installed
 config.font = wezterm.font("JetBrains Mono")
+-- https://github.com/JetBrains/JetBrainsMono#opentype-features
+-- https://wezfurlong.org/wezterm/config/font-shaping.html
+config.harfbuzz_features = { "ss19", "cv99" }
 
 -- Or use FiraCode, which is also built-in; stylistic sets can be enabled
--- https://github.com/tonsky/FiraCode/wiki/How-to-enable-stylistic-sets#wezs-terminal
 -- config.font = wezterm.font("FiraCode")
 -- config.harfbuzz_features = { "zero", "ss01", "ss03", "ss05", "ss06", "ss08" }
 

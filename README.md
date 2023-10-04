@@ -100,8 +100,10 @@ which may take additional setup to install
   - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
   - [`ventoy`](https://www.ventoy.net)
 - Fonts
-  - [`nerd-fonts-jetbrains-mono`](https://www.jetbrains.com/lp/mono/)
-  - [`nerd-fonts-fira-code`](https://github.com/tonsky/FiraCode)
+  - [`ttf-jetbrains-mono-nerd`](https://www.jetbrains.com/lp/mono/)
+  - [`ttf-firacode-nerd`](https://github.com/tonsky/FiraCode)
+  - [`noto-fonts`](https://fonts.google.com/noto)
+  - [`noto-fonts-emoji`](https://fonts.google.com/noto/specimen/Noto+Emoji)
   - [`ttf-ms-fonts`](https://wiki.archlinux.org/title/Microsoft_fonts)
 - Themes
   - [`gruvbox-material-gtk-theme-git`](https://github.com/TheGreatMcPain/gruvbox-material-gtk)
