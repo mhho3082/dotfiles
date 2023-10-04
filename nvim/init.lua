@@ -75,6 +75,9 @@ lazy.setup({
     end,
   },
 
+  -- Readline-like insertion
+  "tpope/vim-rsi",
+
   -- Indent
   "tpope/vim-sleuth",
 
