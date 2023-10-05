@@ -204,9 +204,6 @@ bindsym XF86AudioPrev  exec playerctl previous
 ### Autostarts ###
 ##################
 
-# Stop picom from using transparency
-exec_always --no-startup-id picom --config ~/.config/picom.conf
-
 #get auth work with polkit-gnome
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
@@ -250,9 +247,6 @@ exec --no-startup-id brightnessctl set "50%"
 
 # Launch fcitx for Rime
 exec --no-startup-id fcitx5 -d
-
-# Modify caps lock
-exec --no-startup-id $modify_caps_lock
 
 # Run bar (polybar)
 exec_always --no-startup-id $bar

@@ -10,11 +10,10 @@
 # e.g., for xfce: set to "launch on login" in sessions and startup
 
 if command -v xinput &> /dev/null; then
-    
     num=$(xinput list | grep -m 1 "ELECOM TrackBall Mouse HUGE TrackBall" | sed 's/^.*id=\([0-9]*\)[ \t].*$/\1/')
 
     if [ "$num" = "" ]; then
-        echo "Elecom Huge not found!" 1>&2
+        echo "WARNING(Elecom Huge): Elecom Huge not found!" 1>&2
         exit 1
     fi
 
@@ -23,5 +22,5 @@ if command -v xinput &> /dev/null; then
     xinput set-prop "$num" 'libinput Scroll Method Enabled' 0 0 1
     xinput set-button-map "$num" 1 2 3 4 5 6 7 8 9 10 11 2
 else
-    printf "xinput not installed!" >/dev/stderr
+    printf "WARNING(Elecom Huge): xinput not installed!" 1>&2
 fi
