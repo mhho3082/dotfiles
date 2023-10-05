@@ -750,6 +750,7 @@ require("mason-lspconfig").setup_handlers({
       css = {
         require("efmls-configs.formatters.prettier_d"),
       },
+      -- Use beautysh for shell scripts
       bash = {
         require("efmls-configs.formatters.beautysh"),
       },
@@ -758,6 +759,10 @@ require("mason-lspconfig").setup_handlers({
       },
       zsh = {
         require("efmls-configs.formatters.beautysh"),
+      },
+      -- Enforce Python formatting with Black
+      python = {
+        require("efmls-configs.formatters.black"),
       },
     })
 
