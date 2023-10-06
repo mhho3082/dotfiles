@@ -245,9 +245,6 @@ exec --no-startup-id redshift
 # Set default screen brightness
 exec --no-startup-id brightnessctl set "50%"
 
-# Launch fcitx for Rime
-exec --no-startup-id fcitx5 -d
-
 # Run bar (polybar)
 exec_always --no-startup-id $bar
 
