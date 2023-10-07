@@ -4,13 +4,14 @@
 config_folder=~/.config/
 mkdir -p "$config_folder"
 
-files=$(find -type f | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
-    sed "/.stylua.*/d" | sed "/tips\//d" | sed "/\.git\//d")
+files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
+    sed "/.stylua.*/d" | sed "/tips\//d")
 
 # For every file in this folder
 for file in $files
 do
-    if [[ $file == "./.Xmodmap" ]] || [[ $file == "./.Xresources" ]]; then
+    # These files cannot be linked, and need to be copied to ~/ directly
+    if [[ $file == ".Xmodmap" ]] || [[ $file == ".Xresources" ]]; then
         original_file=$(realpath "${HOME}/${file}")
     else
         original_file=$(realpath "${config_folder}/${file}")
