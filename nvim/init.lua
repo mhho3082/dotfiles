@@ -537,10 +537,10 @@ local function FindTodo()
 
   -- From fzf-lua's default ripgrep arguments
   -- https://github.com/ibhagwan/fzf-lua/blob/main/doc/fzf-lua.txt
-  local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e"
+  local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim"
 
   -- Actually initiate the search
-  require("fzf-lua").fzf_exec("rg " .. rg_args .. " '" .. regexp .. "'", {
+  require("fzf-lua").fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
     prompt = "Find TODOs> ",
     actions = require("fzf-lua").defaults.actions.files,
     previewer = "builtin",
