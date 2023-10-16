@@ -37,7 +37,6 @@ set $bar ~/.config/polybar/launch.sh
 
 # Scripts
 set $help_keybinds ~/.config/i3/scripts/keyhint-2
-set $pause xset dpms force off
 set $locker betterlockscreen -l dim
 set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
@@ -108,7 +107,7 @@ bindsym $mod+Shift+c exec chromium --incognito
 # Power utilities
 bindsym $mod+Shift+e exec $powermenu
 bindsym $mod+Shift+o exec $locker
-bindsym $mod+Shift+p exec $pause
+bindsym $mod+Shift+p exec systemctl suspend
 bindsym $mod+p exec $powerprofiles
 
 # keybinding in fancy rofi (automated):
