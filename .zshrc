@@ -137,7 +137,7 @@ fi
 alias e="$EDITOR"
 alias v="$VISUAL"
 # File manager
-alias f="xdg-open . & disown"
+alias f="xdg-open . 2>/dev/null & disown"
 
 # Exa (or ls + tree)
 if (( $+commands[exa] )); then
