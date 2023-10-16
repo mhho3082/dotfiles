@@ -37,6 +37,7 @@ set $bar ~/.config/polybar/launch.sh
 
 # Scripts
 set $help_keybinds ~/.config/i3/scripts/keyhint-2
+set $pause xset dpms force off
 set $locker betterlockscreen -l dim
 set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
@@ -107,7 +108,7 @@ bindsym $mod+Shift+c exec chromium --incognito
 # Power utilities
 bindsym $mod+Shift+e exec $powermenu
 bindsym $mod+Shift+o exec $locker
-bindsym $mod+Shift+p exec systemctl suspend
+bindsym $mod+Shift+p exec $pause
 bindsym $mod+p exec $powerprofiles
 
 # keybinding in fancy rofi (automated):
@@ -233,7 +234,6 @@ exec --no-startup-id ~/.fehbg
 # use xidlehook to use autosuspend rules for mobile devices
 # For xautolock: https://wiki.archlinux.org/title/Session_lock#xautolock
 # For xidlehook: https://gitlab.com/jD91mZM2/xidlehook
-# exec --no-startup-id xautolock -time 5 -locker "systemctl suspend" -detectsleep
 exec --no-startup-id $powersaving
 
 # Desktop notifications
