@@ -60,7 +60,7 @@ zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
 plugins=(fzf command-not-found zsh-autosuggestions) # Add functionalities
-plugins+=(gh fd ripgrep rust) # For command auto-completion
+plugins+=(gh fd ripgrep yarn rust) # For command auto-completion
 plugins+=zsh-syntax-highlighting # Must be last of plugins
 
 # Add compdef for zoxide
@@ -123,17 +123,6 @@ alias q="exit"
 if (( $+commands[git] )); then
     alias g="git"
 fi
-if (( $+commands[nvim] )); then
-    alias n="nvim"
-fi
-if (( $+commands[vim] )); then
-    alias v="vim"
-elif (( $+commands[vi] )); then
-    alias v="vi"
-fi
-if (( $+commands[vifm] )); then
-    alias f="vifm"
-fi
 if (( $+commands[yarn] )); then
     alias y="yarn"
 fi
@@ -142,6 +131,13 @@ if (( $+commands[trash] )); then
 else
     alias r="rm -i"
 fi
+
+# Defaults
+# Editors
+alias e="$EDITOR"
+alias v="$VISUAL"
+# File manager
+alias f="xdg-open . & disown"
 
 # Exa (or ls + tree)
 if (( $+commands[exa] )); then

@@ -21,7 +21,7 @@ Remove a package completely and safely with `pacman`:
 
 ```bash
 # Replace "package" with package name
-# You can replace `pacman` with `yay` here
+# You can replace `pacman` with `paru` here
 pacman -Runs package
 ```
 
@@ -78,10 +78,10 @@ nvim &
 fg
 ```
 
-Reduce yay cache:
+Reduce `paru` cache:
 
 ```bash
-yay -Sc
+paru -Sc
 ```
 
 Fix cannot update `npm` by `pacman`:

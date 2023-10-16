@@ -7,11 +7,10 @@ look through the code, and remove the parts you don't need first.
 
 ```bash
 # Clone the repo
-git clone https://github.com/mhho3082/dotfiles.git ~/Documents/dotfiles/
-cd ~/Documents/dotfiles/
+git clone https://github.com/mhho3082/dotfiles.git --depth=1
+cd dotfiles
 
 # Copy/update to ~/.config (backup first if needed)
-chmod +x ./copy_to_config.sh
 ./copy_to_config.sh
 ```
 
@@ -47,7 +46,6 @@ which may take additional setup to install
   - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
   - [`trash-cli`](https://github.com/andreafrancia/trash-cli)
 - TUI apps
-  - [`vifm`](https://github.com/vifm/vifm) for filesystem
   - [`bashmount`](https://github.com/jamielinux/bashmount) for USB
   - [`bluetuith`](https://github.com/darkhz/bluetuith) for Bluetooth
 - Coding
@@ -62,6 +60,8 @@ which may take additional setup to install
   - For JavaScript
     - [`node`](https://nodejs.org/en)
     - [`yarn`](https://yarnpkg.com/)
+  - For Rust
+    - [`rustup`](https://rustup.rs/)
 - Writing
   - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
@@ -85,7 +85,6 @@ which may take additional setup to install
   - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
   - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
   - [`redshift`](http://jonls.dk/redshift/)
-  - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - Utilities
   - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
     - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
@@ -99,6 +98,7 @@ which may take additional setup to install
   - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
   - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
   - [`ventoy`](https://www.ventoy.net)
+  - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - Fonts
   - [`ttf-jetbrains-mono-nerd`](https://www.jetbrains.com/lp/mono/)
   - [`ttf-firacode-nerd`](https://github.com/tonsky/FiraCode)
@@ -165,11 +165,11 @@ they are marked below.
 
 ## Handy setup scripts
 
-A safe sequence to bootstrap `yay` from a clean installation
+A safe sequence to bootstrap `paru` from a clean installation
 (for Arch-based distros):
 
 ```bash
-# Add colour to pacman & yay CLIs
+# Add colour to pacman CLI
 sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
 
 # Get fast mirrors
@@ -178,43 +178,25 @@ sudo pacman-mirrors --fasttrack
 # Update system
 sudo pacman -Syu
 
-# Install dependencies & yay
-sudo pacman --needed -S lib32-glibc glibc
-sudo pacman --needed -S git base-devel yay
+# Install dependencies
+sudo pacman --needed base-devel git
 
-# Init and launch yay for the first time
-yay -Syu --devel --timeupdate
+# Install paru by cloning locally
+git clone https://aur.archlinux.org/paru.git --depth=1
+cd paru
+makepkg -si
 ```
 
 Set zsh as the default shell (from bash):
 
 ```bash
 chsh -s `which zsh`
-echo "source $HOME/.config/.zshrc" > ~/.zshrc
-```
-
-Set up Neovim plugins for the first time:
-
-```bash
-# Initiate setup
-nvim +PackerSync
-
-# Wait for Treesitter to compile dozens of parsers
-# (should be quick on locally installed Linux)
-# Type `:qa!`, then press enter, to quit
-# Then open neovim again to do whatever you want
 ```
 
 Optimize SSD usage:
 
 ```bash
 sudo systemctl enable fstrim.timer
-```
-
-Source and use the setup for Tmux:
-
-```bash
-echo "source-file ~/.config/tmux/.tmux.conf" > ~/.tmux.conf
 ```
 
 Login to GitHub CLI:
