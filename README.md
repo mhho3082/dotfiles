@@ -95,7 +95,6 @@ which may take additional setup to install
   - [`xsane`](http://www.sane-project.org/)
   - [`pinta`](https://www.pinta-project.com/) for casual image editing
     (or [`krita`](https://krita.org/) for serious drawing)
-  - [`qemu-full`](https://www.qemu.org/) + [`virt-manager`](https://virt-manager.org/)
   - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
   - [`ventoy`](https://www.ventoy.net)
   - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
