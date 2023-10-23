@@ -68,6 +68,7 @@ which may take additional setup to install
   - [`zotero-bin`](https://www.zotero.org/)
   - [`pandoc-bin`](https://pandoc.org/)
     - [`meta-group-texlive-most`](https://tug.org/texlive/)
+    - [`pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref)
 - Casual usage
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
