@@ -123,6 +123,9 @@ alias q="exit"
 if (( $+commands[git] )); then
     alias g="git"
 fi
+if (( $+commands[make] )); then
+    alias m="make"
+fi
 if (( $+commands[yarn] )); then
     alias y="yarn"
 fi
@@ -159,9 +162,28 @@ fi
 
 # Zathura / Zaread
 if (( $+commands[zaread] )); then
-    alias za='local f=$(fzf); zaread $f & disown'
+    # Select only the viewable files (based on extension)
+    local za_e=(
+        'pdf' 'epub'
+        'docx' 'xlsx' 'pptx' 'doc' 'xls' 'ppt'
+        # 'mobi' 'csv'
+        # 'md' 'rtf' 'typ'
+    )
+    local za_f=""
+    for za_t in "${za_e[@]}"; do
+        [ -z $za_f ] && za_f+='-iname \*.'$za_t || za_f+=' -o -iname \*.'$za_t
+    done
+    local search='$(find -type f \( '$za_f' \) | fzf)'
+    alias za='local f='$search'; zaread $f & disown'
 elif (( $+commands[zathura] )); then
-    alias za='local f=$(fzf); zathura $f & disown'
+    # Select only the viewable files (based on extension)
+    local za_e=('pdf')
+    local za_f=""
+    for za_t in "${za_e[@]}"; do
+        [ -z $za_f ] && za_f+='-iname \*.'$za_t || za_f+=' -o -iname \*.'$za_t
+    done
+    local search='$(find -type f \( '$za_f' \) | fzf)'
+    alias za='local f='$search'; zaread $f & disown'
 fi
 
 # Generate ".." shortcuts
