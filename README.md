@@ -71,6 +71,7 @@ which may take additional setup to install
     - [`pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref)
     - [`mermaid-filter`](https://github.com/raghur/mermaid-filter)
     - [`pandoc-plot-bin`](https://github.com/LaurentRDC/pandoc-plot)
+      - [`python-matplotlib`](https://matplotlib.org/)
 - Casual usage
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
