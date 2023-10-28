@@ -70,6 +70,7 @@ which may take additional setup to install
     - [`meta-group-texlive-most`](https://tug.org/texlive/)
     - [`pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref)
     - [`mermaid-filter`](https://github.com/raghur/mermaid-filter)
+    - [`pandoc-plot-bin`](https://github.com/LaurentRDC/pandoc-plot)
 - Casual usage
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
