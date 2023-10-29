@@ -482,8 +482,20 @@ wk.register({
   },
   ["K"] = { vim.lsp.buf.hover, "Hover" },
   ["gr"] = { vim.lsp.buf.rename, "Rename" },
-  ["gd"] = { require("fzf-lua").lsp_definitions, "Goto definition" },
-  ["gD"] = { require("fzf-lua").lsp_references, "Goto references" },
+  ["gd"] = {
+    function()
+      -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+      require("fzf-lua").lsp_definitions({ jump_to_single_result = true })
+    end,
+    "Goto definition",
+  },
+  ["gD"] = {
+    function()
+      -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+      require("fzf-lua").lsp_references({ jump_to_single_result = true })
+    end,
+    "Goto references",
+  },
   ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "Format" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
@@ -763,6 +775,10 @@ require("mason-lspconfig").setup_handlers({
       -- Enforce Python formatting with Black
       python = {
         require("efmls-configs.formatters.black"),
+      },
+      -- Format GLSL using clang-format (need .clang-format file)
+      glsl = {
+        require("efmls-configs.formatters.clang_format"),
       },
     })
 
