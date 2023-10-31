@@ -371,29 +371,17 @@ vim.opt.spelllang = "en_gb"
 
 -- Markdown code block rendering
 vim.g.markdown_minlines = 100
-vim.g.markdown_fenced_languages = {
-  "c",
-  "c++=cpp",
-  "make",
-  "cmake",
-  "python",
-  "java",
-  "rust",
-  "erb=eruby",
-  "ruby",
-  "javascript",
-  "js=javascript",
-  "json=javascript",
-  "typescript",
-  "bash=sh",
-  "fish=sh",
-  "zsh",
-  "conf",
-  "html",
-  "css",
-  "toml",
-  "yaml",
-}
+-- Add alias for files (for markdown inline syntax highlight)
+-- https://github.com/nvim-treesitter/nvim-treesitter/issues/2131
+-- https://github.com/neovim/neovim/pull/16600
+vim.filetype.add({
+  extension = {
+    ["c++"] = "cpp",
+    js = "javascript",
+    ts = "typescript",
+    matplotlib = "python",
+  },
+})
 
 -- Assuming number is on, toggle to relativenumber in normal mode
 vim.api.nvim_create_autocmd({ "InsertEnter" }, {
