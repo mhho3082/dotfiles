@@ -376,9 +376,6 @@ vim.g.markdown_minlines = 100
 -- https://github.com/neovim/neovim/pull/16600
 vim.filetype.add({
   extension = {
-    ["c++"] = "cpp",
-    js = "javascript",
-    ts = "typescript",
     matplotlib = "python",
   },
 })

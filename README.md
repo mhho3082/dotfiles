@@ -97,6 +97,7 @@ which may take additional setup to install
   - [`flameshot`](https://flameshot.org/)
   - [`htop`](https://htop.dev/)
   - [`xsane`](http://www.sane-project.org/)
+  - [`audacity`](https://www.audacityteam.org/)
   - [`pinta`](https://www.pinta-project.com/) for casual image editing
     (or [`krita`](https://krita.org/) for serious drawing)
   - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
