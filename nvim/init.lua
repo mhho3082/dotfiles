@@ -112,8 +112,12 @@ lazy.setup({
     config = function()
       require("oil").setup({
         view_options = {
-          -- Show files and directories that start with "."
+          -- Display hidden files
           show_hidden = true,
+          -- Don't display "../"
+          is_always_hidden = function(name, _)
+            return name == ".."
+          end,
         },
         -- Deleted files will be removed with the `trash-put` command
         delete_to_trash = true,
