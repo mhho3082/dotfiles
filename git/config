@@ -46,9 +46,9 @@
     an = add --all --intent-to-add # Add new: for adding (but not staging) new files
 
     # Simple commit tool
-    acp = !"git add -A && git commit && git push"
+    acp = !"git add -A && git commit && if git remote | grep . > /dev/null; then git push; fi"
     # Do not open editor for the commit message
-    acpm = !"f() { [ -n \"$1\" ] && git add -A && git commit -m \"$@\" && git push; }; f"
+    acpm = !"f() { [ -n \"$1\" ] && git add -A && git commit -m \"$@\" && if git remote | grep . > /dev/null; then git push; fi; }; f"
 
     b = branch
     bd = branch --delete
