@@ -151,6 +151,13 @@
     # (ignoring uncommitted changes)
     quick-archive = !"git archive --format=zip --output $(git rev-parse --show-toplevel)/../$(git rev-parse --show-toplevel | xargs basename).zip $(git default-branch)"
 
+    # Initiate a git repo
+    quick-init = !"git init && git add -A && git commit -m \"FEAT: Repo init\""
+
+    # Re-initiate version
+    # (Warning: destructive!)
+    quick-reinit = !"rm .git -rf && git init && git add -A && git commit -m \"FEAT: Repo init\""
+
 # ---
 
 [log]

@@ -100,6 +100,7 @@ which may take additional setup to install
   - [`audacity`](https://www.audacityteam.org/)
   - [`pinta`](https://www.pinta-project.com/) for casual image editing
     (or [`krita`](https://krita.org/) for serious drawing)
+  - [`obs-studio`](https://obsproject.com/)
   - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
   - [`ventoy`](https://www.ventoy.net)
   - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
