@@ -12,9 +12,9 @@ for file in $files
 do
     # These files cannot be linked, and need to be copied to ~/ directly
     if [[ $file == ".Xmodmap" ]] || [[ $file == ".Xresources" ]]; then
-        original_file=$(realpath "${HOME}/${file}")
+        original_file=$(readlink -m "${HOME}/${file}")
     else
-        original_file=$(realpath "${config_folder}/${file}")
+        original_file=$(readlink -m "${config_folder}/${file}")
     fi
 
     # Check if the file is different
