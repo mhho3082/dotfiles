@@ -262,6 +262,9 @@ lazy.setup({
     config = function()
       require("fidget").setup({
         progress = {
+          ignore = {
+            "ltex",
+          },
           display = {
             render_limit = 5,
             done_icon = "✓",
@@ -720,7 +723,6 @@ require("mason-lspconfig").setup_handlers({
         dictionary = {
           ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
         },
-        checkFrequency = "save",
       },
     })
   end,
