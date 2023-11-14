@@ -259,14 +259,13 @@ lazy.setup({
   -- LSP server status
   {
     "j-hui/fidget.nvim",
-    tag = "legacy",
     config = function()
       require("fidget").setup({
-        text = {
-          spinner = "dots",
-          done = "✓",
-          commenced = "Started",
-          completed = "Completed",
+        progress = {
+          display = {
+            render_limit = 5,
+            done_icon = "✓",
+          },
         },
       })
     end,
