@@ -12,7 +12,7 @@ end
 config.font = wezterm.font("JetBrains Mono")
 -- https://github.com/JetBrains/JetBrainsMono#opentype-features
 -- https://wezfurlong.org/wezterm/config/font-shaping.html
-config.harfbuzz_features = { "ss19", "cv99" }
+config.harfbuzz_features = { "ss19", "cv07", "cv99" }
 
 -- Or use FiraCode, which is also built-in; stylistic sets can be enabled
 -- config.font = wezterm.font("FiraCode")

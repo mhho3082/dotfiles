@@ -228,7 +228,7 @@ exec --no-startup-id ~/.fehbg
 # exec --no-startup-id xset s 480 dpms 600 600 600
 
 # or, disable power saving (for example if using xscreensaver)
-#exec --no-startup-id xset -dpms
+exec --no-startup-id xset -dpms
 
 # use xidlehook to use autosuspend rules for mobile devices
 # For xautolock: https://wiki.archlinux.org/title/Session_lock#xautolock
