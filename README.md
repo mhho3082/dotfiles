@@ -37,7 +37,7 @@ which may take additional setup to install
 - CLI apps
   - [`zsh`](https://zsh.sourceforge.io/)
   - [`paru`](https://github.com/Morganamilo/paru)
-  - [`exa`](https://github.com/ogham/exa)
+  - [`eza`](https://github.com/eza-community/eza)
   - [`fd`](https://github.com/sharkdp/fd)
   - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
   - [`fzf`](https://github.com/junegunn/fzf)
