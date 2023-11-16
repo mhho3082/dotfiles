@@ -142,10 +142,10 @@ alias v="$VISUAL"
 # File manager
 alias f="xdg-open . 2>/dev/null & disown"
 
-# Exa (or ls + tree)
+# Exa/Eza (or ls + tree)
 if (( $+commands[exa] )); then
-    alias l='exa --all --long --icons --sort=type --git'
-    alias ll='exa --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|venv"'
+    alias l='exa --all --long --icons --sort=type --git --hyperlink'
+    alias ll='exa --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|venv"'
 else
     alias l='ls -AlhF --group-directories-first --color=auto'
     if (( $+commands[tree] )); then
