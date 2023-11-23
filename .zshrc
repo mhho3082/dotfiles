@@ -77,6 +77,9 @@ source $ZSH/oh-my-zsh.sh
 if (( $+commands[nvim] )); then
     export VISUAL="nvim"
     export EDITOR="nvim"
+
+    # Also use nvim as manpager
+    export MANPAGER='nvim +Man!'
 elif (( $+commands[vim] )); then
     export VISUAL="vim"
     export EDITOR="vim"
@@ -269,6 +272,17 @@ alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
 function sizes {
     paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
 }
+
+# Edit the content of the most recent clipboard
+if (( $+commands[xsel] )); then
+    function clipedit {
+        tempfile=$(mktemp)
+        xsel -ob > "$tempfile"
+        $VISUAL "$tempfile"
+        xsel -ib < "$tempfile"
+        rm "$tempfile"
+    }
+fi
 
 # Update the computer (and reboot if necessary)
 # Needs checkupdates

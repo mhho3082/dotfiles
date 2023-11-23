@@ -1,6 +1,6 @@
 /* Modified from Rofi config for i3 for EndeavourOS */
 configuration {
-    font:                "JetBrains Mono Nerd Font 12";
+    font:                "JetBrains Mono NF 12";
     show-icons:          true;
     icon-theme:          "Qogir";
     display-drun:        "Apps";
