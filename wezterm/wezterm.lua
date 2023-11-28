@@ -9,7 +9,7 @@ end
 
 -- Use JetBrains Mono, which is built-in
 -- Emojis will need Noto Emoji installed
-config.font = wezterm.font("JetBrains Mono")
+config.font = wezterm.font("JetBrainsMono NF")
 -- https://github.com/JetBrains/JetBrainsMono#opentype-features
 -- https://wezfurlong.org/wezterm/config/font-shaping.html
 config.harfbuzz_features = { "ss19", "cv07", "cv99" }
