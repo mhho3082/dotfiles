@@ -664,6 +664,8 @@ end
 local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Set up LSP server with CMP capabilities and additional settings.
+---@param server_name string the LSP server name
+---@param settings? table the optional LSP server settings
 local function setup_lsp_server(server_name, settings)
   local opts = {}
   opts.capabilities = cmp_capabilities
@@ -744,6 +746,9 @@ require("mason-lspconfig").setup_handlers({
     languages = vim.tbl_extend("force", languages, {
       -- Add pretter_d to svelte
       svelte = {
+        require("efmls-configs.formatters.prettier_d"),
+      },
+      typescript = {
         require("efmls-configs.formatters.prettier_d"),
       },
       markdown = {
