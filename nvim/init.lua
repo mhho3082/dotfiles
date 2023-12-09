@@ -743,7 +743,7 @@ require("mason-lspconfig").setup_handlers({
 
     -- Use default settings
     local languages = require("efmls-configs.defaults").languages()
-    languages = vim.tbl_extend("force", languages, {
+    languages = vim.tbl_deep_extend("force", languages, {
       -- Add pretter_d to svelte
       svelte = {
         require("efmls-configs.formatters.prettier_d"),

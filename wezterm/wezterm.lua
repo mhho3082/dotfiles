@@ -18,6 +18,9 @@ config.harfbuzz_features = { "ss19", "cv07", "cv99" }
 -- config.font = wezterm.font("FiraCode")
 -- config.harfbuzz_features = { "zero", "ss01", "ss03", "ss05", "ss06", "ss08" }
 
+-- Set font size
+config.font_size = 12.0
+
 -- Disable the tab bar
 config.enable_tab_bar = false
 
