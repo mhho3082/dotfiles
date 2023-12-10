@@ -1,13 +1,17 @@
 #!/bin/bash
 
-if curl -s -f https://api.github.com >/dev/null; then
-    method="curl -s https://api.github.com/gitignore/templates"
+if [ -f $(git rev-parse --show-toplevel 2>/dev/null)/.gitignore ]; then
+    echo 'Ignore file already exists!' > /dev/stderr
+    exit 1
+fi
+
+if curl -s -f https://api.github.com &>/dev/null; then
+    method='curl -s https://api.github.com/gitignore/templates'
+elif type gh > /dev/null; then
+    method='gh api gitignore/templates'
 else
-    if type gh > /dev/null; then
-        method="gh api gitignore/templates"
-    else
-        echo "Rate limited by GitHub!" > /dev/stderr
-    fi
+    echo 'Rate limited by GitHub!' > /dev/stderr
+    exit 1
 fi
 
 select_type=$(
@@ -15,6 +19,6 @@ select_type=$(
     fzf --preview "jq --raw-output .source <($method/{})"
 )
 
-if [[ -n $select_type && $select_type != "null" ]]; then
-    jq --raw-output .source <(sh -c "$method/$select_type") | $VISUAL -
+if [[ -n $select_type && $select_type != 'null' ]]; then
+    jq --raw-output .source <(sh -c "$method/$select_type") | $VISUAL - '+f .gitignore'
 fi
