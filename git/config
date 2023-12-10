@@ -158,6 +158,10 @@
     # (Warning: destructive!)
     quick-reinit = !"[ -d .git ] && rm .git -rf && git init && git add -A && git commit -m \"FEAT: Repo init\""
 
+    # Generate gitignore file using GitHub's API
+    # (Would try GitHub's CLI if rate-limited)
+    ignore = !"~/.config/git/gitignore.sh"
+
 # ---
 
 [log]
