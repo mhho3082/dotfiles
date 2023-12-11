@@ -361,11 +361,27 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- Default indent
+-- Default indent: 4 spaces
 -- (sleuth overrides this if indent format found)
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+-- 2 spaces default indents
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = "javascript,typescript,json,jsonc,svelte,vue,html,css,scss,sass,lua,markdown",
+  callback = function()
+    vim.opt.tabstop = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
+  end,
+})
+-- Tab default indents
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = "make,just",
+  callback = function()
+    vim.opt.expandtab = false
+  end,
+})
 
 -- No backup
 vim.opt.swapfile = false
