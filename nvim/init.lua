@@ -345,7 +345,17 @@ vim.opt.number = false
 vim.opt.ruler = false
 vim.opt.showcmd = false
 vim.opt.showmode = false
-vim.opt.cursorline = false
+
+-- If number is on,
+-- highlight current line number (but not the whole line)
+-- https://stackoverflow.com/a/13275419
+vim.opt.cursorline = true
+vim.api.nvim_set_hl(0, "CursorLine", {})
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+  callback = function()
+    vim.api.nvim_set_hl(0, "CursorLine", {})
+  end,
+})
 
 -- Split below (s) and right (v)
 vim.opt.splitbelow = true
@@ -384,22 +394,6 @@ vim.filetype.add({
   extension = {
     matplotlib = "python",
   },
-})
-
--- Assuming number is on, toggle to relativenumber in normal mode
-vim.api.nvim_create_autocmd({ "InsertEnter" }, {
-  callback = function()
-    if vim.wo.number == true then
-      vim.wo.relativenumber = false
-    end
-  end,
-})
-vim.api.nvim_create_autocmd({ "InsertLeave" }, {
-  callback = function()
-    if vim.wo.number == true then
-      vim.wo.relativenumber = true
-    end
-  end,
 })
 
 -------------
@@ -614,7 +608,7 @@ wk.register({
     },
     i = {
       name = "interface",
-      n = { "<cmd>set number! relativenumber!<cr>", "Number" },
+      n = { "<cmd>set number!<cr>", "Number" },
       s = { "<cmd>set spell!<cr>", "Spell" },
       w = { "<cmd>set wrap!<cr>", "Wrap" },
       i = { "<cmd>IndentBlanklineToggle<cr>", "Indentline" },
