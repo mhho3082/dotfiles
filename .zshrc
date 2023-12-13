@@ -213,7 +213,8 @@ function paths {
 if (( $+commands[wezterm] )); then
     # Create a new instance of wezterm with the same directory
     # (nice to have for tiling window managers, e.g., i3wm)
-    alias wezterm-split="wezterm start --cwd ."
+    # https://wezfurlong.org/wezterm/troubleshooting.html#increasing-log-verbosity
+    alias wezterm-split="WEZTERM_LOG=config=debug,wezterm_font=debug,warn wezterm start --cwd ."
 
     # Show images in the terminal
     alias imgcat="wezterm imgcat"
