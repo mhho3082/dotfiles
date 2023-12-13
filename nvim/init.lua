@@ -767,6 +767,12 @@ require("mason-lspconfig").setup_handlers({
       css = {
         require("efmls-configs.formatters.prettier_d"),
       },
+      json = {
+        require("efmls-configs.formatters.prettier_d"),
+      },
+      jsonc = {
+        require("efmls-configs.formatters.prettier_d"),
+      },
       -- Use beautysh for shell scripts
       bash = {
         require("efmls-configs.formatters.beautysh"),
