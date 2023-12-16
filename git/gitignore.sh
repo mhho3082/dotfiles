@@ -5,10 +5,10 @@ if [ -f $(git rev-parse --show-toplevel 2>/dev/null)/.gitignore ]; then
     exit 1
 fi
 
-if curl -s -f https://api.github.com &>/dev/null; then
-    method='curl -s https://api.github.com/gitignore/templates'
-elif type gh > /dev/null; then
+if type gh &> /dev/null; then
     method='gh api gitignore/templates'
+elif curl -s -f https://api.github.com &>/dev/null; then
+    method='curl -s https://api.github.com/gitignore/templates'
 else
     echo 'Rate limited by GitHub!' > /dev/stderr
     exit 1
