@@ -367,6 +367,7 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 -- 2 spaces default indents
+-- https://stackoverflow.com/q/158968
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = "javascript,typescript,json,jsonc,svelte,vue,html,css,scss,sass,lua,markdown",
   callback = function()
