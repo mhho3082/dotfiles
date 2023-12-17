@@ -255,6 +255,7 @@ lazy.setup({
     version = "v1.x.x", -- version is optional, but recommended
     dependencies = { "neovim/nvim-lspconfig" },
   },
+  { "barreiroleo/ltex-extra.nvim" },
 
   -- LSP server status
   {
@@ -677,10 +678,12 @@ local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- Set up LSP server with CMP capabilities and additional settings.
 ---@param server_name string the LSP server name
 ---@param settings? table the optional LSP server settings
-local function setup_lsp_server(server_name, settings)
+---@param on_attach? function the optional LSP server on_attach call
+local function setup_lsp_server(server_name, settings, on_attach)
   local opts = {}
   opts.capabilities = cmp_capabilities
   opts.settings = settings or {}
+  opts.on_attach = on_attach or nil
   require("lspconfig")[server_name].setup(opts)
 end
 
@@ -737,7 +740,14 @@ require("mason-lspconfig").setup_handlers({
           ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
         },
       },
-    })
+    }, function()
+      require("ltex_extra").setup({
+        load_langs = { "en-GB", "en-US" },
+        init_check = true,
+        path = ".ltex",
+      })
+      print("Hi from ltex_extra!")
+    end)
   end,
   ["jdtls"] = function()
     setup_lsp_server("jdtls", {
