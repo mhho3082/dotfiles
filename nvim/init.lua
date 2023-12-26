@@ -746,7 +746,6 @@ require("mason-lspconfig").setup_handlers({
         init_check = true,
         path = ".ltex",
       })
-      print("Hi from ltex_extra!")
     end)
   end,
   ["jdtls"] = function()
@@ -941,5 +940,5 @@ require("lualine").setup({
     lualine_z = {},
   },
   tabline = {},
-  extensions = { "fzf", "lazy", "fugitive" },
+  extensions = { "fzf", "lazy", "fugitive", "oil" },
 })
