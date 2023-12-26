@@ -91,6 +91,12 @@ Fix cannot update `npm` by `pacman`:
 pacman --overwrite "*" -S npm
 ```
 
+Get size of all installed Arch packages:
+
+```bash
+pacman -Qi | awk '/Installed Size/ {print $4$5}' | sed 's/[^0-9.]*//g' | paste -sd+ - | bc
+```
+
 ## Utility programs
 
 Basic
