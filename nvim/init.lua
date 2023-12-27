@@ -557,7 +557,7 @@ local function FindTodo()
   -- Actually initiate the search
   require("fzf-lua").fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
     prompt = "Find TODOs> ",
-    actions = require("fzf-lua").defaults.actions.files,
+    actions = { ["default"] = require("fzf-lua").actions.file_edit },
     previewer = "builtin",
   })
 end
