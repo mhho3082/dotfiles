@@ -648,8 +648,14 @@ vim.api.nvim_create_user_command("CopyFilename", function()
   print(filename)
 end, {})
 
+-- Copy file content to clipboard
+-- https://stackoverflow.com/questions/15610222/how-to-select-all-and-copy-in-vim
+vim.api.nvim_create_user_command("CopyFileContent", function()
+  vim.api.nvim_command("%y+")
+end, {})
+
 -- Replace all the text in the buffer with that of the system clipboard.
--- Helpful when you have copied the text to a somewhere else for modification and want to update back.
+-- Helpful when you have copied the text to somewhere else for modification and want to update back.
 vim.api.nvim_create_user_command("ReplaceWithClipboard", function()
   vim.api.nvim_command("silent %delete _ | silent put + | 1delete")
 end, {})
@@ -797,6 +803,14 @@ require("mason-lspconfig").setup_handlers({
       python = {
         require("efmls-configs.formatters.black"),
       },
+      -- Format BibTex with bibtex-tidy
+      -- https://github.com/FlamingTempura/bibtex-tidy/issues/143
+      bib = {
+        {
+          formatCommand = "bibtex-tidy  --v2 --no-backup --no-sort --sort-fields --drop-all-caps",
+          formatStdin = true,
+        },
+      },
       -- Format GLSL using clang-format (need .clang-format file)
       glsl = {
         require("efmls-configs.formatters.clang_format"),
@@ -892,7 +906,7 @@ cmp.setup.cmdline(":", {
 -------------
 
 -- gitsigns integration copied from:
--- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-branch
+-- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
 
 -- Gitsigns diff
 local function gitsigns_diff_source()
