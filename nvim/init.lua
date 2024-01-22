@@ -807,7 +807,7 @@ require("mason-lspconfig").setup_handlers({
       -- https://github.com/FlamingTempura/bibtex-tidy/issues/143
       bib = {
         {
-          formatCommand = "bibtex-tidy  --v2 --no-backup --no-sort --sort-fields --drop-all-caps",
+          formatCommand = "bibtex-tidy  --v2 --no-backup --no-sort --sort-fields",
           formatStdin = true,
         },
       },
