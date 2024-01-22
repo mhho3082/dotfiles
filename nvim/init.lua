@@ -954,5 +954,5 @@ require("lualine").setup({
     lualine_z = {},
   },
   tabline = {},
-  extensions = { "fzf", "lazy", "fugitive", "oil" },
+  extensions = { "fugitive", "fzf", "lazy", "mason", "oil" },
 })
