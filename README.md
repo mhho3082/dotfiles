@@ -178,7 +178,7 @@ A safe sequence to bootstrap `paru` from a clean installation
 sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
 
 # Get fast mirrors
-sudo pacman-mirrors --fasttrack
+curl -s https://archlinux.org/mirrorlist/all/https/ | sed -e 's/^#Server/Server/' -e '/^#/d' | sudo sh -c 'rankmirrors -n 10 -m 10 -p - > /etc/pacman.d/mirrorlist'
 
 # Update system
 sudo pacman -Syu
@@ -192,7 +192,7 @@ cd paru
 makepkg -si
 ```
 
-Set zsh as the default shell (from bash):
+Set `zsh` as the default shell (from bash):
 
 ```bash
 chsh -s `which zsh`
