@@ -23,7 +23,7 @@ set window-title-home-tilde true
 set statusbar-home-tilde true
 
 # Hide statusbar by default
-set guioptions ""
+set guioptions none
 
 # Use mupdf-like keybindings
 map b scroll full-up
@@ -31,3 +31,5 @@ map d scroll half-down
 map u scroll half-up
 map i recolor
 map p print
+
+# vim:ft=zathurarc
