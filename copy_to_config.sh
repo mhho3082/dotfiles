@@ -5,7 +5,7 @@ config_folder=~/.config/
 mkdir -p "$config_folder"
 
 files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
-    sed "/.stylua.*/d" | sed "/tips\//d")
+    sed "/.stylua.*/d" | sed "/tips\//d" | sed "/makefile/d")
 
 # For every file in this folder
 for file in $files
