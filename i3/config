@@ -9,7 +9,7 @@
 # https://gitlab.com/BVollmerhaus/dotfiles/-/blob/master/config/i3/config
 
 # Application differences (from EndeavourOS's version):
-# xbacklight -> backlightctl
+# xbacklight -> brightnessctl
 # xautolock  -> xidlehook
 # i3bar      -> polybar
 # scrot      -> flameshot
