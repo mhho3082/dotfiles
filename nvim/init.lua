@@ -347,6 +347,9 @@ vim.opt.ruler = false
 vim.opt.showcmd = false
 vim.opt.showmode = false
 
+-- Remove the intro screen
+vim.opt.shortmess:append({ I = true })
+
 -- If number is on,
 -- highlight current line number (but not the whole line)
 -- https://stackoverflow.com/a/13275419
