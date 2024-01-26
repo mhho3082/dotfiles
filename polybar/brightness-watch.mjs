@@ -13,7 +13,7 @@ const output = () => {
     "brightnessctl",
     (_err, stdout, _stderr) => {
       const percentage = stdout.trim().match(/(\d+)%/)?.[1];
-      const icon = percentage >= 70 ? "󰃠" : percentage >= 30 ? "󰃟" : "󰃞";
+      const icon = percentage >= 70 ? "󰃠" : percentage > 30 ? "󰃟" : "󰃞";
       console.log(`%{F#83A598}${icon}%{F-} ${percentage}%`);
     }
   );
