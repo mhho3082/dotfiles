@@ -176,32 +176,24 @@ lazy.setup({
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
+        --stylua: ignore start
         ensure_installed = {
-          -- Common programming languages
-          "c",
-          "cpp",
-          "python",
-          "java",
-          "javascript",
-          "typescript",
-          "jsdoc",
-          "vue",
-          "svelte",
-          -- Common scripting languages
-          "html",
-          "css",
-          "scss",
-          "lua",
-          "json",
-          "jsonc",
-          "bash",
-          "markdown",
-          "markdown_inline",
-          -- Vim-specific languages
-          "vim",
-          "vimdoc",
-          "comment",
+          -- Programming
+          "c", "cpp", "make", "python", "java", "rust",
+          "javascript", "typescript", "jsdoc", "vue", "svelte",
+          -- Scripting
+          "html", "css", "scss", "json", "jsonc", "regex", "bash",
+          -- Git
+          "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
+          -- Prose
+          "markdown", "markdown_inline", "latex", "bibtex", "mermaid",
+          -- Config
+          "rasi", -- For rofi
+          "yaml", "toml", "zathurarc",
+          -- Vim-specific
+          "vim", "vimdoc", "comment", "lua", "luadoc", "diff",
         },
+        --stylua: ignore end
         highlight = {
           -- false will disable the whole extension
           enable = true,
@@ -527,27 +519,18 @@ wk.register({
 local function FindTodo()
   -- Based on treesitter
   -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
+  --stylua: ignore start
   local tags = {
     -- Todo
-    "TODO",
-    "WIP",
+    "TODO", "WIP",
     -- Note
-    "NOTE",
-    "XXX",
-    "INFO",
-    "DOCS",
-    "PERF",
-    "TEST",
+    "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST",
     -- Warning
-    "HACK",
-    "WARNING",
-    "WARN",
-    "FIX",
+    "HACK", "WARNING", "WARN", "FIX",
     -- Danger
-    "FIXME",
-    "BUG",
-    "ERROR",
+    "FIXME", "BUG", "ERROR",
   }
+  --stylua: ignore end
 
   -- From VS Code Todo Tree's default regex
   -- https://github.com/Gruntfuggly/todo-tree/issues/526
