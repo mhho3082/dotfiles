@@ -220,6 +220,15 @@ if (( $+commands[wezterm] )); then
     alias imgcat="wezterm imgcat"
 fi
 
+# Brightness control
+if (( $+commands[brightnessctl] )); then
+    function brightness {
+        [ "$1" = "down" ] && local op="-" || local op="+"
+        local s=${2:-10}
+        brightnessctl set $(brightnessctl | grep -oP '\d+(?=%)' | perl -ne 'print int($_ / '$s') * '$s' '$op' '$s' . "%\n"')
+    }
+fi
+
 # Get n-letters long alias and functions
 # (helpful to get a wider picture)
 function shorthands {
