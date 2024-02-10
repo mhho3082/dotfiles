@@ -189,6 +189,18 @@ elif (( $+commands[zathura] )); then
     alias za='local f='$search'; zaread $f & disown'
 fi
 
+if (( $+commands[zathura] )); then
+    function zathura-from-url {
+        if [[ $(xsel -ob) =~ ^https?:// ]]
+        then
+            zathura <(curl -s $(xsel -ob)) & disown
+        else
+            echo "Please copy a URL!" >/dev/stderr
+            return 1
+        fi
+    }
+fi
+
 # Generate ".." shortcuts
 # (since paths are set to not be considered executables by themselves)
 for i in {1..9}; do
