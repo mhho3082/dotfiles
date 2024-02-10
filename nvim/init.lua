@@ -727,6 +727,22 @@ require("mason-lspconfig").setup_handlers({
   ["ltex"] = function()
     setup_lsp_server("ltex", {
       ltex = {
+        enabled = {
+          "bib",
+          "gitcommit",
+          "markdown",
+          "org",
+          "plaintex",
+          "rst",
+          "rnoweb",
+          "tex",
+          "pandoc",
+          "quarto",
+          "rmd",
+          "context",
+          -- "html",
+          -- "xhtml",
+        },
         language = "en-GB",
         dictionary = {
           ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
