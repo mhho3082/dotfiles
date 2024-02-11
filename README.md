@@ -240,6 +240,9 @@ See [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
 A nice example of installing a theme can be seen
 [in the Breeze theme README](https://github.com/gustawho/grub2-theme-breeze#installation).
 
+To have GnuPG use the terminal instead of a pop-up window for asking passwords,
+see [this Stack Exchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
+
 ## Credits
 
 - Git alias derived from
