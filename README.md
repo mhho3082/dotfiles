@@ -124,10 +124,11 @@ Some extensions that I install in my browsers:
 <details>
 <summary> Browser extensions </summary>
 
-- [`Vimium`](https://addons.mozilla.org/en-US/firefox/addon/vimium-ff/)
+- [`Vimium`](https://github.com/philc/vimium)
+- [`uBlock Origin`](https://github.com/gorhill/uBlock)
+- [`Dark Background and Light Text`](https://github.com/m-khvoinitsky/dark-background-light-text-extension)
+- [`Redirector`](https://github.com/einaregilsson/Redirector)
 - `HTTPS Everywhere`
-- [`uBlock Origin`](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)
-- [`Dark Background and Light Text`](https://addons.mozilla.org/en-US/firefox/addon/dark-background-light-text/)
 - `Zotero Connector`
 - `Facebook Container`
 
