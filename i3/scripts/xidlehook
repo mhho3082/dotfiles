@@ -6,7 +6,9 @@
 # Only exported variables can be used within the timer's command
 # export PRIMARY_DISPLAY="$(xrandr | awk '/ primary/{print $1}')"
 
-if command -v xidlehook
+# Relies on brightnessctl (for its accurate backlight control)
+
+if command -v xidlehook && command -v brightnessctl
 then
     # Run xidlehook
     # At 5 minute - turn screen off
@@ -14,8 +16,8 @@ then
     xidlehook \
         --not-when-fullscreen --not-when-audio \
         --timer 300 \
-        "xset dpms force off" \
-        ""
+        "brightnessctl --save set 0 >/dev/null" \
+        "brightnessctl --restore >/dev/null"
 else
     # Run xautolock if xidlehook not installed
     xautolock -time 5 -locker "xset dpms force off" -detectsleep
