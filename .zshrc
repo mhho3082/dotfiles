@@ -349,9 +349,11 @@ function paru-update {
 function paru-forceupdate {
     if [ -n "$1" ]; then
         # Update specified packages
+        sudo true
         paru --noconfirm -S $@
     else
         # Update packages that are likely not actively tracked
+        sudo true
         paru --noconfirm -S $(paru -Qq | grep '\-git') $(paru -Qq | grep 'nightly')
     fi
 }
