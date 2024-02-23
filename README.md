@@ -128,6 +128,7 @@ Some extensions that I install in my browsers:
 - [`uBlock Origin`](https://github.com/gorhill/uBlock)
 - [`Dark Background and Light Text`](https://github.com/m-khvoinitsky/dark-background-light-text-extension)
 - [`Redirector`](https://github.com/einaregilsson/Redirector)
+- [`Tab Session Manager`](https://github.com/sienori/Tab-Session-Manager)
 - `HTTPS Everywhere`
 - `Zotero Connector`
 - `Facebook Container`
