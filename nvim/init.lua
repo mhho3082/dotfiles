@@ -677,26 +677,12 @@ local function setup_lsp_server(server_name, options)
 end
 
 -- Setup all LSP servers installed by Mason
-local nvim_lsp = require("lspconfig")
 require("mason-lspconfig").setup_handlers({
   -- Default handler
   function(server_name)
     setup_lsp_server(server_name)
   end,
   -- Specific handlers
-  ["denols"] = function()
-    setup_lsp_server("denols", {
-      -- https://docs.deno.com/runtime/manual/getting_started/setup_your_environment
-      root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
-    })
-  end,
-  ["tsserver"] = function()
-    setup_lsp_server("tsserver", {
-      -- https://docs.deno.com/runtime/manual/getting_started/setup_your_environment
-      root_dir = nvim_lsp.util.root_pattern("package.json"),
-      single_file_support = false,
-    })
-  end,
   ["lua_ls"] = function()
     setup_lsp_server("lua_ls", {
       settings = {
