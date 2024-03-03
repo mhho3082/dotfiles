@@ -669,98 +669,118 @@ local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Set up LSP server with CMP capabilities and additional settings.
 ---@param server_name string the LSP server name
----@param settings? table the optional LSP server settings
----@param on_attach? function the optional LSP server on_attach call
-local function setup_lsp_server(server_name, settings, on_attach)
-  local opts = {}
-  opts.capabilities = cmp_capabilities
-  opts.settings = settings or {}
-  opts.on_attach = on_attach or nil
+---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
+local function setup_lsp_server(server_name, options)
+  local opts = options or {}
+  opts.capabilities = opts.capabilities or cmp_capabilities
   require("lspconfig")[server_name].setup(opts)
 end
 
 -- Setup all LSP servers installed by Mason
+local nvim_lsp = require("lspconfig")
 require("mason-lspconfig").setup_handlers({
   -- Default handler
   function(server_name)
     setup_lsp_server(server_name)
   end,
   -- Specific handlers
+  ["denols"] = function()
+    setup_lsp_server("denols", {
+      -- https://docs.deno.com/runtime/manual/getting_started/setup_your_environment
+      root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
+    })
+  end,
+  ["tsserver"] = function()
+    setup_lsp_server("tsserver", {
+      -- https://docs.deno.com/runtime/manual/getting_started/setup_your_environment
+      root_dir = nvim_lsp.util.root_pattern("package.json"),
+      single_file_support = false,
+    })
+  end,
   ["lua_ls"] = function()
     setup_lsp_server("lua_ls", {
-      Lua = {
-        diagnostics = {
-          globals = { "vim" },
-        },
-        runtime = {
-          version = "LuaJIT",
-        },
-        format = {
-          enable = false,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { "vim" },
+          },
+          runtime = {
+            version = "LuaJIT",
+          },
+          format = {
+            enable = false,
+          },
         },
       },
     })
   end,
   ["rust_analyzer"] = function()
     setup_lsp_server("rust_analyzer", {
-      ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-        },
-        imports = {
-          granularity = {
-            group = "module",
+      settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy",
           },
-          prefix = "self",
-        },
-        cargo = {
-          buildScripts = {
+          imports = {
+            granularity = {
+              group = "module",
+            },
+            prefix = "self",
+          },
+          cargo = {
+            buildScripts = {
+              enable = true,
+            },
+          },
+          procMacro = {
             enable = true,
           },
-        },
-        procMacro = {
-          enable = true,
         },
       },
     })
   end,
   ["ltex"] = function()
     setup_lsp_server("ltex", {
-      ltex = {
-        enabled = {
-          "bib",
-          "gitcommit",
-          "markdown",
-          "org",
-          "plaintex",
-          "rst",
-          "rnoweb",
-          "tex",
-          "pandoc",
-          "quarto",
-          "rmd",
-          "context",
-          -- "html",
-          -- "xhtml",
-        },
-        language = "en-GB",
-        dictionary = {
-          ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
+      settings = {
+        ltex = {
+          enabled = {
+            "bib",
+            "gitcommit",
+            "markdown",
+            "org",
+            "plaintex",
+            "rst",
+            "rnoweb",
+            "tex",
+            "pandoc",
+            "quarto",
+            "rmd",
+            "context",
+            -- "html",
+            -- "xhtml",
+          },
+          language = "en-GB",
+          dictionary = {
+            ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
+          },
         },
       },
-    }, function()
-      require("ltex_extra").setup({
-        load_langs = { "en-GB", "en-US" },
-        init_check = true,
-        path = ".ltex",
-      })
-    end)
+      on_attach = function()
+        require("ltex_extra").setup({
+          load_langs = { "en-GB", "en-US" },
+          init_check = true,
+          path = ".ltex",
+        })
+      end,
+    })
   end,
   ["jdtls"] = function()
     setup_lsp_server("jdtls", {
-      java = {
-        format = {
-          enabled = false,
+      settings = {
+        java = {
+          format = {
+            enabled = false,
+          },
         },
       },
     })
