@@ -65,7 +65,6 @@ which may take additional setup to install
 - Writing
   - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
-  - [`zotero-bin`](https://www.zotero.org/)
   - [`pandoc-bin`](https://pandoc.org/)
     - [`meta-group-texlive-most`](https://tug.org/texlive/)
     - [`pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref)
@@ -130,7 +129,6 @@ Some extensions that I install in my browsers:
 - [`Redirector`](https://github.com/einaregilsson/Redirector)
 - [`Tab Session Manager`](https://github.com/sienori/Tab-Session-Manager)
 - `HTTPS Everywhere`
-- `Zotero Connector`
 - `Facebook Container`
 
 Gruvbox theme for browsers used is [`teatwig/gruvbox-firefox-themes`](https://github.com/teatwig/gruvbox-firefox-themes)
