@@ -131,6 +131,7 @@ if (( $+commands[make] )); then
 fi
 if (( $+commands[yarn] )); then
     alias y="yarn"
+    alias yx="yarn dlx"
 fi
 if (( $+commands[trash] )); then
     alias r="trash"
