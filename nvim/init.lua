@@ -43,7 +43,13 @@ lazy.setup({
       require("mini.surround").setup()
 
       -- Comments
-      require("mini.comment").setup()
+      require("mini.comment").setup({
+        options = {
+          custom_commentstring = function()
+            return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+          end,
+        },
+      })
 
       -- Align
       require("mini.align").setup()
@@ -212,6 +218,7 @@ lazy.setup({
       })
     end,
   },
+  "JoosepAlviste/nvim-ts-context-commentstring",
 
   -- Statusline and tabline
   "nvim-lualine/lualine.nvim",
