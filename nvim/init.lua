@@ -310,7 +310,7 @@ lazy.setup({
 
   -- Search
   {
-    "ibhagwan/fzf-lua",
+    "https://gitlab.com/ibhagwan/fzf-lua",
     -- optional for icon support
     dependencies = { "kyazdani42/nvim-web-devicons" }, -- Or nvim-tree/nvim-web-devicons
     config = function()
