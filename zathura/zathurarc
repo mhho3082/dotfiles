@@ -32,4 +32,7 @@ map u scroll half-up
 map i recolor
 map p print
 
+# Setup databse properly
+set database sqlite
+
 # vim:ft=zathurarc

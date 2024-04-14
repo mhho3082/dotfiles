@@ -233,7 +233,8 @@ exec --no-startup-id xset -dpms
 # use xidlehook to use autosuspend rules for mobile devices
 # For xautolock: https://wiki.archlinux.org/title/Session_lock#xautolock
 # For xidlehook: https://gitlab.com/jD91mZM2/xidlehook
-exec --no-startup-id $powersaving
+# NOTE: Powersaving feature suspended due to use of external monitor
+# exec --no-startup-id $powersaving
 
 # Desktop notifications
 exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
@@ -246,6 +247,9 @@ exec --no-startup-id brightnessctl set "50%"
 
 # Run bar (polybar)
 exec_always --no-startup-id $bar
+
+# Setup display switcher
+exec --no-startup-id ~/.config/i3/scripts/display_switch
 
 ##############
 ### Floats ###

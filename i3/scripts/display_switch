@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Function to activate HDMI and deactivate eDP
+function activate_hdmi {
+    xrandr --output HDMI-A-0 --auto --primary
+    xrandr --output eDP --off
+    killall -q polybar
+    i3-msg restart
+}
+
+# Function to deactivate HDMI and activate eDP
+function activate_edp {
+    xrandr --output eDP --auto --primary
+    xrandr --output HDMI-A-0 --off
+    killall -q polybar
+    i3-msg restart
+}
+
+# Initial check in case HDMI is already connected at script start
+if xrandr | grep "HDMI-A-0 connected"; then
+    activate_hdmi
+else
+    activate_edp
+fi
+
+# Listen to udev events for DRM subsystem
+udevadm monitor --subsystem-match=drm | while read -r line; do
+    echo "$line" | grep -E "change" && {
+        if xrandr | grep "HDMI-A-0 connected"; then
+            activate_hdmi
+        else
+            activate_edp
+        fi
+    }
+done
