@@ -419,7 +419,7 @@ local GIT_ICONS_GITLAB=" "
 local GIT_ICONS_NOTABUG="󱇪 "
 local GIT_ICONS_CODEBERG=" "
 local GIT_ICONS_GITEA="󰶞 "
-local GIT_ICONS_GOGS=" "
+local GIT_ICONS_GOGS=" "
 local GIT_ICONS_BITBUCKET="󰂨 "
 local GIT_ICONS_BASIC_REMOTE=" "
 

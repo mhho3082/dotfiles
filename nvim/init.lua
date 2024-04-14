@@ -1,5 +1,9 @@
 -- Programs needed: unzip, ripgrep, fd
 
+-- Programs advised:
+-- `tree-sitter` (and `tree-sitter-cli`) for install-from-grammer syntaxes, esp. latex
+-- `fswatch` to improve LSP file watching performance
+
 -- Notes: (for particular LSP services)
 -- `prettierd` requires that `nodejs` and `npm` be installed globally
 -- `efm` requires that `go` be installed globally
@@ -283,7 +287,38 @@ lazy.setup({
   "hrsh7th/cmp-nvim-lsp-signature-help",
 
   -- Snippets
-  "L3MON4D3/LuaSnip",
+  {
+    "L3MON4D3/LuaSnip",
+    -- Referencing https://github.com/rafamadriz/friendly-snippets/wiki
+    dependencies = { "rafamadriz/friendly-snippets" },
+    build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
+    config = function(_, opts)
+      local luasnip = require("luasnip")
+
+      if opts then
+        luasnip.config.setup(opts)
+      end
+
+      require("luasnip.loaders.from_vscode").lazy_load({
+        exclude = { "html", "all" },
+      })
+
+      -- enable standardized comments snippets
+      luasnip.filetype_extend("typescript", { "tsdoc" })
+      luasnip.filetype_extend("javascript", { "jsdoc" })
+      luasnip.filetype_extend("lua", { "luadoc" })
+      luasnip.filetype_extend("python", { "pydoc" })
+      luasnip.filetype_extend("rust", { "rustdoc" })
+      luasnip.filetype_extend("cs", { "csharpdoc" })
+      luasnip.filetype_extend("java", { "javadoc" })
+      luasnip.filetype_extend("c", { "cdoc" })
+      luasnip.filetype_extend("cpp", { "cppdoc" })
+      luasnip.filetype_extend("php", { "phpdoc" })
+      luasnip.filetype_extend("kotlin", { "kdoc" })
+      luasnip.filetype_extend("ruby", { "rdoc" })
+      luasnip.filetype_extend("sh", { "shelldoc" })
+    end,
+  },
   "saadparwaiz1/cmp_luasnip",
 
   -- COMMAND TOOLS --
@@ -318,6 +353,11 @@ lazy.setup({
       require("fzf-lua").setup({})
       require("fzf-lua").register_ui_select()
     end,
+  },
+
+  -- Run commands
+  {
+    "tpope/vim-dispatch",
   },
 })
 
@@ -442,11 +482,10 @@ vim.opt.timeoutlen = 500
 vim.opt.scrolloff = 0
 
 -- Move cursor by display lines by default
-local swap_move_cursor = { "j", "k", "0", "^", "$" }
-for _, ops in ipairs(swap_move_cursor) do
+vim.tbl_map(function(ops)
   vim.keymap.set({ "n", "v", "o", "x" }, ops, "g" .. ops, { noremap = true, silent = true })
   vim.keymap.set({ "n", "v", "o", "x" }, "g" .. ops, ops, { noremap = true, silent = true })
-end
+end, { "j", "k", "0", "^", "$" })
 
 -- Fix lua API keyboard interrupt issue
 wk.register({
@@ -459,13 +498,7 @@ wk.register({
   ["gY"] = { '"+Y', "Copy to clipboard" },
   ["gp"] = { '"+p', "Paste from clipboard" },
   ["gP"] = { '"+P', "Paste from clipboard" },
-}, { mode = "n" })
-wk.register({
-  ["gy"] = { '"+y', "Copy to clipboard" },
-  ["gY"] = { '"+Y', "Copy to clipboard" },
-  ["gp"] = { '"+p', "Paste from clipboard" },
-  ["gP"] = { '"+P', "Paste from clipboard" },
-}, { mode = "v" })
+}, { mode = { "n", "v" } })
 
 -- Operate on windows with <M-_> in normal mode
 -- (<M-_> is used to move code in visual mode)
@@ -501,15 +534,34 @@ wk.register({
     end,
     "Goto references",
   },
-  ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
-  ["<leader>k"] = { vim.lsp.buf.format, "Format" },
   ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
   ["<C-k>"] = { vim.diagnostic.goto_prev, "Prev diagnostic" },
 }, { mode = "n" })
 wk.register({
   ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "Format" },
-}, { mode = "v" })
+}, { mode = { "n", "v" } })
+
+-- LuaSnip mappings
+local luasnip = require("luasnip")
+wk.register({
+  ["<C-l>"] = {
+    function()
+      if luasnip.locally_jumpable(1) then
+        luasnip.jump(1)
+      end
+    end,
+    "LuaSnip jump",
+  },
+  ["<C-h>"] = {
+    function()
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      end
+    end,
+    "LuaSnip jump back",
+  },
+}, { mode = { "i", "v" } })
 
 -- Splitjoin mappings
 wk.register({
@@ -651,6 +703,48 @@ end, {})
 -- Helpful when you have copied the text to somewhere else for modification and want to update back.
 vim.api.nvim_create_user_command("ReplaceWithClipboard", function()
   vim.api.nvim_command("silent %delete _ | silent put + | 1delete")
+end, {})
+
+local function format_file_size(size)
+  if size < 1024 then
+    return string.format("%d bytes", size)
+  elseif size < 1024 * 1024 then
+    return string.format("%.2f KB", size / 1024)
+  elseif size < 1024 * 1024 * 1024 then
+    return string.format("%.2f MB", size / (1024 * 1024))
+  else
+    return string.format("%.2f GB", size / (1024 * 1024 * 1024))
+  end
+end
+
+-- Check (and clear) the LSP log,
+-- which could get too large sometimes
+vim.api.nvim_create_user_command("CheckLSPLog", function()
+  local log_path = os.getenv("HOME") .. "/.local/state/nvim/lsp.log"
+
+  local file = io.open(log_path, "r")
+  if not file then
+    print("LSP log file not found.")
+    return
+  end
+
+  local size = file:seek("end")
+  file:close()
+  print("LSP log size: " .. format_file_size(size))
+
+  vim.fn.inputsave()
+  local answer = vim.fn.input("Clear the log? [y/N]: ")
+  vim.fn.inputrestore()
+
+  -- Clear the log file
+  if answer:lower() == "y" then
+    file = io.open(log_path, "w")
+    if file then
+      file:close()
+    end
+
+    print("\nLSP log cleared.")
+  end
 end, {})
 
 ---------
@@ -822,7 +916,7 @@ require("mason-lspconfig").setup_handlers({
       -- https://github.com/FlamingTempura/bibtex-tidy/issues/143
       bib = {
         {
-          formatCommand = "bibtex-tidy  --v2 --no-backup --no-sort --sort-fields",
+          formatCommand = "bibtex-tidy --v2 --no-backup --no-sort --sort-fields --no-escape",
           formatStdin = true,
         },
       },
@@ -858,10 +952,6 @@ require("mason-lspconfig").setup_handlers({
 
 local cmp = require("cmp")
 
-require("luasnip.loaders.from_vscode").lazy_load({
-  exclude = { "html" },
-})
-
 cmp.setup({
   enabled = function()
     -- Enable in command mode
@@ -869,7 +959,7 @@ cmp.setup({
       return true
     end
 
-    -- Disable in Telescope window
+    -- Disable in prompts (e.g., Telescope, fzf-lua)
     local in_prompt = vim.api.nvim_buf_get_option(0, "buftype") == "prompt"
     if in_prompt then
       return false
