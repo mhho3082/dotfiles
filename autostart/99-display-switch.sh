@@ -1,10 +1,11 @@
 #!/bin/bash
 
+# Switch monitors automatically based on HDMI cable
+
 # Function to activate HDMI and deactivate eDP
 function activate_hdmi {
     xrandr --output HDMI-A-0 --auto --primary
     xrandr --output eDP --off
-    killall -q polybar
     i3-msg restart
 }
 
@@ -12,24 +13,25 @@ function activate_hdmi {
 function activate_edp {
     xrandr --output eDP --auto --primary
     xrandr --output HDMI-A-0 --off
-    killall -q polybar
     i3-msg restart
 }
 
-# Initial check in case HDMI is already connected at script start
-if xrandr | grep "HDMI-A-0 connected"; then
-    activate_hdmi
-else
-    activate_edp
-fi
+function main {
+    if xrandr | grep "HDMI-A-0 connected"; then
+        activate_hdmi
+    else
+        activate_edp
+    fi
+}
+main
 
 # Listen to udev events for DRM subsystem
 udevadm monitor --subsystem-match=drm | while read -r line; do
-    echo "$line" | grep -E "change" && {
-        if xrandr | grep "HDMI-A-0 connected"; then
-            activate_hdmi
-        else
-            activate_edp
-        fi
-    }
+    if echo "$line" | grep -E "change"; then
+        # Eat up any upcoming data in the next second
+        # https://stackoverflow.com/a/69945839
+        timeout 1 cat
+
+        main
+    fi
 done

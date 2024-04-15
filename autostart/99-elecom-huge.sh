@@ -6,21 +6,29 @@
 # https://www.reddit.com/r/Trackballs/comments/mtdgld/elecom_huge_button_configuration_ideas/
 # https://askubuntu.com/questions/492744/how-do-i-automatically-remap-buttons-on-my-mouse-at-startup
 
-# Remember to auto-start this with your desktop environment
-# e.g., for xfce: set to "launch on login" in sessions and startup
+function main {
+    if command -v xinput &> /dev/null; then
+        num=$(xinput list | grep -m 1 "ELECOM TrackBall Mouse HUGE TrackBall" | sed 's/^.*id=\([0-9]*\)[ \t].*$/\1/')
 
-if command -v xinput &> /dev/null; then
-    num=$(xinput list | grep -m 1 "ELECOM TrackBall Mouse HUGE TrackBall" | sed 's/^.*id=\([0-9]*\)[ \t].*$/\1/')
-
-    if [ "$num" = "" ]; then
-        echo "WARNING(Elecom Huge): Elecom Huge not found!" 1>&2
-        exit 1
+        if [ -n "$num" ]; then
+            # Set Fn3 to scroll mode
+            xinput set-prop "$num" 'libinput Button Scrolling Button' 12
+            xinput set-prop "$num" 'libinput Scroll Method Enabled' 0 0 1
+            xinput set-button-map "$num" 1 2 3 4 5 6 7 8 9 10 11 2
+        fi
+    else
+        printf "WARNING(Elecom Huge): xinput not installed!" 1>&2
     fi
+}
+main
 
-    # Set Fn3 to scroll mode
-    xinput set-prop "$num" 'libinput Button Scrolling Button' 12
-    xinput set-prop "$num" 'libinput Scroll Method Enabled' 0 0 1
-    xinput set-button-map "$num" 1 2 3 4 5 6 7 8 9 10 11 2
-else
-    printf "WARNING(Elecom Huge): xinput not installed!" 1>&2
-fi
+
+udevadm monitor --subsystem-match=input | while read -r line; do
+    if echo "$line" | grep -E "add"; then
+        # Eat up any upcoming data in the next second
+        # https://stackoverflow.com/a/69945839
+        timeout 1 cat
+
+        main
+    fi
+done
