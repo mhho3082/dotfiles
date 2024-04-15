@@ -211,7 +211,8 @@ exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id dex --autostart --environment i3
 
 # Run all bash scripts in config's autostart folder
-exec --no-startup-id run-parts --regex '.*sh$' ~/.config/autostart
+# exec --no-startup-id run-parts --regex '.*\.sh$' ~/.config/autostart
+exec --no-startup-id bash -c 'for script in ~/.config/autostart/*.sh; do "$script" & done; disown'
 
 # Activate num lock
 exec --no-startup-id numlockx on
@@ -247,9 +248,6 @@ exec --no-startup-id brightnessctl set "50%"
 
 # Run bar (polybar)
 exec_always --no-startup-id $bar
-
-# Setup display switcher
-exec --no-startup-id ~/.config/i3/scripts/display_switch
 
 ##############
 ### Floats ###
