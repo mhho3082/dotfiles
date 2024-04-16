@@ -6,6 +6,7 @@
 function activate_hdmi {
     xrandr --output HDMI-A-0 --auto --primary
     xrandr --output eDP --off
+    killall -q polybar
     i3-msg restart
 }
 
@@ -13,6 +14,7 @@ function activate_hdmi {
 function activate_edp {
     xrandr --output eDP --auto --primary
     xrandr --output HDMI-A-0 --off
+    killall -q polybar
     i3-msg restart
 }
 

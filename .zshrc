@@ -331,14 +331,12 @@ function paru-update {
                 reboot
             else
                 # Re-configure external devices
-                xmodmap ~/.Xmodmap &>/dev/null
-                autostart &>/dev/null
+                for script in ~/.config/autostart/*.sh; do timeout 1s "$script" &>/dev/null & done
                 print -P "%F{green}No need to reboot%f"
             fi
         else
             # Re-configure external devices
-            xmodmap ~/.Xmodmap &>/dev/null
-            autostart &>/dev/null
+            for script in ~/.config/autostart/*.sh; do timeout 1s "$script" &>/dev/null & done
             print -P "%F{red}Paru failed!%f"
         fi
     else
