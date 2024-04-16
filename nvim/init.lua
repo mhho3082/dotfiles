@@ -95,44 +95,38 @@ lazy.setup({
   {
     "Wansmer/treesj",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("treesj").setup({
-        use_default_keymaps = false,
-      })
-    end,
+    opts = {
+      use_default_keymaps = false,
+    },
   },
 
   -- Pairs
   {
     "windwp/nvim-autopairs",
-    config = function()
-      require("nvim-autopairs").setup({})
-    end,
+    opts = {},
   },
   {
     "windwp/nvim-ts-autotag",
-    config = function()
-      require("nvim-ts-autotag").setup()
-    end,
+    opts = {},
   },
 
   -- File browser
   {
     "stevearc/oil.nvim",
-    config = function()
-      require("oil").setup({
-        view_options = {
-          -- Display hidden files
-          show_hidden = true,
-          -- Don't display "../"
-          is_always_hidden = function(name, _)
-            return name == ".."
-          end,
-        },
-        -- Deleted files will be removed with the `trash-put` command
-        delete_to_trash = true,
-      })
-    end,
+    opts = {
+      view_options = {
+        -- Display hidden files
+        show_hidden = true,
+        -- Don't display "../"
+        is_always_hidden = function(name, _)
+          return name == ".."
+        end,
+      },
+      -- Deleted files will be removed with the `trash-put` command
+      delete_to_trash = true,
+      -- Set to true to watch the filesystem for changes and reload oil
+      experimental_watch_for_changes = true,
+    },
   },
 
   -- Undo tree
@@ -160,12 +154,11 @@ lazy.setup({
   -- Indent guide
   {
     "lukas-reineke/indent-blankline.nvim",
-    config = function()
-      require("ibl").setup({
-        indent = { char = "│" },
-        scope = { enabled = false },
-      })
-    end,
+    main = "ibl",
+    opts = {
+      indent = { char = "│" },
+      scope = { enabled = false },
+    },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
 
@@ -183,7 +176,9 @@ lazy.setup({
   -- Syntax highlight
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
+    build = function()
+      require("nvim-treesitter.install").update({ with_sync = true })()
+    end,
     config = function()
       require("nvim-treesitter.configs").setup({
         --stylua: ignore start
@@ -230,9 +225,7 @@ lazy.setup({
   -- Icons
   {
     "kyazdani42/nvim-web-devicons",
-    config = function()
-      require("nvim-web-devicons").setup({})
-    end,
+    opts = {},
   },
 
   -- COPILOTS --
@@ -240,17 +233,13 @@ lazy.setup({
   -- Package manager
   {
     "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
+    opts = {},
   },
 
   -- LSP
   {
     "williamboman/mason-lspconfig.nvim",
-    config = function()
-      require("mason-lspconfig").setup()
-    end,
+    opts = {},
   },
   "neovim/nvim-lspconfig",
   {
@@ -263,19 +252,17 @@ lazy.setup({
   -- LSP server status
   {
     "j-hui/fidget.nvim",
-    config = function()
-      require("fidget").setup({
-        progress = {
-          ignore = {
-            "ltex",
-          },
-          display = {
-            render_limit = 5,
-            done_icon = "✓",
-          },
+    opts = {
+      progress = {
+        ignore = {
+          "ltex",
         },
-      })
-    end,
+        display = {
+          render_limit = 5,
+          done_icon = "✓",
+        },
+      },
+    },
   },
 
   -- Auto-complete
@@ -325,41 +312,49 @@ lazy.setup({
   -- COMMAND TOOLS --
 
   -- Command aid and keymaps
-  "folke/which-key.nvim",
+  {
+    "folke/which-key.nvim",
+    opts = {
+      plugins = {
+        spelling = {
+          enabled = true,
+        },
+      },
+      layout = {
+        align = "center",
+      },
+    },
+  },
 
   -- Git
   "tpope/vim-fugitive",
   {
     "lewis6991/gitsigns.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("gitsigns").setup({})
-    end,
+    opts = {},
   },
   {
     "sindrets/diffview.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("diffview").setup()
-    end,
+    opts = {},
   },
 
-  -- Search
+  -- Search...
   {
-    "https://gitlab.com/ibhagwan/fzf-lua",
+    "ibhagwan/fzf-lua",
     -- optional for icon support
     dependencies = { "kyazdani42/nvim-web-devicons" }, -- Or nvim-tree/nvim-web-devicons
+    opts = {},
     config = function()
-      -- calling `setup` is optional for customization
-      require("fzf-lua").setup({})
       require("fzf-lua").register_ui_select()
     end,
   },
 
+  -- ... and replace
+  { "nvim-pack/nvim-spectre" },
+
   -- Run commands
-  {
-    "tpope/vim-dispatch",
-  },
+  { "tpope/vim-dispatch" },
 })
 
 --------------
@@ -462,18 +457,6 @@ vim.filetype.add({
 -------------
 
 local wk = require("which-key")
-
--- Setup which-key
-wk.setup({
-  plugins = {
-    spelling = {
-      enabled = true,
-    },
-  },
-  layout = {
-    align = "center",
-  },
-})
 
 -- Leader key
 vim.g.mapleader = " "
@@ -608,6 +591,11 @@ local function FindTodo()
   })
 end
 
+-- Search and replace with spectre
+wk.register({
+  S = { require("spectre").toggle, "Search and replace" },
+})
+
 -- The great <leader> keymap
 wk.register({
   ["<leader>"] = {
@@ -615,11 +603,16 @@ wk.register({
     -- Basics
     w = { "<cmd>w!<cr>", "Save" },
     q = { "<cmd>qa!<cr>", "Quit" },
-    n = { "<cmd>nohlsearch<cr>", "Nohl" },
+    n = { vim.cmd.nohl, "Nohl" },
     -- Make
-    m = { "<cmd>make<cr>", "Make" },
-    c = { "<cmd>make clean<cr>", "Make clean" },
-    -- Telescopes
+    m = { vim.cmd.make, "Make" },
+    c = {
+      function()
+        vim.cmd.make("clean")
+      end,
+      "Make clean",
+    },
+    -- Search
     f = { require("fzf-lua").files, "Files" },
     a = { require("fzf-lua").lsp_document_symbols, "Symbols" },
     s = { require("fzf-lua").live_grep, "Search" },
@@ -630,13 +623,13 @@ wk.register({
     u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
     t = {
       name = "tabs",
-      h = { "<cmd>tabprev<cr>", "Previous" },
-      l = { "<cmd>tabnext<cr>", "Next" },
-      H = { "<cmd>tabfirst<cr>", "First" },
-      L = { "<cmd>tablast<cr>", "Last" },
-      n = { "<cmd>tabnew<cr>", "New" },
-      c = { "<cmd>tabclose<cr>", "Close" },
-      o = { "<cmd>tabonly<cr>", "Close all others" },
+      h = { vim.cmd.tabprev, "Previous" },
+      l = { vim.cmd.tabnext, "Next" },
+      H = { vim.cmd.tabfirst, "First" },
+      L = { vim.cmd.tablast, "Last" },
+      n = { vim.cmd.tabnew, "New" },
+      c = { vim.cmd.tabclose, "Close" },
+      o = { vim.cmd.tabonly, "Close all others" },
     },
     l = {
       name = "lazy",
@@ -691,7 +684,7 @@ wk.register({
 vim.api.nvim_create_user_command("CopyFilename", function()
   local filename = vim.fn.expand("%:p")
   vim.fn.setreg("+", filename)
-  print(filename)
+  vim.notify(filename)
 end, {})
 
 -- Copy file content to clipboard
@@ -720,31 +713,26 @@ end
 
 -- Check (and clear) the LSP log,
 -- which could get too large sometimes
-vim.api.nvim_create_user_command("CheckLSPLog", function()
+vim.api.nvim_create_user_command("CheckLspLog", function()
   local log_path = os.getenv("HOME") .. "/.local/state/nvim/lsp.log"
 
   local file = io.open(log_path, "r")
   if not file then
-    print("LSP log file not found.")
+    vim.notify("LSP log file not found.")
     return
   end
-
   local size = file:seek("end")
   file:close()
-  print("LSP log size: " .. format_file_size(size))
+  vim.notify("LSP log size: " .. format_file_size(size))
 
-  vim.fn.inputsave()
-  local answer = vim.fn.input("Clear the log? [y/N]: ")
-  vim.fn.inputrestore()
-
-  -- Clear the log file
-  if answer:lower() == "y" then
+  -- Clear the log file (default is not)
+  local confirm = vim.fn.confirm("Clear log file?", "&Yes\n&No", 2)
+  if confirm == 1 then
     file = io.open(log_path, "w")
     if file then
       file:close()
     end
-
-    print("\nLSP log cleared.")
+    vim.notify("LSP log cleared.")
   end
 end, {})
 
@@ -878,9 +866,8 @@ require("mason-lspconfig").setup_handlers({
     -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
 
     -- Use default settings
-    local languages = require("efmls-configs.defaults").languages()
-    languages = vim.tbl_deep_extend("force", languages, {
-      -- Add pretter_d to svelte
+    local languages = vim.tbl_deep_extend("force", require("efmls-configs.defaults").languages(), {
+      -- Add pretter_d to JS/CSS languages
       svelte = {
         require("efmls-configs.formatters.prettier_d"),
       },
@@ -909,7 +896,7 @@ require("mason-lspconfig").setup_handlers({
       zsh = {
         require("efmls-configs.formatters.beautysh"),
       },
-      -- Enforce Python formatting with Black
+      -- Enforce Python formatting with black
       python = {
         require("efmls-configs.formatters.black"),
       },
@@ -927,9 +914,8 @@ require("mason-lspconfig").setup_handlers({
       },
     })
 
-    local efmls_config = {
+    setup_lsp_server("efm", {
       filetypes = vim.tbl_keys(languages),
-      capabilities = cmp_capabilities,
       settings = {
         rootMarkers = { ".git/" },
         languages = languages,
@@ -938,12 +924,7 @@ require("mason-lspconfig").setup_handlers({
         documentFormatting = true,
         documentRangeFormatting = true,
       },
-    }
-
-    require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, {
-      -- Pass your custom lsp config below like on_attach and capabilities
-      capabilities = cmp_capabilities,
-    }))
+    })
   end,
 })
 
