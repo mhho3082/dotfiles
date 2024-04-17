@@ -243,6 +243,36 @@ A nice example of installing a theme can be seen
 To have GnuPG use the terminal instead of a pop-up window for asking passwords,
 see [this Stack Exchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
 
+To show `lightdm` greeter on multiple screens,
+see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/);
+my (semi-dynamic) `/etc/lightdm/display_setup.sh` is as below:
+
+<!-- Use :r!cat /etc/lightdm/display_setup.sh to copy to below -->
+
+<details>
+<summary> My <code>/etc/lightdm/display_setup.sh</code> script </summary>
+
+```bash
+#!/bin/sh
+
+# Primary display is always known, typically something like eDP for laptops;
+# Please check xrandr to be sure
+PRIMARY_MONITOR="eDP"
+
+# Get all connected monitors except the primary one
+OTHER_MONITORS=$(xrandr --query | grep " connected" | grep -v "$PRIMARY_MONITOR" | cut -d" " -f1)
+
+# Enable the primary monitor first
+xrandr --output "$PRIMARY_MONITOR" --auto --primary
+
+# Loop through all other connected monitors and mirror them to the primary monitor
+for MONITOR in $OTHER_MONITORS; do
+    xrandr --output "$MONITOR" --auto --same-as "$PRIMARY_MONITOR"
+done
+```
+
+</details>
+
 ## Credits
 
 - Git alias derived from
