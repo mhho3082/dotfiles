@@ -247,6 +247,8 @@ To show `lightdm` greeter on multiple screens,
 see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/);
 my (semi-dynamic) `/etc/lightdm/display_setup.sh` is as below:
 
+To create Wi-Fi hotspots, see [This post by Baeldung](https://www.baeldung.com/linux/setup-wifi-hotspot).
+
 <!-- Use :r!cat /etc/lightdm/display_setup.sh to copy to below -->
 
 <details>
