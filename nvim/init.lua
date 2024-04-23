@@ -92,23 +92,11 @@ lazy.setup({
   "tpope/vim-sleuth",
 
   -- Splitjoin
-  {
-    "Wansmer/treesj",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {
-      use_default_keymaps = false,
-    },
-  },
+  { "Wansmer/treesj", dependencies = { "nvim-lua/plenary.nvim" }, opts = { use_default_keymaps = false } },
 
   -- Pairs
-  {
-    "windwp/nvim-autopairs",
-    opts = {},
-  },
-  {
-    "windwp/nvim-ts-autotag",
-    opts = {},
-  },
+  { "windwp/nvim-autopairs", opts = {} },
+  { "windwp/nvim-ts-autotag", opts = {} },
 
   -- File browser
   {
@@ -177,7 +165,7 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter",
     build = function()
-      require("nvim-treesitter.install").update({ with_sync = true })()
+      require("nvim-treesitter.install").update({})()
     end,
     config = function()
       require("nvim-treesitter.configs").setup({
@@ -217,37 +205,28 @@ lazy.setup({
       })
     end,
   },
-  "JoosepAlviste/nvim-ts-context-commentstring",
+  { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
 
   -- Statusline and tabline
   "nvim-lualine/lualine.nvim",
 
   -- Icons
-  {
-    "kyazdani42/nvim-web-devicons",
-    opts = {},
-  },
+  { "kyazdani42/nvim-web-devicons", opts = {} },
 
   -- COPILOTS --
 
   -- Package manager
-  {
-    "williamboman/mason.nvim",
-    opts = {},
-  },
+  { "williamboman/mason.nvim", opts = {} },
 
   -- LSP
-  {
-    "williamboman/mason-lspconfig.nvim",
-    opts = {},
-  },
+  { "williamboman/mason-lspconfig.nvim", opts = {} },
   "neovim/nvim-lspconfig",
   {
     "creativenull/efmls-configs-nvim",
     version = "v1.x.x", -- version is optional, but recommended
     dependencies = { "neovim/nvim-lspconfig" },
   },
-  { "barreiroleo/ltex-extra.nvim" },
+  "barreiroleo/ltex-extra.nvim",
 
   -- LSP server status
   {
@@ -328,16 +307,8 @@ lazy.setup({
 
   -- Git
   "tpope/vim-fugitive",
-  {
-    "lewis6991/gitsigns.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
-  },
-  {
-    "sindrets/diffview.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
-  },
+  { "lewis6991/gitsigns.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
+  { "sindrets/diffview.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
 
   -- Search...
   {
@@ -351,10 +322,10 @@ lazy.setup({
   },
 
   -- ... and replace
-  { "nvim-pack/nvim-spectre" },
+  "nvim-pack/nvim-spectre",
 
   -- Run commands
-  { "tpope/vim-dispatch" },
+  "tpope/vim-dispatch",
 })
 
 --------------
@@ -984,7 +955,7 @@ cmp.setup({
     { name = "nvim_lsp_signature_help" },
     {
       name = "buffer",
-      keyword_length = 5,
+      keyword_length = 4,
       option = {
         get_bufnrs = function()
           local buf = vim.api.nvim_get_current_buf()
