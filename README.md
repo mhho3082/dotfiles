@@ -178,7 +178,7 @@ A safe sequence to bootstrap `paru` from a clean installation
 sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
 
 # Get fast mirrors
-sudo reflector --country hk,jp,sg,kr,tw,gb,us --age 24 --protocol https --sort rate --fastest 10 --verbose
+sudo reflector --country hk,jp,sg,kr,tw,gb,us --age 1 --protocol https --sort rate --fastest 10 --verbose --save /etc/pacman.d/mirrorlist
 
 # Update system
 sudo pacman -Syu
