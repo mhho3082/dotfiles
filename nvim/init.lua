@@ -92,11 +92,29 @@ lazy.setup({
   "tpope/vim-sleuth",
 
   -- Splitjoin
-  { "Wansmer/treesj", dependencies = { "nvim-lua/plenary.nvim" }, opts = { use_default_keymaps = false } },
+  {
+    "Wansmer/treesj",
+    keys = { "gs", "gj" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      local tsj = require("treesj")
+      tsj.setup({
+        use_default_keymaps = false,
+      })
+      vim.keymap.set({ "n" }, "gs", tsj.split, { desc = "Split" })
+      vim.keymap.set({ "n" }, "gj", tsj.join, { desc = "Join" })
+    end,
+  },
 
   -- Pairs
   { "windwp/nvim-autopairs", opts = {} },
-  { "windwp/nvim-ts-autotag", opts = {} },
+  {
+    "windwp/nvim-ts-autotag",
+    --stylua: ignore start
+    ft = { "html", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "vue", "tsx", "jsx", "rescript", "xml", "php", "markdown", "astro", "glimmer", "handlebars", "hbs", },
+    --stylua: ignore end
+    opts = {},
+  },
 
   -- File browser
   {
@@ -129,11 +147,14 @@ lazy.setup({
   -- Move around better
   {
     "chrisgrieser/nvim-spider",
+    keys = { "w", "e", "b", "ge" },
     config = function()
-      vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", { desc = "Spider-w" })
-      vim.keymap.set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>", { desc = "Spider-e" })
-      vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>", { desc = "Spider-b" })
-      vim.keymap.set({ "n", "o", "x" }, "ge", "<cmd>lua require('spider').motion('ge')<CR>", { desc = "Spider-ge" })
+      local spider = require("spider")
+      vim.tbl_map(function(ops)
+        vim.keymap.set({ "n", "v", "o", "x" }, ops, function()
+          spider.motion(ops)
+        end, { desc = "Spider-" .. ops, noremap = true, silent = true })
+      end, { "w", "e", "b", "ge" })
     end,
   },
 
@@ -143,6 +164,7 @@ lazy.setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
+    event = { "BufReadPost", "BufNewFile" },
     opts = {
       indent = { char = "│" },
       scope = { enabled = false },
@@ -153,6 +175,8 @@ lazy.setup({
   -- Colorscheme
   {
     "sainnhe/gruvbox-material",
+    lazy = false,
+    priority = 1000,
     config = function()
       vim.background = "dark"
       vim.g.gruvbox_material_background = "hard"
@@ -208,7 +232,60 @@ lazy.setup({
   { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
 
   -- Statusline and tabline
-  "nvim-lualine/lualine.nvim",
+  {
+    "nvim-lualine/lualine.nvim",
+    config = function()
+      -- gitsigns integration copied from:
+      -- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
+      local function gitsigns_diff_source()
+        local gitsigns = vim.b.gitsigns_status_dict
+        if gitsigns then
+          return {
+            added = gitsigns.added,
+            modified = gitsigns.changed,
+            removed = gitsigns.removed,
+          }
+        end
+      end
+
+      -- Boot up lualine
+      require("lualine").setup({
+        options = {
+          section_separators = "",
+          component_separators = "",
+          globalstatus = true,
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = {
+            { "b:gitsigns_head", icon = "" },
+            {
+              "diff",
+              source = gitsigns_diff_source,
+              symbols = { added = " ", modified = " ", removed = " " },
+            },
+          },
+          lualine_c = {
+            { "filename", path = 1 },
+            { "diagnostics", sources = { "nvim_lsp" } },
+          },
+          lualine_x = { "filetype", "fileformat", "encoding" },
+          lualine_y = {},
+          lualine_z = {},
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { { "filename", path = 1, symbols = { modified = "" } } },
+          lualine_x = { { "filetype", colored = false } },
+          lualine_y = {},
+          lualine_z = {},
+        },
+        tabline = {},
+        extensions = { "fugitive", "fzf", "lazy", "mason", "oil" },
+      })
+    end,
+  },
 
   -- Icons
   { "kyazdani42/nvim-web-devicons", opts = {} },
@@ -245,19 +322,105 @@ lazy.setup({
   },
 
   -- Auto-complete
-  "hrsh7th/nvim-cmp",
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-nvim-lua",
-  "hrsh7th/cmp-path",
-  "hrsh7th/cmp-cmdline",
-  "hrsh7th/cmp-nvim-lsp-signature-help",
-  "hrsh7th/cmp-buffer",
+  {
+    "hrsh7th/nvim-cmp",
+    version = false,
+    event = { "InsertEnter", "CmdlineEnter", "CmdwinEnter" },
+    dependencies = {
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lua",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
+      "hrsh7th/cmp-buffer",
+    },
+    config = function()
+      local cmp = require("cmp")
+
+      cmp.setup({
+        enabled = function()
+          -- Enable in command mode
+          if vim.api.nvim_get_mode().mode == "c" then
+            return true
+          end
+
+          -- Disable in prompts (e.g., Telescope, fzf-lua)
+          local in_prompt = vim.api.nvim_buf_get_option(0, "buftype") == "prompt"
+          if in_prompt then
+            return false
+          end
+
+          local context = require("cmp.config.context")
+
+          -- Disable in comments
+          if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
+            return false
+          end
+
+          return true
+        end,
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+          end,
+        },
+        mapping = {
+          -- Prev
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
+          ["<C-k>"] = cmp.mapping.select_prev_item(),
+          ["<Up>"] = cmp.mapping.select_prev_item(),
+          -- Next
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-j>"] = cmp.mapping.select_next_item(),
+          ["<Down>"] = cmp.mapping.select_next_item(),
+          -- Confirm
+          ["<C-y>"] = cmp.mapping.confirm({ select = false }),
+          ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+          -- Abort
+          ["<C-e>"] = cmp.mapping.abort(),
+        },
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
+          { name = "path" },
+          { name = "nvim_lua" },
+          { name = "nvim_lsp_signature_help" },
+          {
+            name = "buffer",
+            keyword_length = 4,
+            option = {
+              get_bufnrs = function()
+                local buf = vim.api.nvim_get_current_buf()
+                local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+                if byte_size > 1024 * 1024 then -- 1 Megabyte max
+                  return {}
+                end
+                return { buf }
+              end,
+            },
+          },
+        }),
+      })
+
+      -- Command line autocomplete
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          { name = "cmdline" },
+        }),
+      })
+    end,
+  },
 
   -- Snippets
   {
     "L3MON4D3/LuaSnip",
     -- Referencing https://github.com/rafamadriz/friendly-snippets/wiki
     dependencies = { "rafamadriz/friendly-snippets" },
+    event = { "BufReadPost", "BufNewFile" },
     build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
     config = function(_, opts)
       local luasnip = require("luasnip")
@@ -265,6 +428,18 @@ lazy.setup({
       if opts then
         luasnip.config.setup(opts)
       end
+
+      -- Mappings
+      vim.keymap.set({ "i", "v" }, "<C-l>", function()
+        if luasnip.locally_jumpable(1) then
+          luasnip.jump(1)
+        end
+      end, { desc = "LuaSnip jump", noremap = true, silent = true })
+      vim.keymap.set({ "i", "v" }, "<C-h>", function()
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        end
+      end, { desc = "LuaSnip jump back", noremap = true, silent = true })
 
       require("luasnip.loaders.from_vscode").lazy_load({
         exclude = { "html", "all" },
@@ -286,7 +461,6 @@ lazy.setup({
       luasnip.filetype_extend("sh", { "shelldoc" })
     end,
   },
-  "saadparwaiz1/cmp_luasnip",
 
   -- COMMAND TOOLS --
 
@@ -307,8 +481,17 @@ lazy.setup({
 
   -- Git
   "tpope/vim-fugitive",
-  { "lewis6991/gitsigns.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
-  { "sindrets/diffview.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
+  {
+    "lewis6991/gitsigns.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+  {
+    "sindrets/diffview.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
 
   -- Search...
   {
@@ -352,9 +535,6 @@ vim.opt.number = false
 vim.opt.ruler = false
 vim.opt.showcmd = false
 vim.opt.showmode = false
-
--- Remove the intro screen
-vim.opt.shortmess:append({ I = true })
 
 -- If number is on,
 -- highlight current line number (but not the whole line)
@@ -470,7 +650,9 @@ wk.register({
 -- LSP mappings
 wk.register({
   ["J"] = {
-    '<cmd>lua vim.diagnostic.open_float(0, { scope = "cursor" })<cr>',
+    function()
+      vim.diagnostic.open_float(0, { scope = "cursor" })
+    end,
     "Diagnostics",
   },
   ["K"] = { vim.lsp.buf.hover, "Hover" },
@@ -496,33 +678,6 @@ wk.register({
   ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "Format" },
 }, { mode = { "n", "v" } })
-
--- LuaSnip mappings
-local luasnip = require("luasnip")
-wk.register({
-  ["<C-l>"] = {
-    function()
-      if luasnip.locally_jumpable(1) then
-        luasnip.jump(1)
-      end
-    end,
-    "LuaSnip jump",
-  },
-  ["<C-h>"] = {
-    function()
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      end
-    end,
-    "LuaSnip jump back",
-  },
-}, { mode = { "i", "v" } })
-
--- Splitjoin mappings
-wk.register({
-  ["gs"] = { require("treesj").split, "Split" },
-  ["gj"] = { require("treesj").join, "Join" },
-}, { mode = "n" })
 
 -- Click '-' in any buffer to open its parent directory in oil.nvim
 wk.register({
@@ -606,6 +761,7 @@ wk.register({
       name = "lazy",
       l = { "<cmd>Lazy sync<cr>", "Sync" },
       u = { "<cmd>Lazy update<cr>", "Update" },
+      p = { "<cmd>Lazy profile<cr>", "Profile" },
     },
     g = {
       name = "git",
@@ -897,141 +1053,4 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
-})
-
----------
--- CMP --
----------
-
-local cmp = require("cmp")
-
-cmp.setup({
-  enabled = function()
-    -- Enable in command mode
-    if vim.api.nvim_get_mode().mode == "c" then
-      return true
-    end
-
-    -- Disable in prompts (e.g., Telescope, fzf-lua)
-    local in_prompt = vim.api.nvim_buf_get_option(0, "buftype") == "prompt"
-    if in_prompt then
-      return false
-    end
-
-    local context = require("cmp.config.context")
-
-    -- Disable in comments
-    if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
-      return false
-    end
-
-    return true
-  end,
-  snippet = {
-    expand = function(args)
-      require("luasnip").lsp_expand(args.body)
-    end,
-  },
-  mapping = {
-    -- Prev
-    ["<C-p>"] = cmp.mapping.select_prev_item(),
-    ["<C-k>"] = cmp.mapping.select_prev_item(),
-    ["<Up>"] = cmp.mapping.select_prev_item(),
-    -- Next
-    ["<C-n>"] = cmp.mapping.select_next_item(),
-    ["<C-j>"] = cmp.mapping.select_next_item(),
-    ["<Down>"] = cmp.mapping.select_next_item(),
-    -- Confirm
-    ["<C-y>"] = cmp.mapping.confirm({ select = false }),
-    ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-    -- Abort
-    ["<C-e>"] = cmp.mapping.abort(),
-  },
-  sources = cmp.config.sources({
-    { name = "nvim_lsp" },
-    { name = "luasnip" },
-    { name = "path" },
-    { name = "nvim_lua" },
-    { name = "nvim_lsp_signature_help" },
-    {
-      name = "buffer",
-      keyword_length = 4,
-      option = {
-        get_bufnrs = function()
-          local buf = vim.api.nvim_get_current_buf()
-          local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
-          if byte_size > 1024 * 1024 then -- 1 Megabyte max
-            return {}
-          end
-          return { buf }
-        end,
-      },
-    },
-  }),
-})
-
--- Command line autocomplete
-cmp.setup.cmdline(":", {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = "path" },
-  }, {
-    { name = "cmdline" },
-  }),
-})
-
--------------
--- LUALINE --
--------------
-
--- gitsigns integration copied from:
--- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
-
--- Gitsigns diff
-local function gitsigns_diff_source()
-  local gitsigns = vim.b.gitsigns_status_dict
-  if gitsigns then
-    return {
-      added = gitsigns.added,
-      modified = gitsigns.changed,
-      removed = gitsigns.removed,
-    }
-  end
-end
-
--- Boot up lualine
-require("lualine").setup({
-  options = {
-    section_separators = "",
-    component_separators = "",
-    globalstatus = true,
-  },
-  sections = {
-    lualine_a = { "mode" },
-    lualine_b = {
-      { "b:gitsigns_head", icon = "" },
-      {
-        "diff",
-        source = gitsigns_diff_source,
-        symbols = { added = " ", modified = " ", removed = " " },
-      },
-    },
-    lualine_c = {
-      { "filename", path = 1 },
-      { "diagnostics", sources = { "nvim_lsp" } },
-    },
-    lualine_x = { "filetype", "fileformat", "encoding" },
-    lualine_y = {},
-    lualine_z = {},
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { { "filename", path = 1, symbols = { modified = "" } } },
-    lualine_x = { { "filetype", colored = false } },
-    lualine_y = {},
-    lualine_z = {},
-  },
-  tabline = {},
-  extensions = { "fugitive", "fzf", "lazy", "mason", "oil" },
 })
