@@ -36,53 +36,67 @@ local lazy = require("lazy")
 lazy.setup({
   -- EDIT --
 
-  -- Swiss army knife
+  -- Swiss army knife ("mini.nvim")
+  -- More targets
   {
-    "echasnovski/mini.nvim",
-    config = function()
-      -- More targets
-      require("mini.ai").setup()
+    "echasnovski/mini.ai",
+    event = "VeryLazy",
+    opts = {},
+  },
+  -- Surround
+  {
+    "echasnovski/mini.surround",
+    event = "VeryLazy",
+    opts = {},
+  },
+  -- Comments
+  {
+    "echasnovski/mini.comment",
+    event = "VeryLazy",
+    opts = {
+      options = {
+        custom_commentstring = function()
+          return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+        end,
+      },
+    },
+  },
+  -- Align
+  {
+    "echasnovski/mini.align",
+    event = "VeryLazy",
+    opts = {},
+  },
+  -- Move code
+  {
+    "echasnovski/mini.move",
+    event = "VeryLazy",
+    opts = {
+      mappings = {
+        -- Disable using <M-_> for moving in normal mode
+        -- To prevent colliding with inter-window movements
+        line_left = "",
+        line_right = "",
+        line_down = "",
+        line_up = "",
+      },
+    },
+  },
+  -- Multi-line f/t
+  {
+    "echasnovski/mini.jump",
+    event = "VeryLazy",
+    opts = {
+      -- Delay values (in ms) for different functionalities. Set any of them to
+      -- a very big number (like 10^7) to virtually disable.
+      delay = {
+        -- Delay between jump and highlighting all possible jumps
+        highlight = 10000000,
 
-      -- Surround
-      require("mini.surround").setup()
-
-      -- Comments
-      require("mini.comment").setup({
-        options = {
-          custom_commentstring = function()
-            return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
-          end,
-        },
-      })
-
-      -- Align
-      require("mini.align").setup()
-
-      -- Move code
-      require("mini.move").setup({
-        mappings = {
-          -- Disable using <M-_> for moving in normal mode
-          -- To prevent colliding with inter-window movements
-          line_left = "",
-          line_right = "",
-          line_down = "",
-          line_up = "",
-        },
-      })
-
-      -- Multi-line f/t
-      require("mini.jump").setup({
-        -- Delay values (in ms) for different functionalities. Set any of them to
-        -- a very big number (like 10^7) to virtually disable.
-        delay = {
-          -- Delay between jump and highlighting all possible jumps
-          highlight = 10000000,
-
-          -- Delay between jump and automatic stop if idle (no jump is done)
-          idle_stop = 0,
-        },
-      })
-    end,
+        -- Delay between jump and automatic stop if idle (no jump is done)
+        idle_stop = 0,
+      },
+    },
   },
 
   -- Readline-like insertion
@@ -191,6 +205,16 @@ lazy.setup({
     build = function()
       require("nvim-treesitter.install").update({})()
     end,
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      {
+        "JoosepAlviste/nvim-ts-context-commentstring",
+        opts = { enable_autocmd = false },
+        config = function()
+          vim.g.skip_ts_context_commentstring_module = true
+        end,
+      },
+    },
     config = function()
       require("nvim-treesitter.configs").setup({
         --stylua: ignore start
@@ -229,11 +253,11 @@ lazy.setup({
       })
     end,
   },
-  { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
 
   -- Statusline and tabline
   {
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
     config = function()
       -- gitsigns integration copied from:
       -- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
@@ -288,7 +312,11 @@ lazy.setup({
   },
 
   -- Icons
-  { "kyazdani42/nvim-web-devicons", opts = {} },
+  {
+    "kyazdani42/nvim-web-devicons",
+    event = "VeryLazy",
+    opts = {},
+  },
 
   -- COPILOTS --
 
@@ -308,6 +336,7 @@ lazy.setup({
   -- LSP server status
   {
     "j-hui/fidget.nvim",
+    event = "VeryLazy",
     opts = {
       progress = {
         ignore = {
@@ -489,6 +518,9 @@ lazy.setup({
   },
   {
     "sindrets/diffview.nvim",
+    --stylua: ignore start
+    cmd = { "DiffviewLog", "DiffviewOpen", "DiffviewClose", "DiffviewRefresh", "DiffviewFocusFiles", "DiffviewFileHistory", "DiffviewToggleFiles" },
+    --stylua: ignore end
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {},
   },
@@ -496,8 +528,6 @@ lazy.setup({
   -- Search...
   {
     "ibhagwan/fzf-lua",
-    -- optional for icon support
-    dependencies = { "kyazdani42/nvim-web-devicons" }, -- Or nvim-tree/nvim-web-devicons
     opts = {},
     config = function()
       require("fzf-lua").register_ui_select()
@@ -505,7 +535,18 @@ lazy.setup({
   },
 
   -- ... and replace
-  "nvim-pack/nvim-spectre",
+  {
+    "nvim-pack/nvim-spectre",
+    keys = { "S" },
+    config = function()
+      vim.keymap.set(
+        { "n" },
+        "S",
+        require("spectre").toggle,
+        { desc = "Search and replace", noremap = true, silent = true }
+      )
+    end,
+  },
 
   -- Run commands
   "tpope/vim-dispatch",
@@ -716,11 +757,6 @@ local function FindTodo()
     previewer = "builtin",
   })
 end
-
--- Search and replace with spectre
-wk.register({
-  S = { require("spectre").toggle, "Search and replace" },
-})
 
 -- The great <leader> keymap
 wk.register({
