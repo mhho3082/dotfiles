@@ -133,6 +133,7 @@ lazy.setup({
   -- File browser
   {
     "stevearc/oil.nvim",
+    event = "VeryLazy",
     opts = {
       view_options = {
         -- Display hidden files
@@ -147,11 +148,21 @@ lazy.setup({
       -- Set to true to watch the filesystem for changes and reload oil
       experimental_watch_for_changes = true,
     },
+    config = function(_, opts)
+      local oil = require("oil")
+
+      if opts then
+        oil.setup(opts)
+      end
+
+      vim.keymap.set({ "n" }, "-", oil.open, { desc = "Open oil.nvim", noremap = true, silent = true })
+    end,
   },
 
   -- Undo tree
   {
     "mbbill/undotree",
+    event = "VeryLazy",
     config = function()
       -- Open on the right
       vim.g.undotree_WindowLayout = 3
@@ -649,6 +660,7 @@ vim.filetype.add({
 -------------
 
 local wk = require("which-key")
+local fzf = require("fzf-lua")
 
 -- Leader key
 vim.g.mapleader = " "
@@ -701,14 +713,14 @@ wk.register({
   ["gd"] = {
     function()
       -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-      require("fzf-lua").lsp_definitions({ jump_to_single_result = true })
+      fzf.lsp_definitions({ jump_to_single_result = true })
     end,
     "Goto definition",
   },
   ["gD"] = {
     function()
       -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-      require("fzf-lua").lsp_references({ jump_to_single_result = true })
+      fzf.lsp_references({ jump_to_single_result = true })
     end,
     "Goto references",
   },
@@ -719,11 +731,6 @@ wk.register({
   ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
   ["<leader>k"] = { vim.lsp.buf.format, "Format" },
 }, { mode = { "n", "v" } })
-
--- Click '-' in any buffer to open its parent directory in oil.nvim
-wk.register({
-  ["-"] = { require("oil").open, "Open oil.nvim" },
-}, { mode = "n" })
 
 -- A function to search for TODOs and more
 local function FindTodo()
@@ -751,9 +758,9 @@ local function FindTodo()
   local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim"
 
   -- Actually initiate the search
-  require("fzf-lua").fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
+  fzf.fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
     prompt = "Find TODOs> ",
-    actions = { ["default"] = require("fzf-lua").actions.file_edit },
+    actions = { ["default"] = fzf.actions.file_edit },
     previewer = "builtin",
   })
 end
@@ -775,11 +782,11 @@ wk.register({
       "Make clean",
     },
     -- Search
-    f = { require("fzf-lua").files, "Files" },
-    a = { require("fzf-lua").lsp_document_symbols, "Symbols" },
-    s = { require("fzf-lua").live_grep, "Search" },
-    d = { require("fzf-lua").diagnostics_workspace, "Diagnostics" },
-    r = { require("fzf-lua").resume, "Resume search" },
+    f = { fzf.files, "Files" },
+    a = { fzf.lsp_document_symbols, "Symbols" },
+    s = { fzf.live_grep, "Search" },
+    d = { fzf.diagnostics_workspace, "Diagnostics" },
+    r = { fzf.resume, "Resume search" },
     e = { FindTodo, "Find TODOs" },
     -- Undo tree
     u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
