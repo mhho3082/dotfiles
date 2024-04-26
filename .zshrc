@@ -190,10 +190,10 @@ elif (( $+commands[zathura] )); then
         [ -z $za_f ] && za_f+='-iname \*.'$za_t || za_f+=' -o -iname \*.'$za_t
     done
     local search='$(find -type f \( '$za_f' \) | fzf)'
-    alias za='local f='$search'; zaread $f & disown'
+    alias za='local f='$search'; zathura $f & disown'
 fi
 
-if (( $+commands[zathura] )); then
+if (( $+commands[zathura] )) && (( $+commands[xsel] )); then
     function zathura-from-url {
         if [[ $(xsel -ob) =~ ^https?:// ]]
         then
@@ -291,10 +291,10 @@ alias virshprep="sudo virsh net-start default >/dev/null"
 alias superuser="sudo -Eks"
 
 # Run every autostart script
-alias autostart="run-parts --regex '.*sh$' ~/.config/autostart"
+alias autostart='for script in ~/.config/autostart/*.sh; do timeout 1s "$script" &>/dev/null & done'
 
 # Get sizes of different directories / files in current directory
-# https://superuser.com/questions/605414/how-to-merge-ls-commands-colors-with-the-output-of-find-or-du
+# https://superuser.com/q/605414/
 function sizes {
     paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
 }
@@ -361,7 +361,7 @@ compdef _pactree paru-forceupdate
 
 # Remove orphan packages
 function paru-autoremove {
-    paru -Runs $(paru -Qdt | cut -d ' ' -f 1)
+    paru -Runs $(paru -Qdtq)
 }
 
 # Get the IP address of this machine
@@ -371,7 +371,7 @@ function ip-addr {
     local all_ips=($(ip addr show | perl -nle 's/inet (\S+)/print $1/e'))
 
     # Get the main outbound IP address
-    local out_ip=$(ip route get 1.1.1.1 | perl -nle 's/src (\S+)/print $1/e')
+    local out_ip=$(ip route get 8.8.8.8 | perl -nle 's/src (\S+)/print $1/e')
 
     # Highlight the main outbound IP address group in print
     for ip_addr in $all_ips; do
@@ -383,7 +383,9 @@ function ip-addr {
 # https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
     # Open in File Explorer (for WSL)
-    alias explorer='explorer.exe .; || true'
+    function explorer {
+        explorer.exe ${@:-.}; [ $? -eq 1 ]
+    }
 fi
 
 # == Prompt ==
@@ -454,7 +456,7 @@ _setup_ps1() {
     # RHS prompt: git info
     # Modified from https://github.com/romkatv/gitstatus
     RPROMPT=""
-    if gitstatus_query MY && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
+    if gitstatus_query 'MY' && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
         # Inter-branch status
         (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD"
         (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
@@ -473,23 +475,32 @@ _setup_ps1() {
         # Check if remote exists
         if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
             # Show correct hosting service icon if appropriate
-            if [[ $VCS_STATUS_REMOTE_URL =~ "github.com" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_GITHUB%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitlab.com" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_GITLAB%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "notabug.org" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_NOTABUG%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "codeberg.org" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_CODEBERG%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "gitea.com" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_GITEA%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "gogs.io" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_GOGS%f"
-            elif [[ $VCS_STATUS_REMOTE_URL =~ "bitbucket.org" ]]; then
-                RPROMPT+="%F{242}$GIT_ICONS_BITBUCKET%f"
-            else
-                RPROMPT+="%F{242}$GIT_ICONS_BASIC_REMOTE%f"
-            fi
+            case $VCS_STATUS_REMOTE_URL in
+                *"github.com"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_GITHUB%f"
+                    ;;
+                *"gitlab.com"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_GITLAB%f"
+                    ;;
+                *"notabug.org"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_NOTABUG%f"
+                    ;;
+                *"codeberg.org"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_CODEBERG%f"
+                    ;;
+                *"gitea.com"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_GITEA%f"
+                    ;;
+                *"gogs.io"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_GOGS%f"
+                    ;;
+                *"bitbucket.org"*)
+                    RPROMPT+="%F{242}$GIT_ICONS_BITBUCKET%f"
+                    ;;
+                *)
+                    RPROMPT+="%F{242}$GIT_ICONS_BASIC_REMOTE%f"
+                    ;;
+            esac
 
             # Show remote name if different
             if [[ $VCS_STATUS_LOCAL_BRANCH != $VCS_STATUS_REMOTE_BRANCH ]]; then
@@ -570,32 +581,13 @@ bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 
 # Ctrl-n/p for history
-# https://apple.stackexchange.com/questions/426084/zsh-how-do-i-get-ctrl-p-and-ctrl-n-keys-to-perform-history-search-backward-forw
+# https://apple.stackexchange.com/q/426084/
 bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
 
 # Ctrl-u/k for delete to beginning/end of line
 bindkey '^U' backward-kill-line
 bindkey '^K' kill-line
-
-# Add ^Z-fg
-# https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-fancy-ctrl-z () {
-    if [[ $#BUFFER -eq 0 ]]; then
-        if [[ -n ${jobstates[(r)s*]} ]]; then
-            BUFFER="fg"
-            zle accept-line
-        else
-            BUFFER="$VISUAL"
-            zle accept-line
-        fi
-    else
-        BUFFER+=""
-        zle end-of-line
-    fi
-}
-zle -N fancy-ctrl-z
-bindkey '^Z' fancy-ctrl-z
 
 # == FZF ==
 
