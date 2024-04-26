@@ -115,8 +115,8 @@ lazy.setup({
       tsj.setup({
         use_default_keymaps = false,
       })
-      vim.keymap.set({ "n" }, "gs", tsj.split, { desc = "Split" })
-      vim.keymap.set({ "n" }, "gj", tsj.join, { desc = "Join" })
+      vim.keymap.set({ "n" }, "gs", tsj.split, { desc = "Split", noremap = true, silent = true })
+      vim.keymap.set({ "n" }, "gj", tsj.join, { desc = "Join", noremap = true, silent = true })
     end,
   },
 
