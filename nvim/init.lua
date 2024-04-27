@@ -38,17 +38,9 @@ lazy.setup({
 
   -- Swiss army knife ("mini.nvim")
   -- More targets
-  {
-    "echasnovski/mini.ai",
-    event = "VeryLazy",
-    opts = {},
-  },
+  { "echasnovski/mini.ai", event = "VeryLazy", opts = {} },
   -- Surround
-  {
-    "echasnovski/mini.surround",
-    event = "VeryLazy",
-    opts = {},
-  },
+  { "echasnovski/mini.surround", event = "VeryLazy", opts = {} },
   -- Comments
   {
     "echasnovski/mini.comment",
@@ -62,11 +54,7 @@ lazy.setup({
     },
   },
   -- Align
-  {
-    "echasnovski/mini.align",
-    event = "VeryLazy",
-    opts = {},
-  },
+  { "echasnovski/mini.align", event = "VeryLazy", opts = {} },
   -- Move code
   {
     "echasnovski/mini.move",
@@ -100,15 +88,15 @@ lazy.setup({
   },
 
   -- Readline-like insertion
-  "tpope/vim-rsi",
+  { "tpope/vim-rsi", event = "VeryLazy" },
 
   -- Indent
-  "tpope/vim-sleuth",
+  { "tpope/vim-sleuth", event = "VeryLazy" },
 
   -- Splitjoin
   {
     "Wansmer/treesj",
-    keys = { "gs", "gj" },
+    event = "VeryLazy",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
       local tsj = require("treesj")
@@ -121,14 +109,8 @@ lazy.setup({
   },
 
   -- Pairs
-  { "windwp/nvim-autopairs", opts = {} },
-  {
-    "windwp/nvim-ts-autotag",
-    --stylua: ignore start
-    ft = { "html", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "vue", "tsx", "jsx", "rescript", "xml", "php", "markdown", "astro", "glimmer", "handlebars", "hbs", },
-    --stylua: ignore end
-    opts = {},
-  },
+  { "windwp/nvim-autopairs", event = "VeryLazy", opts = {} },
+  { "windwp/nvim-ts-autotag", event = "VeryLazy", opts = {} },
 
   -- File browser
   {
@@ -172,7 +154,7 @@ lazy.setup({
   -- Move around better
   {
     "chrisgrieser/nvim-spider",
-    keys = { "w", "e", "b", "ge" },
+    event = "VeryLazy",
     config = function()
       local spider = require("spider")
       vim.tbl_map(function(ops)
@@ -189,7 +171,7 @@ lazy.setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy",
     opts = {
       indent = { char = "│" },
       scope = { enabled = false },
@@ -205,7 +187,7 @@ lazy.setup({
     config = function()
       vim.background = "dark"
       vim.g.gruvbox_material_background = "hard"
-      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_better_performance = true
       vim.cmd.colorscheme("gruvbox-material")
     end,
   },
@@ -216,7 +198,7 @@ lazy.setup({
     build = function()
       require("nvim-treesitter.install").update({})()
     end,
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy",
     dependencies = {
       {
         "JoosepAlviste/nvim-ts-context-commentstring",
@@ -323,49 +305,170 @@ lazy.setup({
   },
 
   -- Icons
-  {
-    "kyazdani42/nvim-web-devicons",
-    event = "VeryLazy",
-    opts = {},
-  },
+  { "kyazdani42/nvim-web-devicons", event = "VeryLazy", opts = {} },
 
   -- COPILOTS --
 
-  -- Package manager
-  { "williamboman/mason.nvim", opts = {} },
-
   -- LSP
-  { "williamboman/mason-lspconfig.nvim", opts = {} },
-  "neovim/nvim-lspconfig",
   {
-    "creativenull/efmls-configs-nvim",
-    version = "v1.x.x", -- version is optional, but recommended
-    dependencies = { "neovim/nvim-lspconfig" },
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      { "williamboman/mason.nvim", event = "VeryLazy", opts = {} },
+      { "neovim/nvim-lspconfig", event = "VeryLazy" },
+      {
+        "creativenull/efmls-configs-nvim",
+        version = "v1.x.x", -- version is optional, but recommended
+        event = "VeryLazy",
+        dependencies = { "neovim/nvim-lspconfig" },
+      },
+      { "barreiroleo/ltex-extra.nvim", event = "VeryLazy" },
+    },
+    event = "VeryLazy",
+    opts = {},
+    config = function()
+      -- Note: The whole LSP config is here
+
+      -- Don't use virtual text (the text at the end of line)
+      -- It is too disturbing to workflow
+      vim.diagnostic.config({
+        virtual_text = false,
+        severity_sort = true,
+      })
+
+      -- Use nerd font for gutter signs
+      local signs = { Error = "󰅚", Warn = "󰀪", Hint = "󰌶", Info = "󰋽" }
+      for type, icon in pairs(signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      end
+
+      -- Add additional capabilities supported by nvim-cmp
+      local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      -- Set up LSP server with CMP capabilities and additional settings.
+      ---@param server_name string the LSP server name
+      ---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
+      local function setup_lsp_server(server_name, options)
+        local opts = options or {}
+        opts.capabilities = opts.capabilities or cmp_capabilities
+        require("lspconfig")[server_name].setup(opts)
+      end
+
+      -- Setup all LSP servers installed by Mason
+      require("mason-lspconfig").setup_handlers({
+        -- Default handler
+        function(server_name)
+          setup_lsp_server(server_name)
+        end,
+        -- Specific handlers
+        ["lua_ls"] = function()
+          setup_lsp_server("lua_ls", {
+            settings = {
+              Lua = {
+                diagnostics = { globals = { "vim" } },
+                runtime = { version = "LuaJIT" },
+                format = { enable = false },
+              },
+            },
+          })
+        end,
+        ["rust_analyzer"] = function()
+          setup_lsp_server("rust_analyzer", {
+            settings = {
+              ["rust-analyzer"] = {
+                checkOnSave = { command = "clippy" },
+                imports = { granularity = { group = "module" }, prefix = "self" },
+                cargo = { buildScripts = { enable = true } },
+                procMacro = { enable = true },
+              },
+            },
+          })
+        end,
+        ["ltex"] = function()
+          setup_lsp_server("ltex", {
+            settings = {
+              ltex = {
+                --stylua: ignore start
+                enabled = {
+                  "bib", "gitcommit", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc", "quarto", "rmd", "context",
+                  -- "html", "xhtml",
+                },
+                --stylua: ignore end
+                language = "en-GB",
+                --stylua: ignore start
+                dictionary = {
+                  ["en-GB"] = {
+                    "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox",
+                  },
+                },
+                --stylua: ignore end
+              },
+            },
+            on_attach = function()
+              require("ltex_extra").setup({
+                load_langs = { "en-GB", "en-US" },
+                init_check = true,
+                path = ".ltex",
+              })
+            end,
+          })
+        end,
+        ["jdtls"] = function()
+          setup_lsp_server("jdtls", { settings = { java = { format = { enabled = false } } } })
+        end,
+        ["efm"] = function()
+          -- Special null-ls-like LSP server
+          -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
+
+          -- Use default settings
+          local languages = vim.tbl_deep_extend("force", require("efmls-configs.defaults").languages(), {
+            -- Add pretter_d to JS/CSS languages
+            svelte = { require("efmls-configs.formatters.prettier_d") },
+            typescript = { require("efmls-configs.formatters.prettier_d") },
+            markdown = { require("efmls-configs.formatters.prettier_d") },
+            css = { require("efmls-configs.formatters.prettier_d") },
+            json = { require("efmls-configs.formatters.prettier_d") },
+            jsonc = { require("efmls-configs.formatters.prettier_d") },
+            -- Use beautysh for shell scripts
+            bash = { require("efmls-configs.formatters.beautysh") },
+            sh = { require("efmls-configs.formatters.beautysh") },
+            zsh = { require("efmls-configs.formatters.beautysh") },
+            -- Enforce Python formatting with black
+            python = { require("efmls-configs.formatters.black") },
+            -- Format BibTex with bibtex-tidy
+            -- https://github.com/FlamingTempura/bibtex-tidy/issues/143
+            bib = {
+              {
+                formatCommand = "bibtex-tidy --v2 --no-backup --no-sort --sort-fields --no-escape",
+                formatStdin = true,
+              },
+            },
+            -- Format GLSL using clang-format (need .clang-format file)
+            glsl = { require("efmls-configs.formatters.clang_format") },
+          })
+
+          setup_lsp_server("efm", {
+            filetypes = vim.tbl_keys(languages),
+            settings = { rootMarkers = { ".git/" }, languages = languages },
+            init_options = { documentFormatting = true, documentRangeFormatting = true },
+          })
+        end,
+      })
+    end,
   },
-  "barreiroleo/ltex-extra.nvim",
 
   -- LSP server status
   {
     "j-hui/fidget.nvim",
     event = "VeryLazy",
-    opts = {
-      progress = {
-        ignore = {
-          "ltex",
-        },
-        display = {
-          render_limit = 5,
-          done_icon = "✓",
-        },
-      },
-    },
+    opts = { progress = { ignore = { "ltex" }, display = { render_limit = 5, done_icon = "✓" } } },
   },
 
   -- Auto-complete
   {
     "hrsh7th/nvim-cmp",
     version = false,
-    event = { "InsertEnter", "CmdlineEnter", "CmdwinEnter" },
+    event = "VeryLazy",
     dependencies = {
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lsp",
@@ -460,7 +563,7 @@ lazy.setup({
     "L3MON4D3/LuaSnip",
     -- Referencing https://github.com/rafamadriz/friendly-snippets/wiki
     dependencies = { "rafamadriz/friendly-snippets" },
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy",
     build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
     config = function(_, opts)
       local luasnip = require("luasnip")
@@ -507,6 +610,7 @@ lazy.setup({
   -- Command aid and keymaps
   {
     "folke/which-key.nvim",
+    event = "VeryLazy",
     opts = {
       plugins = {
         spelling = {
@@ -517,28 +621,210 @@ lazy.setup({
         align = "center",
       },
     },
+    config = function(_, opts)
+      -- Note: Most of the keymap config is here
+
+      local wk = require("which-key")
+
+      if opts then
+        wk.setup(opts)
+      end
+
+      local fzf = require("fzf-lua")
+
+      -- Leader key
+      vim.g.mapleader = " "
+
+      -- Setups that which-key advices
+      vim.opt.timeoutlen = 500
+      vim.opt.scrolloff = 0
+
+      -- Move cursor by display lines by default
+      vim.tbl_map(function(ops)
+        vim.keymap.set({ "n", "v", "o", "x" }, ops, "g" .. ops, { noremap = true, silent = true })
+        -- vim.keymap.set({ "n", "v", "o", "x" }, "g" .. ops, ops, { noremap = true, silent = true })
+      end, { "j", "k", "0", "^", "$" })
+
+      -- Fix lua API keyboard interrupt issue
+      wk.register({
+        ["<C-c>"] = { "<C-[>", "Escape" },
+      }, { mode = "i" })
+
+      -- Add easy copy/paste to system clipboard
+      wk.register({
+        ["gy"] = { '"+y', "Copy to clipboard" },
+        ["gY"] = { '"+Y', "Copy to clipboard" },
+        ["gp"] = { '"+p', "Paste from clipboard" },
+        ["gP"] = { '"+P', "Paste from clipboard" },
+      }, { mode = { "n", "v" } })
+
+      -- Operate on windows with <M-_> in normal mode
+      -- (<M-_> is used to move code in visual mode)
+      wk.register({
+        ["<M-h>"] = { "<C-w>h", "Move to left window" },
+        ["<M-j>"] = { "<C-w>j", "Move to lower window" },
+        ["<M-k>"] = { "<C-w>k", "Move to upper window" },
+        ["<M-l>"] = { "<C-w>l", "Move to right window" },
+        ["<M-v>"] = { "<C-w>v", "Split vertically" },
+        ["<M-s>"] = { "<C-w>s", "Split" },
+        ["<M-c>"] = { "<C-w>c", "Close window" },
+      }, { mode = "n" })
+
+      -- LSP mappings
+      wk.register({
+        ["J"] = {
+          function()
+            vim.diagnostic.open_float(0, { scope = "cursor" })
+          end,
+          "Diagnostics",
+        },
+        ["K"] = { vim.lsp.buf.hover, "Hover" },
+        ["gr"] = { vim.lsp.buf.rename, "Rename" },
+        ["gd"] = {
+          function()
+            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+            fzf.lsp_definitions({ jump_to_single_result = true })
+          end,
+          "Goto definition",
+        },
+        ["gD"] = {
+          function()
+            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+            fzf.lsp_references({ jump_to_single_result = true })
+          end,
+          "Goto references",
+        },
+        ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
+        ["<C-k>"] = { vim.diagnostic.goto_prev, "Prev diagnostic" },
+      }, { mode = "n" })
+      wk.register({
+        ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
+        ["<leader>k"] = { vim.lsp.buf.format, "Format" },
+      }, { mode = { "n", "v" } })
+
+      -- A function to search for TODOs and more
+      local function FindTodo()
+        -- Based on treesitter
+        -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
+        --stylua: ignore start
+        local tags = {
+          -- Todo
+          "TODO", "WIP",
+          -- Note
+          "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST",
+          -- Warning
+          "HACK", "WARNING", "WARN", "FIX",
+          -- Danger
+          "FIXME", "BUG", "ERROR",
+        }
+        --stylua: ignore end
+
+        -- From VS Code Todo Tree's default regex
+        -- https://github.com/Gruntfuggly/todo-tree/issues/526
+        local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
+
+        -- From fzf-lua's default ripgrep arguments
+        -- https://github.com/ibhagwan/fzf-lua/blob/main/doc/fzf-lua.txt
+        local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim"
+
+        -- Actually initiate the search
+        fzf.fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
+          prompt = "Find TODOs> ",
+          actions = { ["default"] = fzf.actions.file_edit },
+          previewer = "builtin",
+        })
+      end
+
+      -- The great <leader> keymap
+      wk.register({
+        ["<leader>"] = {
+          name = "leader",
+          -- Basics
+          w = { "<cmd>w!<cr>", "Save" },
+          q = { "<cmd>qa!<cr>", "Quit" },
+          n = { vim.cmd.nohl, "Nohl" },
+          -- Make
+          m = { vim.cmd.make, "Make" },
+          c = {
+            function()
+              vim.cmd.make("clean")
+            end,
+            "Make clean",
+          },
+          -- Search
+          f = { fzf.files, "Files" },
+          a = { fzf.lsp_document_symbols, "Symbols" },
+          s = { fzf.live_grep, "Search" },
+          d = { fzf.diagnostics_workspace, "Diagnostics" },
+          r = { fzf.resume, "Resume search" },
+          e = { FindTodo, "Find TODOs" },
+          -- Undo tree
+          u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
+          t = {
+            name = "tabs",
+            h = { vim.cmd.tabprev, "Previous" },
+            l = { vim.cmd.tabnext, "Next" },
+            H = { vim.cmd.tabfirst, "First" },
+            L = { vim.cmd.tablast, "Last" },
+            n = { vim.cmd.tabnew, "New" },
+            c = { vim.cmd.tabclose, "Close" },
+            o = { vim.cmd.tabonly, "Close all others" },
+          },
+          l = {
+            name = "lazy",
+            l = { "<cmd>Lazy sync<cr>", "Sync" },
+            u = { "<cmd>Lazy update<cr>", "Update" },
+            p = { "<cmd>Lazy profile<cr>", "Profile" },
+          },
+          g = {
+            name = "git",
+            -- Statuses
+            b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame" },
+            d = { "<cmd>DiffviewOpen<cr>", "Diff with head" }, -- Or Gvdiffsplit
+            -- Fetch
+            f = { "<cmd>G fetch<cr>", "Fetch" },
+            m = { "<cmd>G merge<cr>", "Merge" },
+            -- Commit
+            a = { "<cmd>G add %<cr>", "Add file" },
+            c = { "<cmd>G commit<cr>", "Commit" },
+            p = { "<cmd>G push<cr>", "Push" },
+          },
+          h = {
+            name = "git hunks",
+            -- View
+            d = { "<cmd>Gitsigns preview_hunk<cr>", "Diff" },
+            -- Select
+            v = { "<cmd>Gitsigns select_hunk<cr>", "Visual" },
+            -- Move
+            n = { "<cmd>Gitsigns next_hunk<cr>", "Next" },
+            p = { "<cmd>Gitsigns prev_hunk<cr>", "Previous" },
+            -- Stage (or reset)
+            s = { "<cmd>Gitsigns stage_hunk<cr>", "Stage" },
+            u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "Undo stage" },
+            r = { "<cmd>Gitsigns reset_hunk<cr>", "Reset" },
+          },
+          i = {
+            name = "interface",
+            n = { "<cmd>set number!<cr>", "Number" },
+            s = { "<cmd>set spell!<cr>", "Spell" },
+            w = { "<cmd>set wrap!<cr>", "Wrap" },
+            i = { "<cmd>IndentBlanklineToggle<cr>", "Indentline" },
+            b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "Background" },
+          },
+        },
+      })
+    end,
   },
 
   -- Git
-  "tpope/vim-fugitive",
-  {
-    "lewis6991/gitsigns.nvim",
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
-  },
-  {
-    "sindrets/diffview.nvim",
-    --stylua: ignore start
-    cmd = { "DiffviewLog", "DiffviewOpen", "DiffviewClose", "DiffviewRefresh", "DiffviewFocusFiles", "DiffviewFileHistory", "DiffviewToggleFiles" },
-    --stylua: ignore end
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
-  },
+  { "tpope/vim-fugitive", event = "VeryLazy" },
+  { "lewis6991/gitsigns.nvim", event = "VeryLazy", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
+  { "sindrets/diffview.nvim", event = "VeryLazy", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
 
   -- Search...
   {
     "ibhagwan/fzf-lua",
+    event = "VeryLazy",
     opts = {},
     config = function()
       require("fzf-lua").register_ui_select()
@@ -548,7 +834,7 @@ lazy.setup({
   -- ... and replace
   {
     "nvim-pack/nvim-spectre",
-    keys = { "S" },
+    event = "VeryLazy",
     config = function()
       vim.keymap.set(
         { "n" },
@@ -560,8 +846,8 @@ lazy.setup({
   },
 
   -- Run commands
-  "tpope/vim-dispatch",
-})
+  { "tpope/vim-dispatch", event = "VeryLazy" },
+}, { ui = { backdrop = 100 } })
 
 --------------
 -- SETTINGS --
@@ -655,195 +941,6 @@ vim.filetype.add({
   },
 })
 
--------------
--- KEYMAPS --
--------------
-
-local wk = require("which-key")
-local fzf = require("fzf-lua")
-
--- Leader key
-vim.g.mapleader = " "
-
--- Setups that which-key advices
-vim.opt.timeoutlen = 500
-vim.opt.scrolloff = 0
-
--- Move cursor by display lines by default
-vim.tbl_map(function(ops)
-  vim.keymap.set({ "n", "v", "o", "x" }, ops, "g" .. ops, { noremap = true, silent = true })
-  vim.keymap.set({ "n", "v", "o", "x" }, "g" .. ops, ops, { noremap = true, silent = true })
-end, { "j", "k", "0", "^", "$" })
-
--- Fix lua API keyboard interrupt issue
-wk.register({
-  ["<C-c>"] = { "<C-[>", "Escape" },
-}, { mode = "i" })
-
--- Add easy copy/paste to system clipboard
-wk.register({
-  ["gy"] = { '"+y', "Copy to clipboard" },
-  ["gY"] = { '"+Y', "Copy to clipboard" },
-  ["gp"] = { '"+p', "Paste from clipboard" },
-  ["gP"] = { '"+P', "Paste from clipboard" },
-}, { mode = { "n", "v" } })
-
--- Operate on windows with <M-_> in normal mode
--- (<M-_> is used to move code in visual mode)
-wk.register({
-  ["<M-h>"] = { "<C-w>h", "Move to left window" },
-  ["<M-j>"] = { "<C-w>j", "Move to lower window" },
-  ["<M-k>"] = { "<C-w>k", "Move to upper window" },
-  ["<M-l>"] = { "<C-w>l", "Move to right window" },
-  ["<M-v>"] = { "<C-w>v", "Split vertically" },
-  ["<M-s>"] = { "<C-w>s", "Split" },
-  ["<M-c>"] = { "<C-w>c", "Close window" },
-}, { mode = "n" })
-
--- LSP mappings
-wk.register({
-  ["J"] = {
-    function()
-      vim.diagnostic.open_float(0, { scope = "cursor" })
-    end,
-    "Diagnostics",
-  },
-  ["K"] = { vim.lsp.buf.hover, "Hover" },
-  ["gr"] = { vim.lsp.buf.rename, "Rename" },
-  ["gd"] = {
-    function()
-      -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-      fzf.lsp_definitions({ jump_to_single_result = true })
-    end,
-    "Goto definition",
-  },
-  ["gD"] = {
-    function()
-      -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-      fzf.lsp_references({ jump_to_single_result = true })
-    end,
-    "Goto references",
-  },
-  ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
-  ["<C-k>"] = { vim.diagnostic.goto_prev, "Prev diagnostic" },
-}, { mode = "n" })
-wk.register({
-  ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
-  ["<leader>k"] = { vim.lsp.buf.format, "Format" },
-}, { mode = { "n", "v" } })
-
--- A function to search for TODOs and more
-local function FindTodo()
-  -- Based on treesitter
-  -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
-  --stylua: ignore start
-  local tags = {
-    -- Todo
-    "TODO", "WIP",
-    -- Note
-    "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST",
-    -- Warning
-    "HACK", "WARNING", "WARN", "FIX",
-    -- Danger
-    "FIXME", "BUG", "ERROR",
-  }
-  --stylua: ignore end
-
-  -- From VS Code Todo Tree's default regex
-  -- https://github.com/Gruntfuggly/todo-tree/issues/526
-  local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
-
-  -- From fzf-lua's default ripgrep arguments
-  -- https://github.com/ibhagwan/fzf-lua/blob/main/doc/fzf-lua.txt
-  local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim"
-
-  -- Actually initiate the search
-  fzf.fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
-    prompt = "Find TODOs> ",
-    actions = { ["default"] = fzf.actions.file_edit },
-    previewer = "builtin",
-  })
-end
-
--- The great <leader> keymap
-wk.register({
-  ["<leader>"] = {
-    name = "leader",
-    -- Basics
-    w = { "<cmd>w!<cr>", "Save" },
-    q = { "<cmd>qa!<cr>", "Quit" },
-    n = { vim.cmd.nohl, "Nohl" },
-    -- Make
-    m = { vim.cmd.make, "Make" },
-    c = {
-      function()
-        vim.cmd.make("clean")
-      end,
-      "Make clean",
-    },
-    -- Search
-    f = { fzf.files, "Files" },
-    a = { fzf.lsp_document_symbols, "Symbols" },
-    s = { fzf.live_grep, "Search" },
-    d = { fzf.diagnostics_workspace, "Diagnostics" },
-    r = { fzf.resume, "Resume search" },
-    e = { FindTodo, "Find TODOs" },
-    -- Undo tree
-    u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
-    t = {
-      name = "tabs",
-      h = { vim.cmd.tabprev, "Previous" },
-      l = { vim.cmd.tabnext, "Next" },
-      H = { vim.cmd.tabfirst, "First" },
-      L = { vim.cmd.tablast, "Last" },
-      n = { vim.cmd.tabnew, "New" },
-      c = { vim.cmd.tabclose, "Close" },
-      o = { vim.cmd.tabonly, "Close all others" },
-    },
-    l = {
-      name = "lazy",
-      l = { "<cmd>Lazy sync<cr>", "Sync" },
-      u = { "<cmd>Lazy update<cr>", "Update" },
-      p = { "<cmd>Lazy profile<cr>", "Profile" },
-    },
-    g = {
-      name = "git",
-      -- Statuses
-      b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame" },
-      d = { "<cmd>DiffviewOpen<cr>", "Diff with head" }, -- Or Gvdiffsplit
-      -- Fetch
-      f = { "<cmd>G fetch<cr>", "Fetch" },
-      m = { "<cmd>G merge<cr>", "Merge" },
-      -- Commit
-      a = { "<cmd>G add %<cr>", "Add file" },
-      c = { "<cmd>G commit<cr>", "Commit" },
-      p = { "<cmd>G push<cr>", "Push" },
-    },
-    h = {
-      name = "git hunks",
-      -- View
-      d = { "<cmd>Gitsigns preview_hunk<cr>", "Diff" },
-      -- Select
-      v = { "<cmd>Gitsigns select_hunk<cr>", "Visual" },
-      -- Move
-      n = { "<cmd>Gitsigns next_hunk<cr>", "Next" },
-      p = { "<cmd>Gitsigns prev_hunk<cr>", "Previous" },
-      -- Stage (or reset)
-      s = { "<cmd>Gitsigns stage_hunk<cr>", "Stage" },
-      u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "Undo stage" },
-      r = { "<cmd>Gitsigns reset_hunk<cr>", "Reset" },
-    },
-    i = {
-      name = "interface",
-      n = { "<cmd>set number!<cr>", "Number" },
-      s = { "<cmd>set spell!<cr>", "Spell" },
-      w = { "<cmd>set wrap!<cr>", "Wrap" },
-      i = { "<cmd>IndentBlanklineToggle<cr>", "Indentline" },
-      b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "Background" },
-    },
-  },
-})
-
 --------------
 -- COMMANDS --
 --------------
@@ -905,195 +1002,3 @@ vim.api.nvim_create_user_command("CheckLspLog", function()
     vim.notify("LSP log cleared.")
   end
 end, {})
-
----------
--- LSP --
----------
-
--- Don't use virtual text (the text at the end of line)
--- It is too disturbing to workflow
-vim.diagnostic.config({
-  virtual_text = false,
-  severity_sort = true,
-})
-
--- Use nerd font for gutter signs
-local signs = { Error = "󰅚", Warn = "󰀪", Hint = "󰌶", Info = "󰋽" }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
-
--- Add additional capabilities supported by nvim-cmp
-local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
-
--- Set up LSP server with CMP capabilities and additional settings.
----@param server_name string the LSP server name
----@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
-local function setup_lsp_server(server_name, options)
-  local opts = options or {}
-  opts.capabilities = opts.capabilities or cmp_capabilities
-  require("lspconfig")[server_name].setup(opts)
-end
-
--- Setup all LSP servers installed by Mason
-require("mason-lspconfig").setup_handlers({
-  -- Default handler
-  function(server_name)
-    setup_lsp_server(server_name)
-  end,
-  -- Specific handlers
-  ["lua_ls"] = function()
-    setup_lsp_server("lua_ls", {
-      settings = {
-        Lua = {
-          diagnostics = {
-            globals = { "vim" },
-          },
-          runtime = {
-            version = "LuaJIT",
-          },
-          format = {
-            enable = false,
-          },
-        },
-      },
-    })
-  end,
-  ["rust_analyzer"] = function()
-    setup_lsp_server("rust_analyzer", {
-      settings = {
-        ["rust-analyzer"] = {
-          checkOnSave = {
-            command = "clippy",
-          },
-          imports = {
-            granularity = {
-              group = "module",
-            },
-            prefix = "self",
-          },
-          cargo = {
-            buildScripts = {
-              enable = true,
-            },
-          },
-          procMacro = {
-            enable = true,
-          },
-        },
-      },
-    })
-  end,
-  ["ltex"] = function()
-    setup_lsp_server("ltex", {
-      settings = {
-        ltex = {
-          enabled = {
-            "bib",
-            "gitcommit",
-            "markdown",
-            "org",
-            "plaintex",
-            "rst",
-            "rnoweb",
-            "tex",
-            "pandoc",
-            "quarto",
-            "rmd",
-            "context",
-            -- "html",
-            -- "xhtml",
-          },
-          language = "en-GB",
-          dictionary = {
-            ["en-GB"] = { "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox" },
-          },
-        },
-      },
-      on_attach = function()
-        require("ltex_extra").setup({
-          load_langs = { "en-GB", "en-US" },
-          init_check = true,
-          path = ".ltex",
-        })
-      end,
-    })
-  end,
-  ["jdtls"] = function()
-    setup_lsp_server("jdtls", {
-      settings = {
-        java = {
-          format = {
-            enabled = false,
-          },
-        },
-      },
-    })
-  end,
-  ["efm"] = function()
-    -- Special null-ls-like LSP server
-    -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
-
-    -- Use default settings
-    local languages = vim.tbl_deep_extend("force", require("efmls-configs.defaults").languages(), {
-      -- Add pretter_d to JS/CSS languages
-      svelte = {
-        require("efmls-configs.formatters.prettier_d"),
-      },
-      typescript = {
-        require("efmls-configs.formatters.prettier_d"),
-      },
-      markdown = {
-        require("efmls-configs.formatters.prettier_d"),
-      },
-      css = {
-        require("efmls-configs.formatters.prettier_d"),
-      },
-      json = {
-        require("efmls-configs.formatters.prettier_d"),
-      },
-      jsonc = {
-        require("efmls-configs.formatters.prettier_d"),
-      },
-      -- Use beautysh for shell scripts
-      bash = {
-        require("efmls-configs.formatters.beautysh"),
-      },
-      sh = {
-        require("efmls-configs.formatters.beautysh"),
-      },
-      zsh = {
-        require("efmls-configs.formatters.beautysh"),
-      },
-      -- Enforce Python formatting with black
-      python = {
-        require("efmls-configs.formatters.black"),
-      },
-      -- Format BibTex with bibtex-tidy
-      -- https://github.com/FlamingTempura/bibtex-tidy/issues/143
-      bib = {
-        {
-          formatCommand = "bibtex-tidy --v2 --no-backup --no-sort --sort-fields --no-escape",
-          formatStdin = true,
-        },
-      },
-      -- Format GLSL using clang-format (need .clang-format file)
-      glsl = {
-        require("efmls-configs.formatters.clang_format"),
-      },
-    })
-
-    setup_lsp_server("efm", {
-      filetypes = vim.tbl_keys(languages),
-      settings = {
-        rootMarkers = { ".git/" },
-        languages = languages,
-      },
-      init_options = {
-        documentFormatting = true,
-        documentRangeFormatting = true,
-      },
-    })
-  end,
-})
