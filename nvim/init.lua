@@ -481,6 +481,21 @@ lazy.setup({
     config = function()
       local cmp = require("cmp")
 
+      local buffer_source = {
+        name = "buffer",
+        keyword_length = 4,
+        option = {
+          get_bufnrs = function()
+            local buf = vim.api.nvim_get_current_buf()
+            local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+            if byte_size > 1024 * 1024 then -- 1 Megabyte max
+              return {}
+            end
+            return { buf }
+          end,
+        },
+      }
+
       cmp.setup({
         enabled = function()
           -- Enable in command mode
@@ -529,31 +544,17 @@ lazy.setup({
           { name = "path" },
           { name = "nvim_lua" },
           { name = "nvim_lsp_signature_help" },
-          {
-            name = "buffer",
-            keyword_length = 4,
-            option = {
-              get_bufnrs = function()
-                local buf = vim.api.nvim_get_current_buf()
-                local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
-                if byte_size > 1024 * 1024 then -- 1 Megabyte max
-                  return {}
-                end
-                return { buf }
-              end,
-            },
-          },
-        }),
+        }, { buffer_source }),
       })
 
       -- Command line autocomplete
+      cmp.setup.cmdline({ "/", "?" }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = { buffer_source },
+      })
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          { name = "cmdline" },
-        }),
+        sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
       })
     end,
   },
@@ -825,8 +826,14 @@ lazy.setup({
   {
     "ibhagwan/fzf-lua",
     event = "VeryLazy",
-    opts = {},
-    config = function()
+    opts = { files = { formatter = "path.filename_first" } },
+    config = function(_, opts)
+      local fzf = require("fzf-lua")
+
+      if opts then
+        fzf.setup(opts)
+      end
+
       require("fzf-lua").register_ui_select()
     end,
   },
