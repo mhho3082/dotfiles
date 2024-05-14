@@ -152,8 +152,7 @@ they are marked below.
 - JS/TS
   - `tsserver`
   - `prettierd` (through `efm`)
-- HTML
-  - `emmet-ls`
+- CSS
   - `css-lsp`
 - Lua
   - `lua-language-server`
@@ -162,6 +161,7 @@ they are marked below.
   - `clangd`
 - Markdown
   - `ltex`
+  - `marksman`
 - Bash
   - `bash-language-server`
   - `beautysh`
