@@ -874,6 +874,7 @@ vim.g.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
+vim.opt.conceallevel = 2 -- For writing prose
 
 -- Don't disturb me (by default)
 vim.opt.number = false
