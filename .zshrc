@@ -291,7 +291,9 @@ alias virshprep="sudo virsh net-start default >/dev/null"
 alias superuser="sudo -Eks"
 
 # Run every autostart script
-alias autostart='for script in ~/.config/autostart/*.sh; do timeout 1s "$script" &>/dev/null & done'
+function autostart {
+    timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+}
 
 # Get sizes of different directories / files in current directory
 # https://superuser.com/q/605414/
@@ -331,12 +333,12 @@ function paru-update {
                 reboot
             else
                 # Re-configure external devices
-                for script in ~/.config/autostart/*.sh; do timeout 1s "$script" &>/dev/null & done
+                timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
                 print -P "%F{green}No need to reboot%f"
             fi
         else
             # Re-configure external devices
-            for script in ~/.config/autostart/*.sh; do timeout 1s "$script" &>/dev/null & done
+            timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
             print -P "%F{red}Paru failed!%f"
         fi
     else
