@@ -17,10 +17,28 @@ do
         original_file=$(readlink -m "${config_folder}/${file}")
     fi
 
-    # Check if the file is different
-    if ! test -f "$original_file" || ! cmp -s "$file" "$original_file"
+    # Check if the destination file exists and compare it
+    if [ -f "$original_file" ] && ! cmp -s "$file" "$original_file"
     then
-        # Copy the file over, creating parent folders if necessary
+        if command -v difft &> /dev/null; then
+            difft "$original_file" "$file"
+        else
+            diff "$original_file" "$file"
+        fi
+
+        # Ask user if they want to overwrite the file
+        read -p "Do you want to overwrite $original_file? (y/N) " answer
+        if [[ "$answer" == "y" || "$answer" == "Y" ]]
+        then
+            # Copy the file over, creating parent folders if necessary
+            echo "Copying $file to $original_file"
+            cp --parents "$file" "$config_folder"
+            cp "$file" "$original_file"
+        else
+            echo "Skipping $file"
+        fi
+    elif [ ! -f "$original_file" ]; then
+        # File does not exist, simply copy it
         echo "Copying $file to $original_file"
         cp --parents "$file" "$config_folder"
         cp "$file" "$original_file"
