@@ -60,7 +60,7 @@ zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
 plugins=(fzf command-not-found zsh-autosuggestions) # Add functionalities
-plugins+=(gh fd ripgrep yarn rust) # For command auto-completion
+plugins+=(gh fd ripgrep npm yarn rust) # For command auto-completion
 plugins+=zsh-syntax-highlighting # Must be last of plugins
 
 # Add compdef for zoxide
@@ -69,7 +69,15 @@ if (( $+commands[zoxide] )); then
     eval "$(zoxide init zsh)"
 fi
 
+# Save all non-plugin alias
+# https://unix.stackexchange.com/q/161973
+save_aliases=$(alias -L)
+
 source $ZSH/oh-my-zsh.sh
+
+# Remove all alias from plugins, and restore the rest
+unalias -m '*'
+eval $save_aliases; unset save_aliases
 
 # == Base config ==
 
@@ -128,6 +136,10 @@ if (( $+commands[git] )); then
 fi
 if (( $+commands[make] )); then
     alias m="make"
+fi
+if (( $+commands[npm] )); then
+    alias n="npm"
+    alias nd="npm run dev"
 fi
 if (( $+commands[yarn] )); then
     alias y="yarn"
