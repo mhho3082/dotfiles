@@ -328,19 +328,21 @@ lazy.setup({
     config = function()
       -- Note: The whole LSP config is here
 
-      -- Don't use virtual text (the text at the end of line)
-      -- It is too disturbing to workflow
       vim.diagnostic.config({
+        -- Don't use virtual text (the text at the end of line)
+        -- It is too disturbing to workflow
         virtual_text = false,
         severity_sort = true,
+        -- Use nerd font for gutter signs
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = "󰅚",
+            [vim.diagnostic.severity.WARN] = "󰀪",
+            [vim.diagnostic.severity.INFO] = "󰋽",
+            [vim.diagnostic.severity.HINT] = "󰌶",
+          },
+        },
       })
-
-      -- Use nerd font for gutter signs
-      local signs = { Error = "󰅚", Warn = "󰀪", Hint = "󰌶", Info = "󰋽" }
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-      end
 
       -- Add additional capabilities supported by nvim-cmp
       local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -916,6 +918,8 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = "make,just",
   callback = function()
+    vim.opt.tabstop = 4
+    vim.opt.shiftwidth = 4
     vim.opt.expandtab = false
   end,
 })
