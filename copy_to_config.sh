@@ -7,6 +7,42 @@ mkdir -p "$config_folder"
 files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
     sed "/.stylua.*/d" | sed "/tips\//d" | sed "/makefile/d")
 
+# Copy file from source to destination,
+# creating necessary folders if needed
+copy_file() {
+    local src=$1
+    local dst=$2
+
+    echo "Copying $src to $dst"
+    cp --parents "$src" "$config_folder"
+    cp "$src" "$dst"
+}
+
+# Show diff and ask for confirmation
+diff_and_ask() {
+    local file=$1
+    local original_file=$2
+
+    if command -v difft &> /dev/null; then
+        difft "$original_file" "$file"
+    else
+        diff "$original_file" "$file"
+    fi
+
+    # Ask user if they want to overwrite the file
+    read -p "Do you want to overwrite $original_file? (y/N) " answer
+    if [[ "$answer" == "y" || "$answer" == "Y" ]]
+    then
+        # Copy the file over, creating parent folders if necessary
+        copy_file "$file" "$original_file"
+    else
+        echo "Skipping $file"
+    fi
+}
+
+# Check for "-y"
+auto_yes=$([[ $1 == "-y" ]] && echo true || echo false)
+
 # For every file in this folder
 for file in $files
 do
@@ -17,31 +53,17 @@ do
         original_file=$(readlink -m "${config_folder}/${file}")
     fi
 
-    # Check if the destination file exists and compare it
     if [ -f "$original_file" ] && ! cmp -s "$file" "$original_file"
     then
-        if command -v difft &> /dev/null; then
-            difft "$original_file" "$file"
+        # Destination file exists
+        if $auto_yes; then
+            copy_file "$file" "$original_file"
         else
-            diff "$original_file" "$file"
-        fi
-
-        # Ask user if they want to overwrite the file
-        read -p "Do you want to overwrite $original_file? (y/N) " answer
-        if [[ "$answer" == "y" || "$answer" == "Y" ]]
-        then
-            # Copy the file over, creating parent folders if necessary
-            echo "Copying $file to $original_file"
-            cp --parents "$file" "$config_folder"
-            cp "$file" "$original_file"
-        else
-            echo "Skipping $file"
+            diff_and_ask "$file" "$original_file"
         fi
     elif [ ! -f "$original_file" ]; then
-        # File does not exist, simply copy it
-        echo "Copying $file to $original_file"
-        cp --parents "$file" "$config_folder"
-        cp "$file" "$original_file"
+        # File does not exist; simply copy it over
+        copy_file "$file" "$original_file"
     fi
 
     # Make necessary files executable
