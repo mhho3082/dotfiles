@@ -123,6 +123,11 @@ if (( $+commands[ruby] )); then
     path+="$GEM_HOME/bin"
 fi
 
+# Set GPG's tty to the current one
+# https://unix.stackexchange.com/a/724766
+GPG_TTY=$(tty)
+export GPG_TTY
+
 # == Alias ==
 
 # Utility shortahnds
