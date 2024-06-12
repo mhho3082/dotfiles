@@ -93,6 +93,7 @@ which may take additional setup to install
   - [`noto-fonts-emoji`](https://fonts.google.com/noto/specimen/Noto+Emoji)
   - [`ttf-ms-fonts`](https://wiki.archlinux.org/title/Microsoft_fonts)
 - Themes
+  - [`nwg-look`](https://github.com/nwg-piotr/nwg-look)
   - [`gruvbox-material-gtk-theme-git`](https://github.com/TheGreatMcPain/gruvbox-material-gtk)
   - [`qogir-icon-theme`](https://github.com/vinceliuice/Qogir-icon-theme)
   - [`fcitx5-gruvbox-dark-theme-git`](https://github.com/pu-007/fcitx5-gruvbox-dark-theme)
