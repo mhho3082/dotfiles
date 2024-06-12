@@ -726,16 +726,9 @@ lazy.setup({
         -- https://github.com/Gruntfuggly/todo-tree/issues/526
         local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
 
-        -- From fzf-lua's default ripgrep arguments
-        -- https://github.com/ibhagwan/fzf-lua/blob/main/doc/fzf-lua.txt
-        local rg_args = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim"
-
         -- Actually initiate the search
-        fzf.fzf_exec("rg " .. rg_args .. " -e '" .. regexp .. "'", {
-          prompt = "Find TODOs> ",
-          actions = { ["default"] = fzf.actions.file_edit },
-          previewer = "builtin",
-        })
+        -- https://github.com/ibhagwan/fzf-lua/discussions/1194#discussioncomment-9418686
+        fzf.grep({ no_esc = true, search = regexp, prompt = "Find TODOs> " })
       end
 
       -- The great <leader> keymap
@@ -828,7 +821,16 @@ lazy.setup({
   {
     "ibhagwan/fzf-lua",
     event = "VeryLazy",
-    opts = { files = { formatter = "path.filename_first" } },
+    opts = {
+      defaults = {
+        formatter = "path.filename_first",
+        multiline = 2,
+      },
+      grep = {
+        -- https://github.com/ibhagwan/fzf-lua/issues/971
+        rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
+      },
+    },
     config = function(_, opts)
       local fzf = require("fzf-lua")
 

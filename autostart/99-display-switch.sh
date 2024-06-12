@@ -2,28 +2,23 @@
 
 # Switch monitors automatically based on HDMI cable
 
-# Function to activate HDMI and deactivate eDP
-function activate_hdmi {
-    xrandr --output HDMI-A-0 --auto --primary
-    xrandr --output eDP --off
-    killall -q polybar
-    i3-msg restart
-}
-
-# Function to deactivate HDMI and activate eDP
-function activate_edp {
-    xrandr --output eDP --auto --primary
-    xrandr --output HDMI-A-0 --off
-    killall -q polybar
-    i3-msg restart
-}
-
 function main {
     if xrandr | grep "HDMI-A-0 connected"; then
-        activate_hdmi
+        # Activate HDMI
+        xrandr --output HDMI-A-0 --auto --primary
+        xrandr --output eDP --off
     else
-        activate_edp
+        # Activate eDP
+        xrandr --output eDP --auto --primary
+        xrandr --output HDMI-A-0 --off
     fi
+
+    # Restart i3
+    killall -q polybar
+    i3-msg restart
+
+    # https://superuser.com/a/644829
+    xset s off && xset s noblank && xset -dpms
 }
 main
 
