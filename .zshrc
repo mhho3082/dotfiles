@@ -336,6 +336,14 @@ function paru-update {
     local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
 
     if [[ -n $updates ]]; then
+        if [[ $updates =~ $reboot_check ]]; then
+            read -p "Reboot will be needed, are you sure? [Y/n]" answer
+            if [[ "$answer" == "n" || "$answer" == "N" ]]
+            then
+                return
+            fi
+        fi
+
         # Update (and also downgrade if needed)
         paru -Syu --noconfirm
         check=$?
