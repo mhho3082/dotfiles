@@ -79,14 +79,14 @@
     si = stash --patch
     sp = stash pop
 
-    # https://stackoverflow.com/questions/26961371/switch-on-another-branch-create-if-not-exists-without-checking-if-already-exi
+    # https://stackoverflow.com/q/26961371
     cd = !"f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)} 2>/dev/null; }; f"
 
     # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
     # Also handles repos without remote by responding the config's default branch instead
     default-branch = !"git symbolic-ref refs/remotes/origin/HEAD &>/dev/null && (git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') 2>/dev/null || git config --get init.defaultBranch"
 
-    # https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
+    # https://stackoverflow.com/a/34467298
     l = l1
     l1 = l1-specific --all
     l2 = l2-specific --all

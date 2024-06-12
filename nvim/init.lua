@@ -969,7 +969,7 @@ vim.api.nvim_create_user_command("CopyFilename", function()
 end, {})
 
 -- Copy file content to clipboard
--- https://stackoverflow.com/questions/15610222/how-to-select-all-and-copy-in-vim
+-- https://stackoverflow.com/q/15610222
 vim.api.nvim_create_user_command("CopyFileContent", function()
   vim.api.nvim_command("%y+")
 end, {})

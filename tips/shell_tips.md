@@ -49,14 +49,14 @@ xsel -b > out.txt # Paste
 ```
 
 Remove Windows-style EOLs from a file:
-(From [Stack Overflow](https://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk))
+(From [Stack Overflow](https://stackoverflow.com/q/11680815))
 
 ```bash
 sed -e 's/\r//g' file.txt # replace with file name
 ```
 
 Test for 256-colours for your terminal emulator:
-(From [Ask Ubuntu](https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal))
+(From [Ask Ubuntu](https://askubuntu.com/q/821157))
 
 ```bash
 curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
@@ -66,6 +66,12 @@ Symlink to "rename" programs, e.g., `fdfind` to `fd`:
 
 ```bash
 ln -s $(which fdfind) ~/.local/bin/fd
+```
+
+Login to GitHub CLI:
+
+```bash
+gh auth login
 ```
 
 Background / foreground jobs:
