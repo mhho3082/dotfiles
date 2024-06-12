@@ -68,6 +68,7 @@ which may take additional setup to install
   - [`zathura`](https://pwmt.org/projects/zathura/)
     - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
     - [`zaread`](https://github.com/paoloap/zaread)
+  - [`mousepad`](https://github.com/codebrainz/mousepad)
 - Web surfing
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
@@ -152,7 +153,20 @@ they are marked below.
 
 </details>
 
-## Handy setup scripts
+## Handy setup guides
+
+To install Arch Linux, please see the very helpful guide by [`DenshiVideo`](https://www.youtube.com/watch?v=68z11VAYMS8).
+Interesting things to note:
+
+- You may see something like `/dev/nvme0n1` instead of `/dev/sda` as your block device
+  (see [`Ask Ubuntu`](https://askubuntu.com/a/932336), and check with `lsblk`);
+  it is fine, just use that instead of `sda` in your commands.
+- Different to the guide, you are often advised to use a swap file instead of a partition
+  (for flexibility and future modifications), with a guide on [ArchWiki](https://wiki.archlinux.org/title/Swap#Swap_file).
+
+You could refer to [`EndeavourOS`'s i3 install package list](https://raw.githubusercontent.com/endeavouros-team/EndeavourOS-packages-lists/master/i3)
+for some ideas for core packages to install after installing Arch
+(note that some packages listed are `EndeavourOS`-only).
 
 A safe sequence to bootstrap `paru` from a clean installation
 (for Arch-based distros):
@@ -182,16 +196,14 @@ Set `zsh` as the default shell (from bash):
 chsh -s `which zsh`
 ```
 
-Optimize SSD usage:
+Enable timers:
 
 ```bash
-sudo systemctl enable fstrim.timer
-```
+# Optimize SSD usage by removing unused filesystem blocks weekly
+sudo systemctl enable --now fstrim.timer
 
-Login to GitHub CLI:
-
-```bash
-gh auth login
+# Clean pacman cache weekly (paru's still need to `paru -Sc`, though)
+sudo systemctl enable --now paccache.timer
 ```
 
 Set up `betterlockscreen`:
@@ -268,4 +280,4 @@ done
 - `i3wm` config based on `EndeavourOS`'s default config at
   https://github.com/endeavouros-team/endeavouros-i3wm-setup
 - Caps-lock to escape remap + escape to backtick remap derived from
-  https://unix.stackexchange.com/questions/692851/
+  https://unix.stackexchange.com/q/692851

@@ -4,7 +4,7 @@
 
 # https://www.reddit.com/r/Trackballs/comments/drdp6f/elecom_huge_trackball_scroll_emulation/
 # https://www.reddit.com/r/Trackballs/comments/mtdgld/elecom_huge_button_configuration_ideas/
-# https://askubuntu.com/questions/492744/how-do-i-automatically-remap-buttons-on-my-mouse-at-startup
+# https://askubuntu.com/q/492744
 
 function main {
     if command -v xinput &> /dev/null; then
