@@ -34,7 +34,7 @@ which may take additional setup to install
 <details>
 <summary> App List </summary>
 
-- CLI apps
+- CLI and TUI
   - [`zsh`](https://zsh.sourceforge.io/)
   - [`paru`](https://github.com/Morganamilo/paru)
   - [`eza`](https://github.com/eza-community/eza)
@@ -45,38 +45,32 @@ which may take additional setup to install
   - [`xsel`](https://github.com/kfish/xsel)
   - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
   - [`trash-cli`](https://github.com/andreafrancia/trash-cli)
-- TUI apps
-  - [`bashmount`](https://github.com/jamielinux/bashmount) for USB
-  - [`bluetuith`](https://github.com/darkhz/bluetuith) for Bluetooth
+  - [`htop`](https://htop.dev/)
+  - [`bashmount`](https://github.com/jamielinux/bashmount)
+  - [`bluetuith`](https://github.com/darkhz/bluetuith)
 - Coding
   - [`nvim`](https://neovim.io/)
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
-  - [`httpie`](https://httpie.io/cli)
-  - For C/C++
-    - [`llvm`](https://llvm.org/) (for [`clangd`](https://clangd.llvm.org/) in editors)
-    - [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html)
-  - For JavaScript
-    - [`node`](https://nodejs.org/en)
-    - [`yarn`](https://yarnpkg.com/)
-  - For Rust
-    - [`rustup`](https://rustup.rs/)
+  - [`llvm`](https://llvm.org/) (for C/C++ [`clangd`](https://clangd.llvm.org/) in editors)
 - Writing
+  - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
+    - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
+      [`rime-cantonese`](https://github.com/rime/rime-cantonese) (for Cantonese)
+    - [`fcitx5-mozc`](https://github.com/google/mozc) (for Japanese)
   - [`libreoffice-fresh`](https://www.libreoffice.org/)
     - [LanguageTool extension](https://extensions.libreoffice.org/en/extensions/show/languagetool)
   - [`pandoc-bin`](https://pandoc.org/)
     - [`texlive`](https://tug.org/texlive/)
     - [`pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref)
     - [`mermaid-filter`](https://github.com/raghur/mermaid-filter)
-    - [`pandoc-plot-bin`](https://github.com/LaurentRDC/pandoc-plot)
-      - [`python-matplotlib`](https://matplotlib.org/)
-- Casual usage
-  - [`firefox`](https://www.mozilla.org/en-US/firefox/)
-  - [`chromium`](https://www.chromium.org/Home/)
   - [`zathura`](https://pwmt.org/projects/zathura/)
     - [`zathura-pdf-mupdf`](https://github.com/pwmt/zathura-pdf-mupdf)
     - [`zaread`](https://github.com/paoloap/zaread)
+- Web surfing
+  - [`firefox`](https://www.mozilla.org/en-US/firefox/)
+  - [`chromium`](https://www.chromium.org/Home/)
   - [`discord`](https://discord.com/)
 - Desktop environment setup
   - [`i3-wm`](https://i3wm.org/)
@@ -88,30 +82,19 @@ which may take additional setup to install
   - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
   - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
   - [`redshift`](http://jonls.dk/redshift/)
-- Utilities
-  - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
-    - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
-      [`rime-cantonese`](https://github.com/rime/rime-cantonese) (for Cantonese)
-    - [`fcitx5-mozc`](https://github.com/google/mozc) (for Japanese)
-  - [`flameshot`](https://flameshot.org/)
-  - [`htop`](https://htop.dev/)
-  - [`xsane`](http://www.sane-project.org/)
-  - [`audacity`](https://www.audacityteam.org/)
-  - [`pinta`](https://www.pinta-project.com/) for casual image editing
-    (or [`krita`](https://krita.org/) for serious drawing)
-  - [`obs-studio`](https://obsproject.com/)
-  - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp)
-  - [`ventoy`](https://www.ventoy.net)
   - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
+- Utilities
+  - [`flameshot`](https://flameshot.org/)
+  - [`xsane`](http://www.sane-project.org/)
+  - [`ventoy`](https://www.ventoy.net)
 - Fonts
   - [`ttf-jetbrains-mono-nerd`](https://www.jetbrains.com/lp/mono/)
-  - [`ttf-firacode-nerd`](https://github.com/tonsky/FiraCode)
   - [`noto-fonts`](https://fonts.google.com/noto)
   - [`noto-fonts-emoji`](https://fonts.google.com/noto/specimen/Noto+Emoji)
   - [`ttf-ms-fonts`](https://wiki.archlinux.org/title/Microsoft_fonts)
 - Themes
   - [`gruvbox-material-gtk-theme-git`](https://github.com/TheGreatMcPain/gruvbox-material-gtk)
-  - [`eos-qogir-icons`](https://github.com/vinceliuice/Qogir-icon-theme)
+  - [`qogir-icon-theme`](https://github.com/vinceliuice/Qogir-icon-theme)
   - [`fcitx5-gruvbox-dark-theme-git`](https://github.com/pu-007/fcitx5-gruvbox-dark-theme)
   - [`grub-theme-vimix`](https://github.com/Se7endAY/grub2-theme-vimix)
   - [`lightdm-webkit-theme-litarvan`](https://github.com/Litarvan/lightdm-webkit-theme-litarvan)
@@ -247,8 +230,6 @@ To show `lightdm` greeter on multiple screens,
 see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/);
 my (semi-dynamic) `/etc/lightdm/display_setup.sh` is as below:
 
-To create Wi-Fi hotspots, see [This post by Baeldung](https://www.baeldung.com/linux/setup-wifi-hotspot).
-
 <!-- Use :r!cat /etc/lightdm/display_setup.sh to copy to below -->
 
 <details>
@@ -283,7 +264,7 @@ done
   https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
 - `m` bookmark function inspired by
   https://dmitryfrank.com/articles/shell_shortcuts
-- `i3wm` config copied from `EndeavourOS`'s default config at
+- `i3wm` config based on `EndeavourOS`'s default config at
   https://github.com/endeavouros-team/endeavouros-i3wm-setup
 - Caps-lock to escape remap + escape to backtick remap derived from
   https://unix.stackexchange.com/questions/692851/
