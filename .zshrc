@@ -342,7 +342,7 @@ function paru-update {
 
     if [[ -n $updates ]]; then
         if [[ $updates =~ $reboot_check ]]; then
-            read -p "Reboot will be needed, are you sure? [Y/n]" answer
+            read "answer?Reboot will be needed, are you sure? [Y/n]"
             if [[ "$answer" == "n" || "$answer" == "N" ]]
             then
                 return
