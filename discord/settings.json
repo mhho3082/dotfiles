@@ -1,4 +1,5 @@
 {
   "SKIP_HOST_UPDATE": true,
-  "chromiumSwitches": {}
+  "chromiumSwitches": {},
+  "enableHardwareAcceleration": false
 }
