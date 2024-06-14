@@ -49,7 +49,7 @@ which may take additional setup to install
   - [`bashmount`](https://github.com/jamielinux/bashmount)
   - [`bluetuith`](https://github.com/darkhz/bluetuith)
 - Coding
-  - [`nvim`](https://neovim.io/)
+  - [`neovim`](https://neovim.io/)
   - [`github-cli`](https://cli.github.com/) (`gh` in shell)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)

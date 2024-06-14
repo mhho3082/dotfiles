@@ -125,8 +125,7 @@ fi
 
 # Set GPG's tty to the current one
 # https://unix.stackexchange.com/a/724766
-GPG_TTY=$(tty)
-export GPG_TTY
+export GPG_TTY=$(tty)
 
 # == Alias ==
 
@@ -334,57 +333,39 @@ fi
 # https://bbs.archlinux.org/viewtopic.php?id=173508
 # https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
 function paru-update {
-    # Check if updates (and reboot) is needed
-    local updates=$(checkupdates)
+    # Sync databases and list updates needed
+    paru -Sy
+    local updates=$({ paru -Qu; paru -Qua; })
 
     # Words to check for in updates
     local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
 
-    if [[ -n $updates ]]; then
-        if [[ $updates =~ $reboot_check ]]; then
-            read "answer?Reboot will be needed, are you sure? [Y/n]"
-            if [[ "$answer" == "n" || "$answer" == "N" ]]
-            then
-                return
-            fi
-        fi
-
-        # Update (and also downgrade if needed)
-        paru -Syu --noconfirm
-        check=$?
-
-        if [[ $check = 0 ]]; then
-            if [[ $updates =~ $reboot_check ]]; then
-                reboot
-            else
-                # Re-configure external devices
-                timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
-                print -P "%F{green}No need to reboot%f"
-            fi
-        else
-            # Re-configure external devices
-            timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
-            print -P "%F{red}Paru failed!%f"
-        fi
-    else
+    # No need to update - skip
+    if [[ -z $updates ]]; then
         print -P "%F{green}No need to update%f"
+        return
     fi
-}
 
-# Specifically force-update package(s)
-# helpful for packages not actively tracked on AUR (e.g., neovim-nightly-bin)
-function paru-forceupdate {
-    if [ -n "$1" ]; then
-        # Update specified packages
-        sudo true
-        paru --noconfirm -S $@
+    # Need to reboot, ask for confirm
+    if [[ $updates =~ $reboot_check ]]; then
+        read "answer?Reboot will be needed, are you sure? [Y/n]"
+        [[ "$answer" =~ ^[nN]$ ]] && return
+    fi
+    
+    # Run the update
+    paru -Syu --noconfirm
+    if (( $? )); then
+        if [[ $updates =~ $reboot_check ]]; then
+            reboot
+        else
+            timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+            print -P "%F{green}No need to reboot%f"
+        fi
     else
-        # Update packages that are likely not actively tracked
-        sudo true
-        paru --noconfirm -S $(paru -Qq | grep '\-git') $(paru -Qq | grep 'nightly')
+        timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+        print -P "%F{red}Paru failed!%f"
     fi
 }
-compdef _pactree paru-forceupdate
 
 # Remove orphan packages
 function paru-autoremove {
@@ -423,10 +404,11 @@ fi
 # https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
 
 # Get utility functions from https://github.com/romkatv/gitstatus
-if [ ! -d ~/gitstatus ]; then
-    git clone --depth=1 https://github.com/romkatv/gitstatus.git ~/gitstatus >/dev/null
+local gitstatus_repo="$HOME/.gitstatus"
+if [ ! -d $gitstatus_repo ]; then
+    git clone --depth=1 https://github.com/romkatv/gitstatus.git $gitstatus_repo >/dev/null
 fi
-source ~/gitstatus/gitstatus.plugin.zsh
+source $gitstatus_repo/gitstatus.plugin.zsh
 
 local GIT_CLEAN="%F{blue}󰝥 %f"
 local GIT_STAGED="%F{green}󰋘 %f"

@@ -351,9 +351,9 @@ lazy.setup({
       ---@param server_name string the LSP server name
       ---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
       local function setup_lsp_server(server_name, options)
-        local opts = options or {}
-        opts.capabilities = opts.capabilities or cmp_capabilities
-        require("lspconfig")[server_name].setup(opts)
+        require("lspconfig")[server_name].setup(vim.tbl_extend("force", {
+          capabilities = cmp_capabilities,
+        }, options or {}))
       end
 
       -- Setup all LSP servers installed by Mason
@@ -814,7 +814,12 @@ lazy.setup({
 
   -- Git
   { "tpope/vim-fugitive", event = "VeryLazy" },
-  { "lewis6991/gitsigns.nvim", event = "VeryLazy", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
+  {
+    "lewis6991/gitsigns.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = { signs_staged_enable = false },
+  },
   { "sindrets/diffview.nvim", event = "VeryLazy", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
 
   -- Search...
