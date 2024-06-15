@@ -164,7 +164,7 @@ Interesting things to note:
 - Different to the guide, you are often advised to use a swap file instead of a partition
   (for flexibility and future modifications), with a guide on [ArchWiki](https://wiki.archlinux.org/title/Swap#Swap_file).
 
-You could refer to [`EndeavourOS`'s i3 install package list](https://raw.githubusercontent.com/endeavouros-team/EndeavourOS-packages-lists/master/i3)
+You could refer to [`EndeavourOS`'s package list](https://github.com/endeavouros-team/EndeavourOS-packages-lists)
 for some ideas for core packages to install after installing Arch
 (note that some packages listed are `EndeavourOS`-only).
 

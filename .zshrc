@@ -110,7 +110,7 @@ unsetopt beep
 unsetopt autocd
 
 # Change less flags
-# https://unix.stackexchange.com/questions/566943/how-to-set-less-and-lesspipe-correctly
+# https://unix.stackexchange.com/q/566943
 export LESS=FRX
 
 # Add local scripts to interactive shell
@@ -329,13 +329,12 @@ if (( $+commands[xsel] )); then
 fi
 
 # Update the computer (and reboot if necessary)
-# Needs checkupdates
 # https://bbs.archlinux.org/viewtopic.php?id=173508
 # https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
 function paru-update {
     # Sync databases and list updates needed
     paru -Sy
-    local updates=$({ paru -Qu; paru -Qua; })
+    local updates=$(paru -Qu)
 
     # Words to check for in updates
     local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
@@ -353,27 +352,28 @@ function paru-update {
     fi
     
     # Run the update
-    paru -Syu --noconfirm
-    if (( $? )); then
+    paru -Su --noconfirm
+    if (( $? == 0 )); then
         if [[ $updates =~ $reboot_check ]]; then
-            reboot
+            reboot && return
         else
-            timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
             print -P "%F{green}No need to reboot%f"
         fi
     else
-        timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
         print -P "%F{red}Paru failed!%f"
     fi
+
+    # Reload autostart scripts (but only their bootup parts)
+    timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
 }
 
 # Remove orphan packages
 function paru-autoremove {
-    paru -Runs $(paru -Qdtq)
+    local orphans=$(paru -Qdtq) && [[ -n $orphans ]] && paru -Runs $orphans || print -P "%F{red}No orphan package to remove%f"
 }
 
 # Get the IP address of this machine
-# https://unix.stackexchange.com/questions/119269/how-to-get-ip-address-using-shell-script
+# https://unix.stackexchange.com/q/119269
 function ip-addr {
     # Get all IP addresses for this machine
     local all_ips=($(ip addr show | perl -nle 's/inet (\S+)/print $1/e'))
@@ -388,11 +388,11 @@ function ip-addr {
 }
 
 # WSL-specific alias
-# https://stackoverflow.com/questions/38086185/how-to-check-if-a-program-is-run-in-bash-on-ubuntu-on-windows-and-not-just-plain#43618657
+# https://stackoverflow.com/q/38086185
 if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
     # Open in File Explorer (for WSL)
     function explorer {
-        explorer.exe ${@:-.}; [ $? -eq 1 ]
+        explorer.exe ${@:-.}; (( $? == 1 ))
     }
 fi
 
@@ -400,8 +400,8 @@ fi
 
 # https://zserge.com/posts/terminal/
 # https://voracious.dev/blog/a-guide-to-customizing-the-zsh-shell-prompt
-# https://unix.stackexchange.com/questions/273529/shorten-path-in-zsh-prompt
-# https://stackoverflow.com/questions/37364631/oh-my-zsh-geometry-theme-git-errors
+# https://unix.stackexchange.com/q/273529
+# https://stackoverflow.com/q/37364631
 
 # Get utility functions from https://github.com/romkatv/gitstatus
 local gitstatus_repo="$HOME/.gitstatus"
@@ -556,7 +556,7 @@ add-zsh-hook precmd _setup_ps1
 # Use vi mode
 bindkey -v
 
-# https://unix.stackexchange.com/questions/433273/changing-cursor-style-based-on-mode-in-both-zsh-and-vim
+# https://unix.stackexchange.com/q/433273
 local CURSOR_NORMAL='\e[2 q'
 local CURSOR_INSERT='\e[6 q'
 

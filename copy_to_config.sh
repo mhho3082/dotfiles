@@ -31,7 +31,7 @@ diff_and_ask() {
 
     # Ask user if they want to overwrite the file
     read -p "Do you want to overwrite $original_file? (y/N) " answer
-    if [[ "$answer" == "y" || "$answer" == "Y" ]]
+    if [[ "$answer" =~ ^[yY]$ ]]
     then
         # Copy the file over, creating parent folders if necessary
         copy_file "$file" "$original_file"
