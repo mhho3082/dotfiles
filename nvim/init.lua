@@ -567,7 +567,8 @@ lazy.setup({
     -- Referencing https://github.com/rafamadriz/friendly-snippets/wiki
     dependencies = { "rafamadriz/friendly-snippets" },
     event = "VeryLazy",
-    build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
+    version = "v2.*",
+    build = "make install_jsregexp",
     config = function(_, opts)
       local luasnip = require("luasnip")
 
