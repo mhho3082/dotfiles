@@ -8,8 +8,7 @@
 
 # Relies on brightnessctl (for its accurate backlight control)
 
-if command -v xidlehook && command -v brightnessctl
-then
+if command -v xidlehook && command -v brightnessctl; then
     # Run xidlehook
     # At 5 minute - turn screen off
     # (`systemctl suspend` is not used due to its impact)
