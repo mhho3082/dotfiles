@@ -4,8 +4,12 @@
 config_folder=~/.config/
 mkdir -p "$config_folder"
 
+# The files (from this repo) to copy over
 files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
     sed "/.stylua.*/d" | sed "/tips\//d" | sed "/makefile/d")
+
+# These files cannot be linked, and need to be copied to ~/ directly
+direct_copy_files=(".Xmodmap" ".Xresources" ".nanorc")
 
 # Copy file from source to destination,
 # creating necessary folders if needed
@@ -30,9 +34,8 @@ diff_and_ask() {
     fi
 
     # Ask user if they want to overwrite the file
-    read -p "Do you want to overwrite $original_file? (y/N) " answer
-    if [[ "$answer" =~ ^[yY]$ ]]
-    then
+    read -p "Do you want to overwrite $original_file? [y/N] " answer
+    if [[ "$answer" =~ ^[yY]$ ]]; then
         # Copy the file over, creating parent folders if necessary
         copy_file "$file" "$original_file"
     else
@@ -41,20 +44,19 @@ diff_and_ask() {
 }
 
 # Check for "-y"
-auto_yes=$([[ $1 == "-y" ]] && echo true || echo false)
+auto_yes=$([[ " $@ " =~ " -y " ]] && echo true || echo false)
 
 # For every file in this folder
 for file in $files
 do
-    # These files cannot be linked, and need to be copied to ~/ directly
-    if [[ $file == ".Xmodmap" ]] || [[ $file == ".Xresources" ]]; then
+    if [[ " ${direct_copy_files[@]} " =~ " ${file} " ]]; then
+        # Copy non-linkable files to ~/
         original_file=$(readlink -m "${HOME}/${file}")
     else
         original_file=$(readlink -m "${config_folder}/${file}")
     fi
 
-    if [ -f "$original_file" ] && ! cmp -s "$file" "$original_file"
-    then
+    if [ -f "$original_file" ] && ! cmp -s "$file" "$original_file"; then
         # Destination file exists
         if $auto_yes; then
             copy_file "$file" "$original_file"
@@ -68,8 +70,7 @@ do
 
     # Make necessary files executable
     mod=$(stat -c "%a" "$file" | cut -b 1)
-    if ((mod % 2 == 1))
-    then
+    if ((mod % 2 == 1)); then
         chmod +x "$original_file"
     fi
 done
