@@ -2,8 +2,10 @@
 
 # Function to check workspaces and output status
 update_workspaces() {
+    workspaces=$(i3-msg -t get_workspaces)
+
     # Get largest workspace index
-    if i3-msg -t get_workspaces | jq -e ".[] | select(.num > 5)" >/dev/null; then
+    if echo "$workspaces" | jq -e ".[] | select(.num > 5)" >/dev/null; then
         last=10
     else
         last=5
@@ -11,13 +13,15 @@ update_workspaces() {
 
     # Update icon of each workspace
     for i in $(seq 1 $last); do
-        if i3-msg -t get_workspaces | jq -e ".[] | select(.num == $i) | .focused" >/dev/null; then
+        workspace=$(echo "$workspaces" | jq -e ".[] | select(.num == $i)")
+
+        if echo "$workspace" | jq -e ".focused" >/dev/null; then
             # Primary
             echo -n '%{F#83A598}%{F-} '
-        elif i3-msg -t get_workspaces | jq -e ".[] | select(.num == $i) | .urgent" >/dev/null; then
+        elif echo "$workspace" | jq -e ".urgent" >/dev/null; then
             # Urgent
             echo -n '%{F#FB4934}%{F-} '
-        elif i3-msg -t get_workspaces | jq -e ".[] | select(.num == $i)" >/dev/null; then
+        elif [ -n "$workspace" ]; then
             # Filled
             echo -n '%{F#BDAE93}%{F-} '
         else
