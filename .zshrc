@@ -166,9 +166,9 @@ function f {
 }
 
 # Exa/Eza (or ls + tree)
-if (( $+commands[exa] )); then
-    alias l='exa --all --long --icons --sort=type --git --hyperlink'
-    alias ll='exa --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|.svelte-kit|node_modules|bower_components|.next|venv"'
+if (( $+commands[eza] )); then
+    alias l='eza --all --long --icons --sort=type --git --hyperlink'
+    alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|.svelte-kit|node_modules|bower_components|.next|venv"'
 else
     alias l='ls -AlhF --group-directories-first --color=auto'
     if (( $+commands[tree] )); then
@@ -347,7 +347,7 @@ function paru-update {
 
     # Need to reboot, ask for confirm
     if [[ $updates =~ $reboot_check ]]; then
-        read "answer?Reboot will be needed, are you sure? [Y/n]"
+        read "answer?Reboot will be needed, are you sure? [Y/n] "
         [[ "$answer" =~ ^[nN]$ ]] && return
     fi
     
@@ -365,6 +365,7 @@ function paru-update {
 
     # Reload autostart scripts (but only their bootup parts)
     timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+    return
 }
 
 # Remove orphan packages
@@ -430,7 +431,7 @@ local GIT_ICONS_CODEBERG=" "
 local GIT_ICONS_GITEA="󰶞 "
 local GIT_ICONS_GOGS=" "
 local GIT_ICONS_BITBUCKET="󰂨 "
-local GIT_ICONS_BASIC_REMOTE=" "
+local GIT_ICONS_BASIC_REMOTE="󰘬 "
 
 local GLYPH=""
 local SUPERUSER_GLYPH=""

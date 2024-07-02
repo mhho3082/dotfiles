@@ -11,6 +11,11 @@ files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
 # These files cannot be linked, and need to be copied to ~/ directly
 direct_copy_files=(".Xmodmap" ".Xresources" ".nanorc")
 
+# Function to get the real path of a file
+resolve_path() {
+    command -v greadlink &> /dev/null && greadlink -m $@ || readlink -m $@
+}
+
 # Copy file from source to destination,
 # creating necessary folders if needed
 copy_file() {
@@ -18,7 +23,7 @@ copy_file() {
     local dst=$2
 
     echo "Copying $src to $dst"
-    cp --parents "$src" "$config_folder"
+    mkdir -p $(dirname "$dst")
     cp "$src" "$dst"
 }
 
@@ -51,9 +56,9 @@ for file in $files
 do
     if [[ " ${direct_copy_files[@]} " =~ " ${file} " ]]; then
         # Copy non-linkable files to ~/
-        original_file=$(readlink -m "${HOME}/${file}")
+        original_file=$(resolve_path "${HOME}/${file}")
     else
-        original_file=$(readlink -m "${config_folder}/${file}")
+        original_file=$(resolve_path "${config_folder}/${file}")
     fi
 
     if [ -f "$original_file" ] && ! cmp -s "$file" "$original_file"; then
@@ -69,7 +74,11 @@ do
     fi
 
     # Make necessary files executable
-    mod=$(stat -c "%a" "$file" | cut -b 1)
+    if [[ "$(uname)" == "Darwin" ]]; then
+        mod=$(stat -f "%A" "$file" | cut -b 1)
+    else
+        mod=$(stat -c "%a" "$file" | cut -b 1)
+    fi
     if ((mod % 2 == 1)); then
         chmod +x "$original_file"
     fi
