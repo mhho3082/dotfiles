@@ -615,16 +615,7 @@ lazy.setup({
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = {
-      plugins = {
-        spelling = {
-          enabled = true,
-        },
-      },
-      layout = {
-        align = "center",
-      },
-    },
+    opts = { preset = "helix" },
     config = function(_, opts)
       -- Note: Most of the keymap config is here
 
@@ -639,72 +630,58 @@ lazy.setup({
       -- Leader key
       vim.g.mapleader = " "
 
-      -- Setups that which-key advices
-      vim.opt.timeoutlen = 500
-      vim.opt.scrolloff = 0
+      -- A quick function to set keymaps;
+      -- see https://neovim.io/doc/user/lua.html#vim.keymap.set()
+      ---@param mode string|string[]
+      ---@param lhs string
+      ---@param rhs string|function
+      ---@param options? table
+      local function keymap(mode, lhs, rhs, options)
+        vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, options or {}))
+      end
 
       -- Move cursor by display lines by default
       vim.tbl_map(function(ops)
-        vim.keymap.set({ "n", "v", "o", "x" }, ops, "g" .. ops, { noremap = true, silent = true })
+        keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
         -- vim.keymap.set({ "n", "v", "o", "x" }, "g" .. ops, ops, { noremap = true, silent = true })
       end, { "j", "k", "0", "^", "$" })
 
       -- Fix lua API keyboard interrupt issue
-      wk.register({
-        ["<C-c>"] = { "<C-[>", "Escape" },
-      }, { mode = "i" })
+      keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
 
       -- Add easy copy/paste to system clipboard
-      wk.register({
-        ["gy"] = { '"+y', "Copy to clipboard" },
-        ["gY"] = { '"+Y', "Copy to clipboard" },
-        ["gp"] = { '"+p', "Paste from clipboard" },
-        ["gP"] = { '"+P', "Paste from clipboard" },
-      }, { mode = { "n", "v" } })
+      keymap({ "n", "v" }, "gy", '"+y', { desc = "Copy to clipboard" })
+      keymap({ "n", "v" }, "gY", '"+Y', { desc = "Copy to clipboard" })
+      keymap({ "n", "v" }, "gp", '"+p', { desc = "Paste to clipboard" })
+      keymap({ "n", "v" }, "gP", '"+P', { desc = "Paste to clipboard" })
 
       -- Operate on windows with <M-_> in normal mode
       -- (<M-_> is used to move code in visual mode)
-      wk.register({
-        ["<M-h>"] = { "<C-w>h", "Move to left window" },
-        ["<M-j>"] = { "<C-w>j", "Move to lower window" },
-        ["<M-k>"] = { "<C-w>k", "Move to upper window" },
-        ["<M-l>"] = { "<C-w>l", "Move to right window" },
-        ["<M-v>"] = { "<C-w>v", "Split vertically" },
-        ["<M-s>"] = { "<C-w>s", "Split" },
-        ["<M-c>"] = { "<C-w>c", "Close window" },
-      }, { mode = "n" })
+      vim.tbl_map(function(ops)
+        keymap("n", "<M-" .. ops .. ">", "<C-w>" .. ops)
+      end, { "h", "j", "k", "l", "v", "s", "c" })
 
       -- LSP mappings
-      wk.register({
-        ["J"] = {
-          function()
-            vim.diagnostic.open_float(0, { scope = "cursor" })
-          end,
-          "Diagnostics",
-        },
-        ["K"] = { vim.lsp.buf.hover, "Hover" },
-        ["gr"] = { vim.lsp.buf.rename, "Rename" },
-        ["gd"] = {
-          function()
-            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-            fzf.lsp_definitions({ jump_to_single_result = true })
-          end,
-          "Goto definition",
-        },
-        ["gD"] = {
-          function()
-            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-            fzf.lsp_references({ jump_to_single_result = true })
-          end,
-          "Goto references",
-        },
-        ["<C-j>"] = { vim.diagnostic.goto_next, "Next diagnostic" },
-        ["<C-k>"] = { vim.diagnostic.goto_prev, "Prev diagnostic" },
-      }, { mode = "n" })
-      wk.register({
-        ["<leader>j"] = { vim.lsp.buf.code_action, "Code action" },
-        ["<leader>k"] = { vim.lsp.buf.format, "Format" },
-      }, { mode = { "n", "v" } })
+      keymap("n", "J", function()
+        vim.diagnostic.open_float(0, { scope = "cursor" })
+      end, { desc = "Diagnostics" })
+      keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+      keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
+      keymap("n", "gd", function()
+        fzf.lsp_definitions({ jump_to_single_result = true })
+      end, { desc = "Goto definition" })
+      keymap("n", "gD", function()
+        fzf.lsp_references({
+          -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+          jump_to_single_result = true,
+          includeDeclaration = false,
+        })
+      end, { desc = "Goto references" })
+      keymap("n", "<C-j>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+      keymap("n", "<C-k>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+      -- LSP maappings for both normal and visual modes
+      keymap({ "n", "v" }, "<leader>j", vim.lsp.buf.code_action, { desc = "Code action" })
+      keymap({ "n", "v" }, "<leader>k", vim.lsp.buf.format, { desc = "Format" })
 
       -- A function to search for TODOs and more
       local function FindTodo()
@@ -733,83 +710,69 @@ lazy.setup({
       end
 
       -- The great <leader> keymap
-      wk.register({
-        ["<leader>"] = {
-          name = "leader",
-          -- Basics
-          w = { "<cmd>w!<cr>", "Save" },
-          q = { "<cmd>qa!<cr>", "Quit" },
-          n = { vim.cmd.nohl, "Nohl" },
-          -- Make
-          m = { vim.cmd.make, "Make" },
-          c = {
-            function()
-              vim.cmd.make("clean")
-            end,
-            "Make clean",
-          },
-          -- Search
-          f = { fzf.files, "Files" },
-          a = { fzf.lsp_document_symbols, "Symbols" },
-          s = { fzf.live_grep, "Search" },
-          d = { fzf.diagnostics_workspace, "Diagnostics" },
-          r = { fzf.resume, "Resume search" },
-          e = { FindTodo, "Find TODOs" },
-          -- Undo tree
-          u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
-          t = {
-            name = "tabs",
-            h = { vim.cmd.tabprev, "Previous" },
-            l = { vim.cmd.tabnext, "Next" },
-            H = { vim.cmd.tabfirst, "First" },
-            L = { vim.cmd.tablast, "Last" },
-            n = { vim.cmd.tabnew, "New" },
-            c = { vim.cmd.tabclose, "Close" },
-            o = { vim.cmd.tabonly, "Close all others" },
-          },
-          l = {
-            name = "lazy",
-            l = { "<cmd>Lazy sync<cr>", "Sync" },
-            u = { "<cmd>Lazy update<cr>", "Update" },
-            p = { "<cmd>Lazy profile<cr>", "Profile" },
-          },
-          g = {
-            name = "git",
-            -- Statuses
-            b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame" },
-            d = { "<cmd>DiffviewOpen<cr>", "Diff with head" }, -- Or Gvdiffsplit
-            -- Fetch
-            f = { "<cmd>G fetch<cr>", "Fetch" },
-            m = { "<cmd>G merge<cr>", "Merge" },
-            -- Commit
-            a = { "<cmd>G add %<cr>", "Add file" },
-            c = { "<cmd>G commit<cr>", "Commit" },
-            p = { "<cmd>G push<cr>", "Push" },
-          },
-          h = {
-            name = "git hunks",
-            -- View
-            d = { "<cmd>Gitsigns preview_hunk<cr>", "Diff" },
-            -- Select
-            v = { "<cmd>Gitsigns select_hunk<cr>", "Visual" },
-            -- Move
-            n = { "<cmd>Gitsigns next_hunk<cr>", "Next" },
-            p = { "<cmd>Gitsigns prev_hunk<cr>", "Previous" },
-            -- Stage (or reset)
-            s = { "<cmd>Gitsigns stage_hunk<cr>", "Stage" },
-            u = { "<cmd>Gitsigns undo_stage_hunk<cr>", "Undo stage" },
-            r = { "<cmd>Gitsigns reset_hunk<cr>", "Reset" },
-          },
-          i = {
-            name = "interface",
-            n = { "<cmd>set number!<cr>", "Number" },
-            s = { "<cmd>set spell!<cr>", "Spell" },
-            w = { "<cmd>set wrap!<cr>", "Wrap" },
-            i = { "<cmd>IndentBlanklineToggle<cr>", "Indentline" },
-            b = { '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>', "Background" },
-          },
-        },
-      })
+      wk.add({ { "<leader>", group = "Leader" } })
+      -- Basics
+      keymap("n", "<leader>w", "<cmd>w!<cr>", { desc = "Save" })
+      keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
+      keymap("n", "<leader>n", vim.cmd.nohl, { desc = "Nohl" })
+      -- Make
+      keymap("n", "<leader>m", vim.cmd.make, { desc = "Make" })
+      keymap("n", "<leader>c", function()
+        vim.cmd.make("clean")
+      end, { desc = "Make clean" })
+      -- Search
+      keymap("n", "<leader>f", fzf.files, { desc = "Files" })
+      keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
+      keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
+      keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
+      keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
+      keymap("n", "<leader>e", FindTodo, { desc = "Find TODOs" })
+      -- Undo tree
+      keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
+      -- Tabs (group: t)
+      wk.add({ { "<leader>t", group = "Tabs" } })
+      keymap("n", "<leader>th", vim.cmd.tabprev, { desc = "Previous tab" })
+      keymap("n", "<leader>tH", vim.cmd.tabfirst, { desc = "First tab" })
+      keymap("n", "<leader>tl", vim.cmd.tabnext, { desc = "Next tab" })
+      keymap("n", "<leader>tL", vim.cmd.tablast, { desc = "Last tab" })
+      keymap("n", "<leader>tn", vim.cmd.tabnew, { desc = "New tab" })
+      keymap("n", "<leader>tc", vim.cmd.tabclose, { desc = "Close tab" })
+      keymap("n", "<leader>to", vim.cmd.tabonly, { desc = "Close all other tabs" })
+      -- Lazy (group: l)
+      wk.add({ { "<leader>l", group = "Lazy" } })
+      keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
+      keymap("n", "<leader>lu", "<cmd>Lazy update<cr>", { desc = "Lazy Update" })
+      keymap("n", "<leader>lp", "<cmd>Lazy profile<cr>", { desc = "Lazy Profile" })
+      -- Git (group: g)
+      wk.add({ { "<leader>g", group = "Git" } })
+      keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
+      keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
+      keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
+      keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
+      keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
+      keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
+      keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
+      -- Git hunks (group: h)
+      wk.add({ { "<leader>h", group = "Git hunks" } })
+      keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
+      keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
+      keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
+      keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
+      keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
+      keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
+      keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
+      -- Interface (group: i)
+      wk.add({ { "<leader>i", group = "Interface" } })
+      keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
+      keymap("n", "<leader>is", "<cmd>set spell!<cr>", { desc = "Spell" })
+      keymap("n", "<leader>iw", "<cmd>set wrap!<cr>", { desc = "Wrap" })
+      keymap("n", "<leader>ii", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
+      keymap(
+        "n",
+        "<leader>ib",
+        '<cmd>let &background = ( &background == "dark"? "light" : "dark" )<cr>',
+        { desc = "Background" }
+      )
     end,
   },
 
