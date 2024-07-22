@@ -65,6 +65,9 @@
     # Use difftool for such diff
     df = !"d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
 
+    f = fetch
+    fa = fetch --all
+
     m = merge
 
     p = push
