@@ -60,7 +60,7 @@ zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Plugins
 plugins=(fzf command-not-found zsh-autosuggestions) # Add functionalities
-plugins+=(gh fd ripgrep npm yarn rust) # For command auto-completion
+plugins+=(gh npm yarn rust) # For command auto-completion
 plugins+=zsh-syntax-highlighting # Must be last of plugins
 
 # Add compdef for zoxide
