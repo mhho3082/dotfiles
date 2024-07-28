@@ -428,6 +428,8 @@ lazy.setup({
             svelte = { require("efmls-configs.formatters.prettier_d") },
             typescript = { require("efmls-configs.formatters.prettier_d") },
             markdown = { require("efmls-configs.formatters.prettier_d") },
+            javascriptreact = { require("efmls-configs.formatters.prettier_d") },
+            typescriptreact = { require("efmls-configs.formatters.prettier_d") },
             css = { require("efmls-configs.formatters.prettier_d") },
             json = { require("efmls-configs.formatters.prettier_d") },
             jsonc = { require("efmls-configs.formatters.prettier_d") },
