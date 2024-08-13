@@ -431,6 +431,8 @@ lazy.setup({
             javascriptreact = { require("efmls-configs.formatters.prettier_d") },
             typescriptreact = { require("efmls-configs.formatters.prettier_d") },
             css = { require("efmls-configs.formatters.prettier_d") },
+            sass = { require("efmls-configs.formatters.prettier_d") },
+            scss = { require("efmls-configs.formatters.prettier_d") },
             json = { require("efmls-configs.formatters.prettier_d") },
             jsonc = { require("efmls-configs.formatters.prettier_d") },
             -- Use beautysh for shell scripts
