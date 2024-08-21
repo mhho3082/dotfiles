@@ -418,6 +418,14 @@ lazy.setup({
         ["jdtls"] = function()
           setup_lsp_server("jdtls", { settings = { java = { format = { enabled = false } } } })
         end,
+        ["cssls"] = function()
+          setup_lsp_server("cssls", {
+            -- https://github.com/LazyVim/LazyVim/discussions/2159
+            init_options = {
+              provideFormatter = false,
+            },
+          })
+        end,
         ["efm"] = function()
           -- Special null-ls-like LSP server
           -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
