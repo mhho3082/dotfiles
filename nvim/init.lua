@@ -426,6 +426,11 @@ lazy.setup({
             },
           })
         end,
+        ["tsserver"] = function()
+          -- https://github.com/neovim/nvim-lspconfig/pull/3232
+          -- https://github.com/williamboman/mason-lspconfig.nvim/issues/458
+          setup_lsp_server("ts_ls", {})
+        end,
         ["efm"] = function()
           -- Special null-ls-like LSP server
           -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
