@@ -832,13 +832,27 @@ lazy.setup({
   {
     "nvim-pack/nvim-spectre",
     event = "VeryLazy",
-    config = function()
-      vim.keymap.set(
-        { "n" },
-        "S",
-        require("spectre").toggle,
-        { desc = "Search and replace", noremap = true, silent = true }
-      )
+    opts = {
+      -- https://github.com/nvim-pack/nvim-spectre/issues/118#issuecomment-1531683211
+      replace_engine = {
+        ["sed"] = {
+          cmd = "sed",
+          args = {
+            "-i",
+            "",
+            "-E",
+          },
+        },
+      },
+    },
+    config = function(_, opts)
+      local s = require("spectre")
+
+      if opts then
+        s.setup(opts)
+      end
+
+      vim.keymap.set({ "n" }, "S", s.toggle, { desc = "Search and replace", noremap = true, silent = true })
     end,
   },
 
