@@ -86,8 +86,17 @@ if (( $+commands[nvim] )); then
     export VISUAL="nvim"
     export EDITOR="nvim"
 
-    # Also use nvim as manpager
+    # Use nvim as manpager
     export MANPAGER='nvim +Man!'
+
+    # Use nvim as ssh client
+    # https://gist.github.com/jsongerber/7dfd9f2d22ae060b98e15c5590c4828d
+    function oil-ssh {
+        host=${1:-$(grep '^Host ' ~/.ssh/config | awk '{ for (i=2; i<=NF; i++) print $i }' | fzf --cycle --layout=reverse --height=80%)}
+        [ -z "$host" ] && return 1
+        user=${2:-$(ssh -G "$host" | grep '^user\>'  | sed 's/^user //')}
+        nvim '+lua require("oil").open()' oil-ssh://"$user"@"$host"/
+    }
 elif (( $+commands[vim] )); then
     export VISUAL="vim"
     export EDITOR="vim"
@@ -205,7 +214,7 @@ if (( $+commands[zaread] )); then
     for za_t in "${za_e[@]}"; do
         [ -z $za_f ] && za_f+='-iname \*.'$za_t || za_f+=' -o -iname \*.'$za_t
     done
-    local search='$(find -type f \( '$za_f' \) | fzf)'
+    local search='$(find -type f \( '$za_f' \) | fzf --cycle --layout=reverse --height=80%)'
     alias za='local f='$search'; zaread $f & disown'
 elif (( $+commands[zathura] )); then
     # Select only the viewable files (based on extension)
@@ -214,7 +223,7 @@ elif (( $+commands[zathura] )); then
     for za_t in "${za_e[@]}"; do
         [ -z $za_f ] && za_f+='-iname \*.'$za_t || za_f+=' -o -iname \*.'$za_t
     done
-    local search='$(find -type f \( '$za_f' \) | fzf)'
+    local search='$(find -type f \( '$za_f' \) | fzf --cycle --layout=reverse --height=80%)'
     alias za='local f='$search'; zathura $f & disown'
 fi
 
@@ -359,7 +368,7 @@ function paru-update {
         read "answer?Reboot will be needed, are you sure? [Y/n] "
         [[ "$answer" =~ ^[nN]$ ]] && return
     fi
-    
+
     # Run the update
     paru -Su --noconfirm
     if (( $? == 0 )); then

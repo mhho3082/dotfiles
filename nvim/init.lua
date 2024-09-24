@@ -118,17 +118,14 @@ lazy.setup({
     event = "VeryLazy",
     opts = {
       view_options = {
-        -- Display hidden files
         show_hidden = true,
         -- Don't display "../"
         is_always_hidden = function(name, _)
           return name == ".."
         end,
       },
-      -- Deleted files will be removed with the `trash-put` command
       delete_to_trash = true,
-      -- Set to true to watch the filesystem for changes and reload oil
-      experimental_watch_for_changes = true,
+      watch_for_changes = true,
     },
     config = function(_, opts)
       local oil = require("oil")
@@ -299,7 +296,38 @@ lazy.setup({
           lualine_z = {},
         },
         tabline = {},
-        extensions = { "fugitive", "fzf", "lazy", "mason", "oil" },
+        extensions = {
+          "fugitive",
+          "fzf",
+          "lazy",
+          "mason",
+          {
+            -- A modified version of
+            -- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/extensions/oil.lua
+            -- to work with ssh, see
+            -- https://github.com/stevearc/oil.nvim/blob/1360be5fda9c67338331abfcd80de2afbb395bcd/doc/recipes.md?plain=1#L39
+            sections = {
+              lualine_a = {
+                function()
+                  local ok, oil = pcall(require, "oil")
+                  if ok then
+                    local dir = oil.get_current_dir()
+                    if dir then
+                      return vim.fn.fnamemodify(dir, ":~")
+                    else
+                      -- If there is no current directory (e.g. over ssh), just show the buffer name
+                      return vim.api.nvim_buf_get_name(0)
+                    end
+                  else
+                    return ""
+                  end
+                end,
+              },
+            },
+
+            filetypes = { "oil" },
+          },
+        },
       })
     end,
   },
@@ -425,11 +453,6 @@ lazy.setup({
               provideFormatter = false,
             },
           })
-        end,
-        ["tsserver"] = function()
-          -- https://github.com/neovim/nvim-lspconfig/pull/3232
-          -- https://github.com/williamboman/mason-lspconfig.nvim/issues/458
-          setup_lsp_server("ts_ls", {})
         end,
         ["efm"] = function()
           -- Special null-ls-like LSP server
