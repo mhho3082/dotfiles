@@ -16,7 +16,8 @@ fi
 
 select_type=$(
     eval $method | jq --raw-output '.[]' |
-    fzf --preview "jq --raw-output .source <($method/{})"
+    fzf --layout=reverse --height=80% \
+        --preview "jq --raw-output .source <($method/{})" --preview-window=wrap
 )
 
 if [[ -n $select_type && $select_type != 'null' ]]; then
