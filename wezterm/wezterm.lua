@@ -39,6 +39,9 @@ config.adjust_window_size_when_changing_font_size = false
 -- Disable IME
 config.use_ime = false
 
+-- Disable bell
+config.audible_bell = "Disabled"
+
 config.keys = {
   -- Copy/paste
   {

@@ -141,11 +141,11 @@ fi
 if (( $+commands[make] )); then
     alias m="make"
 fi
-if (( $+commands[npm] )); then
+if (( $+commands[npm] || $+commands[nvm] )); then
     alias n="npm"
     alias nd="npm run dev"
 fi
-if (( $+commands[yarn] )); then
+if (( $+commands[yarn] || $+commands[nvm] )); then
     alias y="yarn"
     alias yd="yarn dev"
     alias yx="yarn dlx"
@@ -160,9 +160,18 @@ fi
 # Editors
 alias e="$EDITOR"
 alias v="$VISUAL"
+
 # File manager
 function f {
-    xdg-open ${@:-.} 2>/dev/null & disown
+    if (( $+commands[open] )); then
+        open ${@:-.} 2>/dev/null & disown
+    elif grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
+        # Open in File Explorer (for WSL)
+        # https://stackoverflow.com/q/38086185
+        explorer.exe ${@:-.}; (( $? == 1 ))
+    else
+        xdg-open ${@:-.} 2>/dev/null & disown
+    fi
 }
 
 # Exa/Eza (or ls + tree)
@@ -387,15 +396,6 @@ function ip-addr {
         [[ $ip_addr =~ $out_ip ]] && print -P '%F{cyan}'$ip_addr'%f' || echo $ip_addr
     done
 }
-
-# WSL-specific alias
-# https://stackoverflow.com/q/38086185
-if grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
-    # Open in File Explorer (for WSL)
-    function explorer {
-        explorer.exe ${@:-.}; (( $? == 1 ))
-    }
-fi
 
 # == Prompt ==
 
