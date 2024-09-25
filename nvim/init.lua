@@ -32,6 +32,16 @@ vim.opt.rtp:prepend(lazypath)
 
 local lazy = require("lazy")
 
+-- A quick function to set keymaps;
+-- see https://neovim.io/doc/user/lua.html#vim.keymap.set()
+---@param mode string|string[]
+---@param lhs string
+---@param rhs string|function
+---@param options? table
+local function keymap(mode, lhs, rhs, options)
+  vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, options or {}))
+end
+
 -- The great plugins list
 lazy.setup({
   -- EDIT --
@@ -98,13 +108,17 @@ lazy.setup({
     "Wansmer/treesj",
     event = "VeryLazy",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
+    opts = {
+      use_default_keymaps = false,
+    },
+    config = function(_, opts)
       local tsj = require("treesj")
-      tsj.setup({
-        use_default_keymaps = false,
-      })
-      vim.keymap.set({ "n" }, "gs", tsj.split, { desc = "Split", noremap = true, silent = true })
-      vim.keymap.set({ "n" }, "gj", tsj.join, { desc = "Join", noremap = true, silent = true })
+
+      if opts then
+        tsj.setup(opts)
+      end
+      keymap({ "n" }, "gs", tsj.split, { desc = "Split" })
+      keymap({ "n" }, "gj", tsj.join, { desc = "Join" })
     end,
   },
 
@@ -134,7 +148,7 @@ lazy.setup({
         oil.setup(opts)
       end
 
-      vim.keymap.set({ "n" }, "-", oil.open, { desc = "Open oil.nvim", noremap = true, silent = true })
+      keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
     end,
   },
 
@@ -155,9 +169,9 @@ lazy.setup({
     config = function()
       local spider = require("spider")
       vim.tbl_map(function(ops)
-        vim.keymap.set({ "n", "v", "o", "x" }, ops, function()
+        keymap({ "n", "v", "o", "x" }, ops, function()
           spider.motion(ops)
-        end, { desc = "Spider-" .. ops, noremap = true, silent = true })
+        end, { desc = "Spider-" .. ops })
       end, { "w", "e", "b", "ge" })
     end,
   },
@@ -617,16 +631,16 @@ lazy.setup({
       end
 
       -- Mappings
-      vim.keymap.set({ "i", "v" }, "<C-l>", function()
+      keymap({ "i", "v" }, "<C-l>", function()
         if luasnip.locally_jumpable(1) then
           luasnip.jump(1)
         end
-      end, { desc = "LuaSnip jump", noremap = true, silent = true })
-      vim.keymap.set({ "i", "v" }, "<C-h>", function()
+      end, { desc = "LuaSnip jump" })
+      keymap({ "i", "v" }, "<C-h>", function()
         if luasnip.jumpable(-1) then
           luasnip.jump(-1)
         end
-      end, { desc = "LuaSnip jump back", noremap = true, silent = true })
+      end, { desc = "LuaSnip jump back" })
 
       require("luasnip.loaders.from_vscode").lazy_load({
         exclude = { "html", "all" },
@@ -670,20 +684,10 @@ lazy.setup({
       -- Leader key
       vim.g.mapleader = " "
 
-      -- A quick function to set keymaps;
-      -- see https://neovim.io/doc/user/lua.html#vim.keymap.set()
-      ---@param mode string|string[]
-      ---@param lhs string
-      ---@param rhs string|function
-      ---@param options? table
-      local function keymap(mode, lhs, rhs, options)
-        vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, options or {}))
-      end
-
       -- Move cursor by display lines by default
       vim.tbl_map(function(ops)
         keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
-        -- vim.keymap.set({ "n", "v", "o", "x" }, "g" .. ops, ops, { noremap = true, silent = true })
+        -- keymap({ "n", "v", "o", "x" }, "g" .. ops, ops)
       end, { "j", "k", "0", "^", "$" })
 
       -- Fix lua API keyboard interrupt issue
@@ -875,7 +879,7 @@ lazy.setup({
         s.setup(opts)
       end
 
-      vim.keymap.set({ "n" }, "S", s.toggle, { desc = "Search and replace", noremap = true, silent = true })
+      keymap({ "n" }, "S", s.toggle, { desc = "Search and replace" })
     end,
   },
 
