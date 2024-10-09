@@ -460,6 +460,14 @@ lazy.setup({
         ["jdtls"] = function()
           setup_lsp_server("jdtls", { settings = { java = { format = { enabled = false } } } })
         end,
+        ["html"] = function()
+          setup_lsp_server("html", {
+            -- https://github.com/LazyVim/LazyVim/discussions/2159
+            init_options = {
+              provideFormatter = false,
+            },
+          })
+        end,
         ["cssls"] = function()
           setup_lsp_server("cssls", {
             -- https://github.com/LazyVim/LazyVim/discussions/2159
@@ -480,6 +488,7 @@ lazy.setup({
             markdown = { require("efmls-configs.formatters.prettier_d") },
             javascriptreact = { require("efmls-configs.formatters.prettier_d") },
             typescriptreact = { require("efmls-configs.formatters.prettier_d") },
+            html = { require("efmls-configs.formatters.prettier_d") },
             css = { require("efmls-configs.formatters.prettier_d") },
             sass = { require("efmls-configs.formatters.prettier_d") },
             scss = { require("efmls-configs.formatters.prettier_d") },
