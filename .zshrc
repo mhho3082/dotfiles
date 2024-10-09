@@ -95,6 +95,7 @@ if (( $+commands[nvim] )); then
         host=${1:-$(grep '^Host ' ~/.ssh/config | awk '{ for (i=2; i<=NF; i++) print $i }' | fzf --cycle --layout=reverse --height=80%)}
         [ -z "$host" ] && return 1
         user=${2:-$(ssh -G "$host" | grep '^user\>'  | sed 's/^user //')}
+        if ! ssh-add -l &>/dev/null; then ssh-add; fi
         nvim '+lua require("oil").open()' oil-ssh://"$user"@"$host"/
     }
 elif (( $+commands[vim] )); then
