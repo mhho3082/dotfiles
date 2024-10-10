@@ -219,8 +219,7 @@ lazy.setup({
         end,
       },
     },
-    config = function()
-      require("nvim-treesitter.configs").setup({
+    opts = {
         --stylua: ignore start
         ensure_installed = {
           -- Programming
@@ -228,6 +227,7 @@ lazy.setup({
           "javascript", "typescript", "jsdoc", "vue", "svelte",
           -- Scripting
           "html", "css", "scss", "json", "jsonc", "regex", "bash",
+          "php", "php_only", "phpdoc", "blade",
           -- Git
           "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
           -- Prose
@@ -238,23 +238,45 @@ lazy.setup({
           -- Vim-specific
           "vim", "vimdoc", "comment", "lua", "luadoc", "diff",
         },
-        --stylua: ignore end
-        highlight = {
-          -- false will disable the whole extension
-          enable = true,
-          -- list of language that will be disabled
-          disable = {},
+      --stylua: ignore end
+      highlight = {
+        -- false will disable the whole extension
+        enable = true,
+        -- list of language that will be disabled
+        disable = {},
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<cr>",
+          node_incremental = "<cr>",
+          scope_incremental = "<s-cr>",
+          node_decremental = "<bs>",
         },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<cr>",
-            node_incremental = "<cr>",
-            scope_incremental = "<s-cr>",
-            node_decremental = "<bs>",
-          },
+      },
+    },
+    config = function(_, opts)
+      -- Blade Treesitter install based on https://github.com/EmranMR/tree-sitter-blade/discussions/19
+      -- also see `after/` folder for SCM code
+
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+      parser_config.blade = {
+        install_info = {
+          url = "https://github.com/EmranMR/tree-sitter-blade",
+          files = { "src/parser.c" },
+          branch = "main",
+        },
+        filetype = "blade",
+      }
+
+      vim.filetype.add({
+        pattern = {
+          [".*%.blade%.php"] = "blade",
         },
       })
+
+      require("nvim-treesitter.configs").setup(opts)
     end,
   },
 
@@ -350,6 +372,15 @@ lazy.setup({
   { "kyazdani42/nvim-web-devicons", event = "VeryLazy", opts = {} },
 
   -- COPILOTS --
+
+  -- GitHub Copilot
+  {
+    "zbirenbaum/copilot.lua",
+    event = "VeryLazy",
+    config = function()
+      require("copilot").setup({})
+    end,
+  },
 
   -- LSP
   {
@@ -510,6 +541,8 @@ lazy.setup({
             },
             -- Format GLSL using clang-format (need .clang-format file)
             glsl = { require("efmls-configs.formatters.clang_format") },
+            -- Format blade with blade-formatter
+            blade = { require("efmls-configs.formatters.blade_formatter") },
           })
 
           setup_lsp_server("efm", {
@@ -542,6 +575,7 @@ lazy.setup({
       "hrsh7th/cmp-cmdline",
       "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-buffer",
+      { "zbirenbaum/copilot-cmp", opts = {} },
     },
     config = function()
       local cmp = require("cmp")
@@ -574,11 +608,14 @@ lazy.setup({
             return false
           end
 
-          local context = require("cmp.config.context")
+          -- Disable in comments, unless using Copilot
+          local copilot = require("lazy.core.config").plugins["copilot-cmp"]
+          if not copilot then
+            local context = require("cmp.config.context")
 
-          -- Disable in comments
-          if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
-            return false
+            if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
+              return false
+            end
           end
 
           return true
@@ -604,6 +641,7 @@ lazy.setup({
           ["<C-e>"] = cmp.mapping.abort(),
         },
         sources = cmp.config.sources({
+          { name = "copilot" },
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "path" },
