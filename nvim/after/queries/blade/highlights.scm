@@ -1,6 +1,6 @@
-(directive) @keyword.operator
-(directive_start) @keyword.operator
-(directive_end) @keyword.operator
+(directive) @function
+(directive_start) @function
+(directive_end) @function
 (comment) @comment @spell
 ((parameter) @include (#set! "priority" 110)) 
 ((php_only) @include (#set! "priority" 110)) 
