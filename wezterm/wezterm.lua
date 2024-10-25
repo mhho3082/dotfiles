@@ -7,6 +7,10 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
+-- Check if the target platform is macOS
+-- https://github.com/wez/wezterm/discussions/4728
+local is_darwin = wezterm.target_triple:find("darwin") ~= nil
+
 -- Use JetBrains Mono, which is built-in
 -- Emojis will need Noto Emoji installed
 config.font = wezterm.font("JetBrainsMono NF")
@@ -42,32 +46,38 @@ config.use_ime = false
 -- Disable bell
 config.audible_bell = "Disabled"
 
+-- Give a reasonable title to the terminal window (for macOS)
+wezterm.on("format-window-title", function(tab)
+  return "WezTerm: " .. tab.active_pane.title
+end)
+
+
 config.keys = {
   -- Copy/paste
   {
     key = "c",
-    mods = "CTRL|SHIFT",
+    mods = is_darwin and "CMD" or "CTRL|SHIFT",
     action = wezterm.action.CopyTo("Clipboard"),
   },
   {
     key = "v",
-    mods = "CTRL|SHIFT",
+    mods = is_darwin and "CMD" or "CTRL|SHIFT",
     action = wezterm.action.PasteFrom("Clipboard"),
   },
   -- Change font size
   {
     key = "-",
-    mods = "CTRL",
+    mods = is_darwin and "CMD" or "CTRL",
     action = wezterm.action.DecreaseFontSize,
   },
   {
     key = "=",
-    mods = "CTRL",
+    mods = is_darwin and "CMD" or "CTRL",
     action = wezterm.action.IncreaseFontSize,
   },
   {
     key = "0",
-    mods = "CTRL",
+    mods = is_darwin and "CMD" or "CTRL",
     action = wezterm.action.ResetFontSize,
   },
   -- Scroll up/down
