@@ -129,6 +129,7 @@ lazy.setup({
   -- File browser
   {
     "stevearc/oil.nvim",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     opts = {
       view_options = {
@@ -155,6 +156,7 @@ lazy.setup({
   -- Undo tree
   {
     "mbbill/undotree",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     config = function()
       -- Open on the right
@@ -181,6 +183,7 @@ lazy.setup({
   -- Indent guide
   {
     "lukas-reineke/indent-blankline.nvim",
+    cond = not vim.g.vscode,
     main = "ibl",
     event = "VeryLazy",
     opts = {
@@ -193,6 +196,7 @@ lazy.setup({
   -- Colorscheme
   {
     "sainnhe/gruvbox-material",
+    cond = not vim.g.vscode,
     lazy = false,
     priority = 1000,
     config = function()
@@ -283,6 +287,7 @@ lazy.setup({
   -- Statusline and tabline
   {
     "nvim-lualine/lualine.nvim",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     config = function()
       -- gitsigns integration copied from:
@@ -376,6 +381,7 @@ lazy.setup({
   -- GitHub Copilot
   {
     "zbirenbaum/copilot.lua",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     config = function()
       require("copilot").setup({})
@@ -558,6 +564,7 @@ lazy.setup({
   -- LSP server status
   {
     "j-hui/fidget.nvim",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     opts = { progress = { ignore = { "ltex" }, display = { render_limit = 5, done_icon = "✓" } } },
   },
@@ -726,7 +733,14 @@ lazy.setup({
         wk.setup(opts)
       end
 
-      local fzf = require("fzf-lua")
+      local fzf
+      local vscode
+      if not vim.g.vscode then
+        fzf = require("fzf-lua")
+      else
+        -- For vscode-neovim interop
+        vscode = require("vscode")
+      end
 
       -- Leader key
       vim.g.mapleader = " "
@@ -753,23 +767,32 @@ lazy.setup({
       end, { "h", "j", "k", "l", "v", "s", "c" })
 
       -- LSP mappings
-      keymap("n", "J", function()
-        vim.diagnostic.open_float(0, { scope = "cursor" })
-      end, { desc = "Diagnostics" })
-      keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-      keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
-      keymap("n", "gd", function()
-        fzf.lsp_definitions({ jump_to_single_result = true })
-      end, { desc = "Goto definition" })
-      keymap("n", "gD", function()
-        fzf.lsp_references({
-          -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-          jump_to_single_result = true,
-          includeDeclaration = false,
-        })
-      end, { desc = "Goto references" })
-      keymap("n", "<C-j>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-      keymap("n", "<C-k>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+      if not vim.g.vscode then
+        keymap("n", "J", function()
+          vim.diagnostic.open_float(0, { scope = "cursor" })
+        end, { desc = "Diagnostics" })
+        keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+        keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
+
+        keymap("n", "gd", function()
+          fzf.lsp_definitions({ jump_to_single_result = true })
+        end, { desc = "Goto definition" })
+        keymap("n", "gD", function()
+          fzf.lsp_references({
+            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+            jump_to_single_result = true,
+            includeDeclaration = false,
+          })
+        end, { desc = "Goto references" })
+
+        keymap("n", "<C-j>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+        keymap("n", "<C-k>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+      else
+        keymap("n", "gr", function()
+          vscode.action("editor.action.rename")
+        end, { desc = "Rename" })
+      end
+
       -- LSP maappings for both normal and visual modes
       keymap({ "n", "v" }, "<leader>j", vim.lsp.buf.code_action, { desc = "Code action" })
       keymap({ "n", "v" }, "<leader>k", vim.lsp.buf.format, { desc = "Format" })
@@ -812,12 +835,14 @@ lazy.setup({
         vim.cmd.make("clean")
       end, { desc = "Make clean" })
       -- Search
-      keymap("n", "<leader>f", fzf.files, { desc = "Files" })
-      keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
-      keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
-      keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
-      keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
-      keymap("n", "<leader>e", FindTodo, { desc = "Find TODOs" })
+      if not vim.g.vscode then
+        keymap("n", "<leader>f", fzf.files, { desc = "Files" })
+        keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
+        keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
+        keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
+        keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
+        keymap("n", "<leader>e", FindTodo, { desc = "Find TODOs" })
+      end
       -- Undo tree
       keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
       -- Tabs (group: t)
@@ -875,11 +900,18 @@ lazy.setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs_staged_enable = false },
   },
-  { "sindrets/diffview.nvim", event = "VeryLazy", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
+  {
+    "sindrets/diffview.nvim",
+    cond = not vim.g.vscode,
+    event = "VeryLazy",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
 
   -- Search...
   {
     "ibhagwan/fzf-lua",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     opts = {
       defaults = {
@@ -905,6 +937,7 @@ lazy.setup({
   -- ... and replace
   {
     "nvim-pack/nvim-spectre",
+    cond = not vim.g.vscode,
     event = "VeryLazy",
     opts = {
       -- https://github.com/nvim-pack/nvim-spectre/issues/118#issuecomment-1531683211
@@ -931,7 +964,11 @@ lazy.setup({
   },
 
   -- Run commands
-  { "tpope/vim-dispatch", event = "VeryLazy" },
+  {
+    "tpope/vim-dispatch",
+    cond = not vim.g.vscode,
+    event = "VeryLazy",
+  },
 }, { ui = { backdrop = 100 } })
 
 --------------
