@@ -67,7 +67,7 @@
 
     f = fetch
     # Fetch all remote branches and pull to local branches
-    fa = "!f() { git fetch ${1:-origin} && for r in $(git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-origin}/@@\"); do git fetch ${1:-origin} $r:$r; done }; f"
+    fa = "!f() { git fetch ${1:-origin} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-origin}/@@\" | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
 
     m = merge
 
@@ -223,10 +223,10 @@
 # ---
 
 [credential "https://github.com"]
-    helper = !/usr/bin/gh auth git-credential
+    helper = !/usr/bin/env gh auth git-credential
 
 [credential "https://gist.github.com"]
-    helper = !/usr/bin/gh auth git-credential
+    helper = !/usr/bin/env gh auth git-credential
 
 [url "git@github.com:"]
     insteadOf = "gh:"
