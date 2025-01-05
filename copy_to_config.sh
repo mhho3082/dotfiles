@@ -9,7 +9,7 @@ files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
     sed "/.stylua.*/d" | sed "/tips\//d" | sed "/makefile/d")
 
 # These files cannot be linked, and need to be copied to ~/ directly
-direct_copy_files=(".Xmodmap" ".Xresources" ".nanorc")
+direct_copy_files=(".Xresources" ".nanorc")
 
 # Function to get the real path of a file
 resolve_path() {
