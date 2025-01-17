@@ -45,16 +45,15 @@
     ap = add --patch
     an = add --all --intent-to-add # Add new: for adding (but not staging) new files
 
-    # Simple commit tool
-    acp = "!git add -A && git commit && if git remote | grep . > /dev/null; then git push; fi"
-    # Do not open editor for the commit message
-    acpm = "!f() { [ -n \"$1\" ] && git add -A && git commit -m \"$@\" && if git remote | grep . > /dev/null; then git push; fi; }; f"
-
     b = branch
-    bd = branch --delete
 
     c = commit
     ci = commit --interactive
+
+    # Simple commit tool
+    ca = "!git add -A && git commit && if git remote | grep . > /dev/null; then git push; fi"
+    # Do not open editor for the commit message
+    cam = "!f() { [ -n \"$1\" ] && git add -A && git commit -m \"$@\" && if git remote | grep . > /dev/null; then git push; fi; }; f"
 
     co = checkout
     cl = clone
@@ -63,7 +62,7 @@
     # `git d i` Diff between i revisions ago and current
     d = "!d() { git diff --patch-with-stat HEAD~${1:-0}; }; d"
     # Use difftool for such diff
-    df = "!d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
+    dt = "!d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
 
     f = fetch
     # Fetch all remote branches and pull to local branches

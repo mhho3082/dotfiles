@@ -174,6 +174,7 @@ alias v="$VISUAL"
 # File manager
 function f {
     if (( $+commands[open] )); then
+        # For macOS
         open ${@:-.} 2>/dev/null & disown
     elif grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
         # Open in File Explorer (for WSL)
