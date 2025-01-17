@@ -768,16 +768,16 @@ lazy.setup({
 
       -- LSP mappings
       if not vim.g.vscode then
-        keymap("n", "J", function()
+        keymap("n", "N", vim.lsp.buf.hover, { desc = "Hover" })
+        keymap("n", "E", function()
           vim.diagnostic.open_float(0, { scope = "cursor" })
         end, { desc = "Diagnostics" })
-        keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
         keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
 
-        keymap("n", "gd", function()
+        keymap("n", "go", function()
           fzf.lsp_definitions({ jump_to_single_result = true })
         end, { desc = "Goto definition" })
-        keymap("n", "gD", function()
+        keymap("n", "gO", function()
           fzf.lsp_references({
             -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
             jump_to_single_result = true,
@@ -785,8 +785,8 @@ lazy.setup({
           })
         end, { desc = "Goto references" })
 
-        keymap("n", "<C-j>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-        keymap("n", "<C-k>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+        keymap("n", "<C-e>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+        keymap("n", "<C-i>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
       else
         keymap("n", "gr", function()
           vscode.action("editor.action.rename")
@@ -794,8 +794,8 @@ lazy.setup({
       end
 
       -- LSP maappings for both normal and visual modes
-      keymap({ "n", "v" }, "<leader>j", vim.lsp.buf.code_action, { desc = "Code action" })
-      keymap({ "n", "v" }, "<leader>k", vim.lsp.buf.format, { desc = "Format" })
+      keymap({ "n", "v" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
+      keymap({ "n", "v" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
 
       -- A function to search for TODOs and more
       local function FindTodo()
@@ -828,32 +828,20 @@ lazy.setup({
       -- Basics
       keymap("n", "<leader>w", "<cmd>w!<cr>", { desc = "Save" })
       keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
-      keymap("n", "<leader>n", vim.cmd.nohl, { desc = "Nohl" })
+      keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohl" })
       -- Make
       keymap("n", "<leader>m", vim.cmd.make, { desc = "Make" })
-      keymap("n", "<leader>c", function()
-        vim.cmd.make("clean")
-      end, { desc = "Make clean" })
       -- Search
       if not vim.g.vscode then
-        keymap("n", "<leader>f", fzf.files, { desc = "Files" })
         keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
-        keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
-        keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
         keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
-        keymap("n", "<leader>e", FindTodo, { desc = "Find TODOs" })
+        keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
+        keymap("n", "<leader>t", fzf.files, { desc = "Files" })
+        keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
+        keymap("n", "<leader>p", FindTodo, { desc = "Find TODOs" })
       end
       -- Undo tree
       keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
-      -- Tabs (group: t)
-      wk.add({ { "<leader>t", group = "Tabs" } })
-      keymap("n", "<leader>th", vim.cmd.tabprev, { desc = "Previous tab" })
-      keymap("n", "<leader>tH", vim.cmd.tabfirst, { desc = "First tab" })
-      keymap("n", "<leader>tl", vim.cmd.tabnext, { desc = "Next tab" })
-      keymap("n", "<leader>tL", vim.cmd.tablast, { desc = "Last tab" })
-      keymap("n", "<leader>tn", vim.cmd.tabnew, { desc = "New tab" })
-      keymap("n", "<leader>tc", vim.cmd.tabclose, { desc = "Close tab" })
-      keymap("n", "<leader>to", vim.cmd.tabonly, { desc = "Close all other tabs" })
       -- Lazy (group: l)
       wk.add({ { "<leader>l", group = "Lazy" } })
       keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
