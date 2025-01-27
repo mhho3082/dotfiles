@@ -785,8 +785,8 @@ lazy.setup({
           })
         end, { desc = "Goto references" })
 
-        keymap("n", "<C-e>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-        keymap("n", "<C-i>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+        keymap("n", "<C-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+        keymap("n", "<C-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
       else
         keymap("n", "gr", function()
           vscode.action("editor.action.rename")
