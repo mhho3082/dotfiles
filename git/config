@@ -67,6 +67,9 @@
     f = fetch
     # Fetch all remote branches and pull to local branches
     fa = "!f() { git fetch ${1:-origin} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-origin}/@@\" | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
+    # Fetch remote, but do not create new branches (so only existing ones)
+    # Helpful for repos with dozens of contributors and hundreds of remote branches
+    fe = "!f() { git fetch ${1:-origin} && git branch | grep -v '^*' | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
 
     m = merge
 
