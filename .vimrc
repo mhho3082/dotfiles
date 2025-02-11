@@ -1,4 +1,6 @@
 set nocompatible
+" set compatible " Fixes 'Set first letter as g' problem for some versions of vim, see https://stackoverflow.com/a/39874424
+
 syntax on
 let mapleader = " "
 
