@@ -1,11 +1,17 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# limits recursive functions, see 'man bash'
+[[ -z "$FUNCNEST" ]] && export FUNCNEST=100
+
 # Handy aliases
 alias l='ls -AlhF'
 alias g='git'
 alias c='clear'
 alias q='exit'
 
-# Use the up and down arrows to cycle through commands
-# (You can write some initial letters of the command first)
+# Use the up and down arrow keys for finding a command in history
+# (you can write some initial letters of the command first)
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 

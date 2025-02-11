@@ -1,95 +1,102 @@
 #!/usr/bin/env bash
 
-# The folder where default configs go
-config_folder=~/.config/
-mkdir -p "$config_folder"
+# The dir where default configs go
+# https://unix.stackexchange.com/a/537531
+config_dir=${XDG_CONFIG_HOME:-~/.config}
+mkdir -p "$config_dir"
 
-# The files (from this repo) to copy over
-files=$(git ls-files | sed "/copy_to_config.*/d" | sed "/README.*/d" | \
-    sed "/.stylua.*/d" | sed "/tips\//d" | sed "/makefile/d")
+# Regex patterns to ignore
+ignore_patterns=(
+    ".gitignore"
+    "copy_to_config.*"
+    "README.*"
+    ".stylua.*"
+    "tips/"
+    "makefile"
+)
 
-# These files cannot be linked, and need to be copied to ~/ directly
-direct_copy_files=(".Xresources" ".nanorc")
+# Get all Git files in this repo
+# https://stackoverflow.com/a/9429887
+dotfiles=$(git ls-files | grep -Ev $(IFS='|'; echo "${ignore_patterns[*]}"))
 
-# Function to get the real path of a file
+# Get the real path of a file, handling Darwin differences
 resolve_path() {
-    command -v greadlink &> /dev/null && greadlink -m $@ || readlink -m $@
+    if command -v greadlink &> /dev/null; then
+        greadlink -m $@
+    else
+        readlink -m $@
+    fi
 }
 
-# Copy file from source to destination,
-# creating necessary folders if needed
-copy_file() {
+# Copy executable attribute
+copy_chmod() {
     local src=$1
     local dst=$2
 
-    echo "Copying $src to $dst"
-    mkdir -p $(dirname "$dst")
-    cp "$src" "$dst"
+    if [[ -f $src && -x $src && -f $dst && ! -x $dst ]]; then
+        echo -e "\033[1;32mMaking $dst executable...\033[0m"
+        chmod +x "$dst"
+    fi
 }
 
-# Show diff and ask for confirmation
+# Show diff (if needed) and ask for confirmation to copy
 diff_and_ask() {
-    local file=$1
-    local original_file=$2
+    local src=$1
+    local dst=$2
 
-    if command -v difft &> /dev/null; then
-        difft "$original_file" "$file"
+    # Ask user for confirmation
+    if [[ -f "$dst" ]]; then
+        # Show diff first
+        if command -v difft &> /dev/null; then
+            difft "$dst" "$src" --color=always | less -FRX
+        else
+            diff "$dst" "$src" --color=always | less -FRX
+        fi
+
+        read -p $'Do you want to overwrite \e[34m'$dst$'\e[0m? [y/N] ' answer
     else
-        diff "$original_file" "$file"
+        read -p $'Do you want to create \e[34m'$dst$'\e[0m? [y/N] ' answer
     fi
 
-    # Ask user if they want to overwrite the file
-    read -p "Do you want to overwrite $original_file? [y/N] " answer
     if [[ "$answer" =~ ^[yY]$ ]]; then
-        # Copy the file over, creating parent folders if necessary
-        copy_file "$file" "$original_file"
+        # Copy file from source to destination,
+        # creating necessary dirs if needed
+        echo -e "\033[0;32mCopying $src to $dst...\033[0m"
+        mkdir -p $(dirname "$dst")
+        cp "$src" "$dst"
     else
-        echo "Skipping $file"
+        echo -e "\033[1;33mSkipping $src...\033[0m"
     fi
 }
 
-# Check for "-y"
-auto_yes=$([[ " $@ " =~ " -y " ]] && echo true || echo false)
-
-# For every file in this folder
-for file in $files
+# For every file in this repo
+for dotfile in $dotfiles
 do
-    if [[ " ${direct_copy_files[@]} " =~ " ${file} " ]]; then
-        # Copy non-linkable files to ~/
-        original_file=$(resolve_path "${HOME}/${file}")
-    else
-        original_file=$(resolve_path "${config_folder}/${file}")
+    # If the file is not found (deleted from filesystem, but not `git rm` yet), skip it
+    # Use red output to alert user to handle the Git issues
+    if [[ ! -f $dotfile ]]; then
+        echo -e "\033[1;31mCannot find $dotfile (likely deleted), skipping...\033[0m"
+
+        continue
     fi
 
-    if [ -f "$original_file" ] && ! cmp -s "$file" "$original_file"; then
-        # Destination file exists
-        if $auto_yes; then
-            copy_file "$file" "$original_file"
-        else
-            diff_and_ask "$file" "$original_file"
-        fi
-    elif [ ! -f "$original_file" ]; then
-        # File does not exist; simply copy it over
-        copy_file "$file" "$original_file"
+    if [[ $dotfile != *"/"* ]]; then
+        # Copy files that don't use XDG_CONFIG_HOME (indicated by not being in its own dir inside the repo, eg `.zshrc`) to ~/
+        config_file=$(resolve_path "${HOME}/${dotfile}")
+    else
+        config_file=$(resolve_path "${config_dir}/${dotfile}")
     fi
 
-    # Make necessary files executable
-    if [[ "$(uname)" == "Darwin" ]]; then
-        mod=$(stat -f "%A" "$file" | cut -b 1)
-    else
-        mod=$(stat -c "%a" "$file" | cut -b 1)
+    # No need to handle unmodified files (execpt executable attribute)
+    if [[ -f "$config_file" ]] && cmp -s "$dotfile" "$config_file"; then
+        # Make necessary files executable (for unmodified files)
+        copy_chmod $dotfile $config_file
+
+        continue
     fi
-    if ((mod % 2 == 1)); then
-        chmod +x "$original_file"
-    fi
+
+    diff_and_ask "$dotfile" "$config_file"
+
+    # Make necessary files executable (for newly created / modified files)
+    copy_chmod $dotfile $config_file
 done
-
-# Source files as appropriate
-if ! [[ -f ~/.zshrc ]]; then
-    echo "Linking Zsh config to ~/"
-    echo "source ~/.config/.zshrc" > ~/.zshrc
-fi
-if ! [[ -f ~/.tmux.conf ]]; then
-    echo "Linking Tmux config to ~/"
-    echo "source-file ~/.config/tmux/.tmux.conf" > ~/.tmux.conf
-fi
