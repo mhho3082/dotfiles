@@ -171,8 +171,8 @@ fi
 alias e="$EDITOR"
 alias v="$VISUAL"
 
-# File manager
-function f {
+# File manager (open)
+function o {
     if (( $+commands[open] )); then
         # For macOS
         open ${@:-.} 2>/dev/null & disown
