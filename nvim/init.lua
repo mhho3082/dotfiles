@@ -50,7 +50,19 @@ lazy.setup({
   -- More targets
   { "echasnovski/mini.ai", event = "VeryLazy", opts = {} },
   -- Surround
-  { "echasnovski/mini.surround", event = "VeryLazy", opts = {} },
+  { "echasnovski/mini.surround", event = "VeryLazy", opts = {
+    custom_surroundings = {
+      -- For laravel translated strings
+      ['-'] = {
+        input = { "{{__('" .. '().-()' .. "')}}" },
+        output = { left = "{{__('", right = "')}}" },
+      },
+      ['_'] = {
+        input = { "{{_('" .. '().-()' .. "')}}" },
+        output = { left = "{{_('", right = "')}}" },
+      },
+    },
+  }},
   -- Comments
   {
     "echasnovski/mini.comment",
