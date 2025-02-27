@@ -50,19 +50,23 @@ lazy.setup({
   -- More targets
   { "echasnovski/mini.ai", event = "VeryLazy", opts = {} },
   -- Surround
-  { "echasnovski/mini.surround", event = "VeryLazy", opts = {
-    custom_surroundings = {
-      -- For laravel translated strings
-      ['-'] = {
-        input = { "{{__('" .. '().-()' .. "')}}" },
-        output = { left = "{{__('", right = "')}}" },
-      },
-      ['_'] = {
-        input = { "{{_('" .. '().-()' .. "')}}" },
-        output = { left = "{{_('", right = "')}}" },
+  {
+    "echasnovski/mini.surround",
+    event = "VeryLazy",
+    opts = {
+      custom_surroundings = {
+        -- For laravel translated strings
+        ["-"] = {
+          input = { "{{__('" .. "().-()" .. "')}}" },
+          output = { left = "{{__('", right = "')}}" },
+        },
+        ["_"] = {
+          input = { "{{_('" .. "().-()" .. "')}}" },
+          output = { left = "{{_('", right = "')}}" },
+        },
       },
     },
-  }},
+  },
   -- Comments
   {
     "echasnovski/mini.comment",
@@ -787,12 +791,12 @@ lazy.setup({
         keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
 
         keymap("n", "go", function()
-          fzf.lsp_definitions({ jump_to_single_result = true })
+          -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+          fzf.lsp_definitions({ jump1 = true })
         end, { desc = "Goto definition" })
         keymap("n", "gO", function()
           fzf.lsp_references({
-            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-            jump_to_single_result = true,
+            jump1 = true,
             includeDeclaration = false,
           })
         end, { desc = "Goto references" })
@@ -800,9 +804,18 @@ lazy.setup({
         keymap("n", "<C-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
         keymap("n", "<C-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
       else
+        keymap("n", "N", function()
+          vscode.action("editor.action.showHover")
+        end, { desc = "Hover" })
         keymap("n", "gr", function()
           vscode.action("editor.action.rename")
         end, { desc = "Rename" })
+        keymap("n", "go", function()
+          vscode.action("editor.action.goToDefinition")
+        end, { desc = "Goto definition" })
+        keymap("n", "gO", function()
+          vscode.action("editor.action.referenceSearch.trigger")
+        end, { desc = "Goto references" })
       end
 
       -- LSP maappings for both normal and visual modes
@@ -843,17 +856,17 @@ lazy.setup({
       keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohl" })
       -- Make
       keymap("n", "<leader>m", vim.cmd.make, { desc = "Make" })
-      -- Search
       if not vim.g.vscode then
+        -- Search
         keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
         keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
         keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
         keymap("n", "<leader>t", fzf.files, { desc = "Files" })
         keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
         keymap("n", "<leader>p", FindTodo, { desc = "Find TODOs" })
+        -- Undo tree
+        keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
       end
-      -- Undo tree
-      keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
       -- Lazy (group: l)
       wk.add({ { "<leader>l", group = "Lazy" } })
       keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
