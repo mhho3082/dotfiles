@@ -7,32 +7,48 @@
     # Find with `gpg --list-keys --keyid-format long`
     signingkey = DADA239B
 
-[core]
-    editor = nvim
-    eol = lf
-    autocrlf = false
-
-[init]
-    defaultBranch = main
-
-[pull]
-    rebase = true
-
-[push]
-    default = current
-    followTags = true
-
-[code]
-    editor = nvim
-
-[fetch]
-    prune = true
-
 [commit]
     gpgSign = true
 
 [tag]
     gpgSign = true
+
+# ---
+
+[core]
+    editor = nvim
+    eol = lf
+    autocrlf = false
+
+[code]
+    editor = nvim
+
+[init]
+    defaultBranch = main
+
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
+[pull]
+    rebase = true
+
+[push]
+    default = simple
+    autoSetupRemote = true
+    followTags = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+
+[rebase]
+        autoSquash = true
+        autoStash = true
+        updateRefs = true
 
 # ---
 
@@ -165,6 +181,9 @@
 
 # ---
 
+[column]
+    ui = auto
+
 [log]
     decorate = true
     abbrevCommit = true
@@ -172,30 +191,17 @@
 [format]
     pretty = "%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(green)(%cr) %C(cyan)<%an>%Creset"
 
-# ---
-
 [pager]
     difftool = true
 
 # ---
 
-[merge]
-    tool = nvim
-    conflictstyle = diff3
-
-[mergetool]
-  prompt = false
-
-[mergetool "nvim"]
-    cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
-
-[mergetool "vscode"]
-    cmd = code --wait $MERGED
-
-# ---
-
 [diff]
     tool = difftastic
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
 
 [difftool]
     prompt = false
@@ -205,10 +211,25 @@
 
 
 [difftool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+    cmd = !"nvim -d \"$LOCAL\" \"$REMOTE\""
 
 [difftool "vscode"]
     cmd = code --wait --diff $LOCAL $REMOTE
+
+# ---
+
+[merge]
+    tool = nvim
+    conflictstyle = zdiff3
+
+[mergetool]
+  prompt = false
+
+[mergetool "nvim"]
+    cmd = !"nvim -f -c \"Gdiffsplit!\" \"$MERGED\""
+
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
 
 # ---
 
@@ -225,21 +246,5 @@
 
 [credential "https://gist.github.com"]
     helper = !/usr/bin/env gh auth git-credential
-
-[url "git@github.com:"]
-    insteadOf = "gh:"
-    pushInsteadOf = "github:"
-    pushInsteadOf = "git://github.com/"
-
-[url "git://github.com/"]
-    insteadOf = "github:"
-
-[url "git@gist.github.com:"]
-    insteadOf = "gst:"
-    pushInsteadOf = "gist:"
-    pushInsteadOf = "git://gist.github.com/"
-
-[url "git://gist.github.com/"]
-    insteadOf = "gist:"
 
 # vim:ft=gitconfig
