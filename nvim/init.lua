@@ -765,7 +765,7 @@ lazy.setup({
       vim.tbl_map(function(ops)
         keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
         -- keymap({ "n", "v", "o", "x" }, "g" .. ops, ops)
-      end, { "j", "k", "0", "^", "$" })
+      end, { "j", "k", "0", "^", "$", "<Down>", "<Up>" })
 
       -- Fix lua API keyboard interrupt issue
       keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
