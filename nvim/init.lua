@@ -397,34 +397,80 @@ lazy.setup({
 
   -- COPILOTS --
 
+  -- Auto-complete
+  {
+    "saghen/blink.cmp",
+    version = "*",
+    cond = not vim.g.vscode,
+    event = "VeryLazy",
+    dependencies = { "fang2hou/blink-copilot", "zbirenbaum/copilot.lua" },
+    opts = {
+      keymap = { preset = "super-tab" },
+      sources = {
+        default = function(_)
+          local success, node = pcall(vim.treesitter.get_node)
+          if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
+            return { "copilot", "path", "buffer" }
+          else
+            return { "copilot", "lsp", "path", "snippets", "buffer" }
+          end
+        end,
+        providers = {
+          copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
+          buffer = { min_keyword_length = 4 },
+        },
+      },
+      completion = {
+        list = { selection = { auto_insert = false } },
+        documentation = { auto_show = true, auto_show_delay_ms = 0 },
+      },
+      cmdline = {
+        keymap = {
+          preset = "cmdline",
+          ["<Up>"] = { "select_prev", "fallback" },
+          ["<Down>"] = { "select_next", "fallback" },
+        },
+        completion = { menu = { auto_show = true } },
+      },
+      signature = { enabled = true },
+      fuzzy = { implementation = "prefer_rust" },
+    },
+    opts_extend = { "sources.default" },
+  },
+
   -- GitHub Copilot
   {
     "zbirenbaum/copilot.lua",
     cond = not vim.g.vscode,
     event = "VeryLazy",
-    config = function()
-      require("copilot").setup({})
-    end,
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+      filetypes = { markdown = true, help = true },
+    },
   },
 
   -- LSP
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = {
+      "saghen/blink.cmp",
       { "williamboman/mason.nvim", event = "VeryLazy", opts = {} },
-      { "neovim/nvim-lspconfig", event = "VeryLazy" },
+      "neovim/nvim-lspconfig",
       {
         "creativenull/efmls-configs-nvim",
         version = "v1.x.x", -- version is optional, but recommended
         event = "VeryLazy",
         dependencies = { "neovim/nvim-lspconfig" },
       },
-      { "barreiroleo/ltex-extra.nvim", event = "VeryLazy" },
+      "barreiroleo/ltex-extra.nvim",
     },
     event = "VeryLazy",
     opts = {},
     config = function()
       -- Note: The whole LSP config is here
+
+      local blink = require("blink.cmp")
 
       vim.diagnostic.config({
         -- Don't use virtual text (the text at the end of line)
@@ -442,15 +488,12 @@ lazy.setup({
         },
       })
 
-      -- Add additional capabilities supported by nvim-cmp
-      local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
-
       -- Set up LSP server with CMP capabilities and additional settings.
       ---@param server_name string the LSP server name
       ---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
       local function setup_lsp_server(server_name, options)
         require("lspconfig")[server_name].setup(vim.tbl_extend("force", {
-          capabilities = cmp_capabilities,
+          capabilities = blink.get_lsp_capabilities((options or {}).capabilities),
         }, options or {}))
       end
 
@@ -586,154 +629,6 @@ lazy.setup({
     cond = not vim.g.vscode,
     event = "VeryLazy",
     opts = { progress = { ignore = { "ltex" }, display = { render_limit = 5, done_icon = "✓" } } },
-  },
-
-  -- Auto-complete
-  {
-    "hrsh7th/nvim-cmp",
-    version = false,
-    event = "VeryLazy",
-    dependencies = {
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-cmdline",
-      "hrsh7th/cmp-nvim-lsp-signature-help",
-      "hrsh7th/cmp-buffer",
-      { "zbirenbaum/copilot-cmp", opts = {} },
-    },
-    config = function()
-      local cmp = require("cmp")
-
-      local buffer_source = {
-        name = "buffer",
-        keyword_length = 4,
-        option = {
-          get_bufnrs = function()
-            local buf = vim.api.nvim_get_current_buf()
-            local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
-            if byte_size > 1024 * 1024 then -- 1 Megabyte max
-              return {}
-            end
-            return { buf }
-          end,
-        },
-      }
-
-      cmp.setup({
-        enabled = function()
-          -- Enable in command mode
-          if vim.api.nvim_get_mode().mode == "c" then
-            return true
-          end
-
-          -- Disable in prompts (e.g., Telescope, fzf-lua)
-          local in_prompt = vim.api.nvim_buf_get_option(0, "buftype") == "prompt"
-          if in_prompt then
-            return false
-          end
-
-          -- Disable in comments, unless using Copilot
-          local copilot = require("lazy.core.config").plugins["copilot-cmp"]
-          if not copilot then
-            local context = require("cmp.config.context")
-
-            if context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
-              return false
-            end
-          end
-
-          return true
-        end,
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
-        },
-        mapping = {
-          -- Prev
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<C-k>"] = cmp.mapping.select_prev_item(),
-          ["<Up>"] = cmp.mapping.select_prev_item(),
-          -- Next
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-j>"] = cmp.mapping.select_next_item(),
-          ["<Down>"] = cmp.mapping.select_next_item(),
-          -- Confirm
-          ["<C-y>"] = cmp.mapping.confirm({ select = false }),
-          ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-          -- Abort
-          ["<C-e>"] = cmp.mapping.abort(),
-        },
-        sources = cmp.config.sources({
-          { name = "copilot" },
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "path" },
-          { name = "nvim_lua" },
-          { name = "nvim_lsp_signature_help" },
-        }, { buffer_source }),
-      })
-
-      -- Command line autocomplete
-      cmp.setup.cmdline({ "/", "?" }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = { buffer_source },
-      })
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
-      })
-    end,
-  },
-
-  -- Snippets
-  {
-    "L3MON4D3/LuaSnip",
-    -- Referencing https://github.com/rafamadriz/friendly-snippets/wiki
-    dependencies = { "rafamadriz/friendly-snippets" },
-    event = "VeryLazy",
-    version = "v2.*",
-    build = "make install_jsregexp",
-    config = function(_, opts)
-      local luasnip = require("luasnip")
-
-      if opts then
-        luasnip.config.setup(opts)
-      end
-
-      -- Mappings
-      keymap({ "i", "v" }, "<C-l>", function()
-        if luasnip.locally_jumpable(1) then
-          luasnip.jump(1)
-        end
-      end, { desc = "LuaSnip jump" })
-      keymap({ "i", "v" }, "<C-h>", function()
-        if luasnip.jumpable(-1) then
-          luasnip.jump(-1)
-        end
-      end, { desc = "LuaSnip jump back" })
-
-      require("luasnip.loaders.from_vscode").lazy_load({
-        exclude = { "html", "all" },
-      })
-
-      -- enable standardized comments snippets
-      luasnip.filetype_extend("typescript", { "tsdoc" })
-      luasnip.filetype_extend("javascript", { "jsdoc" })
-      luasnip.filetype_extend("lua", { "luadoc" })
-      luasnip.filetype_extend("python", { "pydoc" })
-      luasnip.filetype_extend("rust", { "rustdoc" })
-      luasnip.filetype_extend("cs", { "csharpdoc" })
-      luasnip.filetype_extend("java", { "javadoc" })
-      luasnip.filetype_extend("c", { "cdoc" })
-      luasnip.filetype_extend("cpp", { "cppdoc" })
-      luasnip.filetype_extend("php", { "phpdoc" })
-      luasnip.filetype_extend("kotlin", { "kdoc" })
-      luasnip.filetype_extend("ruby", { "rdoc" })
-      luasnip.filetype_extend("sh", { "shelldoc" })
-    end,
   },
 
   -- COMMAND TOOLS --
