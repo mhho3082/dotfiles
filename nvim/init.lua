@@ -87,12 +87,15 @@ lazy.setup({
     event = "VeryLazy",
     opts = {
       mappings = {
-        -- Disable using <M-_> for moving in normal mode
-        -- To prevent colliding with inter-window movements
-        line_left = "",
-        line_right = "",
-        line_down = "",
-        line_up = "",
+        left = "<S-Left>",
+        right = "<S-Right>",
+        down = "<S-Down>",
+        up = "<S-Up>",
+
+        line_left = "<S-Left>",
+        line_right = "<S-Right>",
+        line_down = "<S-Down>",
+        line_up = "<S-Up>",
       },
     },
   },
@@ -777,10 +780,12 @@ lazy.setup({
       keymap({ "n", "v" }, "gP", '"+P', { desc = "Paste to clipboard" })
 
       -- Operate on windows with <M-_> in normal mode
-      -- (<M-_> is used to move code in visual mode)
       vim.tbl_map(function(ops)
         keymap("n", "<M-" .. ops .. ">", "<C-w>" .. ops)
       end, { "h", "j", "k", "l", "v", "s", "c" })
+      vim.tbl_map(function(ops)
+        keymap("n", "<M-" .. ops .. ">", "<C-w><" .. ops .. ">")
+      end, { "Left", "Down", "Up", "Right" })
 
       -- LSP mappings
       if not vim.g.vscode then
@@ -855,7 +860,13 @@ lazy.setup({
       keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
       keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohl" })
       -- Make
-      keymap("n", "<leader>m", vim.cmd.make, { desc = "Make" })
+      if not vim.g.vscode then
+        keymap("n", "<leader>m", "<cmd>OverseerRun<cr>", { desc = "Make" })
+      else
+        keymap("n", "<leader>m", function()
+          vscode.action("workbench.action.tasks.build")
+        end, { desc = "Make" })
+      end
       if not vim.g.vscode then
         -- Search
         keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
@@ -978,9 +989,10 @@ lazy.setup({
 
   -- Run commands
   {
-    "tpope/vim-dispatch",
+    "stevearc/overseer.nvim",
     cond = not vim.g.vscode,
     event = "VeryLazy",
+    opts = {},
   },
 }, { ui = { backdrop = 100 } })
 
@@ -1091,7 +1103,7 @@ vim.filetype.add({
 
 -- These are all custom commands to complete simple tasks
 
--- Copy the full path of currently open file to system clipboard.
+-- Copy the full path of currently open file to system clipboard
 vim.api.nvim_create_user_command("CopyFilename", function()
   local filename = vim.fn.expand("%:p")
   vim.fn.setreg("+", filename)
