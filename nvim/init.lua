@@ -16,7 +16,7 @@
 -- Speed up plugins' load time
 vim.loader.enable()
 
--- Auto-install packer
+-- Auto-install lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -57,11 +57,11 @@ lazy.setup({
       custom_surroundings = {
         -- For laravel translated strings
         ["-"] = {
-          input = { "{{__('" .. "().-()" .. "')}}" },
+          input = { "{{__%('.-'%)}}", "^{{__%('().*()'%)}}$" },
           output = { left = "{{__('", right = "')}}" },
         },
         ["_"] = {
-          input = { "{{_('" .. "().-()" .. "')}}" },
+          input = { "{{_%('.-'%)}}", "^{{_%('().*()'%)}}$" },
           output = { left = "{{_('", right = "')}}" },
         },
       },
@@ -153,7 +153,7 @@ lazy.setup({
     opts = {
       view_options = {
         show_hidden = true,
-        -- Don't display "../"
+        -- Don't display `../`
         is_always_hidden = function(name, _)
           return name == ".."
         end,
@@ -322,7 +322,6 @@ lazy.setup({
         end
       end
 
-      -- Boot up lualine
       require("lualine").setup({
         options = {
           section_separators = "",
@@ -463,14 +462,11 @@ lazy.setup({
         event = "VeryLazy",
         dependencies = { "neovim/nvim-lspconfig" },
       },
-      "barreiroleo/ltex-extra.nvim",
     },
     event = "VeryLazy",
     opts = {},
     config = function()
       -- Note: The whole LSP config is here
-
-      local blink = require("blink.cmp")
 
       vim.diagnostic.config({
         -- Don't use virtual text (the text at the end of line)
@@ -488,12 +484,16 @@ lazy.setup({
         },
       })
 
-      -- Set up LSP server with CMP capabilities and additional settings.
+
+      -- try to require blink
+      local have_blink, blink = pcall(require, "blink.cmp")
+
+      -- Set up LSP server with completion capabilities and additional settings.
       ---@param server_name string the LSP server name
       ---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
       local function setup_lsp_server(server_name, options)
         require("lspconfig")[server_name].setup(vim.tbl_extend("force", {
-          capabilities = blink.get_lsp_capabilities((options or {}).capabilities),
+          capabilities = have_blink and blink.get_lsp_capabilities((options or {}).capabilities) or nil,
         }, options or {}))
       end
 
@@ -527,33 +527,16 @@ lazy.setup({
             },
           })
         end,
-        ["ltex"] = function()
-          setup_lsp_server("ltex", {
+        ["harper_ls"] = function()
+          setup_lsp_server("harper_ls", {
             settings = {
-              ltex = {
-                --stylua: ignore start
-                enabled = {
-                  "bib", "gitcommit", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc", "quarto", "rmd", "context",
-                  -- "html", "xhtml",
+              ["harper-ls"] = {
+                linters = {
+                  SentenceCapitalization = false,
+                  SpellCheck = false,
                 },
-                --stylua: ignore end
-                language = "en-GB",
-                --stylua: ignore start
-                dictionary = {
-                  ["en-GB"] = {
-                    "neovim", "fzf", "ripgrep", "fd", "dotfiles", "zsh", "Hin", "ArchWiki", "newpage", "gruvbox",
-                  },
-                },
-                --stylua: ignore end
               },
             },
-            on_attach = function()
-              require("ltex_extra").setup({
-                load_langs = { "en-GB", "en-US" },
-                init_check = true,
-                path = ".ltex",
-              })
-            end,
           })
         end,
         ["jdtls"] = function()
@@ -581,7 +564,7 @@ lazy.setup({
 
           -- Use default settings
           local languages = vim.tbl_deep_extend("force", require("efmls-configs.defaults").languages(), {
-            -- Add pretter_d to JS/CSS languages
+            -- Add `prettier_d` to JS/CSS languages
             svelte = { require("efmls-configs.formatters.prettier_d") },
             typescript = { require("efmls-configs.formatters.prettier_d") },
             markdown = { require("efmls-configs.formatters.prettier_d") },
@@ -593,23 +576,13 @@ lazy.setup({
             scss = { require("efmls-configs.formatters.prettier_d") },
             json = { require("efmls-configs.formatters.prettier_d") },
             jsonc = { require("efmls-configs.formatters.prettier_d") },
-            -- Use beautysh for shell scripts
+            -- Use `beautysh` for shell scripts
             bash = { require("efmls-configs.formatters.beautysh") },
             sh = { require("efmls-configs.formatters.beautysh") },
             zsh = { require("efmls-configs.formatters.beautysh") },
-            -- Enforce Python formatting with black
+            -- Enforce Python formatting with `black`
             python = { require("efmls-configs.formatters.black") },
-            -- Format BibTex with bibtex-tidy
-            -- https://github.com/FlamingTempura/bibtex-tidy/issues/143
-            bib = {
-              {
-                formatCommand = "bibtex-tidy --v2 --no-backup --no-sort --sort-fields --no-escape",
-                formatStdin = true,
-              },
-            },
-            -- Format GLSL using clang-format (need .clang-format file)
-            glsl = { require("efmls-configs.formatters.clang_format") },
-            -- Format blade with blade-formatter
+            -- Format blade with `blade-formatter`
             blade = { require("efmls-configs.formatters.blade_formatter") },
           })
 
@@ -628,7 +601,7 @@ lazy.setup({
     "j-hui/fidget.nvim",
     cond = not vim.g.vscode,
     event = "VeryLazy",
-    opts = { progress = { ignore = { "ltex" }, display = { render_limit = 5, done_icon = "✓" } } },
+    opts = { progress = { ignore = { "harper_ls" }, display = { render_limit = 5, done_icon = "✓" } } },
   },
 
   -- COMMAND TOOLS --
@@ -647,14 +620,8 @@ lazy.setup({
         wk.setup(opts)
       end
 
-      local fzf
-      local vscode
-      if not vim.g.vscode then
-        fzf = require("fzf-lua")
-      else
-        -- For vscode-neovim interop
-        vscode = require("vscode")
-      end
+      local _, fzf = pcall(require, "fzf-lua")
+      local _, vscode = pcall(require, "vscode")
 
       -- Leader key
       vim.g.mapleader = " "
@@ -662,7 +629,6 @@ lazy.setup({
       -- Move cursor by display lines by default
       vim.tbl_map(function(ops)
         keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
-        -- keymap({ "n", "v", "o", "x" }, "g" .. ops, ops)
       end, { "j", "k", "0", "^", "$", "<Down>", "<Up>" })
 
       -- Fix lua API keyboard interrupt issue
@@ -728,7 +694,7 @@ lazy.setup({
         -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
         --stylua: ignore start
         local tags = {
-          -- Todo
+          -- To-do
           "TODO", "WIP",
           -- Note
           "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST",
@@ -739,7 +705,7 @@ lazy.setup({
         }
         --stylua: ignore end
 
-        -- From VS Code Todo Tree's default regex
+        -- From VS Code `todo-tree`'s default regex
         -- https://github.com/Gruntfuggly/todo-tree/issues/526
         local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
 
@@ -773,12 +739,12 @@ lazy.setup({
         -- Undo tree
         keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
       end
-      -- Lazy (group: l)
+      -- Lazy (group: `l`)
       wk.add({ { "<leader>l", group = "Lazy" } })
       keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
       keymap("n", "<leader>lu", "<cmd>Lazy update<cr>", { desc = "Lazy Update" })
       keymap("n", "<leader>lp", "<cmd>Lazy profile<cr>", { desc = "Lazy Profile" })
-      -- Git (group: g)
+      -- Git (group: `g`)
       wk.add({ { "<leader>g", group = "Git" } })
       keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
       keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
@@ -787,7 +753,7 @@ lazy.setup({
       keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
       keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
       keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
-      -- Git hunks (group: h)
+      -- Git hunks (group: `h`)
       wk.add({ { "<leader>h", group = "Git hunks" } })
       keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
       keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
@@ -796,7 +762,7 @@ lazy.setup({
       keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
       keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
       keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
-      -- Interface (group: i)
+      -- Interface (group: `i`)
       wk.add({ { "<leader>i", group = "Interface" } })
       keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
       keymap("n", "<leader>is", "<cmd>set spell!<cr>", { desc = "Spell" })

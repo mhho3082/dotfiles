@@ -145,7 +145,7 @@ they are marked below.
 - C/C++
   - `clangd`
 - Markdown
-  - `ltex`
+  - `harper_ls`
   - `marksman`
 - Bash
   - `bash-language-server`
