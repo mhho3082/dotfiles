@@ -115,6 +115,17 @@ lazy.setup({
       },
     },
   },
+  -- Easymotion
+  {
+    "echasnovski/mini.jump2d",
+    event = "VeryLazy",
+    opts = {
+      labels = "tsraneiogmdhpflu",
+      view = { dim = true },
+      allowed_lines = { blank = false },
+      mappings = { start_jumping = "S" },
+    },
+  },
 
   -- Readline-like insertion
   { "tpope/vim-rsi", event = "VeryLazy" },
@@ -484,7 +495,6 @@ lazy.setup({
         },
       })
 
-
       -- try to require blink
       local have_blink, blink = pcall(require, "blink.cmp")
 
@@ -621,6 +631,7 @@ lazy.setup({
       end
 
       local _, fzf = pcall(require, "fzf-lua")
+      local _, spectre = pcall(require, "spectre")
       local _, vscode = pcall(require, "vscode")
 
       -- Leader key
@@ -735,7 +746,9 @@ lazy.setup({
         keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
         keymap("n", "<leader>t", fzf.files, { desc = "Files" })
         keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
-        keymap("n", "<leader>p", FindTodo, { desc = "Find TODOs" })
+        keymap("n", "<leader>f", FindTodo, { desc = "Find TODOs" })
+        -- Replace
+        keymap("n", "<leader>p", spectre.toggle, { desc = "Replace" })
         -- Undo tree
         keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
       end
@@ -767,7 +780,7 @@ lazy.setup({
       keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
       keymap("n", "<leader>is", "<cmd>set spell!<cr>", { desc = "Spell" })
       keymap("n", "<leader>iw", "<cmd>set wrap!<cr>", { desc = "Wrap" })
-      keymap("n", "<leader>ii", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
+      keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
       keymap(
         "n",
         "<leader>ib",
@@ -826,26 +839,8 @@ lazy.setup({
     event = "VeryLazy",
     opts = {
       -- https://github.com/nvim-pack/nvim-spectre/issues/118#issuecomment-1531683211
-      replace_engine = {
-        ["sed"] = {
-          cmd = "sed",
-          args = {
-            "-i",
-            "",
-            "-E",
-          },
-        },
-      },
+      replace_engine = { ["sed"] = { cmd = "sed", args = { "-i", "", "-E" } } },
     },
-    config = function(_, opts)
-      local s = require("spectre")
-
-      if opts then
-        s.setup(opts)
-      end
-
-      keymap({ "n" }, "S", s.toggle, { desc = "Search and replace" })
-    end,
   },
 
   -- Run commands
