@@ -1,0 +1,8 @@
+{
+  "keyMappings": "map <s-left> goBack\nmap <s-down> previousTab\nmap <s-up> nextTab\nmap <s-right> goForward",
+  "linkHintCharacters": "tsraneiogmdhpflu",
+  "searchEngines": "w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia\nd: https://duckduckgo.com/?q=%s DuckDuckGo",
+  "searchUrl": "https://www.duckduckgo.com/?q=",
+  "settingsVersion": "2.1.2",
+  "exclusionRules": []
+}
