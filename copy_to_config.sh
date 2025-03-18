@@ -13,6 +13,7 @@ ignore_patterns=(
     ".stylua.*"
     "tips/"
     "makefile"
+    "vimium-options.json"
 )
 
 # Get all Git files in this repo

@@ -156,7 +156,7 @@
 
     # Show verbose data
     tags = tag -l
-    branches = branch --all --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+    branches = branch -vv --sort=-committerdate
     remotes = remote --verbose
     contributors = shortlog --summary --numbered --no-merges
     stashes = stash list
