@@ -695,6 +695,14 @@ lazy.setup({
         keymap("n", "<M-" .. ops .. ">", "<C-w><" .. ops .. ">")
       end, { "Left", "Down", "Up", "Right" })
 
+      -- Allow zz to work in visual mode (for the whole selection)
+      local function CenterVisualSelection()
+        vim.cmd([[ execute "normal! \<ESC>" ]]) -- Force exit from visual mode
+        vim.api.nvim_win_set_cursor(0, { math.floor((vim.fn.line("'<") + vim.fn.line("'>")) / 2), 0 })
+        vim.cmd([[ execute "normal! zz" ]])
+      end
+      keymap("x", "zz", CenterVisualSelection, { desc = "Center" })
+
       -- LSP mappings
       if not vim.g.vscode then
         keymap("n", "N", vim.lsp.buf.hover, { desc = "Hover" })
