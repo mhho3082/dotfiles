@@ -108,7 +108,7 @@ lazy.setup({
       -- a very big number (like 10^7) to virtually disable.
       delay = {
         -- Delay between jump and highlighting all possible jumps
-        highlight = 10000000,
+        highlight = 100000000,
 
         -- Delay between jump and automatic stop if idle (no jump is done)
         idle_stop = 0,
@@ -121,10 +121,21 @@ lazy.setup({
     event = "VeryLazy",
     opts = {
       labels = "tsraneiogmdhpflu",
-      view = { dim = true },
+      view = { dim = true, n_steps_ahead = 1 },
       allowed_lines = { blank = false },
       mappings = { start_jumping = "S" },
     },
+    config = function(_, opts)
+      local jump2d = require("mini.jump2d")
+
+      opts = vim.tbl_extend("force", {
+        spotter = jump2d.gen_pattern_spotter("[%w_%-]+"),
+      }, opts or {})
+
+      if opts then
+        jump2d.setup(opts)
+      end
+    end,
   },
 
   -- Readline-like insertion
@@ -234,6 +245,31 @@ lazy.setup({
       vim.g.gruvbox_material_background = "hard"
       vim.g.gruvbox_material_better_performance = true
       vim.cmd.colorscheme("gruvbox-material")
+
+      -- Function to brighten/dim a color
+      local bit = require("bit")
+      local function adjust_brightness(color, factor)
+        local r = bit.band(bit.rshift(color, 16), 0xFF)
+        local g = bit.band(bit.rshift(color, 8), 0xFF)
+        local b = bit.band(color, 0xFF)
+        factor = factor
+        return bit.bor(
+          bit.lshift(math.floor(r * factor), 16),
+          bit.lshift(math.floor(g * factor), 8),
+          math.floor(b * factor)
+        )
+      end
+
+      -- Adjust the hl groups for `mini.jump2d` to be closer to `hop.nvim`
+      -- (modifying https://github.com/sainnhe/gruvbox-material/blob/master/colors/gruvbox-material.vim#L1524)
+      local v = vim.api.nvim_get_hl_by_name("MiniIconsBlue", true) -- Blue
+      v.bold = true
+      v.nocombine = true
+      vim.api.nvim_set_hl(0, "MiniJump2dSpot", v)
+      vim.api.nvim_set_hl(0, "MiniJump2dSpotUnique", v)
+      v.bold = false
+      v.foreground = adjust_brightness(v.foreground, 0.7)
+      vim.api.nvim_set_hl(0, "MiniJump2dSpotAhead", v)
     end,
   },
 
@@ -430,10 +466,6 @@ lazy.setup({
           buffer = { min_keyword_length = 4 },
         },
       },
-      completion = {
-        list = { selection = { auto_insert = false } },
-        documentation = { auto_show = true, auto_show_delay_ms = 0 },
-      },
       cmdline = {
         keymap = {
           preset = "cmdline",
@@ -441,6 +473,10 @@ lazy.setup({
           ["<Down>"] = { "select_next", "fallback" },
         },
         completion = { menu = { auto_show = true } },
+      },
+      completion = {
+        list = { selection = { auto_insert = false } },
+        documentation = { auto_show = true, auto_show_delay_ms = 0 },
       },
       signature = { enabled = true },
       fuzzy = { implementation = "prefer_rust" },
