@@ -354,7 +354,7 @@ fi
 function paru-update {
     # Sync databases and list updates needed
     paru -Sy
-    local updates=$(paru -Qu)
+    local updates=$(paru -Qu --color=always)
 
     # Words to check for in updates
     local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
@@ -367,6 +367,7 @@ function paru-update {
 
     # Need to reboot, ask for confirm
     if [[ $updates =~ $reboot_check ]]; then
+        echo $updates
         read "answer?Reboot will be needed, are you sure? [Y/n] "
         [[ "$answer" =~ ^[nN]$ ]] && return
     fi
