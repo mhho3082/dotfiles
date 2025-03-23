@@ -862,7 +862,7 @@ lazy.setup({
       },
       grep = {
         -- https://github.com/ibhagwan/fzf-lua/issues/971
-        rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
+        rg_opts = "--no-ignore --hidden -g '!.git/' --column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
       },
     },
     config = function(_, opts)

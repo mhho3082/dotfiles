@@ -5,6 +5,6 @@
   "searchEngines": "w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia\nd: https://duckduckgo.com/?q=%s DuckDuckGo",
   "searchUrl": "https://www.duckduckgo.com/?q=",
   "settingsVersion": "2.1.2",
-  "userDefinedLinkHintCss": "div > .vimiumHintMarker {\n/* linkhint boxes */\nbackground: #fabd2f;\nborder: 1px solid #FBF1C7;\n}\n\ndiv > .vimiumHintMarker span {\n/* linkhint text */\ncolor: #1d2021;\nfont-size: 12px;\nfont-family: \"JetBrains Mono\";\n}\n\ndiv > .vimiumHintMarker > .matchingCharacter {\ndisplay: none;\n}",
+  "userDefinedLinkHintCss": "div > .vimiumHintMarker {\n/* linkhint boxes */\nbackground: #fabd2f;\nborder: 1px solid #FBF1C7;\n}\n\ndiv > .vimiumHintMarker span {\n/* linkhint text */\ncolor: #1d2021;\nfont-size: 12px;\n}\n\ndiv > .vimiumHintMarker > .matchingCharacter {\ndisplay: none;\n}",
   "exclusionRules": []
 }
