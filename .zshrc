@@ -144,32 +144,30 @@ alias c="clear"
 alias d="disown"
 alias q="exit"
 
+# Editors
+alias e="$EDITOR"
+alias v="$VISUAL"
+
 # Application shorthands
-if (( $+commands[git] )); then
-    alias g="git"
-fi
-if (( $+commands[make] )); then
-    alias m="make"
-fi
-if (( $+commands[npm] || $+commands[nvm] )); then
-    alias n="npm"
-    alias nd="npm run dev"
-fi
-if (( $+commands[yarn] || $+commands[nvm] )); then
-    alias y="yarn"
-    alias yd="yarn dev"
-    alias yx="yarn dlx"
-fi
+alias g="git"
+alias m="make"
+# NPM
+alias n="npm"
+alias nd="npm run dev"
+# Yarn
+alias y="yarn"
+alias yd="yarn dev"
+alias yx="yarn dlx"
+# Tmux
+alias t="tmux"
+alias ta="tmux attach || tmux new"
+alias tl="tmux ls"
+
 if (( $+commands[trash] )); then
     alias r="trash"
 else
     alias r="rm -i"
 fi
-
-# Defaults
-# Editors
-alias e="$EDITOR"
-alias v="$VISUAL"
 
 # File manager (open)
 function o {
@@ -196,12 +194,18 @@ else
     fi
 fi
 
-# Tmux
-if (( $+commands[tmux] )); then
-    alias t="tmux"
-    alias ta="tmux attach || tmux new"
-    alias tl="tmux ls"
-fi
+# Generate ".." shortcuts
+# (since paths are set to not be considered executables by themselves)
+for i in {1..9}; do
+    local alias_name="."
+    local relative_path=""
+    for j in `seq $i`; do
+        alias_name+='.'
+        relative_path+='../'
+    done
+    local line="alias $alias_name='cd $relative_path'"
+    eval $line
+done
 
 # Zathura / Zaread
 if (( $+commands[zaread] )); then
@@ -229,38 +233,6 @@ elif (( $+commands[zathura] )); then
     alias za='local f='$search'; zathura $f & disown'
 fi
 
-if (( $+commands[zathura] )) && (( $+commands[xsel] )); then
-    function zathura-from-url {
-        if [[ $(xsel -ob) =~ ^https?:// ]]
-        then
-            zathura <(curl -s $(xsel -ob)) & disown
-        else
-            echo "Please copy a URL!" >/dev/stderr
-            return 1
-        fi
-    }
-fi
-
-# Generate ".." shortcuts
-# (since paths are set to not be considered executables by themselves)
-for i in {1..9}; do
-    local alias_name="."
-    local relative_path=""
-    for j in `seq $i`; do
-        alias_name+='.'
-        relative_path+='../'
-    done
-    local line="alias $alias_name='cd $relative_path'"
-    eval $line
-done
-
-# Pretty print paths
-function paths {
-    for i in $path; do
-        echo $i
-    done
-}
-
 # Wezterm
 if (( $+commands[wezterm] )); then
     # Create a new instance of wezterm with the same directory
@@ -272,14 +244,46 @@ if (( $+commands[wezterm] )); then
     alias imgcat="wezterm imgcat"
 fi
 
-# Brightness control
-if (( $+commands[brightnessctl] )); then
-    function brightness {
-        [ "$1" = "down" ] && local op="-" || local op="+"
-        local s=${2:-10}
-        brightnessctl set $(brightnessctl | grep -oP '\d+(?=%)' | perl -ne 'print int($_ / '$s') * '$s' '$op' '$s' . "%\n"')
-    }
-fi
+# Prepare virtual network for virt-manager
+alias virshprep="sudo virsh net-start default >/dev/null"
+
+# Change to superuser
+alias superuser="sudo -Eks"
+
+# == Functions ==
+
+# Pretty print paths
+function paths {
+    for i in $path; do
+        echo $i
+    done
+}
+
+# Run every autostart script
+function autostart {
+    timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+}
+
+# Get sizes of different directories / files in current directory
+# https://superuser.com/q/605414/
+function sizes {
+    paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
+}
+
+# Get the IP address of this machine
+# https://unix.stackexchange.com/q/119269
+function ip-addr {
+    # Get all IP addresses for this machine
+    local all_ips=($(ip addr show | perl -nle 's/inet (\S+)/print $1/e'))
+
+    # Get the main outbound IP address
+    local out_ip=$(ip route get 8.8.8.8 | perl -nle 's/src (\S+)/print $1/e')
+
+    # Highlight the main outbound IP address group in print
+    for ip_addr in $all_ips; do
+        [[ $ip_addr =~ $out_ip ]] && print -P '%F{cyan}'$ip_addr'%f' || echo $ip_addr
+    done
+}
 
 # Get n-letters long alias and functions
 # (helpful to get a wider picture)
@@ -320,23 +324,6 @@ function shorthands {
 
 }
 
-# Prepare virtual network for virt-manager
-alias virshprep="sudo virsh net-start default >/dev/null"
-
-# Change to superuser
-alias superuser="sudo -Eks"
-
-# Run every autostart script
-function autostart {
-    timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
-}
-
-# Get sizes of different directories / files in current directory
-# https://superuser.com/q/605414/
-function sizes {
-    paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
-}
-
 # Edit the content of the most recent clipboard
 if (( $+commands[xsel] )); then
     function clipedit {
@@ -348,66 +335,53 @@ if (( $+commands[xsel] )); then
     }
 fi
 
-# Update the computer (and reboot if necessary)
-# https://bbs.archlinux.org/viewtopic.php?id=173508
-# https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
-function paru-update {
-    # Sync databases and list updates needed
-    paru -Sy
-    local updates=$(paru -Qu --color=always)
+if (( $+commands[paru] )); then
+    # Update the computer (and reboot if necessary)
+    # https://bbs.archlinux.org/viewtopic.php?id=173508
+    # https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
+    function paru-update {
+        # Sync databases and list updates needed
+        paru -Sy
+        local updates=$(paru -Qu --color=always)
 
-    # Words to check for in updates
-    local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
+        # Words to check for in updates
+        local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
 
-    # No need to update - skip
-    if [[ -z $updates ]]; then
-        print -P "%F{green}No need to update%f"
-        return
-    fi
-
-    # Need to reboot, ask for confirm
-    if [[ $updates =~ $reboot_check ]]; then
-        echo $updates
-        read "answer?Reboot will be needed, are you sure? [Y/n] "
-        [[ "$answer" =~ ^[nN]$ ]] && return
-    fi
-
-    # Run the update
-    paru -Su --noconfirm
-    if (( $? == 0 )); then
-        if [[ $updates =~ $reboot_check ]]; then
-            reboot && return
-        else
-            print -P "%F{green}No need to reboot%f"
+        # No need to update - skip
+        if [[ -z $updates ]]; then
+            print -P "%F{green}No need to update%f"
+            return
         fi
-    else
-        print -P "%F{red}Paru failed!%f"
-    fi
 
-    # Reload autostart scripts (but only their bootup parts)
-    timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
-    return
-}
+        # Need to reboot, ask for confirm
+        if [[ $updates =~ $reboot_check ]]; then
+            echo $updates
+            read "answer?Reboot will be needed, are you sure? [Y/n] "
+            [[ "$answer" =~ ^[nN]$ ]] && return
+        fi
 
-# Remove orphan packages
-function paru-autoremove {
-    local orphans=$(paru -Qdtq) && [[ -n $orphans ]] && paru -Runs $orphans || print -P "%F{red}No orphan package to remove%f"
-}
+        # Run the update
+        paru -Su --noconfirm
+        if (( $? == 0 )); then
+            if [[ $updates =~ $reboot_check ]]; then
+                reboot && return
+            else
+                print -P "%F{green}No need to reboot%f"
+            fi
+        else
+            print -P "%F{red}Paru failed!%f"
+        fi
 
-# Get the IP address of this machine
-# https://unix.stackexchange.com/q/119269
-function ip-addr {
-    # Get all IP addresses for this machine
-    local all_ips=($(ip addr show | perl -nle 's/inet (\S+)/print $1/e'))
+        # Reload autostart scripts (but only their bootup parts)
+        timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+        return
+    }
 
-    # Get the main outbound IP address
-    local out_ip=$(ip route get 8.8.8.8 | perl -nle 's/src (\S+)/print $1/e')
-
-    # Highlight the main outbound IP address group in print
-    for ip_addr in $all_ips; do
-        [[ $ip_addr =~ $out_ip ]] && print -P '%F{cyan}'$ip_addr'%f' || echo $ip_addr
-    done
-}
+    # Remove orphan packages
+    function paru-autoremove {
+        local orphans=$(paru -Qdtq) && [[ -n $orphans ]] && paru -Runs $orphans || print -P "%F{red}No orphan package to remove%f"
+    }
+fi
 
 # == Prompt ==
 
@@ -618,3 +592,9 @@ if (( $+commands[fzf] )); then
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_CTRL_T_OPTS="--preview='less {}'"
 fi
+
+# == NVM ==
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
