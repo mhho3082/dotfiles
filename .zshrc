@@ -356,8 +356,9 @@ if (( $+commands[paru] )); then
         # Need to reboot, ask for confirm
         if [[ $updates =~ $reboot_check ]]; then
             echo $updates
-            read "answer?Reboot will be needed, are you sure? [Y/n] "
-            [[ "$answer" =~ ^[nN]$ ]] && return
+            read -k1 "answer?Reboot will be needed, are you sure? [y/N] "
+            echo
+            [[ "$answer" =~ ^[yY]$ ]] || return
         fi
 
         # Run the update
