@@ -54,9 +54,11 @@ diff_and_ask() {
             diff "$dst" "$src" --color=always | less -FRX
         fi
 
-        read -p $'Do you want to overwrite \e[34m'$dst$'\e[0m? [y/N] ' answer
+        read -n1 -p $'Do you want to overwrite \e[34m'$dst$'\e[0m? [y/N] ' answer
+        echo
     else
-        read -p $'Do you want to create \e[34m'$dst$'\e[0m? [y/N] ' answer
+        read -n1 -p $'Do you want to create \e[34m'$dst$'\e[0m? [y/N] ' answer
+        echo
     fi
 
     if [[ "$answer" =~ ^[yY]$ ]]; then
