@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 # Set brightness via xbrightness when redshift status changes
 
 # Deeply based on https://wiki.archlinux.org/title/Redshift
@@ -13,22 +14,21 @@ brightness_night='50%'
 backlights=($(brightnessctl --list | grep "'backlight'" | sed "s/Device '\([^']*\)'.*/\1/"))
 
 set_brightness() {
-    for backlight in "${backlights[@]}"
-    do
-        brightnessctl --device=$backlight set $1 &
-    done
+  for backlight in "${backlights[@]}"; do
+    brightnessctl --device=$backlight set $1 &
+  done
 }
 
 if [ "$1" = period-changed ]; then
-    case $3 in
-        night)
-            set_brightness $brightness_night
-            ;;
-        transition)
-            set_brightness $brightness_transition
-            ;;
-        daytime)
-            set_brightness $brightness_day
-            ;;
-    esac
+  case $3 in
+    night)
+      set_brightness $brightness_night
+      ;;
+    transition)
+      set_brightness $brightness_transition
+      ;;
+    daytime)
+      set_brightness $brightness_day
+      ;;
+  esac
 fi
