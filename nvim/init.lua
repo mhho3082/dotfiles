@@ -604,6 +604,7 @@ lazy.setup({
   -- Handling servers without automatic LSP configuration
   {
     "nvimtools/none-ls.nvim",
+    event = "VeryLazy",
     dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" },
     config = function()
       local null_ls = require("null-ls")
@@ -686,8 +687,8 @@ lazy.setup({
 
       -- LSP mappings
       if not vim.g.vscode then
-        keymap("n", "N", vim.lsp.buf.hover, { desc = "Hover" })
-        keymap("n", "E", function()
+        keymap("n", "<C-n>", vim.lsp.buf.hover, { desc = "Hover" })
+        keymap("n", "<C-e>", function()
           vim.diagnostic.open_float(0, { scope = "cursor" })
         end, { desc = "Diagnostics" })
         keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
@@ -703,10 +704,10 @@ lazy.setup({
           })
         end, { desc = "Goto references" })
 
-        keymap("n", "<C-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-        keymap("n", "<C-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+        keymap("n", "<M-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+        keymap("n", "<M-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
       else
-        keymap("n", "N", function()
+        keymap("n", "<C-n>", function()
           vscode.action("editor.action.showHover")
         end, { desc = "Hover" })
         keymap("n", "gr", function()
@@ -926,7 +927,7 @@ vim.opt.expandtab = true
 -- 2 spaces default indents
 -- https://stackoverflow.com/q/158968
 vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = "javascript,typescript,json,jsonc,svelte,vue,html,css,scss,sass,lua,markdown",
+  pattern = "javascript,typescript,json,jsonc,svelte,vue,html,css,scss,sass,lua,markdown,sh,zsh,fish",
   callback = function()
     vim.opt.tabstop = 2
     vim.opt.shiftwidth = 2
