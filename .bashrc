@@ -36,12 +36,12 @@ shopt -s histappend
 
 # enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 
-    alias ls='ls --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
 fi
 
 # == Completion ==
@@ -66,7 +66,7 @@ bind '"\e[B": history-search-forward'
 
 # Enable .bash_aliases
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
 # Handy aliases
@@ -77,30 +77,30 @@ alias q='exit'
 
 # For GitHub commit links in Markdown
 function gh-sha-md() {
-    local remote_url=$(git config --get remote.origin.url | sed 's|^git@|https://|' | sed 's@.git$@@')
-    if [[ " $* " == *" -b "* ]]; then
-        local branch=$(git rev-parse --abbrev-ref HEAD)
-        local branch_str="[\`$branch\`]($remote_url/commits/$branch)"
-    else
-        local branch_str=""
-    fi
-    echo "$branch_str [\`#$(git rev-parse --short HEAD)\`]($remote_url/commit/$(git rev-parse HEAD))" |
-        xargs echo # https://stackoverflow.com/a/12973694
+  local remote_url=$(git config --get remote.origin.url | sed 's|^git@|https://|' | sed 's@.git$@@')
+  if [[ " $* " == *" -b "* ]]; then
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local branch_str="[\`$branch\`]($remote_url/commits/$branch)"
+  else
+    local branch_str=""
+  fi
+  echo "$branch_str [\`#$(git rev-parse --short HEAD)\`]($remote_url/commit/$(git rev-parse HEAD))" |
+    xargs echo # https://stackoverflow.com/a/12973694
 }
 
 # For GitLab commit links in Markdown
 function gl-sha-md() {
-    local remote_url="$(git config --get remote.origin.url | sed 's@:@/@' | sed 's|^git@|https://|' | sed 's@.git$@@')"
+  local remote_url="$(git config --get remote.origin.url | sed 's@:@/@' | sed 's|^git@|https://|' | sed 's@.git$@@')"
 
-    if [[ " $* " == *" -b "* ]]; then
-        local branch=$(git rev-parse --abbrev-ref HEAD)
-        local branch_str="[\`$branch\`]($remote_url/-/commits/$branch?ref_type=heads)"
-    else
-        local branch_str=""
-    fi
+  if [[ " $* " == *" -b "* ]]; then
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local branch_str="[\`$branch\`]($remote_url/-/commits/$branch?ref_type=heads)"
+  else
+    local branch_str=""
+  fi
 
-    echo "$branch_str [\`#$(git rev-parse --short HEAD)\`]($remote_url/-/commit/$(git rev-parse HEAD))" |
-        xargs echo # https://stackoverflow.com/a/12973694
+  echo "$branch_str [\`#$(git rev-parse --short HEAD)\`]($remote_url/-/commit/$(git rev-parse HEAD))" |
+    xargs echo # https://stackoverflow.com/a/12973694
 }
 
 alias sha-md=gl-sha-md
@@ -109,10 +109,10 @@ alias sha-md=gl-sha-md
 
 # https://code.mendhak.com/simple-bash-prompt-for-developers-ps1-git/
 function parse_git_dirty {
-  [[ $(git status --porcelain 2> /dev/null) ]] && echo "*"
+  [[ $(git status --porcelain 2>/dev/null) ]] && echo "*"
 }
 function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty))/"
+  git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty))/"
 }
 
 export PS1="\[\033[01;32m\]\u@\h \[\033[00;34m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
@@ -120,5 +120,5 @@ export PS1="\[\033[01;32m\]\u@\h \[\033[00;34m\]\w\[\033[33m\]\$(parse_git_branc
 # == NVM ==
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion

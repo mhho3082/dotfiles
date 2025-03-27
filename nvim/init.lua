@@ -6,7 +6,6 @@
 
 -- Notes: (for particular LSP services)
 -- `prettierd` requires that `nodejs` and `npm` be installed globally
--- `efm` requires that `go` be installed globally
 -- `jdtls` (Java LSP) only works with projects
 
 -------------
@@ -503,12 +502,6 @@ lazy.setup({
       "saghen/blink.cmp",
       { "williamboman/mason.nvim", event = "VeryLazy", opts = {} },
       "neovim/nvim-lspconfig",
-      {
-        "creativenull/efmls-configs-nvim",
-        version = "v1.x.x", -- version is optional, but recommended
-        event = "VeryLazy",
-        dependencies = { "neovim/nvim-lspconfig" },
-      },
     },
     event = "VeryLazy",
     opts = {},
@@ -604,40 +597,28 @@ lazy.setup({
             },
           })
         end,
-        ["efm"] = function()
-          -- Special null-ls-like LSP server
-          -- Based on https://github.com/creativenull/efmls-configs-nvim#setup
+      })
+    end,
+  },
 
-          -- Use default settings
-          local languages = vim.tbl_deep_extend("force", require("efmls-configs.defaults").languages(), {
-            -- Add `prettier_d` to JS/CSS languages
-            svelte = { require("efmls-configs.formatters.prettier_d") },
-            typescript = { require("efmls-configs.formatters.prettier_d") },
-            markdown = { require("efmls-configs.formatters.prettier_d") },
-            javascriptreact = { require("efmls-configs.formatters.prettier_d") },
-            typescriptreact = { require("efmls-configs.formatters.prettier_d") },
-            html = { require("efmls-configs.formatters.prettier_d") },
-            css = { require("efmls-configs.formatters.prettier_d") },
-            sass = { require("efmls-configs.formatters.prettier_d") },
-            scss = { require("efmls-configs.formatters.prettier_d") },
-            json = { require("efmls-configs.formatters.prettier_d") },
-            jsonc = { require("efmls-configs.formatters.prettier_d") },
-            -- Use `beautysh` for shell scripts
-            bash = { require("efmls-configs.formatters.beautysh") },
-            sh = { require("efmls-configs.formatters.beautysh") },
-            zsh = { require("efmls-configs.formatters.beautysh") },
-            -- Enforce Python formatting with `black`
-            python = { require("efmls-configs.formatters.black") },
-            -- Format blade with `blade-formatter`
-            blade = { require("efmls-configs.formatters.blade_formatter") },
-          })
+  -- Handling servers without automatic LSP configuration
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" },
+    config = function()
+      local null_ls = require("null-ls")
 
-          setup_lsp_server("efm", {
-            filetypes = vim.tbl_keys(languages),
-            settings = { rootMarkers = { ".git/" }, languages = languages },
-            init_options = { documentFormatting = true, documentRangeFormatting = true },
-          })
-        end,
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.prettierd,
+          null_ls.builtins.formatting.stylua,
+          null_ls.builtins.formatting.black,
+          null_ls.builtins.formatting.blade_formatter,
+          null_ls.builtins.formatting.shfmt.with({
+            -- https://github.com/mvdan/sh/issues/212
+            args = { "-i", "2", "-ci", "-filename", "$FILENAME" },
+          }),
+        },
       })
     end,
   },
