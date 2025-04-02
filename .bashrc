@@ -69,6 +69,9 @@ if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
 
+# Enable vi mode
+set -o vi
+
 # Handy aliases
 alias l='ls -AlhF'
 alias g='git'
