@@ -106,6 +106,9 @@ else
   export EDITOR="vi"
 fi
 
+# Set the AUR helper (variable used only for .zshrc functions)
+export AUR_HELPER="paru"
+
 # Modify history
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -335,52 +338,49 @@ if (( $+commands[xsel] )); then
   }
 fi
 
-if (( $+commands[paru] )); then
-  # Update the computer (and reboot if necessary)
-  # https://bbs.archlinux.org/viewtopic.php?id=173508
-  # https://forum.endeavouros.com/t/check-if-a-reboot-is-neccessary/7092
-  function paru-update {
-    # Sync databases and list updates needed
-    paru -Sy
-    local updates=$(paru -Qu --color=always)
+# Only define functions if the AUR helper exists
+if (( $+commands[$AUR_HELPER] )); then
+  # Update the system and reboot if needed
+  function aur-update {
+    # Sync databases
+    $AUR_HELPER -Sy
+    local updates=$($AUR_HELPER -Qu --color=always)
 
-    # Words to check for in updates
+    # Package regexes that may require a reboot
     local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
 
-    # No need to update - skip
     if [[ -z $updates ]]; then
-      print -P "%F{green}No need to update%f"
+      print -P "%F{green}No updates available.%f"
       return
     fi
 
-    # Need to reboot, ask for confirm
+    # Warn about required reboot
     if [[ $updates =~ $reboot_check ]]; then
-      echo $updates
-      read -k1 "answer?Reboot will be needed, are you sure? [y/N] "
+      echo "$updates"
+      read -k1 "answer?Reboot likely needed. Proceed with update? [y/N] "
       echo
       [[ "$answer" =~ ^[yY]$ ]] || return
     fi
 
-    # Run the update
-    paru -Su --noconfirm
+    # Perform upgrade
+    $AUR_HELPER -Su --noconfirm
     if (( $? == 0 )); then
       if [[ $updates =~ $reboot_check ]]; then
         reboot && return
       else
-        print -P "%F{green}No need to reboot%f"
+        print -P "%F{green}Update successful. No reboot needed.%f"
       fi
     else
-      print -P "%F{red}Paru failed!%f"
+      print -P "%F{red}Update failed using $AUR_HELPER!%f"
     fi
 
-    # Reload autostart scripts (but only their bootup parts)
+    # Reload autostart scripts (bootup parts only)
     timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
-    return
   }
 
-  # Remove orphan packages
-  function paru-autoremove {
-    local orphans=$(paru -Qdtq) && [[ -n $orphans ]] && paru -Runs $orphans || print -P "%F{red}No orphan package to remove%f"
+  # Remove orphaned packages
+  function aur-autoremove {
+    $AUR_HELPER -Runs $($AUR_HELPER -Qdtq)
   }
 fi
 
