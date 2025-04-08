@@ -904,6 +904,10 @@ vim.opt.ruler = false
 vim.opt.showcmd = false
 vim.opt.showmode = false
 
+-- Set cursor types
+-- (modified from Neovim default: https://neovim.io/doc/user/options.html#'guicursor')
+vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:ver25"
+
 -- If number is on,
 -- highlight current line number (but not the whole line)
 -- https://stackoverflow.com/a/13275419
