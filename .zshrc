@@ -1,84 +1,3 @@
-# == Oh-my-zsh ==
-
-# https://lazyren.github.io/devlog/oh-my-zsh-setup.html
-
-export ZSH="$HOME/.oh-my-zsh"
-
-# Auto-install omz if needed
-if ! test -d $ZSH; then
-  export RUNZSH=no
-  export KEEP_ZSHRC=yes
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-  # Force-link the zshrc to this one
-  echo "source ~/.config/.zshrc" > ~/.zshrc
-fi
-
-# Auto-install external plugins if needed
-
-# Modified from https://github.com/mattmc3/zsh_unplugged
-function plugin-load {
-  local repo plugdir initfile
-  ZPLUGINDIR=${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins
-  for repo in $@; do
-    plugdir=$ZPLUGINDIR/${repo:t}
-    initfile=$plugdir/${repo:t}.plugin.zsh
-    if [[ ! -d $plugdir ]]; then
-      echo "Cloning $repo..."
-      git clone -q --depth 1 --recursive --shallow-submodules https://github.com/$repo $plugdir
-    fi
-  done
-}
-local repos=(
-  zsh-users/zsh-autosuggestions
-  zsh-users/zsh-syntax-highlighting
-)
-plugin-load $repos
-
-# Turn off completion issues with `sudo -E -s`
-export ZSH_DISABLE_COMPFIX=true
-
-# Turn on compinit
-autoload -U compinit && compinit
-
-# Modify zsh completion
-# https://thevaluable.dev/zsh-completion-guide-examples/
-zstyle ':completion:*' menu select
-zstyle ':completion:*' completer _extensions _complete _approximate
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' complete-options true
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
-zstyle ':completion:*' list-suffixes
-zstyle ':completion:*' expand prefix suffix
-
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*:descriptions' format "%F{yellow}%B--- %d%b"
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format "%F{red}No matches for:%f %d"
-zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-
-# Plugins
-plugins=(fzf command-not-found zsh-autosuggestions) # Add functionalities
-plugins+=(gh npm yarn rust) # For command auto-completion
-plugins+=zsh-syntax-highlighting # Must be last of plugins
-
-# Add compdef for zoxide
-# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/zoxide/zoxide.plugin.zsh
-if (( $+commands[zoxide] )); then
-  eval "$(zoxide init zsh)"
-fi
-
-# Save all non-plugin alias
-# https://unix.stackexchange.com/q/161973
-save_aliases=$(alias -L)
-
-source $ZSH/oh-my-zsh.sh
-
-# Remove all alias from plugins, and restore the rest
-unalias -m '*'
-eval $save_aliases; unset save_aliases
-
 # == Base config ==
 
 # Use nvim (or vim, or vi) for editing
@@ -139,6 +58,151 @@ fi
 # Set GPG's tty to the current one
 # https://unix.stackexchange.com/a/724766
 export GPG_TTY=$(tty)
+
+# == Plugins ==
+
+# Auto-install and load external plugins
+# Modified from https://github.com/mattmc3/zsh_unplugged
+
+# If the plugin folder does not exist, create it
+ZPLUGINDIR="$HOME/.local/share/zsh/plugins"
+mkdir -p $ZPLUGINDIR
+
+# Clone a plugin, identify its init file, source it, and add it to your fpath
+function plugin-load {
+  local repo repos=($@) plugdir initfile initfiles=()
+
+  # Clear positional parameters ($@),
+  # otherwise old plugins (like gitstatus) might malfunction with unexpected parameters passed to them
+  set --
+
+  for repo in $repos; do
+    plugdir=$ZPLUGINDIR/${repo:t}
+    initfile=$plugdir/${repo:t}.plugin.zsh
+    if [[ ! -d $plugdir ]]; then
+      echo "Cloning $repo..."
+      git clone -q --depth 1 --recursive --shallow-submodules \
+        https://github.com/$repo $plugdir
+    fi
+    if [[ ! -e $initfile ]]; then
+      initfiles=($plugdir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
+      (( $#initfiles )) || { echo >&2 "No init file '$repo'." && continue }
+      ln -sf $initfiles[1] $initfile
+    fi
+    fpath+=$plugdir
+    source $initfile
+  done
+}
+
+# Update each plugin in $ZPLUGINDIR
+function plugin-update {
+  local repo plugdir
+  for plugdir in $ZPLUGINDIR/*; do
+    if [[ -d $plugdir ]]; then
+      repo=${plugdir:t}
+      echo "Updating $repo..."
+      git -C $plugdir pull --ff-only --quiet || echo >&2 "Failed to update $repo."
+    fi
+  done
+}
+
+local repos=(
+  romkatv/gitstatus
+  zsh-users/zsh-completions
+  zsh-users/zsh-autosuggestions
+  # zsh-syntax-highlighting must be sourced after all ZLE command-line buffer hooks,
+  # see https://github.com/zsh-users/zsh-syntax-highlighting?tab=readme-ov-file#why-must-zsh-syntax-highlightingzsh-be-sourced-at-the-end-of-the-zshrc-file
+  zsh-users/zsh-syntax-highlighting
+)
+plugin-load $repos
+
+# == Completion ==
+
+# Turn on compinit and bash compatibility
+autoload -U compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
+# Modify zsh completion
+# https://thevaluable.dev/zsh-completion-guide-examples/
+zstyle ':completion:*' menu select
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' complete-options true
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+zstyle ':completion:*' list-suffixes
+zstyle ':completion:*' expand prefix suffix
+
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:descriptions' format "%F{yellow}%B--- %d%b"
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format "%F{red}No matches for:%f %d"
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+
+# Enable programmable completion features (using bash completion)
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+  source /usr/share/bash-completion/bash_completion
+elif [ -f /etc/bash_completion ]; then
+  source /etc/bash_completion
+fi
+
+# == Vi mode and ZLE ==
+
+# Use vi mode
+bindkey -v
+
+# https://unix.stackexchange.com/q/433273
+local CURSOR_NORMAL='\e[2 q'
+local CURSOR_INSERT='\e[6 q'
+
+# Change cursor upon changing modes
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+  [[ $1 = 'block' ]]; then
+    echo -ne $CURSOR_NORMAL
+  elif [[ ${KEYMAP} == main ]] ||
+  [[ ${KEYMAP} == viins ]] ||
+  [[ ${KEYMAP} = '' ]] ||
+  [[ $1 = 'beam' ]]; then
+    echo -ne $CURSOR_INSERT
+  fi
+}
+zle -N zle-keymap-select
+
+function zle-line-init {
+  zle -K viins
+}
+zle -N zle-line-init
+
+# Default in insert mode cursor
+function _default_cursor {
+  echo -ne $CURSOR_INSERT
+}
+precmd_functions+=(_default_cursor)
+
+# Set up history search in ZLE
+# https://unix.stackexchange.com/a/97844
+# https://apple.stackexchange.com/q/426084/
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+# Use the up and down arrow keys, and Ctrl-n/p, for finding a command in history
+# (you can write some initial letters of the command first)
+bindkey "^[[A" history-beginning-search-backward-end
+bindkey "^[[B" history-beginning-search-forward-end
+
+# Also for Ctrl-p/n
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
+
+# Ctrl-a/e for beginning/end of line
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+
+# Ctrl-u/k for delete to beginning/end of line
+bindkey '^U' backward-kill-line
+bindkey '^K' kill-line
 
 # == Alias ==
 
@@ -386,17 +450,12 @@ fi
 
 # == Prompt ==
 
+# Uses romkatv/gitstatus plugin
+
 # https://zserge.com/posts/terminal/
 # https://voracious.dev/blog/a-guide-to-customizing-the-zsh-shell-prompt
 # https://unix.stackexchange.com/q/273529
 # https://stackoverflow.com/q/37364631
-
-# Get utility functions from https://github.com/romkatv/gitstatus
-local gitstatus_repo="$HOME/.gitstatus"
-if [ ! -d $gitstatus_repo ]; then
-  git clone --depth=1 https://github.com/romkatv/gitstatus.git $gitstatus_repo >/dev/null
-fi
-source $gitstatus_repo/gitstatus.plugin.zsh
 
 local GIT_CLEAN="%F{blue}󰝥 %f"
 local GIT_STAGED="%F{green}󰋘 %f"
@@ -524,54 +583,12 @@ gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _setup_ps1
 
-# == Vi mode ==
-
-# Use vi mode
-bindkey -v
-
-# https://unix.stackexchange.com/q/433273
-local CURSOR_NORMAL='\e[2 q'
-local CURSOR_INSERT='\e[6 q'
-
-# Change cursor upon changing modes
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-  [[ $1 = 'block' ]]; then
-    echo -ne $CURSOR_NORMAL
-  elif [[ ${KEYMAP} == main ]] ||
-  [[ ${KEYMAP} == viins ]] ||
-  [[ ${KEYMAP} = '' ]] ||
-  [[ $1 = 'beam' ]]; then
-    echo -ne $CURSOR_INSERT
-  fi
-}
-zle -N zle-keymap-select
-
-function zle-line-init {
-  zle -K viins
-}
-zle -N zle-line-init
-
-# Default in insert mode cursor
-function _default_cursor {
-  echo -ne $CURSOR_INSERT
-}
-precmd_functions+=(_default_cursor)
-
-# Ctrl-a/e for beginning/end of line
-bindkey '^A' beginning-of-line
-bindkey '^E' end-of-line
-
-# Ctrl-n/p for history
-# https://apple.stackexchange.com/q/426084/
-bindkey '^P' history-beginning-search-backward
-bindkey '^N' history-beginning-search-forward
-
-# Ctrl-u/k for delete to beginning/end of line
-bindkey '^U' backward-kill-line
-bindkey '^K' kill-line
-
 # == FZF ==
+
+# Add completion for fzf
+if (( $+commands[fzf] )); then
+  source <(fzf --zsh)
+fi
 
 if (( $+commands[fzf] )); then
   export FZF_DEFAULT_COMMAND='fd --type f -H -I -E "*.*.package" -E ".svn" -E ".git" -E ".hg" -E "node_modules" -E "bower_components"'
@@ -582,6 +599,15 @@ fi
 # == NVM ==
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-true # Set $? back to 0 if the above folders are not found
+# Load nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
+# Add completion for nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
+
+# == ZOXIDE ==
+
+# Add completion for zoxide
+# https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi

@@ -46,21 +46,14 @@ fi
 
 # == Completion ==
 
-# Enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Enable programmable completion features
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+    source /etc/bash_completion
   fi
 fi
-
-# Use the up and down arrow keys for finding a command in history
-# (you can write some initial letters of the command first)
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
 
 # == Aliases and functions ==
 
