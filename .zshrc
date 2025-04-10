@@ -38,6 +38,7 @@ setopt correct
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt prompt_subst
+setopt no_case_glob
 unsetopt beep
 unsetopt autocd
 
@@ -47,7 +48,7 @@ export LESS=FRX
 
 # Add local scripts to interactive shell
 fpath+=~/.config/scripts
-autoload -U ~/.config/scripts/*(.:t)
+autoload -Uz ~/.config/scripts/*(.:t)
 
 # Add gem path if any
 if (( $+commands[ruby] )); then
@@ -119,8 +120,8 @@ plugin-load $repos
 # == Completion ==
 
 # Turn on compinit and bash compatibility
-autoload -U compinit && compinit
-autoload -U +X bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
+autoload -Uz bashcompinit && bashcompinit
 
 # Modify zsh completion
 # https://thevaluable.dev/zsh-completion-guide-examples/
@@ -140,9 +141,10 @@ zstyle ':completion:*:warnings' format "%F{red}No matches for:%f %d"
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 
 # Enable programmable completion features (using bash completion)
-if [ -f /usr/share/bash-completion/bash_completion ]; then
+# (also ensure shopt does not exist in the files, zsh does not have shopt)
+if [[ -r /usr/share/bash-completion/bash_completion ]] && ! grep 'shopt' /usr/share/bash-completion/bash_completion &>/dev/null; then
   source /usr/share/bash-completion/bash_completion
-elif [ -f /etc/bash_completion ]; then
+elif [[ -r /etc/bash_completion ]] && ! grep 'shopt' /etc/bash_completion &>/dev/null; then
   source /etc/bash_completion
 fi
 
@@ -183,7 +185,7 @@ precmd_functions+=(_default_cursor)
 # Set up history search in ZLE
 # https://unix.stackexchange.com/a/97844
 # https://apple.stackexchange.com/q/426084/
-autoload -U history-search-end
+autoload -Uz history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 
