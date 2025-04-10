@@ -36,21 +36,17 @@ which may take additional setup to install
 
 - CLI and TUI
   - [`zsh`](https://zsh.sourceforge.io/)
-  - [`paru`](https://github.com/Morganamilo/paru)
   - [`eza`](https://github.com/eza-community/eza)
   - [`fd`](https://github.com/sharkdp/fd)
   - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
   - [`fzf`](https://github.com/junegunn/fzf)
   - [`ripgrep`](https://github.com/BurntSushi/ripgrep)
   - [`xsel`](https://github.com/kfish/xsel)
-  - [`libqalculate`](https://github.com/Qalculate/libqalculate) (`qalc` in shell)
+  - [`libqalculate`](https://github.com/Qalculate/libqalculate)
   - [`trash-cli`](https://github.com/andreafrancia/trash-cli)
-  - [`htop`](https://htop.dev/)
-  - [`bashmount`](https://github.com/jamielinux/bashmount)
-  - [`bluetuith`](https://github.com/darkhz/bluetuith)
 - Coding
   - [`neovim`](https://neovim.io/)
-  - [`github-cli`](https://cli.github.com/) (`gh` in shell)
+  - [`github-cli`](https://cli.github.com/)
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
   - [`llvm`](https://llvm.org/) (for C/C++ [`clangd`](https://clangd.llvm.org/) in editors)
@@ -75,6 +71,7 @@ which may take additional setup to install
   - [`discord`](https://discord.com/)
 - Desktop environment setup
   - [`i3-wm`](https://i3wm.org/)
+  - [`paru`](https://github.com/Morganamilo/paru)
   - [`wezterm`](https://github.com/wez/wezterm)
   - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
   - [`feh`](https://feh.finalrewind.org/)
@@ -85,8 +82,11 @@ which may take additional setup to install
   - [`redshift`](http://jonls.dk/redshift/)
   - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - Utilities
+  - [`htop`](https://htop.dev/)
   - [`flameshot`](https://flameshot.org/)
   - [`xsane`](http://www.sane-project.org/)
+  - [`bashmount`](https://github.com/jamielinux/bashmount)
+  - [`bluetuith`](https://github.com/darkhz/bluetuith)
   - [`ventoy`](https://www.ventoy.net)
 - Fonts
   - [`ttf-jetbrains-mono-nerd`](https://www.jetbrains.com/lp/mono/)
@@ -113,10 +113,10 @@ Some extensions that I install in my browsers:
 - [`Dark Background and Light Text`](https://github.com/m-khvoinitsky/dark-background-light-text-extension)
 - [`Redirector`](https://github.com/einaregilsson/Redirector)
 - [`Tab Session Manager`](https://github.com/sienori/Tab-Session-Manager)
-- `HTTPS Everywhere`
-- `Facebook Container`
+- [`HTTPS Everywhere`](https://www.eff.org/https-everywhere)
+- [`Facebook Container`](https://addons.mozilla.org/en-US/firefox/addon/facebook-container/)
 
-Gruvbox theme for browsers used is [`teatwig/gruvbox-firefox-themes`](https://github.com/teatwig/gruvbox-firefox-themes)
+Gruvbox theme for browsers is [`teatwig/gruvbox-firefox-themes`](https://github.com/teatwig/gruvbox-firefox-themes)
 
 (You may want to also activate additional filter lists in `uBlock Origin`
 for things such as Facebook or cookie banners;
@@ -126,22 +126,18 @@ please refer to their [wiki](https://github.com/gorhill/uBlock/wiki).)
 
 I also install some LSP servers in Neovim with `mason.nvim`
 with respect to the languages I am currently working with.
-Some other LSP servers need to also be ported using `efm`;
-they are marked below.
 
 <details>
 <summary> Some LSP servers </summary>
 
-- General
-  - `efm` (needs `go` installed)
 - JS/TS
   - `tsserver`
-  - `prettierd` (through `efm`)
+  - `prettierd`
 - CSS
   - `css-lsp`
 - Lua
   - `lua-language-server`
-  - `stylua` (through `efm`)
+  - `stylua`
 - C/C++
   - `clangd`
 - Markdown
@@ -237,7 +233,7 @@ A nice example of installing a theme can be seen
 [in the Breeze theme README](https://github.com/gustawho/grub2-theme-breeze#installation).
 
 To have GnuPG use the terminal instead of a pop-up window for asking passwords,
-see [this Stack Exchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
+see [this StackExchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
 
 To show `lightdm` greeter on multiple screens,
 see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/);
