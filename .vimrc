@@ -3,6 +3,7 @@ set nocompatible
 
 syntax on
 let mapleader = " "
+set mouse=a
 
 nnoremap j gj
 nnoremap k gk
