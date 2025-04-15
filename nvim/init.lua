@@ -707,18 +707,12 @@ lazy.setup({
         keymap("n", "<M-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
         keymap("n", "<M-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
       else
-        keymap("n", "<C-n>", function()
-          vscode.action("editor.action.showHover")
-        end, { desc = "Hover" })
-        keymap("n", "gr", function()
-          vscode.action("editor.action.rename")
-        end, { desc = "Rename" })
-        keymap("n", "go", function()
-          vscode.action("editor.action.goToDefinition")
-        end, { desc = "Goto definition" })
-        keymap("n", "gO", function()
-          vscode.action("editor.action.referenceSearch.trigger")
-        end, { desc = "Goto references" })
+        --stylua: ignore start
+        keymap("n", "<C-n>", function() vscode.action("editor.action.showHover") end, { desc = "Hover" })
+        keymap("n", "gr", function() vscode.action("editor.action.rename") end, { desc = "Rename" })
+        keymap("n", "go", function() vscode.action("editor.action.goToDefinition") end, { desc = "Goto definition" })
+        keymap("n", "gO", function() vscode.action("editor.action.referenceSearch.trigger") end, { desc = "Goto references" })
+        --stylua: ignore end
       end
 
       -- LSP maappings for both normal and visual modes
@@ -759,11 +753,11 @@ lazy.setup({
       keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohl" })
       -- Make
       if not vim.g.vscode then
-        keymap("n", "<leader>m", "<cmd>OverseerRun<cr>", { desc = "Make" })
+        keymap("n", "<leader>b", "<cmd>OverseerRun<cr>", { desc = "Build" })
       else
-        keymap("n", "<leader>m", function()
-          vscode.action("workbench.action.tasks.build")
-        end, { desc = "Make" })
+        --stylua: ignore start
+        keymap("n", "<leader>b", function() vscode.action("workbench.action.tasks.build") end, { desc = "Build" })
+        --stylua: ignore end
       end
       if not vim.g.vscode then
         -- Search
@@ -777,30 +771,51 @@ lazy.setup({
         keymap("n", "<leader>p", spectre.toggle, { desc = "Replace" })
         -- Undo tree
         keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
+      else
+        --stylua: ignore start
+        keymap("n", "<leader>s", function() vscode.action("workbench.view.search") end, { desc = "Search" })
+        keymap("n", "<leader>t", function() vscode.action("workbench.action.quickOpen") end, { desc = "Files" })
+        --stylua: ignore end
       end
       -- Lazy (group: `l`)
       wk.add({ { "<leader>l", group = "Lazy" } })
       keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
       keymap("n", "<leader>lu", "<cmd>Lazy update<cr>", { desc = "Lazy Update" })
       keymap("n", "<leader>lp", "<cmd>Lazy profile<cr>", { desc = "Lazy Profile" })
-      -- Git (group: `g`)
-      wk.add({ { "<leader>g", group = "Git" } })
-      keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
-      keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
-      keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
-      keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
-      keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
-      keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
-      keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
-      -- Git hunks (group: `h`)
-      wk.add({ { "<leader>h", group = "Git hunks" } })
-      keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
-      keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
-      keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
-      keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
-      keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
-      keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
-      keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
+      if not vim.g.vscode then
+        -- Git (group: `g`)
+        wk.add({ { "<leader>g", group = "Git" } })
+        keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
+        keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
+        keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
+        keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
+        keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
+        keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
+        keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
+        -- Git hunks (group: `h`)
+        wk.add({ { "<leader>h", group = "Git hunks" } })
+        keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
+        keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
+        keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
+        keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
+        keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
+        keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
+        keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
+      else
+        --stylua: ignore start
+        -- Git (group: `g`)
+        keymap("n", "<leader>gb", function() vscode.action("gitlens.toggleLineBlame") end, { desc = "Git Blame" })
+        keymap("n", "<leader>gd", function() vscode.action("gitlens.diffWithPrevious") end, { desc = "Git Diff" })
+        keymap("n", "<leader>gf", function() vscode.action("git.fetch") end, { desc = "Git Fetch" })
+        keymap("n", "<leader>gm", function() vscode.action("git.merge") end, { desc = "Git Merge" })
+        keymap("n", "<leader>ga", function() vscode.action("git.stage") end, { desc = "Git Add" })
+        keymap("n", "<leader>gc", function() vscode.action("git.commit") end, { desc = "Git Commit" })
+        keymap("n", "<leader>gp", function() vscode.action("git.push") end, { desc = "Git Push" })
+        -- Git hunks (group: `h`)
+        keymap("n", "<leader>hn", function() vscode.action("gitlens.annotations.nextChange") end, { desc = "Next hunk" })
+        keymap("n", "<leader>hp", function() vscode.action("gitlens.annotations.previousChange") end, { desc = "Previous hunk" })
+        --stylua: ignore end
+      end
       -- Interface (group: `i`)
       wk.add({ { "<leader>i", group = "Interface" } })
       keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
