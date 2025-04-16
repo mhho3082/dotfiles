@@ -17,7 +17,7 @@ du ~ -h -d 1 | sort -hr
 ```
 
 Remove a package completely and safely with `pacman`:
-(From [Reddit](https://www.reddit.com/r/archlinux/comments/ki9hmm/how_to_properly_removeuninstall_packagesapps_with/))
+(From [Reddit](https://www.reddit.com/r/archlinux/comments/ki9hmm))
 
 ```bash
 # Replace "package" with package name

@@ -97,12 +97,24 @@ function plugin-load {
 
 # Update each plugin in $ZPLUGINDIR
 function plugin-update {
-  local repo plugdir
+  local repo plugdir old_commit new_commit
   for plugdir in $ZPLUGINDIR/*; do
     if [[ -d $plugdir ]]; then
       repo=${plugdir:t}
       echo "Updating $repo..."
-      git -C $plugdir pull --ff-only --quiet || echo >&2 "Failed to update $repo."
+
+      old_commit=$(git -C $plugdir rev-parse --short HEAD 2>/dev/null)
+
+      if git -C $plugdir pull --ff-only --quiet; then
+        new_commit=$(git -C $plugdir rev-parse --short HEAD 2>/dev/null)
+        if [[ "$old_commit" != "$new_commit" ]]; then
+          echo "Updated $repo: $old_commit → $new_commit"
+        else
+          echo "$repo is already up to date."
+        fi
+      else
+        echo >&2 "Failed to update $repo."
+      fi
     fi
   done
 }
