@@ -67,6 +67,7 @@ set -o vi
 
 # Handy aliases
 alias l='ls -AlhF'
+alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
 alias g='git'
 alias c='clear'
 alias q='exit'
