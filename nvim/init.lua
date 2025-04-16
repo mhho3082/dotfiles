@@ -564,6 +564,7 @@ lazy.setup({
         cmdline = {
           keymap = {
             preset = "cmdline",
+            ["<Tab>"] = { "select_and_accept", "fallback" },
             ["<Up>"] = { "select_prev", "fallback" },
             ["<Down>"] = { "select_next", "fallback" },
           },
@@ -627,9 +628,13 @@ lazy.setup({
         ---@param server_name string the LSP server name
         ---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
         local function setup_lsp_server(server_name, options)
-          require("lspconfig")[server_name].setup(vim.tbl_extend("force", {
-            capabilities = have_blink and blink.get_lsp_capabilities((options or {}).capabilities) or nil,
-          }, options or {}))
+          vim.lsp.config(
+            server_name,
+            vim.tbl_extend("force", {
+              capabilities = have_blink and blink.get_lsp_capabilities((options or {}).capabilities) or nil,
+            }, options or {})
+          )
+          vim.lsp.enable(server_name)
         end
 
         -- Setup all LSP servers installed by Mason
