@@ -155,7 +155,6 @@ end
 
 -- The great plugins list
 lazy.setup({
-  checker = { enabled = true },
   spec = {
     -- EDIT --
 
@@ -172,10 +171,6 @@ lazy.setup({
           ["-"] = {
             input = { "{{__%('.-'%)}}", "^{{__%('().*()'%)}}$" },
             output = { left = "{{__('", right = "')}}" },
-          },
-          ["_"] = {
-            input = { "{{_%('.-'%)}}", "^{{_%('().*()'%)}}$" },
-            output = { left = "{{_('", right = "')}}" },
           },
         },
       },
@@ -763,12 +758,14 @@ lazy.setup({
         -- Fix lua API keyboard interrupt issue
         keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
 
-        -- Open oil with -
-        keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
+        if not vim.g.vscode then
+          -- Open oil with -
+          keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
 
-        -- Split/join lines
-        keymap({ "n" }, "gs", treesj.split, { desc = "Split" })
-        keymap({ "n" }, "gj", treesj.join, { desc = "Join" })
+          -- Split/join lines
+          keymap({ "n" }, "gs", treesj.split, { desc = "Split" })
+          keymap({ "n" }, "gj", treesj.join, { desc = "Join" })
+        end
 
         -- Add easy copy/paste to system clipboard
         keymap({ "n", "v" }, "gy", '"+y', { desc = "Copy to clipboard" })
@@ -884,12 +881,12 @@ lazy.setup({
         keymap("n", "<leader>t", function() vscode.action("workbench.action.quickOpen") end, { desc = "Files" })
           --stylua: ignore end
         end
-        -- Plugins (group: `p`)
-        wk.add({ { "<leader>p", group = "Plugins" } })
-        keymap("n", "<leader>pl", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
-        keymap("n", "<leader>pu", "<cmd>Lazy update<cr>", { desc = "Lazy Update" })
-        keymap("n", "<leader>pp", "<cmd>Lazy profile<cr>", { desc = "Lazy Profile" })
-        keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
+        -- Plugins (group: `l`)
+        wk.add({ { "<leader>l", group = "Plugins" } })
+        keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
+        keymap("n", "<leader>lu", "<cmd>Lazy update<cr>", { desc = "Lazy Update" })
+        keymap("n", "<leader>lp", "<cmd>Lazy profile<cr>", { desc = "Lazy Profile" })
+        keymap("n", "<leader>lm", "<cmd>Mason<cr>", { desc = "Mason" })
         if not vim.g.vscode then
           -- Git (group: `g`)
           wk.add({ { "<leader>g", group = "Git" } })

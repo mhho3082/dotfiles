@@ -267,11 +267,11 @@ function o {
 # Exa/Eza (or ls + tree)
 if (( $+commands[eza] )); then
   alias l='eza --all --long --icons --sort=type --git --hyperlink'
-  alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|.svelte-kit|node_modules|bower_components|.next|venv"'
+  alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
 else
   alias l='ls -AlhF --group-directories-first --color=auto'
   if (( $+commands[tree] )); then
-    alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
+    alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
   fi
 fi
 
