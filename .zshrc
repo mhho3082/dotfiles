@@ -50,6 +50,11 @@ export LESS=FRX
 fpath+=~/.config/scripts
 autoload -Uz ~/.config/scripts/*(.:t)
 
+# Add /usr/local/sbin to path
+if [[ -d "/usr/local/sbin" ]]; then
+  path+="/usr/local/sbin"
+fi
+
 # Add gem path if any
 if (( $+commands[ruby] )); then
   export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
