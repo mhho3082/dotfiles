@@ -423,14 +423,52 @@ fi
 
 # Only define functions if the AUR helper exists
 if (( $+commands[$AUR_HELPER] )); then
+  # Package regexes that may require a reboot
+  # Based on https://github.com/endeavouros-team/eos-bash-shared/blob/main/eos-reboot-required.hook
+  local aur_reboot_pkgs=(
+    'amd-ucode'
+    'intel-ucode'
+    'btrfs-progs'
+    'cryptsetup'
+    'linux'
+    'linux-hardened'
+    'linux-lts'
+    'linux-zen'
+    'linux-rt'
+    'linux-rt-lts'
+    'linux-firmware.*'
+    'nvidia'
+    'nvidia-dkms'
+    'nvidia-.*xx-dkms'
+    'nvidia-.*xx'
+    'nvidia-.*lts-dkms'
+    'nvidia.*-lts'
+    'mesa'
+    'systemd.*'
+    'wayland'
+    'virtualbox-guest-utils'
+    'virtualbox-host-dkms'
+    'virtualbox-host-modules-arch'
+    'egl-wayland'
+    'xf86-video-.*'
+    'xorg-server.*'
+    'xorg-fonts.*'
+  )
+
+  # Join the package names with '|', wrap with ^( ... )$
+  local aur_reboot_check="^($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))$"
+
   # Update the system and reboot if needed
   function aur-update {
     # Sync databases
-    $AUR_HELPER -Sy
-    local updates=$($AUR_HELPER -Qu --color=always)
+    local updates
 
-    # Package regexes that may require a reboot
-    local reboot_check="(ucode|cryptsetup|linux|nvidia|mesa|systemd|wayland|xf86-video|xorg)"
+    if (( $+commands[checkupdates] )); then
+      updates=$(checkupdates | awk '{print $1;}')
+    else
+      $AUR_HELPER -Sy
+      updates=$($AUR_HELPER -Qu | awk '{print $1;}')
+    fi
 
     if [[ -z $updates ]]; then
       print -P "%F{green}No updates available.%f"
@@ -438,7 +476,7 @@ if (( $+commands[$AUR_HELPER] )); then
     fi
 
     # Warn about required reboot
-    if [[ $updates =~ $reboot_check ]]; then
+    if [[ $updates =~ $aur_reboot_check ]]; then
       echo "$updates"
       read -k1 "answer?Reboot likely needed. Proceed with update? [y/N] "
       echo
@@ -448,7 +486,7 @@ if (( $+commands[$AUR_HELPER] )); then
     # Perform upgrade
     $AUR_HELPER -Su --noconfirm
     if (( $? == 0 )); then
-      if [[ $updates =~ $reboot_check ]]; then
+      if [[ $updates =~ $aur_reboot_check ]]; then
         reboot && return
       else
         print -P "%F{green}Update successful. No reboot needed.%f"
