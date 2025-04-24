@@ -484,7 +484,7 @@ if (( $+commands[$AUR_HELPER] )); then
     fi
 
     # Perform upgrade
-    $AUR_HELPER -Su --noconfirm
+    $AUR_HELPER -Syu --noconfirm
     if (( $? == 0 )); then
       if [[ $updates =~ $aur_reboot_check ]]; then
         reboot && return
