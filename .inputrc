@@ -1,3 +1,5 @@
+$include /etc/inputrc
+
 # Use correct cursor shape in vi mode
 # (only works in bash 4.4 and later, with readline 7.0 and later)
 set editing-mode vi
@@ -21,3 +23,17 @@ set vi-ins-mode-string "\1\e[6 q\2"
 # Ctrl-U/K to kill to beginning/end of line
 "\C-u": unix-line-discard
 "\C-k": kill-line
+
+# Ctrl-L to clear the screen
+"\C-l": clear-screen
+
+# Adjust tab-completion behavior
+# https://www.topbug.net/blog/2017/07/31/inputrc-for-humans/
+set bell-style none
+set colored-stats on
+set completion-ignore-case on
+set completion-prefix-display-length 3
+set mark-symlinked-directories on
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set visible-stats on
