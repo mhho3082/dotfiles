@@ -455,8 +455,8 @@ if (( $+commands[$AUR_HELPER] )); then
     'xorg-fonts.*'
   )
 
-  # Join the package names with '|', wrap with ^( ... )$
-  local aur_reboot_check="^($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))$"
+  # Join the package names with '|', wrap with ",( ... ),"
+  local aur_reboot_check=",($(IFS='|'; echo "${aur_reboot_pkgs[*]}")),"
 
   # Update the system and reboot if needed
   function aur-update {
@@ -464,10 +464,10 @@ if (( $+commands[$AUR_HELPER] )); then
     local updates
 
     if (( $+commands[checkupdates] )); then
-      updates=$(checkupdates | awk '{print $1;}')
+      updates=$(checkupdates --nocolor | awk '{print $1;}' | tr '\n' ',')
     else
       $AUR_HELPER -Sy
-      updates=$($AUR_HELPER -Qu | awk '{print $1;}')
+      updates=$($AUR_HELPER -Qu --color=never | awk '{print $1;}' | tr '\n' ',')
     fi
 
     if [[ -z $updates ]]; then
@@ -476,8 +476,10 @@ if (( $+commands[$AUR_HELPER] )); then
     fi
 
     # Warn about required reboot
-    if [[ $updates =~ $aur_reboot_check ]]; then
-      echo "$updates"
+    local reboot_needed=0
+    if [[ ",$updates," =~ $aur_reboot_check ]]; then
+      reboot_needed=1
+      echo "Packages to update: $(echo $updates | sed "s/,$//" | sed "s/,/, /g")"
       read -k1 "answer?Reboot likely needed. Proceed with update? [y/N] "
       echo
       [[ "$answer" =~ ^[yY]$ ]] || return
@@ -486,7 +488,7 @@ if (( $+commands[$AUR_HELPER] )); then
     # Perform upgrade
     $AUR_HELPER -Syu --noconfirm
     if (( $? == 0 )); then
-      if [[ $updates =~ $aur_reboot_check ]]; then
+      if (( reboot_needed )); then
         reboot && return
       else
         print -P "%F{green}Update successful. No reboot needed.%f"
