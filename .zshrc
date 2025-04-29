@@ -113,7 +113,7 @@ function plugin-update {
       if git -C $plugdir pull --ff-only --quiet; then
         new_commit=$(git -C $plugdir rev-parse --short HEAD 2>/dev/null)
         if [[ "$old_commit" != "$new_commit" ]]; then
-          echo "Updated $repo: $old_commit → $new_commit"
+          echo "Updated $repo: $old_commit -> $new_commit"
         else
           echo "$repo is already up to date."
         fi
