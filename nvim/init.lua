@@ -589,17 +589,15 @@ lazy.setup({
 
     -- LSP
     {
-      "williamboman/mason-lspconfig.nvim",
+      "neovim/nvim-lspconfig",
       dependencies = {
+        { "mason-org/mason.nvim", opts = {} },
+        { "mason-org/mason-lspconfig.nvim", opts = {} },
         "saghen/blink.cmp",
-        { "williamboman/mason.nvim", event = "VeryLazy", opts = {} },
-        "neovim/nvim-lspconfig",
       },
       event = "VeryLazy",
-      opts = {},
       config = function()
         -- Note: The whole LSP config is here
-
         vim.diagnostic.config({
           -- Don't use virtual text (the text at the end of line)
           -- It is too disturbing to workflow
@@ -616,83 +614,52 @@ lazy.setup({
           },
         })
 
-        -- try to require blink
-        local have_blink, blink = pcall(require, "blink.cmp")
+        vim.lsp.config("*", {
+          capabilities = vim.lsp.protocol.make_client_capabilities(),
+        })
 
-        -- Set up LSP server with completion capabilities and additional settings.
-        ---@param server_name string the LSP server name
-        ---@param options? {settings?: table, on_attach?: function, [string]: any} the optional LSP server settings
-        local function setup_lsp_server(server_name, options)
-          vim.lsp.config(
-            server_name,
-            vim.tbl_extend("force", {
-              capabilities = have_blink and blink.get_lsp_capabilities((options or {}).capabilities) or nil,
-            }, options or {})
-          )
-          vim.lsp.enable(server_name)
-        end
-
-        -- Setup all LSP servers installed by Mason
-        require("mason-lspconfig").setup_handlers({
-          -- Default handler
-          function(server_name)
-            setup_lsp_server(server_name)
-          end,
-          -- Specific handlers
-          ["lua_ls"] = function()
-            setup_lsp_server("lua_ls", {
-              settings = {
-                Lua = {
-                  diagnostics = { globals = { "vim" } },
-                  runtime = { version = "LuaJIT" },
-                  format = { enable = false },
-                },
+        -- Specific handlers
+        vim.lsp.config("lua_ls", {
+          settings = {
+            Lua = {
+              diagnostics = { globals = { "vim" } },
+              runtime = { version = "LuaJIT" },
+              format = { enable = false },
+            },
+          },
+        })
+        vim.lsp.config("rust_analyzer", {
+          settings = {
+            ["rust-analyzer"] = {
+              checkOnSave = { command = "clippy" },
+              imports = { granularity = { group = "module" }, prefix = "self" },
+              cargo = { buildScripts = { enable = true } },
+              procMacro = { enable = true },
+            },
+          },
+        })
+        vim.lsp.config("harper_ls", {
+          settings = {
+            ["harper-ls"] = {
+              linters = {
+                SentenceCapitalization = false,
+                SpellCheck = false,
               },
-            })
-          end,
-          ["rust_analyzer"] = function()
-            setup_lsp_server("rust_analyzer", {
-              settings = {
-                ["rust-analyzer"] = {
-                  checkOnSave = { command = "clippy" },
-                  imports = { granularity = { group = "module" }, prefix = "self" },
-                  cargo = { buildScripts = { enable = true } },
-                  procMacro = { enable = true },
-                },
-              },
-            })
-          end,
-          ["harper_ls"] = function()
-            setup_lsp_server("harper_ls", {
-              settings = {
-                ["harper-ls"] = {
-                  linters = {
-                    SentenceCapitalization = false,
-                    SpellCheck = false,
-                  },
-                },
-              },
-            })
-          end,
-          ["jdtls"] = function()
-            setup_lsp_server("jdtls", { settings = { java = { format = { enabled = false } } } })
-          end,
-          ["html"] = function()
-            setup_lsp_server("html", {
-              -- https://github.com/LazyVim/LazyVim/discussions/2159
-              init_options = {
-                provideFormatter = false,
-              },
-            })
-          end,
-          ["cssls"] = function()
-            setup_lsp_server("cssls", {
-              -- https://github.com/LazyVim/LazyVim/discussions/2159
-              init_options = {
-                provideFormatter = false,
-              },
-            })
-          end,
+            },
+          },
+        })
+        vim.lsp.config("jdtls", { settings = { java = { format = { enabled = false } } } })
+        vim.lsp.config("html", {
+          -- https://github.com/LazyVim/LazyVim/discussions/2159
+          init_options = {
+            provideFormatter = false,
+          },
+        })
+        vim.lsp.config("cssls", {
+          -- https://github.com/LazyVim/LazyVim/discussions/2159
+          init_options = {
+            provideFormatter = false,
+          },
         })
       end,
     },
