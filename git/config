@@ -69,6 +69,9 @@
     d = "!d() { git diff --patch-with-stat HEAD~${1:-0}; }; d"
     # Use difftool for such diff
     dt = "!d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
+    # diff one commit (or between two commits)
+    dc = "!d() { case $# in 1) git diff --patch-with-stat $1~1 $1 ;; 2) git diff --patch-with-stat $1 $2 ;; esac; }; d"
+    dct = "!d() { case $# in 1) git difftool --patch-with-stat $1~1 $1 ;; 2) git difftool --patch-with-stat $1 $2 ;; esac; }; d"
 
     f = fetch
     # Fetch all remote branches and pull to local branches
@@ -92,7 +95,7 @@
     sp = stash pop
 
     # https://stackoverflow.com/q/26961371
-    cd = "!f() { git checkout ${1:-$(git default-branch)} 2>/dev/null || git checkout -b ${1:-$(git default-branch)}; }; f"
+    cd = "!f() { local b=${1:-$(git default-branch)}; if git show-ref --quiet refs/heads/$b; then git checkout $b; else git checkout -b $b; fi; }; f"
 
     # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
     # Also handles repos without remote by responding the config's default branch instead
