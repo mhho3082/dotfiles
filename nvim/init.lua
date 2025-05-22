@@ -237,7 +237,8 @@ lazy.setup({
         local jump2d = require("mini.jump2d")
 
         opts = vim.tbl_extend("force", {
-          spotter = jump2d.gen_pattern_spotter("[%w_%-]*%w[%w_%-]*"),
+          -- One or more [\w-_], containing at least one \w
+          spotter = jump2d.gen_spotter.pattern("[%w_%-]*%w[%w_%-]*"),
         }, opts or {})
 
         if opts then
