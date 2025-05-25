@@ -435,27 +435,27 @@ if (( $+commands[$AUR_HELPER] )); then
     'linux-zen'
     'linux-rt'
     'linux-rt-lts'
-    'linux-firmware.*'
+    'linux-firmware\S*'
     'nvidia'
     'nvidia-dkms'
-    'nvidia-.*xx-dkms'
-    'nvidia-.*xx'
-    'nvidia-.*lts-dkms'
-    'nvidia.*-lts'
+    'nvidia-\S*xx-dkms'
+    'nvidia-\S*xx'
+    'nvidia-\S*lts-dkms'
+    'nvidia\S*-lts'
     'mesa'
-    'systemd.*'
+    'systemd\S*'
     'wayland'
     'virtualbox-guest-utils'
     'virtualbox-host-dkms'
     'virtualbox-host-modules-arch'
     'egl-wayland'
-    'xf86-video-.*'
-    'xorg-server.*'
-    'xorg-fonts.*'
+    'xf86-video-\S*'
+    'xorg-server\S*'
+    'xorg-fonts\S*'
   )
 
   # Join the package names with '|' and check word boundaries using space char
-  local aur_reboot_check="\s($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))\s"
+  local aur_reboot_check="\s($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))(?=\s)"
 
   # Update the system and reboot if needed
   function aur-update {
@@ -476,10 +476,10 @@ if (( $+commands[$AUR_HELPER] )); then
 
     # Warn about required reboot
     local reboot_needed=0
-    if echo " $updates " | grep -E $aur_reboot_check &>/dev/null; then
+    if echo " $updates " | grep -P $aur_reboot_check &>/dev/null; then
       reboot_needed=1
       echo "Packages to update:"
-      echo " $updates " | grep -E $aur_reboot_check --color=always | xargs
+      echo " $updates " | grep -P $aur_reboot_check --color=always | xargs
       read -k1 "answer?Reboot likely needed. Proceed with update? [y/N] "
       echo
       [[ "$answer" =~ ^[yY]$ ]] || return
