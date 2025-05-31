@@ -172,7 +172,7 @@ A safe sequence to bootstrap `paru` from a clean installation
 sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
 
 # Get fast mirrors
-sudo reflector --country hk,jp,sg,kr,tw,gb,us --age 1 --protocol https --sort rate --fastest 10 --verbose --save /etc/pacman.d/mirrorlist
+sudo reflector --country hk,jp,sg,kr,tw,gb,us --age 5 --protocol https --sort rate --fastest 10 --verbose --save /etc/pacman.d/mirrorlist
 
 # Update system
 sudo pacman -Syu
@@ -215,6 +215,30 @@ To set up a GPG key for Git and GitHub usage, see
 To set up Cantonese input with Rime, see
 [the `rime-cantonese` wiki page by Rime's makers](https://github.com/rime/rime-cantonese/wiki).
 
+To remove the annoying "Clicking shift turns into ASCII-only mode" with Rime, adjust as below:
+
+<details>
+<summary> <code>~/.local/share/fcitx5/rime/default.custom.yaml</code> </summary>
+
+```yaml
+patch:
+  schema_list:
+    # ...
+  ascii_composer:
+    good_old_caps_lock: true
+    switch_key:
+      # Shift_L: inline_ascii
+      # Shift_R: commit_text
+      Shift_L: noop
+      Shift_R: noop
+      Control_L: noop
+      Control_R: noop
+      Caps_Lock: clear
+      Eisu_toggle: clear
+```
+
+</details>
+
 This config uses `brightnessctl` by default;
 if you find `xbacklight` not working, you are advised to switch to `brightnesctl`.
 
@@ -236,13 +260,13 @@ To have GnuPG use the terminal instead of a pop-up window for asking passwords,
 see [this StackExchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
 
 To show `lightdm` greeter on multiple screens,
-see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/);
-my (semi-dynamic) `/etc/lightdm/display_setup.sh` is as below:
+see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/),
+for example below semi-dynamic script:
 
 <!-- Use :r!cat /etc/lightdm/display_setup.sh to copy to below -->
 
 <details>
-<summary> My <code>/etc/lightdm/display_setup.sh</code> script </summary>
+<summary> <code>/etc/lightdm/display_setup.sh</code> </summary>
 
 ```bash
 #!/bin/sh
@@ -269,11 +293,7 @@ done
 
 - Git alias derived from
   https://github.com/mathiasbynens/dotfiles
-- Tmux status bar based off of
+- Tmux status bar based on
   https://www.reddit.com/r/unixporn/comments/5vke7s/osx_iterm2_tmux_vim/
-- `m` bookmark function inspired by
-  https://dmitryfrank.com/articles/shell_shortcuts
 - `i3wm` config based on `EndeavourOS`'s default config at
   https://github.com/endeavouros-team/endeavouros-i3wm-setup
-- Caps-lock to escape remap + escape to backtick remap derived from
-  https://unix.stackexchange.com/q/692851
