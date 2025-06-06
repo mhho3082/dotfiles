@@ -663,6 +663,14 @@ export NVM_DIR="$HOME/.nvm"
 # Add completion for nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
 
+# == PYENV ==
+
+export PYENV_ROOT="$HOME/.pyenv"
+# Load pyenv
+[[ -d $PYENV_ROOT/bin ]] && path+="$PYENV_ROOT/bin" && eval "$(pyenv init - zsh)" || true
+# Load pyenv-virtualenv too
+pyenv virtualenvs &>/dev/null && eval "$(pyenv virtualenv-init -)" || true
+
 # == ZOXIDE ==
 
 # Add completion for zoxide
