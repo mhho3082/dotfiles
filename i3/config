@@ -145,8 +145,8 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # splits
-bindsym $mod+s split h
-bindsym $mod+v split v
+bindsym $mod+s split v
+bindsym $mod+v split h
 
 # resize
 bindsym $mod+comma resize shrink width 5 px or 5 ppt
