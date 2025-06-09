@@ -666,7 +666,7 @@ lazy.setup({
         -- Make pyright and basedpyright use the correct pyenv version if provided
         -- https://stackoverflow.com/a/78916731
         if vim.fn.executable("pyenv") == 1 then
-          vim.env.PYENV_VERSION = vim.fn.system('pyenv version-name')
+          vim.env.PYENV_VERSION = vim.fn.system("pyenv version-name")
         end
       end,
     },

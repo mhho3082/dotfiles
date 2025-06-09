@@ -51,7 +51,6 @@ wezterm.on("format-window-title", function(tab)
   return "WezTerm: " .. tab.active_pane.title
 end)
 
-
 config.keys = {
   -- Copy/paste
   {
