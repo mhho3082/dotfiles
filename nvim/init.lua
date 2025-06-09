@@ -662,6 +662,12 @@ lazy.setup({
             provideFormatter = false,
           },
         })
+
+        -- Make pyright and basedpyright use the correct pyenv version if provided
+        -- https://stackoverflow.com/a/78916731
+        if vim.fn.executable("pyenv") == 1 then
+          vim.env.PYENV_VERSION = vim.fn.system('pyenv version-name')
+        end
       end,
     },
 
@@ -840,7 +846,7 @@ lazy.setup({
           keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
           keymap("n", "<leader>f", FindTodo, { desc = "Find TODOs" })
           -- Search and Replace
-          keymap("n", "<leader>S", spectre.toggle, { desc = "Search and Replace" })
+          keymap("n", "<leader>p", spectre.toggle, { desc = "Search and Replace" })
           -- Undo tree
           keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
         else
@@ -926,6 +932,10 @@ lazy.setup({
         defaults = {
           formatter = "path.filename_first",
           multiline = 2,
+        },
+        files = {
+          -- See `../.zshrc`
+          fd_opts = "-t f -H -I -E '*.*.package' -E '.svn' -E '.git' -E '.hg' -E 'node_modules' -E 'bower_components' -E 'venv'",
         },
         grep = {
           -- https://github.com/ibhagwan/fzf-lua/issues/971
