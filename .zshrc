@@ -650,9 +650,17 @@ if (( $+commands[fzf] )); then
 fi
 
 if (( $+commands[fzf] )); then
-  export FZF_DEFAULT_COMMAND='fd --type f -H -I -E "*.*.package" -E ".svn" -E ".git" -E ".hg" -E "node_modules" -E "bower_components"'
+  export FZF_DEFAULT_COMMAND="fd -t f -H -I -E '*.*.package' -E '.svn' -E '.git' -E '.hg' -E 'node_modules' -E 'bower_components' -E 'venv'"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_CTRL_T_OPTS="--preview='less {}'"
+fi
+
+# == ZOXIDE ==
+
+# Add completion for zoxide
+# https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
 fi
 
 # == NVM ==
@@ -672,12 +680,4 @@ if (( $+commands[pyenv] )); then
   if pyenv commands | grep -q 'virtualenv-init'; then
     eval "$(pyenv virtualenv-init -)"
   fi
-fi
-
-# == ZOXIDE ==
-
-# Add completion for zoxide
-# https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
-if (( $+commands[zoxide] )); then
-  eval "$(zoxide init zsh)"
 fi

@@ -50,6 +50,10 @@ which may take additional setup to install
   - [`difftastic`](https://github.com/Wilfred/difftastic)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
   - [`llvm`](https://llvm.org/) (for C/C++ [`clangd`](https://clangd.llvm.org/) in editors)
+- Version managers
+  - [`nvm`](https://github.com/nvm-sh/nvm)
+  - [`pyenv`](https://github.com/pyenv/pyenv) and [`pyenv-virtualenv`](https://github.com/pyenv/pyenv-virtualenv)
+  - [`rustup`](https://rustup.rs/)
 - Writing
   - [`fcitx5`](https://fcitx-im.org/wiki/Fcitx_5)
     - [`fcitx5-rime`](https://github.com/fcitx/fcitx5-rime) +
