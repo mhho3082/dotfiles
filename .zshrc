@@ -665,11 +665,14 @@ export NVM_DIR="$HOME/.nvm"
 
 # == PYENV ==
 
-export PYENV_ROOT="$HOME/.pyenv"
-# Load pyenv
-[[ -d $PYENV_ROOT/bin ]] && path+="$PYENV_ROOT/bin" && eval "$(pyenv init - zsh)" || true
-# Load pyenv-virtualenv too
-pyenv virtualenvs &>/dev/null && eval "$(pyenv virtualenv-init -)" || true
+# https://github.com/pyenv/pyenv-virtualenv/issues/387#issuecomment-2629477881
+if (( $+commands[pyenv] )); then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+  if pyenv commands | grep -q 'virtualenv-init'; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+fi
 
 # == ZOXIDE ==
 
