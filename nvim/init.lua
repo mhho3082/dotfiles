@@ -935,7 +935,7 @@ lazy.setup({
         },
         files = {
           -- See `../.zshrc`
-          fd_opts = "-t f -H -I -E '*.*.package' -E '.svn' -E '.git' -E '.hg' -E 'node_modules' -E 'bower_components' -E 'venv'",
+          fd_opts = "-t f -H -I -E '*.*.package' -E '.svn' -E '.git' -E '.hg' -E 'node_modules' -E 'bower_components' -E 'venv' -E '__pycache__'",
         },
         grep = {
           -- https://github.com/ibhagwan/fzf-lua/issues/971
