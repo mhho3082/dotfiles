@@ -507,6 +507,17 @@ if (( $+commands[$AUR_HELPER] )); then
   }
 fi
 
+# For homebrew / linuxbrew
+if (( $+commands[brew] )); then
+  # Update homebrew
+  function brew-update {
+    brew update
+    brew upgrade
+    brew cleanup
+    brew doctor
+  }
+fi
+
 # == Prompt ==
 
 # Uses romkatv/gitstatus plugin
