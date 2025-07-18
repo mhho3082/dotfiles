@@ -392,7 +392,7 @@ lazy.setup({
           -- Git
           "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
           -- Prose
-          "markdown", "markdown_inline", "latex", "bibtex", "mermaid",
+          "markdown", "markdown_inline", "bibtex", "mermaid",
           -- Config
           "rasi", -- For rofi
           "yaml", "toml", "zathurarc",
@@ -934,12 +934,11 @@ lazy.setup({
           multiline = 2,
         },
         files = {
-          -- See `../.zshrc`
-          fd_opts = "-t f -H -I -E '*.*.package' -E '.svn' -E '.git' -E '.hg' -E 'node_modules' -E 'bower_components' -E 'venv' -E '__pycache__'",
+          fd_opts = "-t f -H -E '.git/'",
         },
         grep = {
           -- https://github.com/ibhagwan/fzf-lua/issues/971
-          rg_opts = "--no-ignore --hidden -g '!.git/' --column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
+          rg_opts = "--hidden -g '!.git/' --column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
         },
       },
       config = function(_, opts)

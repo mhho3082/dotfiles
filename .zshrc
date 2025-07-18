@@ -54,6 +54,11 @@ if [[ -d "/usr/local/sbin" ]]; then
   path+="/usr/local/sbin"
 fi
 
+# Add ~/.local/bin to path
+if [[ -d "$HOME/.local/bin" ]]; then
+  path+="$HOME/.local/bin"
+fi
+
 # Add gem path if any
 if (( $+commands[ruby] )); then
   export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
@@ -661,7 +666,7 @@ if (( $+commands[fzf] )); then
 fi
 
 if (( $+commands[fzf] )); then
-  export FZF_DEFAULT_COMMAND="fd -t f -H -I -E '*.*.package' -E '.svn' -E '.git' -E '.hg' -E 'node_modules' -E 'bower_components' -E 'venv' -E '__pycache__'"
+  export FZF_DEFAULT_COMMAND="fd -t f -H"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_CTRL_T_OPTS="--preview='less {}'"
 fi
