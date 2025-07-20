@@ -263,6 +263,10 @@ A nice example of installing a theme can be seen
 To have GnuPG use the terminal instead of a pop-up window for asking passwords,
 see [this StackExchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
 
+If you want to keep using your laptop after closing the lid
+(eg with another monitor),
+see [this StackExchange answer](https://unix.stackexchange.com/a/52645).
+
 To show `lightdm` greeter on multiple screens,
 see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/),
 for example below semi-dynamic script:
