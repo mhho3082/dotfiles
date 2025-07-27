@@ -23,7 +23,7 @@ config.harfbuzz_features = { "ss19", "cv07", "cv99" }
 -- config.harfbuzz_features = { "zero", "ss01", "ss03", "ss05", "ss06", "ss08" }
 
 -- Set font size
-config.font_size = 15.0
+config.font_size = is_darwin and 15.0 or 12.0
 
 -- Disable the tab bar
 config.enable_tab_bar = false

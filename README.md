@@ -260,6 +260,10 @@ See [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
 A nice example of installing a theme can be seen
 [in the Breeze theme README](https://github.com/gustawho/grub2-theme-breeze#installation).
 
+If you want to use Colemak-DH on a staggered keyboard (e.g., your laptop),
+try to set the keymap to `colemak_dh_ortho`;
+see [discussion on Reddit](https://www.reddit.com/r/Colemak/comments/wqcspl/colemak_dh_on_linux/).
+
 To have GnuPG use the terminal instead of a pop-up window for asking passwords,
 see [this StackExchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
 
