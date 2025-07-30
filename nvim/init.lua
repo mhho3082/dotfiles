@@ -584,7 +584,7 @@ lazy.setup({
       opts = {
         suggestion = { enabled = false },
         panel = { enabled = false },
-        filetypes = { markdown = true, help = true },
+        filetypes = { markdown = true, yaml = true, help = true },
       },
     },
 
