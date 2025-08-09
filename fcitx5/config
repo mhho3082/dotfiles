@@ -1,10 +1,10 @@
 [Hotkey]
+# Trigger Input Method
+TriggerKeys=
 # Enumerate when press trigger key repeatedly
-EnumerateWithTriggerKeys=True
+EnumerateWithTriggerKeys=False
 # Temporally switch between first and current Input Method
 AltTriggerKeys=
-# Enumerate Input Method Forward
-EnumerateForwardKeys=
 # Enumerate Input Method Backward
 EnumerateBackwardKeys=
 # Skip first input method while enumerating
@@ -20,7 +20,7 @@ DeactivateKeys=
 # Time limit in milliseconds for triggering modifier key shortcuts
 ModifierOnlyKeyTimeout=250
 
-[Hotkey/TriggerKeys]
+[Hotkey/EnumerateForwardKeys]
 0=Super+space
 
 [Hotkey/PrevPage]
