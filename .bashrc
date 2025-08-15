@@ -65,9 +65,9 @@ fi
 
 # For fzf: https://github.com/junegunn/fzf/releases
 # mkdir -p ~/.local/bin
-# wget https://github.com/junegunn/fzf/releases/download/v0.64.0/fzf-0.64.0-linux_amd64.tar.gz
-# tar xzvf fzf-0.64.0-linux_amd64.tar.gz
-# rm fzf-0.64.0-linux_amd64.tar.gz
+# wget https://github.com/junegunn/fzf/releases/download/v0.65.1/fzf-0.65.1-linux_amd64.tar.gz
+# tar xzvf fzf-0.65.1-linux_amd64.tar.gz
+# rm fzf-0.65.1-linux_amd64.tar.gz
 # mv fzf ~/.local/bin/fzf
 
 # For fd: https://github.com/sharkdp/fd/releases
