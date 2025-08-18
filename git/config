@@ -170,7 +170,7 @@
 
     # Re-initiate version
     # (Warning: destructive!)
-    quick-reinit = "![ -d .git ] && rm .git -rf && git init && git add -A && git commit -m \"FEAT: Repo init\""
+    quick-reinit = "![ -d .git ] && rm -rf .git && git init && git add -A && git commit -m \"FEAT: Repo init\""
 
     # Generate gitignore file using GitHub's CLI/API
     ignore = "!~/.config/git/gitignore.sh"
