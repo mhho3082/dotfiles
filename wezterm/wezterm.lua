@@ -11,14 +11,14 @@ end
 -- https://github.com/wez/wezterm/discussions/4728
 local is_darwin = wezterm.target_triple:find("darwin") ~= nil
 
--- Use JetBrains Mono, which is built-in
+-- Use JetBrains Mono (built-in)
 -- Emojis will need Noto Emoji installed
 config.font = wezterm.font("JetBrainsMono NF")
 -- https://github.com/JetBrains/JetBrainsMono#opentype-features
 -- https://wezfurlong.org/wezterm/config/font-shaping.html
 config.harfbuzz_features = { "ss19", "cv07", "cv99" }
 
--- Or use FiraCode, which is also built-in; stylistic sets can be enabled
+-- Or use FiraCode (built-in)
 -- config.font = wezterm.font("FiraCode")
 -- config.harfbuzz_features = { "zero", "ss01", "ss03", "ss05", "ss06", "ss08" }
 
