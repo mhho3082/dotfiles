@@ -115,43 +115,26 @@ fi
 set -o vi
 
 # Handy aliases
-alias l='ls -AlhF'
-alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components" --dirsfirst'
+alias l='ls -AlhF --group-directories-first --color=auto'
+alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
 alias e="$EDITOR"
 alias v="$VISUAL"
 alias g='git'
 alias c='clear'
 alias q='exit'
 
-# For GitHub commit links in Markdown
-function gh-sha-md() {
-  local remote_url=$(git config --get remote.origin.url | sed 's|^git@|https://|' | sed 's@.git$@@')
-  if [[ " $* " == *" -b "* ]]; then
-    local branch=$(git rev-parse --abbrev-ref HEAD)
-    local branch_str="[\`$branch\`]($remote_url/commits/$branch)"
-  else
-    local branch_str=""
-  fi
-  echo "$branch_str [\`#$(git rev-parse --short HEAD)\`]($remote_url/commit/$(git rev-parse HEAD))" |
-    xargs echo # https://stackoverflow.com/a/12973694
-}
-
-# For GitLab commit links in Markdown
-function gl-sha-md() {
-  local remote_url="$(git config --get remote.origin.url | sed 's@:@/@' | sed 's|^git@|https://|' | sed 's@.git$@@')"
-
-  if [[ " $* " == *" -b "* ]]; then
-    local branch=$(git rev-parse --abbrev-ref HEAD)
-    local branch_str="[\`$branch\`]($remote_url/-/commits/$branch?ref_type=heads)"
-  else
-    local branch_str=""
-  fi
-
-  echo "$branch_str [\`#$(git rev-parse --short HEAD)\`]($remote_url/-/commit/$(git rev-parse HEAD))" |
-    xargs echo # https://stackoverflow.com/a/12973694
-}
-
-alias sha-md=gl-sha-md
+# Generate ".." shortcuts
+# (since paths are set to not be considered executables by themselves)
+for i in {1..9}; do
+  alias_name="."
+  relative_path=""
+  for j in `seq $i`; do
+    alias_name+='.'
+    relative_path+='../'
+  done
+  line="alias $alias_name='cd $relative_path'"
+  eval $line
+done
 
 # == Prompt ==
 
@@ -168,5 +151,7 @@ export PS1="\[\033[01;32m\]\u@\h \[\033[00;34m\]\w\[\033[33m\]\$(parse_git_branc
 # == NVM ==
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+# Load nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
+# Add completion for nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true

@@ -411,7 +411,6 @@ function shorthands {
     print -P '\n%F{cyan}functions%f'
     echo $functions_list | grep '^'$letters
   fi
-
 }
 
 # Edit the content of the most recent clipboard
