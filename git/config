@@ -65,14 +65,18 @@
     cl = clone
     cp = cherry-pick
 
-    # `d` is normal diff, `dt` is difftool, `ds` is stat only
+    # `d` is normal diff, `dw` is diff-words, `dt` is difftool, `ds` is stat only
+    # https://www.reddit.com/r/commandline/comments/wf7oju/comment/iitrsgy
+
     # diff between i revisions ago (or HEAD) and index
     d = "!d() { git diff --patch-with-stat HEAD~${1:-0}; }; d"
     dt = "!d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
+    dw = "!d() { git diff --patch-with-stat --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+' HEAD~${1:-0}; }; d"
     ds = "!d() { git diff --stat HEAD~${1:-0}; }; d"
     # diff the change of one commit (or between two commits)
     dc = "!d() { case $# in 1) git diff --patch-with-stat $1~1 $1 ;; 2) git diff --patch-with-stat $1 $2 ;; esac; }; d"
     dct = "!d() { case $# in 1) git difftool --patch-with-stat $1~1 $1 ;; 2) git difftool --patch-with-stat $1 $2 ;; esac; }; d"
+    dcw = "!d() { case $# in 1) git diff --patch-with-stat --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+' $1~1 $1 ;; 2) git diff --patch-with-stat --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+' $1 $2 ;; esac; }; d"
     dcs = "!d() { case $# in 1) git diff --stat $1~1 $1 ;; 2) git diff --stat $1 $2 ;; esac; }; d"
     # Show info on the latest commit
     latest = log -1 HEAD --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
