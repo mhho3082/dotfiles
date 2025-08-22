@@ -89,6 +89,11 @@
 
     m = merge
 
+    r = rebase
+    ri = rebase --interactive
+    # Modify commits before pushing to upstream
+    riu = rebase --interactive @{upstream}
+
     # https://www.reddit.com/r/programming/comments/1febgy/handy_git_tips_to_stop_you_getting_fired/
     # Handle merge conflicts easily
     ours = "!f() { git checkout --ours $@ && git add $@; }; f"
@@ -96,6 +101,8 @@
 
     p = push
     pu = pull
+    # Fast-forward pull only, fail otherwise
+    pf = pull --ff-only
     # Stash changes away before pull
     ps = pull --rebase --autostash
     # The more aggressive version
@@ -104,7 +111,7 @@
     # Force local changes up to remotes
     force = push --all --force-with-lease
     # Save and push all temporary changes in case of emergency
-    emergency = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force-with-lease"
+    fire = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force-with-lease"
 
     s = stash
     sn = stash --include-untracked # Stash, with new files
@@ -159,15 +166,14 @@
     conflicts = diff --name-only --diff-filter=U
 
     # Make an archive of the current repo
-    # (ignoring uncommitted changes)
-    quick-archive = "!f() { git archive --format=zip --output $(git rev-parse --show-toplevel)/../$(git rev-parse --show-toplevel | xargs basename).zip HEAD; }; f"
+    quick-archive = "!f() { d=\"$(git rev-parse --show-toplevel)\"; [ -d $d ] && pushd \"$d/..\" && tar cf \"$(basename $d).tar\" \"$(basename $d)\" && popd; }; f"
 
     # Initiate a git repo
-    quick-init = "![ ! -d .git ] && git init && git add -A && git commit -m \"FEAT: Repo init\""
+    quick-init = "![ ! -d .git ] && git init && git add -A && git commit -m \"feat: Repo init\""
 
     # Re-initiate version
     # (Warning: destructive!)
-    quick-reinit = "![ -d .git ] && rm -rf .git && git init && git add -A && git commit -m \"FEAT: Repo init\""
+    quick-reinit = "![ -d .git ] && rm -rf .git && git init && git add -A && git commit -m \"feat: Repo init\""
 
     # Generate gitignore file based on https://github.com/github/gitignore
     ignore = "!~/.config/git/gitignore.sh"
