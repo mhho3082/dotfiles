@@ -1,7 +1,7 @@
 -- Programs needed: unzip, ripgrep, fd
 
 -- Programs advised:
--- `tree-sitter` (and `tree-sitter-cli`) for install-from-grammer syntaxes, esp. latex
+-- `tree-sitter` (and `tree-sitter-cli`) for install-from-grammer syntax files, esp. latex
 -- `fswatch` on Linux to improve LSP file watching performance (see https://www.reddit.com/r/neovim/comments/1b4bk5h)
 
 -- Notes: (for particular LSP services)
@@ -580,7 +580,7 @@ lazy.setup({
     {
       "zbirenbaum/copilot.lua",
       cond = not vim.g.vscode,
-      event = "InsertEnter",
+      event = "VeryLazy",
       opts = {
         suggestion = { enabled = false },
         panel = { enabled = false },
@@ -1024,7 +1024,7 @@ vim.api.nvim_create_user_command("CheckLspLog", function()
   file:close()
   vim.notify("LSP log size: " .. format_file_size(size))
 
-  -- Clear the log file (default is not)
+  -- Clear the LSP log (default is not)
   local confirm = vim.fn.confirm("Clear log file?", "&Yes\n&No", 2)
   if confirm == 1 then
     file = io.open(log_path, "w")

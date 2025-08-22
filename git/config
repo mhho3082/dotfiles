@@ -65,22 +65,30 @@
     cl = clone
     cp = cherry-pick
 
-    # `git d i` Diff between i revisions ago and current
+    # `d` is normal diff, `dt` is difftool, `ds` is stat only
+    # diff between i revisions ago (or HEAD) and index
     d = "!d() { git diff --patch-with-stat HEAD~${1:-0}; }; d"
-    # Use difftool for such diff
     dt = "!d() { git difftool --patch-with-stat HEAD~${1:-0}; }; d"
-    # diff one commit (or between two commits)
+    ds = "!d() { git diff --stat HEAD~${1:-0}; }; d"
+    # diff the change of one commit (or between two commits)
     dc = "!d() { case $# in 1) git diff --patch-with-stat $1~1 $1 ;; 2) git diff --patch-with-stat $1 $2 ;; esac; }; d"
     dct = "!d() { case $# in 1) git difftool --patch-with-stat $1~1 $1 ;; 2) git difftool --patch-with-stat $1 $2 ;; esac; }; d"
+    dcs = "!d() { case $# in 1) git diff --stat $1~1 $1 ;; 2) git diff --stat $1 $2 ;; esac; }; d"
+    # Show info on the latest commit
+    latest = log -1 HEAD --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
 
     f = fetch
-    # Fetch all remote branches and pull to local branches
-    fa = "!f() { git fetch ${1:-origin} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-origin}/@@\" | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
-    # Fetch remote, but do not create new branches (so only existing ones)
-    # Helpful for repos with dozens of contributors and hundreds of remote branches
+    # Fetch remote branches, and update existing local branches (without creating new ones)
     fe = "!f() { git fetch ${1:-origin} && git branch | grep -v '^*' | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
+    # Fetch remote branches, and update / create local branches to match
+    fa = "!f() { git fetch ${1:-origin} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-origin}/@@\" | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
 
     m = merge
+
+    # https://www.reddit.com/r/programming/comments/1febgy/handy_git_tips_to_stop_you_getting_fired/
+    # Handle merge conflicts easily
+    ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
     p = push
     pu = pull
@@ -88,6 +96,11 @@
     ps = pull --rebase --autostash
     # The more aggressive version
     pss = "!git stash; git pull --rebase; git stash pop"
+
+    # Force local changes up to remotes
+    force = push --all --force-with-lease
+    # Save and push all temporary changes in case of emergency
+    emergency = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force-with-lease"
 
     s = stash
     sn = stash --include-untracked # Stash, with new files
@@ -117,21 +130,6 @@
     # whatchanged
     w = log --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --no-merges
 
-    # Helpful lists
-    # List the affected files and their statuses
-    stat = status --short --branch
-    # List the amount of changes per file
-    changes = "!d() { git diff --stat HEAD~${1:-0}; }; d"
-    # list conflicted files
-    conflicts = diff --name-only --diff-filter=U
-
-    # Get all recent updates
-    sync = pull --rebase --all
-    # Force local changes up to remotes
-    force = push --all --force-with-lease
-    # Save and push all temporary changes in case of emergency
-    emergency = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force"
-
     # https://gggritso.com/human-git-aliases
     # Remove all changes from staging
     unstage = reset --mixed HEAD --
@@ -141,25 +139,20 @@
     uncommit = reset HEAD~1 --mixed
     # Amend the recent commit
     amend = commit --amend
-
-    # https://www.reddit.com/r/programming/comments/1febgy/handy_git_tips_to_stop_you_getting_fired/
-    # Handle merge conflicts easily
-    ours = "!f() { git checkout --ours $@ && git add $@; }; f"
-    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+    overwrite = commit --amend --no-edit --reset-author
 
     # Remove unused objects in the .git directory
     autoclean = gc --prune=now --aggressive
 
     # Show verbose data
+    stat = status --short --branch
+    sha = rev-parse --short HEAD
     tags = tag -l
     branches = branch -vv --sort=-committerdate
     remotes = remote --verbose
     contributors = shortlog --summary --numbered --no-merges
     stashes = stash list
-    latest = log -1 HEAD --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
-
-    # Get SHA of head, useful in detached head
-    sha = rev-parse --short HEAD
+    conflicts = diff --name-only --diff-filter=U
 
     # Make an archive of the current repo
     # (ignoring uncommitted changes)
@@ -172,7 +165,7 @@
     # (Warning: destructive!)
     quick-reinit = "![ -d .git ] && rm -rf .git && git init && git add -A && git commit -m \"FEAT: Repo init\""
 
-    # Generate gitignore file using GitHub's CLI/API
+    # Generate gitignore file based on https://github.com/github/gitignore
     ignore = "!~/.config/git/gitignore.sh"
 
 # ---
