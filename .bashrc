@@ -55,6 +55,15 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Include some major applications' completions
+for app in git; do
+  if [ -f "/usr/share/bash-completion/completions/$app" ]; then
+    source "/usr/share/bash-completion/completions/$app"
+  elif [ -f "/etc/bash_completion.d/$app" ]; then
+    source "/etc/bash_completion.d/$app"
+  fi
+done
+
 # == Extending with local apps ==
 
 # For nvim: https://github.com/neovim/neovim/releases

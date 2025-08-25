@@ -45,10 +45,6 @@ unsetopt autocd
 # https://unix.stackexchange.com/q/566943
 export LESS=FRX
 
-# Add local scripts to interactive shell
-fpath+=~/.config/scripts
-autoload -Uz ~/.config/scripts/*(.:t)
-
 # Add /usr/local/sbin to path
 if [[ -d "/usr/local/sbin" ]]; then
   path+="/usr/local/sbin"
@@ -678,21 +674,38 @@ if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
 fi
 
-# == NVM ==
+# == Version managers ==
+
+# Based on:
+# https://peterlyons.com/problog/2018/01/zsh-lazy-loading/
+# https://notes.frederic-hemberger.de/speeding-up-initial-zsh-startup-with-lazy-loading/
+# https://github.com/qoomon/zsh-lazyload
+# https://sumercip.com/posts/lazyload-zsh/
+
+function lazyload {
+  # cmd[] init_code
+  local cmd cmds=(${@[1,-2]}) f="${@[-1]}"
+  for cmd in $cmds; do
+    # https://www.bashsupport.com/zsh/parameter-expansion-flags/q/
+    eval \
+      "function $cmd {
+        unfunction $cmds
+        eval ${(qqqq)f} && $cmd \"\$@\"
+      }"
+  done
+}
 
 export NVM_DIR="$HOME/.nvm"
-# Load nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
-# Add completion for nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
+lazyload nvm \
+  '[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" 
+  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"'
 
-# == PYENV ==
+# To enable enable auto-activation of Python virtualenvs
+# (when you are likely doing Python-intensive work),
+# call pyenv in advance
 
 # https://github.com/pyenv/pyenv-virtualenv/issues/387#issuecomment-2629477881
-if (( $+commands[pyenv] )); then
-  eval "$(pyenv init --path)"
+lazyload pyenv \
+  'eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
-  if pyenv commands | grep -q 'virtualenv-init'; then
-    eval "$(pyenv virtualenv-init -)"
-  fi
-fi
+  if pyenv commands | grep -q "virtualenv-init"; then eval "$(pyenv virtualenv-init -)"; fi'
