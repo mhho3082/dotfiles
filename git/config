@@ -1,5 +1,5 @@
 [user]
-    # Please change this to your own user name and email
+    # Please change this to your own username and email
     name = Max Ho
     email = 73323597+mhho3082@users.noreply.github.com
 
@@ -36,9 +36,9 @@
     all = true
 
 [rebase]
-        autoSquash = true
-        autoStash = true
-        updateRefs = true
+    autoSquash = true
+    autoStash = true
+    updateRefs = true
 
 # ---
 
@@ -82,14 +82,6 @@
     dut = diff-shorthand u t
     dus = diff-shorthand u s
     dun = diff-shorthand u n
-    dc  = diff-shorthand c _
-    dcw = diff-shorthand c w
-    dct = diff-shorthand c t
-    dcs = diff-shorthand c s
-    dcn = diff-shorthand c n
-
-    # Show info on the latest commit
-    latest = log -1 HEAD --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
 
     f = fetch
     # Fetch remote branches, and update existing local branches (without creating new ones)
@@ -149,7 +141,10 @@
     l3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
     # whatchanged
-    w = log --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --no-merges
+    # For particular revisions
+    w = show --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    # As log
+    lw = log --stat --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --no-merges
 
     # https://gggritso.com/human-git-aliases
     # Remove all changes from staging
@@ -232,7 +227,7 @@
     conflictstyle = zdiff3
 
 [mergetool]
-  prompt = false
+    prompt = false
 
 [mergetool "nvim"]
     cmd = !"nvim -f -c \"Gdiffsplit!\" \"$MERGED\""
