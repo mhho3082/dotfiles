@@ -75,6 +75,10 @@ diff_and_ask() {
   fi
 }
 
+# Preserve current Git username and email
+git_username=$(git config --global user.name)
+git_email=$(git config --global user.email)
+
 # For every file in this repo
 for dotfile in $dotfiles; do
   # If the file is not found (deleted from filesystem, but not `git rm` yet), skip it
@@ -105,3 +109,10 @@ for dotfile in $dotfiles; do
   # Make necessary files executable (for newly created / modified files)
   copy_chmod $dotfile $config_file
 done
+
+# Re-configure Git username and email if needed
+if [ -n "$git_username" ] || [ -n "$git_email" ]; then
+  echo -e "\033[0;32mRe-configuring your Git username and email...\033[0m"
+  [ -n "$git_username" ] && git config --global user.name "$git_username"
+  [ -n "$git_email" ] && git config --global user.email "$git_email"
+fi
