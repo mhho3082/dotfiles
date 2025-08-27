@@ -67,21 +67,11 @@
 
     # Diff display options
     diff-shorthand = "!~/.config/git/git-diff-shorthand.sh"
-    d   = diff-shorthand _ _
-    dw  = diff-shorthand _ w
-    dt  = diff-shorthand _ t
-    ds  = diff-shorthand _ s
-    dn  = diff-shorthand _ n
-    di  = diff-shorthand i _
-    diw = diff-shorthand i w
-    dit = diff-shorthand i t
-    dis = diff-shorthand i s
-    din = diff-shorthand i n
-    du  = diff-shorthand u _
-    duw = diff-shorthand u w
-    dut = diff-shorthand u t
-    dus = diff-shorthand u s
-    dun = diff-shorthand u n
+    d   = diff-shorthand _
+    dw  = diff-shorthand w
+    dt  = diff-shorthand t
+    ds  = diff-shorthand s
+    dn  = diff-shorthand n
 
     f = fetch
     # Fetch remote branches, and update existing local branches (without creating new ones)

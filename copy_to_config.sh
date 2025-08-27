@@ -78,6 +78,9 @@ diff_and_ask() {
 # Preserve current Git username and email
 git_username=$(git config --global user.name)
 git_email=$(git config --global user.email)
+if [ -n "$git_username" ] || [ -n "$git_email" ]; then
+  echo -e "\033[0;32mWe will preserve your current Git username and email (if any)...\033[0m"
+fi
 
 # For every file in this repo
 for dotfile in $dotfiles; do
