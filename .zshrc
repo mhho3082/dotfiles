@@ -695,10 +695,10 @@ function lazyload {
   done
 }
 
+# Do not lazyload nvm, as node is needed for multiple LSPs and AI interfaces
 export NVM_DIR="$HOME/.nvm"
-lazyload nvm \
-  '[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" 
-  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"'
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
 
 # To enable enable auto-activation of Python virtualenvs
 # (when you are likely doing Python-intensive work),
