@@ -8,10 +8,10 @@
 #        $# = 2 is revision / commits-before range
 # For checking against index (staged), use `--cached`, it will be passed to Git
 #
-# style: ``  is normal
+# style: ``  is normal (patch + compact summary)
 #        `w` is diff-words
 #        `t` is difftool
-#        `s` is stat only
+#        `s` is summary
 #        `n` is name only
 # https://stackoverflow.com/a/25634420
 # https://stackoverflow.com/a/1587952
@@ -48,11 +48,11 @@ main() {
 
   range="$(modify_specifiers "${specifiers[@]}")"
   case "$s" in
-    _) style="diff --patch-with-stat" ;;
-    w) style="diff --patch-with-stat --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'" ;;
-    t) style="difftool --patch-with-stat" ;;
-    s) style="diff --stat" ;;
-    n) style="diff --name-only" ;;
+    _) style="diff --patch-with-stat --compact-summary" ;;
+    w) style="diff --patch-with-stat --compact-summary --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'" ;;
+    t) style="difftool --patch-with-stat --compact-summary" ;;
+    s) style="diff --compact-summary" ;;
+    n) style="diff --name-status" ;;
   esac
 
   local command="git $style $range ${rest[@]}"
