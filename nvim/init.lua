@@ -820,7 +820,7 @@ lazy.setup({
 
           -- Actually initiate the search
           -- https://github.com/ibhagwan/fzf-lua/discussions/1194#discussioncomment-9418686
-          fzf.grep({ no_esc = true, search = regexp, prompt = "Find TODOs> " })
+          fzf.grep({ no_esc = true, search = regexp, prompt = "> ", winopts = { title = "Find TODOs" } })
         end
 
         -- The great <leader> keymap
@@ -935,6 +935,7 @@ lazy.setup({
         },
         files = {
           fd_opts = "-t f -H -E '.git/'",
+          cwd_prompt = false,
         },
         grep = {
           -- https://github.com/ibhagwan/fzf-lua/issues/971
