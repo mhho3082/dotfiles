@@ -66,28 +66,29 @@ done
 
 # == Extending with local apps ==
 
-# For nvim: https://github.com/neovim/neovim/releases
+# # For nvim: https://github.com/neovim/neovim/releases
+# # If server does not support recent glibc versions, use https://github.com/neovim/neovim-releases (glibc 2.17) instead
 # mkdir -p ~/.local/bin
-# wget https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-x86_64.appimage
+# wget https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.appimage
 # chmod u+x nvim-linux-x86_64.appimage
 # mv nvim-linux-x86_64.appimage ~/.local/bin/nvim
-
-# For fzf: https://github.com/junegunn/fzf/releases
+#
+# # For fzf: https://github.com/junegunn/fzf/releases
 # mkdir -p ~/.local/bin
-# wget https://github.com/junegunn/fzf/releases/download/v0.65.1/fzf-0.65.1-linux_amd64.tar.gz
-# tar xzvf fzf-0.65.1-linux_amd64.tar.gz
-# rm fzf-0.65.1-linux_amd64.tar.gz
+# wget https://github.com/junegunn/fzf/releases/download/v0.65.2/fzf-0.65.2-linux_amd64.tar.gz
+# tar xzvf fzf-0.65.2-linux_amd64.tar.gz
+# rm fzf-0.65.2-linux_amd64.tar.gz
 # mv fzf ~/.local/bin/fzf
-
-# For fd: https://github.com/sharkdp/fd/releases
+#
+# # For fd: https://github.com/sharkdp/fd/releases
 # mkdir -p ~/.local/bin
-# wget https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
-# tar xzvf fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
-# rm fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
-# mv fd-v10.2.0-x86_64-unknown-linux-gnu/fd ~/.local/bin/fd
-# rm -rf fd-v10.2.0-x86_64-unknown-linux-gnu
-
-# For ripgrep: https://github.com/BurntSushi/ripgrep/releases
+# wget https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
+# tar xzvf fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
+# rm fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
+# mv fd-v10.3.0-x86_64-unknown-linux-gnu/fd ~/.local/bin/fd
+# rm -rf fd-v10.3.0-x86_64-unknown-linux-gnu
+#
+# # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
 # mkdir -p ~/.local/bin
 # wget https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
 # tar xzvf ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
