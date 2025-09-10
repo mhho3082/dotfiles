@@ -103,6 +103,8 @@
     # Save and push all temporary changes in case of emergency
     fire = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force-with-lease"
 
+    st = status --short --branch
+
     s = stash
     sn = stash --include-untracked # Stash, with new files
     si = stash --patch
@@ -149,7 +151,6 @@
     autoclean = gc --prune=now --aggressive
 
     # Show verbose data
-    stat = status --short --branch
     sha = rev-parse --short HEAD
     tags = tag -l
     branches = branch -vv --sort=-committerdate
