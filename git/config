@@ -38,6 +38,13 @@
     autoStash = true
     updateRefs = true
 
+[gc]
+    # Disable automatic gc, as it can be disruptive
+    # https://donatstudios.com/yagni-git-gc
+    # https://stackoverflow.com/a/87445
+    # To do garbage collection, use `git gc` or `git autoclean` (alias, see below)
+    auto = 0
+
 # ---
 
 # Some ideas from https://github.com/mathiasbynens/dotfiles
