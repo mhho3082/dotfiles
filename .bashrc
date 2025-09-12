@@ -21,6 +21,10 @@ shopt -s checkwinsize
 # https://unix.stackexchange.com/q/566943
 export LESS=FRX
 
+# Disable "Did you mean ...?" suggestions
+# https://askubuntu.com/a/958493
+unset command_not_found_handle
+
 # == History ==
 
 # Don't put duplicate lines or lines starting with space in the history.
