@@ -160,10 +160,10 @@ lazy.setup({
 
     -- Swiss army knife ("mini.nvim")
     -- More targets
-    { "echasnovski/mini.ai", event = "VeryLazy", opts = {} },
+    { "nvim-mini/mini.ai", event = "VeryLazy", opts = {} },
     -- Surround
     {
-      "echasnovski/mini.surround",
+      "nvim-mini/mini.surround",
       event = "VeryLazy",
       opts = {
         custom_surroundings = {
@@ -177,7 +177,7 @@ lazy.setup({
     },
     -- Comments
     {
-      "echasnovski/mini.comment",
+      "nvim-mini/mini.comment",
       event = "VeryLazy",
       opts = {
         options = {
@@ -188,10 +188,10 @@ lazy.setup({
       },
     },
     -- Align
-    { "echasnovski/mini.align", event = "VeryLazy", opts = {} },
+    { "nvim-mini/mini.align", event = "VeryLazy", opts = {} },
     -- Move code
     {
-      "echasnovski/mini.move",
+      "nvim-mini/mini.move",
       event = "VeryLazy",
       opts = {
         mappings = {
@@ -209,7 +209,7 @@ lazy.setup({
     },
     -- Multi-line f/t
     {
-      "echasnovski/mini.jump",
+      "nvim-mini/mini.jump",
       event = "VeryLazy",
       opts = {
         -- Delay values (in ms) for different functionalities. Set any of them to
@@ -225,7 +225,7 @@ lazy.setup({
     },
     -- Easymotion
     {
-      "echasnovski/mini.jump2d",
+      "nvim-mini/mini.jump2d",
       event = "VeryLazy",
       opts = {
         labels = "tsraneiogmdhpflu",
