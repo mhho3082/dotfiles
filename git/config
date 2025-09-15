@@ -170,11 +170,7 @@
     quick-archive = "!f() { d=\"$(git rev-parse --show-toplevel)\"; [ -d $d ] && pushd \"$d/..\" && tar cf \"$(basename $d).tar\" \"$(basename $d)\" && popd; }; f"
 
     # Initiate a git repo
-    quick-init = "![ ! -d .git ] && git init && git add -A && git commit -m \"feat: Repo init\""
-
-    # Re-initiate version
-    # (Warning: destructive!)
-    quick-reinit = "![ -d .git ] && rm -rf .git && git init && git add -A && git commit -m \"feat: Repo init\""
+    quick-init = "!f() { if [ ! -d .git ]; then git init && git add -A && git commit -m \"feat: Repo init\"; else printf 'Git repository already exists, fully overwrite it? [y/N] '; read answer; case \"$answer\" in [yY]) rm -rf .git && git init && git add -A && git commit -m \"feat: Repo init\" ;; esac; fi; }; f"
 
     # Generate gitignore file based on https://github.com/github/gitignore
     ignore = "!~/.config/git/gitignore.sh"
