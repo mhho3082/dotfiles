@@ -68,6 +68,13 @@ for app in git; do
   fi
 done
 
+# Also handle aliases that resolve to git
+if command -v __git_complete &>/dev/null; then
+  for v in g; do
+    __git_complete $v __git_main
+  done
+fi
+
 # == Extending with local apps ==
 
 # # For nvim: https://github.com/neovim/neovim/releases
@@ -142,7 +149,7 @@ alias q='exit'
 for i in {1..9}; do
   alias_name="."
   relative_path=""
-  for j in `seq $i`; do
+  for j in $(seq $i); do
     alias_name+='.'
     relative_path+='../'
   done
