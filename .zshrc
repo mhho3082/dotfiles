@@ -499,6 +499,9 @@ if (( $+commands[$AUR_HELPER] )); then
 
     # Reload autostart scripts (bootup parts only)
     timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+
+    # Return without errors if it could get to the end
+    return 0
   }
 
   # Remove orphaned packages
