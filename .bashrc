@@ -92,12 +92,14 @@ fi
 # mv fzf ~/.local/bin/fzf
 #
 # # For fd: https://github.com/sharkdp/fd/releases
+# # Uses `-musl` instead of `-gnu` for portability to servers that do not support recent glibc versions,
+# # see https://github.com/sharkdp/fd/issues/417
 # mkdir -p ~/.local/bin
-# wget https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
-# tar xzvf fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
-# rm fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
-# mv fd-v10.3.0-x86_64-unknown-linux-gnu/fd ~/.local/bin/fd
-# rm -rf fd-v10.3.0-x86_64-unknown-linux-gnu
+# wget https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz
+# tar xzvf fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz
+# rm fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz
+# mv fd-v10.3.0-x86_64-unknown-linux-musl/fd ~/.local/bin/fd
+# rm -rf fd-v10.3.0-x86_64-unknown-linux-musl
 #
 # # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
 # mkdir -p ~/.local/bin
