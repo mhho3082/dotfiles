@@ -51,6 +51,28 @@ wezterm.on("format-window-title", function(tab)
   return "WezTerm: " .. tab.active_pane.title
 end)
 
+if not is_darwin then
+  -- Fix cursor theme on i3
+  -- https://github.com/wezterm/wezterm/issues/1742#issuecomment-1075333507
+  local xcursor_size = nil
+  local xcursor_theme = nil
+
+  local success, stdout, stderr =
+    wezterm.run_child_process({ "gsettings", "get", "org.gnome.desktop.interface", "cursor-theme" })
+  if success then
+    xcursor_theme = stdout:gsub("'(.+)'\n", "%1")
+  end
+
+  local _success, _stdout, _stderr =
+    wezterm.run_child_process({ "gsettings", "get", "org.gnome.desktop.interface", "cursor-size" })
+  if _success then
+    xcursor_size = tonumber(_stdout)
+  end
+
+  config.xcursor_theme = xcursor_theme
+  config.xcursor_size = xcursor_size
+end
+
 config.keys = {
   -- Copy/paste
   {
