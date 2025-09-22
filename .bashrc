@@ -25,6 +25,12 @@ export LESS=FRX
 # https://askubuntu.com/a/958493
 unset command_not_found_handle
 
+# If the server does not understand tmux-256color, use fallback
+# https://unix.stackexchange.com/a/574674
+if [ "$TERM" = "tmux-256color" ] && ! infocmp -0qU "tmux-256color" >/dev/null 2>&1; then
+  export TERM=screen-256color
+fi
+
 # == History ==
 
 # Don't put duplicate lines or lines starting with space in the history.
@@ -37,16 +43,6 @@ export HISTFILESIZE=2000
 
 # Append to the history file, don't overwrite it
 shopt -s histappend
-
-# enable color support of ls and grep
-if [ -x /usr/bin/dircolors ]; then
-  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-
-  alias ls='ls --color=auto'
-  alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
-fi
 
 # == Completion ==
 
@@ -136,6 +132,16 @@ fi
 
 # Enable vi mode
 set -o vi
+
+# enable color support of ls and grep
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
 
 # Handy aliases
 alias l='ls -AlhF --group-directories-first --color=auto'
