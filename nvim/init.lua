@@ -849,6 +849,10 @@ lazy.setup({
           keymap("n", "<leader>p", spectre.toggle, { desc = "Search and Replace" })
           -- Undo tree
           keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
+          -- Search selected text in visual mode
+          keymap("v", "<leader>s", function()
+            fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
+          end, { desc = "Search" })
         else
         --stylua: ignore start
         keymap("n", "<leader>s", function() vscode.action("workbench.view.search") end, { desc = "Search" })
