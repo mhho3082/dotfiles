@@ -73,37 +73,47 @@ fi
 
 # == Extending with local apps ==
 
+# # Use below script to (re-)install local apps
+# # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,
+# # see https://github.com/sharkdp/fd/issues/417
+#
+# mkdir -p ~/.local/bin
+# TEMP_DIR=$(mktemp -d) && pushd "$TEMP_DIR"
+#
 # # For nvim: https://github.com/neovim/neovim/releases
 # # If server does not support recent glibc versions, use https://github.com/neovim/neovim-releases (glibc 2.17) instead
-# mkdir -p ~/.local/bin
-# wget https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.appimage
-# chmod u+x nvim-linux-x86_64.appimage
-# mv nvim-linux-x86_64.appimage ~/.local/bin/nvim
+# glibc_version=$(ldd --version | head -n1 | awk '{print $NF}')
+# neovim_repo=$([ "$glibc_version" == "2.17" ] && echo "neovim/neovim-releases" || echo "neovim/neovim")
+# version=$(curl -s "https://api.github.com/repos/$neovim_repo/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+# wget "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.appimage"
+# chmod u+x "nvim-linux-x86_64.appimage"
+# mv "nvim-linux-x86_64.appimage" ~/.local/bin/nvim
 #
 # # For fzf: https://github.com/junegunn/fzf/releases
-# mkdir -p ~/.local/bin
-# wget https://github.com/junegunn/fzf/releases/download/v0.65.2/fzf-0.65.2-linux_amd64.tar.gz
-# tar xzvf fzf-0.65.2-linux_amd64.tar.gz
-# rm fzf-0.65.2-linux_amd64.tar.gz
+# version=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+# wget "https://github.com/junegunn/fzf/releases/download/$version/fzf-${version#v}-linux_amd64.tar.gz"
+# tar xzvf "fzf-${version#v}-linux_amd64.tar.gz"
 # mv fzf ~/.local/bin/fzf
 #
 # # For fd: https://github.com/sharkdp/fd/releases
-# # Uses `-musl` instead of `-gnu` for portability to servers that do not support recent glibc versions,
-# # see https://github.com/sharkdp/fd/issues/417
-# mkdir -p ~/.local/bin
-# wget https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz
-# tar xzvf fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz
-# rm fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz
-# mv fd-v10.3.0-x86_64-unknown-linux-musl/fd ~/.local/bin/fd
-# rm -rf fd-v10.3.0-x86_64-unknown-linux-musl
+# version=$(curl -s "https://api.github.com/repos/sharkdp/fd/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+# wget "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
+# tar xzvf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
+# mv "fd-$version-x86_64-unknown-linux-musl/fd" ~/.local/bin/fd
 #
 # # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
-# mkdir -p ~/.local/bin
-# wget https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
-# tar xzvf ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
-# rm ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
-# mv ripgrep-14.1.1-x86_64-unknown-linux-musl/rg ~/.local/bin/rg
-# rm -rf ripgrep-14.1.1-x86_64-unknown-linux-musl
+# version=$(curl -s "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+# wget "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
+# tar xzvf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
+# mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" ~/.local/bin/rg
+#
+# # For difftastic: https://github.com/Wilfred/difftastic/releases
+# version=$(curl -s "https://api.github.com/repos/Wilfred/difftastic/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+# wget "https://github.com/Wilfred/difftastic/releases/download/${version#v}/difft-x86_64-unknown-linux-musl.tar.gz"
+# tar xzvf "difft-x86_64-unknown-linux-musl.tar.gz"
+# mv difft ~/.local/bin/difft
+#
+# popd && rm -rf "$TEMP_DIR"
 
 if [ -d "$HOME/.local/bin" ]; then
   # Add local bin to PATH
