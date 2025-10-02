@@ -73,8 +73,8 @@
     # Diff display options
     diff-shorthand = "!~/.config/git/git-diff-shorthand.sh"
     d   = diff-shorthand _
+    df  = diff-shorthand f
     dw  = diff-shorthand w
-    dt  = diff-shorthand t
     ds  = diff-shorthand s
     dn  = diff-shorthand n
 
