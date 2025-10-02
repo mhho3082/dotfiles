@@ -9,8 +9,8 @@
 # For checking against index (staged), use `--cached`, it will be passed to Git
 #
 # style: ``  is normal (patch + compact summary)
+#        `f` is difftool
 #        `w` is diff-words
-#        `t` is difftool
 #        `s` is summary
 #        `n` is name only
 # https://stackoverflow.com/a/25634420
@@ -49,8 +49,8 @@ main() {
   range="$(modify_specifiers "${specifiers[@]}")"
   case "$s" in
     _) style="diff --patch-with-stat --compact-summary" ;;
+    f) style="difftool --patch-with-stat --compact-summary" ;;
     w) style="diff --patch-with-stat --compact-summary --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'" ;;
-    t) style="difftool --patch-with-stat --compact-summary" ;;
     s) style="diff --compact-summary" ;;
     n) style="diff --name-status" ;;
   esac
