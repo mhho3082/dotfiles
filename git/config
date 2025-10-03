@@ -49,6 +49,10 @@
 
 # Some ideas from https://github.com/mathiasbynens/dotfiles
 
+# Note: complex alias using `f() {}; f` format can use bash autocompletion
+# by prefixing with a null command `:`, e.g. `!f() { : git checkout ; ... }; f`;
+# see https://forum.upcase.com/t/git-bash-completion-with-aliases/4381
+
 [alias]
     a = add
     aa = add --all
@@ -93,8 +97,8 @@
 
     # https://www.reddit.com/r/programming/comments/1febgy/handy_git_tips_to_stop_you_getting_fired/
     # Handle merge conflicts easily
-    ours = "!f() { git checkout --ours $@ && git add $@; }; f"
-    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+    ours = "!f() { : git add ; git checkout --ours $@ && git add $@; }; f"
+    theirs = "!f() { : git add ; git checkout --theirs $@ && git add $@; }; f"
 
     p = push
     pu = pull
@@ -120,7 +124,7 @@
     # Checkout or create branch
     # https://stackoverflow.com/q/26961371
     # Adjusted to run on both bash and dash
-    cd = "!f() { b=\"$1\"; if [ -z \"$b\" ]; then b=$(git default-branch); fi; if git rev-parse --verify \"$b\" >/dev/null 2>&1; then git checkout \"$b\"; else printf 'Revision specifier %s not found, create branch %s? [y/N] ' \"$b\" \"$b\"; read answer; case \"$answer\" in [yY]) git checkout -b \"$b\" ;; esac; fi; }; f"
+    cd = "!f() { : git checkout ; b=\"$1\"; if [ -z \"$b\" ]; then b=$(git default-branch); fi; if git rev-parse --verify \"$b\" >/dev/null 2>&1; then git checkout \"$b\"; else printf 'Revision specifier %s not found, create branch %s? [y/N] ' \"$b\" \"$b\"; read answer; case \"$answer\" in [yY]) git checkout -b \"$b\" ;; esac; fi; }; f"
 
     # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
     # Also handles repos without remote by responding the config's default branch instead
