@@ -395,7 +395,7 @@ lazy.setup({
           "markdown", "markdown_inline", "bibtex", "mermaid",
           -- Config
           "rasi", -- For rofi
-          "yaml", "toml", "zathurarc",
+          "yaml", "toml", "zathurarc", "xresources",
           -- Vim-specific
           "vim", "vimdoc", "comment", "lua", "luadoc", "diff",
         },
