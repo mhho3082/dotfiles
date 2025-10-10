@@ -532,6 +532,26 @@ lazy.setup({
     -- Icons
     { "kyazdani42/nvim-web-devicons", event = "VeryLazy", opts = {} },
 
+    -- Smear cursor, for screen sharing
+    {
+      "sphamba/smear-cursor.nvim",
+      cond = not vim.g.vscode,
+      event = "VeryLazy",
+      opts = {
+        -- Disable by default
+        enabled = false,
+        -- Fire hazard style
+        cursor_color = "#ff8800",
+        stiffness = 0.5,
+        trailing_stiffness = 0.25,
+        damping = 0.75,
+        trailing_exponent = 5,
+        never_draw_over_target = true,
+        hide_target_hack = true,
+        gamma = 1,
+      },
+    },
+
     -- COPILOTS --
 
     -- Auto-complete
@@ -722,6 +742,7 @@ lazy.setup({
         local _, oil = pcall(require, "oil")
         local _, fzf = pcall(require, "fzf-lua")
         local _, spectre = pcall(require, "spectre")
+        local _, smear = pcall(require, "smear_cursor")
         local _, vscode = pcall(require, "vscode")
 
         -- Move cursor by display lines by default
@@ -908,6 +929,9 @@ lazy.setup({
         keymap("n", "<leader>ib", function()
           vim.o.background = vim.o.background == "dark" and "light" or "dark"
         end, { desc = "Background" })
+        keymap("n", "<leader>ic", function ()
+          smear.enabled = not smear.enabled
+        end, { desc = "Smear cursor" })
       end,
     },
 
