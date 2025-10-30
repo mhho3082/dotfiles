@@ -78,8 +78,9 @@ diff_and_ask() {
 # Preserve current Git username and email
 git_username=$(git config --global user.name)
 git_email=$(git config --global user.email)
-if [ -n "$git_username" ] || [ -n "$git_email" ]; then
-  echo -e "\033[0;32mWe will preserve your current Git username and email (if any)...\033[0m"
+git_signingkey=$(git config --global user.signingkey)
+if [ -n "$git_username" ] || [ -n "$git_email" ] || [ -n "$git_signingkey" ]; then
+  echo -e "\033[0;32mWe will preserve your current Git user settings...\033[0m"
 fi
 
 # For every file in this repo
@@ -114,8 +115,9 @@ for dotfile in $dotfiles; do
 done
 
 # Re-configure Git username and email if needed
-if [ -n "$git_username" ] || [ -n "$git_email" ]; then
-  echo -e "\033[0;32mRe-configuring your Git username and email...\033[0m"
-  [ -n "$git_username" ] && git config --global user.name "$git_username"
-  [ -n "$git_email" ] && git config --global user.email "$git_email"
+if [ -n "$git_username" ] || [ -n "$git_email" ] || [ -n "$git_signingkey" ]; then
+  echo -e "\033[0;32mRe-configuring your Git user settings...\033[0m"
+  [ -n "$git_username" ] && git config --global user.name "$git_username" || true
+  [ -n "$git_email" ] && git config --global user.email "$git_email" || true
+  [ -n "$git_signingkey" ] && git config --global user.signingkey "$git_signingkey" || true
 fi
