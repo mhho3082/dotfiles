@@ -818,6 +818,9 @@ lazy.setup({
         keymap({ "n", "v" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
         keymap({ "n", "v" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
 
+        -- Manually show completion menu for AI suggestions
+        keymap({ "i" }, "<C-g>", require('blink.cmp').show, { desc = "Show" })
+
         -- A function to search for TODOs and more
         local function FindTodo()
         -- Based on treesitter
