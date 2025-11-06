@@ -106,7 +106,7 @@ function plugin-update {
   for plugdir in $ZPLUGINDIR/*; do
     if [[ -d $plugdir ]]; then
       repo=${plugdir:t}
-      echo "Updating $repo..."
+      echo -ne "Updating $repo...\r"
 
       old_commit=$(git -C $plugdir rev-parse --short HEAD 2>/dev/null)
 

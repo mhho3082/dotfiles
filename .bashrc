@@ -139,42 +139,44 @@ function install_local_apps {
   # see https://github.com/sharkdp/fd/issues/417
 
   mkdir -p ~/.local/bin
-  TEMP_DIR=$(mktemp -d) && pushd "$TEMP_DIR"
+  TEMP_DIR=$(mktemp -d) && pushd "$TEMP_DIR" >/dev/null
+
+  WGET_OPTS="--quiet --show-progress --progress=bar:force:noscroll"
 
   # For nvim: https://github.com/neovim/neovim/releases
   # If server does not support recent glibc versions, use https://github.com/neovim/neovim-releases (glibc 2.17) instead
   glibc_version=$(ldd --version | head -n1 | awk '{print $NF}')
   neovim_repo=$([ "$glibc_version" == "2.17" ] && echo "neovim/neovim-releases" || echo "neovim/neovim")
   version=$(curl -s "https://api.github.com/repos/$neovim_repo/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
-  wget "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.appimage"
+  wget $WGET_OPTS "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.appimage"
   chmod u+x "nvim-linux-x86_64.appimage"
   mv "nvim-linux-x86_64.appimage" ~/.local/bin/nvim
 
   # For fzf: https://github.com/junegunn/fzf/releases
   version=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
-  wget "https://github.com/junegunn/fzf/releases/download/$version/fzf-${version#v}-linux_amd64.tar.gz"
-  tar xzvf "fzf-${version#v}-linux_amd64.tar.gz"
+  wget $WGET_OPTS "https://github.com/junegunn/fzf/releases/download/$version/fzf-${version#v}-linux_amd64.tar.gz"
+  tar xzf "fzf-${version#v}-linux_amd64.tar.gz"
   mv fzf ~/.local/bin/fzf
 
   # For fd: https://github.com/sharkdp/fd/releases
   version=$(curl -s "https://api.github.com/repos/sharkdp/fd/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
-  wget "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
-  tar xzvf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
+  wget $WGET_OPTS "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
+  tar xzf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
   mv "fd-$version-x86_64-unknown-linux-musl/fd" ~/.local/bin/fd
 
   # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
   version=$(curl -s "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
-  wget "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
-  tar xzvf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
+  wget $WGET_OPTS "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
+  tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" ~/.local/bin/rg
 
   # For difftastic: https://github.com/Wilfred/difftastic/releases
   version=$(curl -s "https://api.github.com/repos/Wilfred/difftastic/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
-  wget "https://github.com/Wilfred/difftastic/releases/download/${version#v}/difft-x86_64-unknown-linux-musl.tar.gz"
-  tar xzvf "difft-x86_64-unknown-linux-musl.tar.gz"
+  wget $WGET_OPTS "https://github.com/Wilfred/difftastic/releases/download/${version#v}/difft-x86_64-unknown-linux-musl.tar.gz"
+  tar xzf "difft-x86_64-unknown-linux-musl.tar.gz"
   mv difft ~/.local/bin/difft
 
-  popd && rm -rf "$TEMP_DIR"
+  popd >/dev/null && rm -rf "$TEMP_DIR"
 }
 
 # == Prompt ==
