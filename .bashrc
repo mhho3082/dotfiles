@@ -81,10 +81,12 @@ fi
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR=nvim
   export VISUAL=nvim
+  export MANPAGER='nvim +Man!'
 elif command -v vim >/dev/null 2>&1; then
   # Fallback to Vim if Neovim is not available
   export EDITOR=vim
   export VISUAL=vim
+  export MANPAGER="vim -M +MANPAGER -"
 else
   # Default editor if neither Neovim nor Vim is available
   export EDITOR=vi
@@ -94,8 +96,8 @@ fi
 # == Aliases and functions ==
 
 # Enable .bash_aliases
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
+if [ -f "$HOME/.bash_aliases" ]; then
+  . "$HOME/.bash_aliases"
 fi
 
 # Enable vi mode
@@ -103,7 +105,7 @@ set -o vi
 
 # enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
-  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  test -r "$HOME/.dircolors" && eval "$(dircolors -b "$HOME/.dircolors")" || eval "$(dircolors -b)"
 
   alias ls='ls --color=auto'
   alias grep='grep --color=auto'
@@ -133,48 +135,64 @@ for i in {1..9}; do
   eval $line
 done
 
-function install_local_apps {
+function install-local-apps {
   # (re-)Install local apps
   # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,
   # see https://github.com/sharkdp/fd/issues/417
+  
+  function get_version {
+    curl -s "https://api.github.com/repos/$1/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);"
+  }
 
-  mkdir -p ~/.local/bin
+  mkdir -p "$HOME/.local/bin"
   TEMP_DIR=$(mktemp -d) && pushd "$TEMP_DIR" >/dev/null
 
   WGET_OPTS="--quiet --show-progress --progress=bar:force:noscroll"
+
+  # Check Github API rate limit
+  rate_data=$(curl -s "https://api.github.com/rate_limit")
+  rate_remaining=$(echo "$rate_data" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.remaining);")
+  if [ "$rate_remaining" -lt 10 ]; then
+    rate_reset=$(echo "$rate_data" | node -e "console.log(new Date(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.reset * 1000).toLocaleString('en-GB'));")
+    echo "Warning: GitHub API rate limit is low ($rate_remaining remaining)."
+    echo "Consider waiting until $rate_reset before running this script again."
+    return 1
+  fi
 
   # For nvim: https://github.com/neovim/neovim/releases
   # If server does not support recent glibc versions, use https://github.com/neovim/neovim-releases (glibc 2.17) instead
   glibc_version=$(ldd --version | head -n1 | awk '{print $NF}')
   neovim_repo=$([ "$glibc_version" == "2.17" ] && echo "neovim/neovim-releases" || echo "neovim/neovim")
-  version=$(curl -s "https://api.github.com/repos/$neovim_repo/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
-  wget $WGET_OPTS "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.appimage"
-  chmod u+x "nvim-linux-x86_64.appimage"
-  mv "nvim-linux-x86_64.appimage" ~/.local/bin/nvim
+  version=$(get_version "$neovim_repo")
+  wget $WGET_OPTS "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.tar.gz"
+  tar xzf "nvim-linux-x86_64.tar.gz"
+  rm -rf "$HOME/.local/bin/nvim-linux-x86_64" "$HOME/.local/bin/nvim" || true
+  mv "nvim-linux-x86_64" "$HOME/.local/bin/nvim-linux-x86_64"
+  ln -s "$HOME/.local/bin/nvim-linux-x86_64/bin/nvim" "$HOME/.local/bin/nvim"
 
   # For fzf: https://github.com/junegunn/fzf/releases
-  version=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+  version=$(get_version "junegunn/fzf")
   wget $WGET_OPTS "https://github.com/junegunn/fzf/releases/download/$version/fzf-${version#v}-linux_amd64.tar.gz"
   tar xzf "fzf-${version#v}-linux_amd64.tar.gz"
-  mv fzf ~/.local/bin/fzf
+  mv fzf "$HOME/.local/bin/fzf"
 
   # For fd: https://github.com/sharkdp/fd/releases
-  version=$(curl -s "https://api.github.com/repos/sharkdp/fd/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+  version=$(get_version "sharkdp/fd")
   wget $WGET_OPTS "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
-  mv "fd-$version-x86_64-unknown-linux-musl/fd" ~/.local/bin/fd
+  mv "fd-$version-x86_64-unknown-linux-musl/fd" "$HOME/.local/bin/fd"
 
   # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
-  version=$(curl -s "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+  version=$(get_version "BurntSushi/ripgrep")
   wget $WGET_OPTS "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
-  mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" ~/.local/bin/rg
+  mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" "$HOME/.local/bin/rg"
 
   # For difftastic: https://github.com/Wilfred/difftastic/releases
-  version=$(curl -s "https://api.github.com/repos/Wilfred/difftastic/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);")
+  version=$(get_version "Wilfred/difftastic")
   wget $WGET_OPTS "https://github.com/Wilfred/difftastic/releases/download/${version#v}/difft-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "difft-x86_64-unknown-linux-musl.tar.gz"
-  mv difft ~/.local/bin/difft
+  mv difft "$HOME/.local/bin/difft"
 
   popd >/dev/null && rm -rf "$TEMP_DIR"
 }
