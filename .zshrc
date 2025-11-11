@@ -4,21 +4,11 @@
 if (( $+commands[nvim] )); then
   export VISUAL="nvim"
   export EDITOR="nvim"
-
-  # Use nvim as manpager
   export MANPAGER='nvim +Man!'
-
-  # Use nvim as ssh client
-  # https://gist.github.com/jsongerber/7dfd9f2d22ae060b98e15c5590c4828d
-  function oil-ssh {
-    host=${1:-$(grep '^Host ' ~/.ssh/config | awk '{ for (i=2; i<=NF; i++) print $i }' | fzf --cycle --layout=reverse --height=80%)}
-    [ -z "$host" ] && return 1
-    if ! ssh-add -l &>/dev/null; then ssh-add; fi
-    nvim '+lua require("oil").open()' oil-ssh://"$host"/
-  }
 elif (( $+commands[vim] )); then
   export VISUAL="vim"
   export EDITOR="vim"
+  export MANPAGER="vim -M +MANPAGER -"
 else
   export VISUAL="vi"
   export EDITOR="vi"
@@ -28,7 +18,7 @@ fi
 export AUR_HELPER="paru"
 
 # Modify history
-HISTFILE=~/.histfile
+HISTFILE="$HOME/.histfile"
 HISTSIZE=1000
 SAVEHIST=1000
 
@@ -347,7 +337,7 @@ function paths {
 
 # Run every autostart script
 function autostart {
-  timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+  timeout 1s bash -c 'for script in $HOME/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
 }
 
 # Get sizes of different directories / files in current directory
@@ -498,7 +488,7 @@ if (( $+commands[$AUR_HELPER] )); then
     fi
 
     # Reload autostart scripts (bootup parts only)
-    timeout 1s bash -c 'for script in ~/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+    timeout 1s bash -c 'for script in $HOME/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
 
     # Return without errors if it could get to the end
     return 0
