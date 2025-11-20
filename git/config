@@ -84,11 +84,13 @@
 
     f = fetch
     # Fetch remote branches, and update existing local branches (without creating new ones)
-    fe = "!f() { git fetch ${1:-origin} && git branch | grep -v '^*' | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
+    fe = "!f() { git fetch ${1:-$(git default-remote)} && git branch | grep -v '^*' | xargs -P4 -I{} git fetch ${1:-$(git default-remote)} {}:{}; }; f"
     # Fetch remote branches, and update / create local branches to match
-    fa = "!f() { git fetch ${1:-origin} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-origin}/@@\" | xargs -P4 -I{} git fetch ${1:-origin} {}:{}; }; f"
+    fa = "!f() { git fetch ${1:-$(git default-remote)} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-$(git default-remote)}/@@\" | xargs -P4 -I{} git fetch ${1:-$(git default-remote)} {}:{}; }; f"
 
     m = merge
+    # Merge branches without switching to them
+    mr = "!f() { : git checkout ; SRC=\"$1\"; DST=\"$2\"; if [ $(git merge-base \"$SRC\" \"$DST\") = $(git rev-parse \"$DST\") ]; then git update-ref -m \"fast-forward merge: $SRC\" \"refs/heads/$DST\" $(git rev-parse \"$SRC\"); echo \"Fast-forwarded '$DST' to '$SRC'.\"; else CURR=$(git write-tree); ( git read-tree -m --trivial $(git merge-base \"$DST\" \"$SRC\") \"$DST\" \"$SRC\" && git update-ref \"refs/heads/$DST\" $(git commit-tree $(git write-tree) -p \"$DST\" -p \"$SRC\" -m \"Merge $([[ \"$(git rev-parse --symbolic-full-name)\" == refs/remotes/* ]] && echo 'remote-tracking branch' || echo 'branch') '$SRC' into $DST\") && echo \"Merged '$SRC' into '$DST'.\"; ) || echo \"Merge failed due to conflicts. No changes were made.\"; git read-tree $CURR; fi; }; f"
 
     r = rebase
     ri = rebase --interactive
@@ -129,7 +131,8 @@
     # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
     # Also handles repos without remote by responding the config's default branch instead
     # Adjusted to run on both bash and dash
-    default-branch = "!f() { b=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null); if [ -n \"$b\" ]; then echo \"$b\" | sed 's@^refs/remotes/origin/@@'; else git config --get init.defaultBranch; fi; }; f"
+    default-branch = "!f() { b=$(git symbolic-ref refs/remotes/$(git default-remote)/HEAD 2>/dev/null); if [ -n \"$b\" ]; then echo \"$b\" | sed 's@^refs/remotes/'$(git default-remote)'/@@'; else git config --get init.defaultBranch; fi; }; f"
+    default-remote = "!f() { r=$(git remote); if [ -n \"$r\" ]; then echo \"$r\" | head -n1; else echo \"origin\"; fi; }; f"
 
     # https://stackoverflow.com/a/34467298
     l = l1
