@@ -90,7 +90,7 @@
 
     m = merge
     # Merge branches without switching to them
-    mr = "!f() { : git checkout ; SRC=\"$1\"; DST=\"$2\"; if [ $(git merge-base \"$SRC\" \"$DST\") = $(git rev-parse \"$DST\") ]; then git update-ref -m \"fast-forward merge: $SRC\" \"refs/heads/$DST\" $(git rev-parse \"$SRC\"); echo \"Fast-forwarded '$DST' to '$SRC'.\"; else CURR=$(git write-tree); ( git read-tree -m --trivial $(git merge-base \"$DST\" \"$SRC\") \"$DST\" \"$SRC\" && git update-ref \"refs/heads/$DST\" $(git commit-tree $(git write-tree) -p \"$DST\" -p \"$SRC\" -m \"Merge $([[ \"$(git rev-parse --symbolic-full-name)\" == refs/remotes/* ]] && echo 'remote-tracking branch' || echo 'branch') '$SRC' into $DST\") && echo \"Merged '$SRC' into '$DST'.\"; ) || echo \"Merge failed due to conflicts. No changes were made.\"; git read-tree $CURR; fi; }; f"
+    mr = "!f() { : git checkout ; SRC=\"$1\"; DST=\"$2\"; WT_DIR=$(mktemp -d); if ! git worktree add \"$WT_DIR\" \"$DST\" >/dev/null 2>&1; then echo \"Error: Could not create worktree for '$DST'. Is it already checked out?\"; rm -rf \"$WT_DIR\"; return 1; fi; ( cd \"$WT_DIR\" && git merge \"$SRC\" ) && echo \"Successfully merged '$SRC' into '$DST'.\" || echo \"Merge failed due to conflicts. No changes were made.\"; git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1; }; f"
 
     r = rebase
     ri = rebase --interactive
