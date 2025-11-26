@@ -139,7 +139,7 @@ function install-local-apps {
   # (re-)Install local apps
   # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,
   # see https://github.com/sharkdp/fd/issues/417
-  
+
   function get_version {
     curl -s "https://api.github.com/repos/$1/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);"
   }
@@ -199,18 +199,103 @@ function install-local-apps {
 
 # == Prompt ==
 
-# https://code.mendhak.com/simple-bash-prompt-for-developers-ps1-git/
-function parse_git_dirty {
-  [[ $(git status --porcelain 2>/dev/null) ]] && echo " *"
-}
-function parse_git_branch {
-  git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty))/"
+function bash_git_status {
+  local branch=$(git rev-parse --abbrev-ref HEAD)
+
+  # Difference to remote
+  local remote_diff=""
+  if git rev-parse --abbrev-ref --symbolic-full-name @{u} &>/dev/null; then
+    local diff=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
+    if [ "$(echo "$diff" | awk '{print $1}')" -gt 0 ]; then remote_diff+="↑"; fi
+    if [ "$(echo "$diff" | awk '{print $2}')" -gt 0 ]; then remote_diff+="↓"; fi
+  fi
+  if [ -n "$remote_diff" ]; then remote_diff=" \033[00m$remote_diff"; fi
+
+  # Status indicator
+  has_staged=false
+  has_unstaged=false
+  has_untracked=false
+  while IFS= read -r line; do
+    local x="${line:0:1}" y="${line:1:1}"
+    if [[ "$x" == "?" ]]; then
+      has_untracked=true
+    elif [[ "$x" != " " ]]; then
+      has_staged=true
+    elif [[ "$y" != " " ]]; then
+      has_unstaged=true
+    fi
+  done < <(git status --porcelain 2>/dev/null)
+
+  local status_color=""
+  if $has_staged; then
+    if $has_unstaged || $has_untracked; then
+      status_color="\033[01;33m" # yellow
+    else
+      status_color="\033[01;32m" # green
+    fi
+  elif $has_unstaged || $has_untracked; then
+    status_color="\033[01;31m" # red
+  else
+    status_color="\033[01;34m" # blue
+  fi
+
+  local status_symbol=""
+  if $has_untracked; then
+    status_symbol+="?"
+  elif $has_unstaged; then
+    status_symbol+="!"
+  elif $has_staged; then
+    status_symbol+="+"
+  fi
+
+  local status=$([ $status_symbol ] && echo -e " $status_color$status_symbol\033[00m")
+
+  echo -e "\033[33m(${branch}${remote_diff}${status}\033[33m)\033[00m"
 }
 
-export PS1="\[\033[01;32m\]\u@\h \[\033[00;34m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+function bash_prompt {
+  # Capture exit status of the last command
+  status="$?"
+
+  # Reset PS1
+  PS1=""
+
+  # Jobs
+  jobs_count=$(jobs -p | wc -l)
+  if [ "$jobs_count" -gt 0 ]; then
+    PS1+="\[\033[00;36m\]\133${jobs_count}\135 \[\033[00m\]"
+  fi
+
+  # Username and hostname
+  PS1+="\[\033[00;32m\]\u@\h "
+
+  # pwd
+  PS1+="\[\033[00;34m\]\w "
+
+  # Git branch and status
+  if git rev-parse --git-dir &>/dev/null; then
+    PS1+="\$(bash_git_status) "
+  fi
+
+  # Glyph indicating last command status
+  if [ $status -eq 0 ]; then
+    PS1+="\[\033[00;34m\]"
+  else
+    PS1+="\[\033[00;31m\]"
+  fi
+  # Check if superuser
+  if [ "$EUID" -eq 0 ]; then
+    PS1+="# "
+  else
+    PS1+="$ "
+  fi
+
+  # Reset the prompt color
+  PS1+="\[\033[00m\]"
+}
 
 # Reset cursor shape to insert mode
-export PROMPT_COMMAND='echo -ne "\e[6 q"'
+export PROMPT_COMMAND='bash_prompt; echo -ne "\e[6 q"'
 
 # == NVM ==
 
