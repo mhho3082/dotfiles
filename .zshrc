@@ -623,18 +623,20 @@ _setup_ps1() {
     fi
 
     # Within-branch status
-    if (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNTRACKED )); then
-      RPROMPT+=" $GIT_STAGED_UNTRACKED"
-    elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED_DELETED )); then # deleted is also a type of untracked
-      RPROMPT+=" $GIT_STAGED_UNTRACKED"
-    elif (( VCS_STATUS_NUM_STAGED )) && (( VCS_STATUS_NUM_UNSTAGED )); then
-      RPROMPT+=" $GIT_STAGED_UNSTAGED"
-    elif (( VCS_STATUS_NUM_UNTRACKED )) || (( VCS_STATUS_NUM_UNSTAGED_DELETED )); then
+    # Combine "Untracked" and "Deleted" counts as they share the same logic
+    local is_untracked=$(( VCS_STATUS_NUM_UNTRACKED + VCS_STATUS_NUM_UNSTAGED_DELETED ))
+    if (( VCS_STATUS_NUM_STAGED )); then
+      if   (( is_untracked )); then
+        RPROMPT+=" $GIT_STAGED_UNTRACKED"
+      elif (( VCS_STATUS_NUM_UNSTAGED )); then
+        RPROMPT+=" $GIT_STAGED_UNSTAGED"
+      else
+        RPROMPT+=" $GIT_STAGED"
+      fi
+    elif (( is_untracked )); then
       RPROMPT+=" $GIT_UNTRACKED"
     elif (( VCS_STATUS_NUM_UNSTAGED )); then
       RPROMPT+=" $GIT_UNSTAGED"
-    elif (( VCS_STATUS_NUM_STAGED )); then
-      RPROMPT+=" $GIT_STAGED"
     else
       RPROMPT+=" $GIT_CLEAN"
     fi

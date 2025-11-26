@@ -51,7 +51,7 @@
 
 # Note: complex alias using `f() {}; f` format can use bash autocompletion
 # by prefixing with a null command `:`, e.g. `!f() { : git checkout ; ... }; f`;
-# see https://forum.upcase.com/t/git-bash-completion-with-aliases/4381
+# see https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 
 [alias]
     a = add
@@ -75,7 +75,7 @@
     cp = cherry-pick
 
     # Diff display options
-    diff-shorthand = "!~/.config/git/git-diff-shorthand.sh"
+    diff-shorthand = "!f() { : git diff ; ~/.config/git/git-diff-shorthand.sh $@; }; f"
     d   = diff-shorthand _
     df  = diff-shorthand f
     dw  = diff-shorthand w
