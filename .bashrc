@@ -200,9 +200,20 @@ function install-local-apps {
 # == Prompt ==
 
 function bash_git_status {
-  local branch=$(git rev-parse --abbrev-ref HEAD)
+  # In-branch status
+  local location=""
+  local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null || echo "")
+  local tag=$(git describe --tags --exact-match 2>/dev/null || echo "")
+  local sha=$(git rev-parse --short HEAD 2>/dev/null || echo "")
+  if [ -n "$branch" ]; then
+    location="\033[33m$branch"
+  elif [ -n "$tag" ]; then
+    location="\033[00;90m#\033[33m$tag"
+  else
+    location="\033[00;90m@\033[33m$sha"
+  fi
 
-  # Difference to remote
+  # Inter-branch status
   local remote_diff=""
   if git rev-parse --abbrev-ref --symbolic-full-name @{u} &>/dev/null; then
     local diff=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
@@ -210,6 +221,12 @@ function bash_git_status {
     if [ "$(echo "$diff" | awk '{print $2}')" -gt 0 ]; then remote_diff+="↓"; fi
   fi
   if [ -n "$remote_diff" ]; then remote_diff=" \033[00m$remote_diff"; fi
+
+  # Stash status
+  local stash_flag=""
+  if [ "$(git rev-list --walk-reflogs --ignore-missing --count refs/stash)" -gt 0 ]; then
+    stash_flag=" \033[00;90m⚑"
+  fi
 
   # Status indicator
   has_staged=false
@@ -250,7 +267,7 @@ function bash_git_status {
 
   local status=$([ $status_symbol ] && echo -e " $status_color$status_symbol\033[00m")
 
-  echo -e "\033[33m(${branch}${remote_diff}${status}\033[33m)\033[00m"
+  echo -e "\033[33m(${location}${remote_diff}${stash_flag}${status}\033[33m)\033[00m"
 }
 
 function bash_prompt {
@@ -295,7 +312,7 @@ function bash_prompt {
 }
 
 # Reset cursor shape to insert mode
-export PROMPT_COMMAND='bash_prompt; echo -ne "\e[6 q"'
+export PROMPT_COMMAND='bash_prompt'
 
 # == NVM ==
 
