@@ -90,7 +90,9 @@
 
     m = merge
     # Merge branches without switching to them
-    mr = "!f() { : git checkout ; SRC=\"$1\"; DST=\"$2\"; WT_DIR=$(mktemp -d); if ! git worktree add \"$WT_DIR\" \"$DST\" >/dev/null 2>&1; then echo \"Error: Could not create worktree for '$DST'. Is it already checked out?\"; rm -rf \"$WT_DIR\"; return 1; fi; ( cd \"$WT_DIR\" && git merge \"$SRC\" ) && echo \"Successfully merged '$SRC' into '$DST'.\" || echo \"Merge failed due to conflicts. No changes were made.\"; git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1; }; f"
+    # Usage: git mr <source-branch> <target-branch-1> <target-branch-2> ...
+    mr = "!f() { : git checkout ; SRC=\"$1\"; shift; for DST in \"$@\"; do git mr-specific \"$SRC\" \"$DST\"; echo; done; }; f"
+    mr-specific = "!f() { : git checkout ; SRC=\"$1\"; DST=\"$2\"; CURR=$(git rev-parse --abbrev-ref HEAD); if [ \"$DST\" = \"$CURR\" ]; then if git merge \"$SRC\"; then echo \"Successfully merged '$SRC' into '$DST'.\"; else echo \"Merge failed. Aborting and leaving working tree untouched.\"; git merge --abort >/dev/null 2>&1; fi; else WT_DIR=$(mktemp -d); if ! git worktree add \"$WT_DIR\" \"$DST\" >/dev/null 2>&1; then echo \"Error: Could not create worktree for '$DST'.\"; rm -rf \"$WT_DIR\"; return 1; fi; ( if cd \"$WT_DIR\"; then if git merge \"$SRC\"; then echo \"Successfully merged '$SRC' into '$DST'.\"; else echo \"Merge failed. No changes were made.\"; fi; fi ); git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1; fi; }; f"
 
     r = rebase
     ri = rebase --interactive
