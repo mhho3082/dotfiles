@@ -26,7 +26,7 @@ vim.g.maplocalleader = "\\"
 -- Basic theme settings
 vim.opt.termguicolors = true
 vim.opt.lazyredraw = true
-vim.g.updatetime = 100
+vim.opt.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
@@ -46,10 +46,12 @@ vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:ver25"
 -- highlight current line number (but not the whole line)
 -- https://stackoverflow.com/a/13275419
 vim.opt.cursorline = true
-vim.api.nvim_set_hl(0, "CursorLine", {})
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
   callback = function()
     vim.api.nvim_set_hl(0, "CursorLine", {})
+    local v = vim.api.nvim_get_hl(0, { name = "CursorLineNR", link = false })
+    v.bold = true
+    vim.api.nvim_set_hl(0, "CursorLineNR", v)
   end,
 })
 
@@ -246,6 +248,8 @@ lazy.setup({
         end
       end,
     },
+    -- Trailspace
+    { "nvim-mini/mini.trailspace", event = "VeryLazy", opts = {} },
 
     -- Readline-like insertion
     { "tpope/vim-rsi", event = "VeryLazy" },
@@ -271,7 +275,7 @@ lazy.setup({
     {
       "stevearc/oil.nvim",
       cond = not vim.g.vscode,
-      event = "VeryLazy",
+      lazy = false,
       opts = {
         view_options = {
           show_hidden = true,
@@ -332,7 +336,7 @@ lazy.setup({
       lazy = false,
       priority = 1000,
       config = function()
-        vim.background = "dark"
+        vim.opt.background = "dark"
         vim.g.gruvbox_material_background = "hard"
         vim.g.gruvbox_material_better_performance = true
         vim.cmd.colorscheme("gruvbox-material")
@@ -353,13 +357,14 @@ lazy.setup({
 
         -- Adjust the hl groups for `mini.jump2d` to be closer to `hop.nvim`
         -- (modifying https://github.com/sainnhe/gruvbox-material/blob/master/colors/gruvbox-material.vim#L1524)
-        local v = vim.api.nvim_get_hl_by_name("MiniIconsBlue", true) -- Blue
+        local v = vim.api.nvim_get_hl(0, { name = "MiniIconsBlue", link = false })
         v.bold = true
         v.nocombine = true
         vim.api.nvim_set_hl(0, "MiniJump2dSpot", v)
         vim.api.nvim_set_hl(0, "MiniJump2dSpotUnique", v)
+
         v.bold = false
-        v.foreground = adjust_brightness(v.foreground, 0.7)
+        v.fg = adjust_brightness(v.fg, 0.7)
         vim.api.nvim_set_hl(0, "MiniJump2dSpotAhead", v)
       end,
     },
@@ -530,7 +535,7 @@ lazy.setup({
     },
 
     -- Icons
-    { "kyazdani42/nvim-web-devicons", event = "VeryLazy", opts = {} },
+    { "nvim-tree/nvim-web-devicons", event = "VeryLazy", opts = {} },
 
     -- Smear cursor, for screen sharing
     {
@@ -540,8 +545,8 @@ lazy.setup({
       opts = {
         -- Disable by default
         enabled = false,
-        -- Fire hazard style
-        cursor_color = "#ff8800",
+        -- Fire hazard style, but neon
+        cursor_color = "#8ec07c",
         stiffness = 0.5,
         trailing_stiffness = 0.25,
         damping = 0.75,
@@ -565,8 +570,8 @@ lazy.setup({
         keymap = { preset = "super-tab" },
         sources = {
           default = function(_)
-            local success, node = pcall(vim.treesitter.get_node)
-            if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
+            local ok, node = pcall(vim.treesitter.get_node)
+            if ok and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
               return { "copilot", "path", "buffer" }
             else
               return { "copilot", "lsp", "path", "snippets", "buffer" }
@@ -635,9 +640,12 @@ lazy.setup({
           },
         })
 
-        vim.lsp.config("*", {
-          capabilities = vim.lsp.protocol.make_client_capabilities(),
-        })
+        local _, blink = pcall(require, "blink.cmp")
+        if blink then
+          vim.lsp.config("*", {
+            capabilities = blink.get_lsp_capabilities(),
+          })
+        end
 
         -- Specific handlers
         vim.lsp.config("lua_ls", {
@@ -819,7 +827,7 @@ lazy.setup({
         keymap({ "n", "v" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
 
         -- Manually show completion menu for AI suggestions
-        keymap({ "i" }, "<C-g>", require('blink.cmp').show, { desc = "Show" })
+        keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show" })
 
         -- A function to search for TODOs and more
         local function FindTodo()
@@ -932,9 +940,7 @@ lazy.setup({
         keymap("n", "<leader>ib", function()
           vim.o.background = vim.o.background == "dark" and "light" or "dark"
         end, { desc = "Background" })
-        keymap("n", "<leader>ic", function ()
-          smear.enabled = not smear.enabled
-        end, { desc = "Smear cursor" })
+        keymap("n", "<leader>ic", "<cmd>SmearCursorToggle<cr>", { desc = "Smear cursor" })
       end,
     },
 
@@ -1045,7 +1051,7 @@ end
 -- Check (and clear) the LSP log,
 -- which could get too large sometimes
 vim.api.nvim_create_user_command("CheckLspLog", function()
-  local log_path = os.getenv("HOME") .. "/.local/state/nvim/lsp.log"
+  local log_path = vim.fn.stdpath("state") .. "/lsp.log"
 
   local file = io.open(log_path, "r")
   if not file then
