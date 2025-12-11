@@ -18,7 +18,7 @@ fi
 export AUR_HELPER="paru"
 
 # Modify history
-HISTFILE="$HOME/.histfile"
+HISTFILE="$HOME/.zsh_history"
 HISTSIZE=1000
 SAVEHIST=1000
 
@@ -35,15 +35,9 @@ unsetopt autocd
 # https://unix.stackexchange.com/q/566943
 export LESS=FRX
 
-# Add /usr/local/sbin to path
-if [[ -d "/usr/local/sbin" ]]; then
-  path+="/usr/local/sbin"
-fi
-
-# Add ~/.local/bin to path
-if [[ -d "$HOME/.local/bin" ]]; then
-  path+="$HOME/.local/bin"
-fi
+# Add paths to PATH
+[[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
+[[ -d "$HOME/.local/bin" ]] && path+="$HOME/.local/bin"
 
 # Add gem path if any
 if (( $+commands[ruby] )); then
@@ -184,10 +178,10 @@ function zle-line-init {
 zle -N zle-line-init
 
 # Default in insert mode cursor
-function _default_cursor {
+function _default-cursor {
   echo -ne $CURSOR_INSERT
 }
-precmd_functions+=(_default_cursor)
+precmd_functions+=(_default-cursor)
 
 # Set up history search in ZLE
 # https://unix.stackexchange.com/a/97844
@@ -214,6 +208,11 @@ bindkey '^U' backward-kill-line
 bindkey '^K' kill-line
 
 # == Alias ==
+
+# Enable .zsh_aliases if exists
+if [[ -f "$HOME/.zsh_aliases" ]]; then
+  source "$HOME/.zsh_aliases"
+fi
 
 # Utility shortahnds
 alias c="clear"

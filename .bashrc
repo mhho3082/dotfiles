@@ -3,6 +3,22 @@
 
 # == Base config ==
 
+# Use nvim (or vim, or vi) for editing
+if command -v nvim >/dev/null 2>&1; then
+  export EDITOR=nvim
+  export VISUAL=nvim
+  export MANPAGER='nvim +Man!'
+elif command -v vim >/dev/null 2>&1; then
+  # Fallback to Vim if Neovim is not available
+  export EDITOR=vim
+  export VISUAL=vim
+  export MANPAGER="vim -M +MANPAGER -"
+else
+  # Default editor if neither Neovim nor Vim is available
+  export EDITOR=vi
+  export VISUAL=vi
+fi
+
 # Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -30,6 +46,9 @@ unset command_not_found_handle
 if [ "$TERM" = "tmux-256color" ] && ! infocmp -0qU "tmux-256color" >/dev/null 2>&1; then
   export TERM=screen-256color
 fi
+
+# Add local bin to PATH
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 
 # == History ==
 
@@ -71,31 +90,9 @@ if command -v __git_complete &>/dev/null; then
   done
 fi
 
-# == Extending with local apps ==
-
-if [ -d "$HOME/.local/bin" ]; then
-  # Add local bin to PATH
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-
-if command -v nvim >/dev/null 2>&1; then
-  export EDITOR=nvim
-  export VISUAL=nvim
-  export MANPAGER='nvim +Man!'
-elif command -v vim >/dev/null 2>&1; then
-  # Fallback to Vim if Neovim is not available
-  export EDITOR=vim
-  export VISUAL=vim
-  export MANPAGER="vim -M +MANPAGER -"
-else
-  # Default editor if neither Neovim nor Vim is available
-  export EDITOR=vi
-  export VISUAL=vi
-fi
-
 # == Aliases and functions ==
 
-# Enable .bash_aliases
+# Enable .bash_aliases if exists
 if [ -f "$HOME/.bash_aliases" ]; then
   . "$HOME/.bash_aliases"
 fi
@@ -140,7 +137,7 @@ function install-local-apps {
   # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,
   # see https://github.com/sharkdp/fd/issues/417
 
-  function get_version {
+  function get-version {
     curl -s "https://api.github.com/repos/$1/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);"
   }
 
@@ -163,7 +160,7 @@ function install-local-apps {
   # If server does not support recent glibc versions, use https://github.com/neovim/neovim-releases (glibc 2.17) instead
   glibc_version=$(ldd --version | head -n1 | awk '{print $NF}')
   neovim_repo=$([ "$glibc_version" == "2.17" ] && echo "neovim/neovim-releases" || echo "neovim/neovim")
-  version=$(get_version "$neovim_repo")
+  version=$(get-version "$neovim_repo")
   wget $WGET_OPTS "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.tar.gz"
   tar xzf "nvim-linux-x86_64.tar.gz"
   rm -rf "$HOME/.local/bin/nvim-linux-x86_64" "$HOME/.local/bin/nvim" || true
@@ -171,25 +168,25 @@ function install-local-apps {
   ln -s "$HOME/.local/bin/nvim-linux-x86_64/bin/nvim" "$HOME/.local/bin/nvim"
 
   # For fzf: https://github.com/junegunn/fzf/releases
-  version=$(get_version "junegunn/fzf")
+  version=$(get-version "junegunn/fzf")
   wget $WGET_OPTS "https://github.com/junegunn/fzf/releases/download/$version/fzf-${version#v}-linux_amd64.tar.gz"
   tar xzf "fzf-${version#v}-linux_amd64.tar.gz"
   mv fzf "$HOME/.local/bin/fzf"
 
   # For fd: https://github.com/sharkdp/fd/releases
-  version=$(get_version "sharkdp/fd")
+  version=$(get-version "sharkdp/fd")
   wget $WGET_OPTS "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
   mv "fd-$version-x86_64-unknown-linux-musl/fd" "$HOME/.local/bin/fd"
 
   # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
-  version=$(get_version "BurntSushi/ripgrep")
+  version=$(get-version "BurntSushi/ripgrep")
   wget $WGET_OPTS "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" "$HOME/.local/bin/rg"
 
   # For difftastic: https://github.com/Wilfred/difftastic/releases
-  version=$(get_version "Wilfred/difftastic")
+  version=$(get-version "Wilfred/difftastic")
   wget $WGET_OPTS "https://github.com/Wilfred/difftastic/releases/download/${version#v}/difft-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "difft-x86_64-unknown-linux-musl.tar.gz"
   mv difft "$HOME/.local/bin/difft"
@@ -199,7 +196,7 @@ function install-local-apps {
 
 # == Prompt ==
 
-function bash_git_status {
+function bash-git-status {
   # In-branch status
   local location=""
   local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null || echo "")
@@ -270,7 +267,7 @@ function bash_git_status {
   echo -e "\033[33m(${location}${remote_diff}${stash_flag}${status}\033[33m)\033[00m"
 }
 
-function bash_prompt {
+function bash-prompt {
   # Capture exit status of the last command
   status="$?"
 
@@ -291,7 +288,7 @@ function bash_prompt {
 
   # Git branch and status
   if git rev-parse --git-dir &>/dev/null; then
-    PS1+="\$(bash_git_status) "
+    PS1+="\$(bash-git-status) "
   fi
 
   # Glyph indicating last command status
@@ -312,7 +309,7 @@ function bash_prompt {
 }
 
 # Reset cursor shape to insert mode
-export PROMPT_COMMAND='bash_prompt'
+export PROMPT_COMMAND='bash-prompt'
 
 # == NVM ==
 
