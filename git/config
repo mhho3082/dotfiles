@@ -1,5 +1,7 @@
 [user]
-    # Please change this to your own username and email
+    # Please use `git config --global user.name "Your Name"`
+    # and `git config --global user.email "example@example.com"` to set these values;
+    # If you run `make` to copy dotfiles, these will be restored automatically
 
 # ---
 

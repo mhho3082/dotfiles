@@ -749,7 +749,7 @@ lazy.setup({
         local _, treesj = pcall(require, "treesj")
         local _, oil = pcall(require, "oil")
         local _, fzf = pcall(require, "fzf-lua")
-        local _, spectre = pcall(require, "spectre")
+        local _, grug = pcall(require, "grug-far")
         local _, smear = pcall(require, "smear_cursor")
         local _, vscode = pcall(require, "vscode")
 
@@ -771,10 +771,10 @@ lazy.setup({
         end
 
         -- Add easy copy/paste to system clipboard
-        keymap({ "n", "v" }, "gy", '"+y', { desc = "Copy to clipboard" })
-        keymap({ "n", "v" }, "gY", '"+Y', { desc = "Copy to clipboard" })
-        keymap({ "n", "v" }, "gp", '"+p', { desc = "Paste to clipboard" })
-        keymap({ "n", "v" }, "gP", '"+P', { desc = "Paste to clipboard" })
+        keymap({ "n", "x" }, "gy", '"+y', { desc = "Copy to clipboard" })
+        keymap({ "n", "x" }, "gY", '"+Y', { desc = "Copy to clipboard" })
+        keymap({ "n", "x" }, "gp", '"+p', { desc = "Paste to clipboard" })
+        keymap({ "n", "x" }, "gP", '"+P', { desc = "Paste to clipboard" })
 
         -- Operate on windows with <M-_> in normal mode
         vim.tbl_map(function(ops)
@@ -823,8 +823,8 @@ lazy.setup({
         end
 
         -- LSP maappings for both normal and visual modes
-        keymap({ "n", "v" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
-        keymap({ "n", "v" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
+        keymap({ "n", "x" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
+        keymap({ "n", "x" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
 
         -- Manually show completion menu for AI suggestions
         keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show" })
@@ -870,19 +870,33 @@ lazy.setup({
           --stylua: ignore end
         end
         if not vim.g.vscode then
+          -- Search and Replace
+          keymap("n", "<leader>a", grug.open, { desc = "Search and replace" })
+          keymap("x", "<leader>a", function()
+            grug.open({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
+          end, { desc = "Search and replace" })
+          keymap("n", "<leader>A", function()
+            grug.open({ prefills = { paths = vim.fn.expand("%") } })
+          end, { desc = "Search and replace in current file" })
+          keymap("x", "<leader>A", function()
+            grug.open({
+              search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))),
+              prefills = { paths = vim.fn.expand("%") },
+            })
+          end, { desc = "Search and replace in current file" })
+        end
+        if not vim.g.vscode then
           -- Search
-          keymap("n", "<leader>a", fzf.lsp_document_symbols, { desc = "Symbols" })
           keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
           keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
           keymap("n", "<leader>t", fzf.files, { desc = "Files" })
+          keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
           keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
           keymap("n", "<leader>f", FindTodo, { desc = "Find TODOs" })
-          -- Search and Replace
-          keymap("n", "<leader>p", spectre.toggle, { desc = "Search and Replace" })
           -- Undo tree
           keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
           -- Search selected text in visual mode
-          keymap("v", "<leader>s", function()
+          keymap("x", "<leader>s", function()
             fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
           end, { desc = "Search" })
         else
@@ -992,13 +1006,9 @@ lazy.setup({
 
     -- ... and replace
     {
-      "nvim-pack/nvim-spectre",
+      "MagicDuck/grug-far.nvim",
       cond = not vim.g.vscode,
       event = "VeryLazy",
-      opts = {
-        -- https://github.com/nvim-pack/nvim-spectre/issues/118#issuecomment-1531683211
-        replace_engine = { ["sed"] = { cmd = "sed", args = { "-i", "", "-E" } } },
-      },
     },
 
     -- Run commands
