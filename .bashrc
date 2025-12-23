@@ -142,7 +142,7 @@ function install-local-apps {
   }
 
   mkdir -p "$HOME/.local/bin"
-  TEMP_DIR=$(mktemp -d) && pushd "$TEMP_DIR" >/dev/null
+  TEMP_DIR=$(mktemp -d /tmp/install.XXXXXX) && pushd "$TEMP_DIR" >/dev/null
 
   WGET_OPTS="--quiet --show-progress --progress=bar:force:noscroll"
 

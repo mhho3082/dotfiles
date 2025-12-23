@@ -1007,6 +1007,7 @@ lazy.setup({
     -- ... and replace
     {
       "MagicDuck/grug-far.nvim",
+      version = "*",
       cond = not vim.g.vscode,
       event = "VeryLazy",
     },
