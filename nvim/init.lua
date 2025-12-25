@@ -1,7 +1,7 @@
--- Programs needed: unzip, ripgrep, fd
+-- Programs needed: `unzip`, `ripgrep`, `fd`
 
 -- Programs advised:
--- `tree-sitter` (and `tree-sitter-cli`) for install-from-grammer syntax files, esp. latex
+-- `tree-sitter` (and `tree-sitter-cli`) for install-from-grammer syntax files, esp. LaTeX
 -- `fswatch` on Linux to improve LSP file watching performance (see https://www.reddit.com/r/neovim/comments/1b4bk5h)
 
 -- Notes: (for particular LSP services)
@@ -93,9 +93,6 @@ vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir/"
 
--- Allow to read project-local configs
-vim.opt.exrc = true
-
 -- Remove 'c no curly braces' errors
 vim.g.c_no_curly_error = 1
 
@@ -110,7 +107,7 @@ vim.g.markdown_minlines = 100
 -- https://github.com/neovim/neovim/pull/16600
 vim.filetype.add({
   extension = {
-    -- For markdown inline block
+    -- For Markdown inline block
     matplotlib = "python",
   },
   pattern = {
@@ -169,7 +166,7 @@ lazy.setup({
       event = "VeryLazy",
       opts = {
         custom_surroundings = {
-          -- For laravel translated strings
+          -- For Laravel translated strings
           ["-"] = {
             input = { "{{__%('.-'%)}}", "^{{__%('().*()'%)}}$" },
             output = { left = "{{__('", right = "')}}" },
@@ -209,7 +206,7 @@ lazy.setup({
         },
       },
     },
-    -- Multi-line f/t
+    -- Multiline `f`/`t`
     {
       "nvim-mini/mini.jump",
       event = "VeryLazy",
@@ -274,7 +271,6 @@ lazy.setup({
     -- File browser
     {
       "stevearc/oil.nvim",
-      cond = not vim.g.vscode,
       lazy = false,
       opts = {
         view_options = {
@@ -292,7 +288,6 @@ lazy.setup({
     -- Undo tree
     {
       "mbbill/undotree",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       config = function()
         -- Open on the right
@@ -301,25 +296,13 @@ lazy.setup({
     },
 
     -- Move around better
-    {
-      "chrisgrieser/nvim-spider",
-      event = "VeryLazy",
-      config = function()
-        local spider = require("spider")
-        vim.tbl_map(function(ops)
-          keymap({ "n", "v", "o", "x" }, ops, function()
-            spider.motion(ops)
-          end, { desc = "Spider-" .. ops })
-        end, { "w", "e", "b", "ge" })
-      end,
-    },
+    { "chrisgrieser/nvim-spider", event = "VeryLazy" },
 
     -- VIEW --
 
     -- Indent guide
     {
       "lukas-reineke/indent-blankline.nvim",
-      cond = not vim.g.vscode,
       main = "ibl",
       event = "VeryLazy",
       opts = {
@@ -332,7 +315,6 @@ lazy.setup({
     -- Colorscheme
     {
       "sainnhe/gruvbox-material",
-      cond = not vim.g.vscode,
       lazy = false,
       priority = 1000,
       config = function()
@@ -355,7 +337,7 @@ lazy.setup({
           )
         end
 
-        -- Adjust the hl groups for `mini.jump2d` to be closer to `hop.nvim`
+        -- Adjust the highlight groups for `mini.jump2d` to be closer to `hop.nvim`
         -- (modifying https://github.com/sainnhe/gruvbox-material/blob/master/colors/gruvbox-material.vim#L1524)
         local v = vim.api.nvim_get_hl(0, { name = "MiniIconsBlue", link = false })
         v.bold = true
@@ -446,10 +428,9 @@ lazy.setup({
       end,
     },
 
-    -- Statusline and tabline
+    -- Statusline and tab-line
     {
       "nvim-lualine/lualine.nvim",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       config = function()
         -- gitsigns integration copied from:
@@ -540,7 +521,6 @@ lazy.setup({
     -- Smear cursor, for screen sharing
     {
       "sphamba/smear-cursor.nvim",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       opts = {
         -- Disable by default
@@ -559,11 +539,10 @@ lazy.setup({
 
     -- COPILOTS --
 
-    -- Auto-complete
+    -- Autocomplete
     {
       "saghen/blink.cmp",
       version = "*",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       dependencies = { "fang2hou/blink-copilot" },
       opts = {
@@ -604,7 +583,6 @@ lazy.setup({
     -- GitHub Copilot
     {
       "zbirenbaum/copilot.lua",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       opts = {
         suggestion = { enabled = false },
@@ -725,7 +703,6 @@ lazy.setup({
     -- LSP server status
     {
       "j-hui/fidget.nvim",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       opts = { progress = { ignore = { "harper_ls" }, display = { render_limit = 5, done_icon = "✓" } } },
     },
@@ -746,29 +723,33 @@ lazy.setup({
           wk.setup(opts)
         end
 
+        local _, spider = pcall(require, "spider")
         local _, treesj = pcall(require, "treesj")
         local _, oil = pcall(require, "oil")
         local _, fzf = pcall(require, "fzf-lua")
         local _, grug = pcall(require, "grug-far")
-        local _, smear = pcall(require, "smear_cursor")
-        local _, vscode = pcall(require, "vscode")
 
         -- Move cursor by display lines by default
         vim.tbl_map(function(ops)
           keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
         end, { "j", "k", "0", "^", "$", "<Down>", "<Up>" })
 
-        -- Fix lua API keyboard interrupt issue
+        -- Better `w`, `e`, and `b` motions
+        vim.tbl_map(function(ops)
+          keymap({ "n", "v", "o", "x" }, ops, function()
+            spider.motion(ops)
+          end, { desc = "Spider-" .. ops })
+        end, { "w", "e", "b", "ge" })
+
+        -- Fix Lua API keyboard interrupt issue
         keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
 
-        if not vim.g.vscode then
-          -- Open oil with -
-          keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
+        -- Open oil with -
+        keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
 
-          -- Split/join lines
-          keymap({ "n" }, "gs", treesj.split, { desc = "Split" })
-          keymap({ "n" }, "gj", treesj.join, { desc = "Join" })
-        end
+        -- Split/join lines
+        keymap({ "n" }, "gs", treesj.split, { desc = "Split" })
+        keymap({ "n" }, "gj", treesj.join, { desc = "Join" })
 
         -- Add easy copy/paste to system clipboard
         keymap({ "n", "x" }, "gy", '"+y', { desc = "Copy to clipboard" })
@@ -792,35 +773,30 @@ lazy.setup({
         end
         keymap("x", "zz", CenterVisualSelection, { desc = "Center" })
 
+        -- Remove default LSP mappings
+        vim.keymap.del("n", "grt")
+        vim.keymap.del("n", "grr")
+        vim.keymap.del("n", "grn")
+        vim.keymap.del("n", "gra")
+        vim.keymap.del("n", "gri")
+
         -- LSP mappings
-        if not vim.g.vscode then
-          keymap("n", "<C-n>", vim.lsp.buf.hover, { desc = "Hover" })
-          keymap("n", "<C-e>", function()
-            vim.diagnostic.open_float(0, { scope = "cursor" })
-          end, { desc = "Diagnostics" })
-          keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
+        keymap("n", "<C-n>", vim.lsp.buf.hover, { desc = "Hover" })
+        keymap("n", "<C-e>", function()
+          vim.diagnostic.open_float(0, { scope = "cursor" })
+        end, { desc = "Diagnostics" })
+        keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
 
-          keymap("n", "go", function()
-            -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-            fzf.lsp_definitions({ jump1 = true })
-          end, { desc = "Goto definition" })
-          keymap("n", "gO", function()
-            fzf.lsp_references({
-              jump1 = true,
-              includeDeclaration = false,
-            })
-          end, { desc = "Goto references" })
+        -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+        keymap("n", "go", function()
+          fzf.lsp_definitions({ jump1 = true })
+        end, { desc = "Goto definition" })
+        keymap("n", "gO", function()
+          fzf.lsp_references({ jump1 = true, includeDeclaration = false })
+        end, { desc = "Goto references" })
 
-          keymap("n", "<M-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-          keymap("n", "<M-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
-        else
-        --stylua: ignore start
-        keymap("n", "<C-n>", function() vscode.action("editor.action.showHover") end, { desc = "Hover" })
-        keymap("n", "gr", function() vscode.action("editor.action.rename") end, { desc = "Rename" })
-        keymap("n", "go", function() vscode.action("editor.action.goToDefinition") end, { desc = "Goto definition" })
-        keymap("n", "gO", function() vscode.action("editor.action.referenceSearch.trigger") end, { desc = "Goto references" })
-          --stylua: ignore end
-        end
+        keymap("n", "<M-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+        keymap("n", "<M-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
 
         -- LSP maappings for both normal and visual modes
         keymap({ "n", "x" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
@@ -835,14 +811,10 @@ lazy.setup({
         -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
         --stylua: ignore start
         local tags = {
-          -- To-do
-          "TODO", "WIP",
-          -- Note
-          "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST",
-          -- Warning
-          "HACK", "WARNING", "WARN", "FIX",
-          -- Danger
-          "FIXME", "BUG", "ERROR",
+          "TODO", "WIP", -- To-do
+          "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST", -- Note
+          "HACK", "WARNING", "WARN", "FIX", -- Warning
+          "FIXME", "BUG", "ERROR", -- Danger
         }
           --stylua: ignore end
 
@@ -857,94 +829,72 @@ lazy.setup({
 
         -- The great <leader> keymap
         wk.add({ { "<leader>", group = "Leader" } })
-        -- Basics
+
+        -- The basics
         keymap("n", "<leader>w", "<cmd>w!<cr>", { desc = "Save" })
         keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
         keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohl" })
+
         -- Make
-        if not vim.g.vscode then
-          keymap("n", "<leader>b", "<cmd>OverseerRun<cr>", { desc = "Build" })
-        else
-        --stylua: ignore start
-        keymap("n", "<leader>b", function() vscode.action("workbench.action.tasks.build") end, { desc = "Build" })
-          --stylua: ignore end
-        end
-        if not vim.g.vscode then
-          -- Search and Replace
-          keymap("n", "<leader>a", grug.open, { desc = "Search and replace" })
-          keymap("x", "<leader>a", function()
-            grug.open({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
-          end, { desc = "Search and replace" })
-          keymap("n", "<leader>A", function()
-            grug.open({ prefills = { paths = vim.fn.expand("%") } })
-          end, { desc = "Search and replace in current file" })
-          keymap("x", "<leader>A", function()
-            grug.open({
-              search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))),
-              prefills = { paths = vim.fn.expand("%") },
-            })
-          end, { desc = "Search and replace in current file" })
-        end
-        if not vim.g.vscode then
-          -- Search
-          keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
-          keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
-          keymap("n", "<leader>t", fzf.files, { desc = "Files" })
-          keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
-          keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
-          keymap("n", "<leader>f", FindTodo, { desc = "Find TODOs" })
-          -- Undo tree
-          keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
-          -- Search selected text in visual mode
-          keymap("x", "<leader>s", function()
-            fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
-          end, { desc = "Search" })
-        else
-        --stylua: ignore start
-        keymap("n", "<leader>s", function() vscode.action("workbench.view.search") end, { desc = "Search" })
-        keymap("n", "<leader>t", function() vscode.action("workbench.action.quickOpen") end, { desc = "Files" })
-          --stylua: ignore end
-        end
+        keymap("n", "<leader>b", "<cmd>OverseerRun<cr>", { desc = "Build" })
+
+        -- Search and replace
+        keymap("n", "<leader>a", grug.open, { desc = "Search and replace" })
+        keymap("x", "<leader>a", function()
+          grug.open({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
+        end, { desc = "Search and replace" })
+        keymap("n", "<leader>A", function()
+          grug.open({ prefills = { paths = vim.fn.expand("%") } })
+        end, { desc = "Search and replace in current file" })
+        keymap("x", "<leader>A", function()
+          grug.open({
+            search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))),
+            prefills = { paths = vim.fn.expand("%") },
+          })
+        end, { desc = "Search and replace in current file" })
+
+        -- Search
+        keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
+        keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
+        keymap("n", "<leader>t", fzf.files, { desc = "Files" })
+        keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
+        keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
+        keymap("n", "<leader>f", FindTodo, { desc = "Find TODOs" })
+        -- Search selected text in visual mode
+        keymap("x", "<leader>s", function()
+          fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
+        end, { desc = "Search" })
+
+        -- Undo tree
+        keymap("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo tree" })
+
         -- Plugins (group: `l`)
         wk.add({ { "<leader>l", group = "Plugins" } })
         keymap("n", "<leader>ll", "<cmd>Lazy sync<cr>", { desc = "Lazy Sync" })
         keymap("n", "<leader>lu", "<cmd>Lazy update<cr>", { desc = "Lazy Update" })
         keymap("n", "<leader>lp", "<cmd>Lazy profile<cr>", { desc = "Lazy Profile" })
         keymap("n", "<leader>lm", "<cmd>Mason<cr>", { desc = "Mason" })
-        if not vim.g.vscode then
-          -- Git (group: `g`)
-          wk.add({ { "<leader>g", group = "Git" } })
-          keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
-          keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
-          keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
-          keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
-          keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
-          keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
-          keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
-          -- Git hunks (group: `h`)
-          wk.add({ { "<leader>h", group = "Git hunks" } })
-          keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
-          keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
-          keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
-          keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
-          keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
-          keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
-          keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
-        else
-        --stylua: ignore start
+
         -- Git (group: `g`)
-        keymap("n", "<leader>gb", function() vscode.action("gitlens.toggleLineBlame") end, { desc = "Git Blame" })
-        keymap("n", "<leader>gd", function() vscode.action("gitlens.diffWithPrevious") end, { desc = "Git Diff" })
-        keymap("n", "<leader>gf", function() vscode.action("git.fetch") end, { desc = "Git Fetch" })
-        keymap("n", "<leader>gm", function() vscode.action("git.merge") end, { desc = "Git Merge" })
-        keymap("n", "<leader>ga", function() vscode.action("git.stage") end, { desc = "Git Add" })
-        keymap("n", "<leader>gc", function() vscode.action("git.commit") end, { desc = "Git Commit" })
-        keymap("n", "<leader>gp", function() vscode.action("git.push") end, { desc = "Git Push" })
+        wk.add({ { "<leader>g", group = "Git" } })
+        keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
+        keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
+        keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
+        keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
+        keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
+        keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
+        keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
+
         -- Git hunks (group: `h`)
-        keymap("n", "<leader>hn", function() vscode.action("gitlens.annotations.nextChange") end, { desc = "Next hunk" })
-        keymap("n", "<leader>hp", function() vscode.action("gitlens.annotations.previousChange") end, { desc = "Previous hunk" })
-          --stylua: ignore end
-        end
+        wk.add({ { "<leader>h", group = "Git hunks" } })
+        keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
+        keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
+        keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
+        keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
+        keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
+        keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
+        keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
+
         -- Interface (group: `i`)
         wk.add({ { "<leader>i", group = "Interface" } })
         keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
@@ -968,16 +918,14 @@ lazy.setup({
     },
     {
       "sindrets/diffview.nvim",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       dependencies = { "nvim-lua/plenary.nvim" },
       opts = {},
     },
 
-    -- Search...
+    -- Search and go to files
     {
       "ibhagwan/fzf-lua",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       opts = {
         defaults = {
@@ -1004,18 +952,16 @@ lazy.setup({
       end,
     },
 
-    -- ... and replace
+    -- Search and replace
     {
       "MagicDuck/grug-far.nvim",
       version = "*",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
     },
 
     -- Run commands
     {
       "stevearc/overseer.nvim",
-      cond = not vim.g.vscode,
       event = "VeryLazy",
       opts = {},
     },
