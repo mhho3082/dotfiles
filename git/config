@@ -86,9 +86,7 @@
 
     f = fetch
     # Fetch remote branches, and update existing local branches (without creating new ones)
-    fe = "!f() { git fetch ${1:-$(git default-remote)} && git branch | grep -v '^*' | xargs -P4 -I{} git fetch ${1:-$(git default-remote)} {}:{}; }; f"
-    # Fetch remote branches, and update / create local branches to match
-    fa = "!f() { git fetch ${1:-$(git default-remote)} && git branch -r | grep -v \\> | grep -v $(git rev-parse --abbrev-ref HEAD) | sed \"s@${1:-$(git default-remote)}/@@\" | xargs -P4 -I{} git fetch ${1:-$(git default-remote)} {}:{}; }; f"
+    fe = "!f() { dr=\"${1:-$(git default-remote)}\"; git fetch \"$dr\"; git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads | while read -r b u; do [ -z \"$u\" ] && continue; [ \"$b\" = \"$(git rev-parse --abbrev-ref HEAD)\" ] && continue; r=\"${u%%/*}\"; ub=\"${u#*/}\"; git remote get-url \"$r\" >/dev/null 2>&1 || continue; git fetch \"$r\" \"$ub:$b\"; done; }; f"
 
     m = merge
     # Merge branches without switching to them
