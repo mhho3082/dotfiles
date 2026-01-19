@@ -145,6 +145,10 @@ function install-local-apps {
   TEMP_DIR=$(mktemp -d /tmp/install.XXXXXX) && pushd "$TEMP_DIR" >/dev/null
 
   WGET_OPTS="--quiet --show-progress --progress=bar:force:noscroll"
+  # If wget is too old to support --show-progress, fallback to no progress
+  if ! wget --help | grep -q -- '--show-progress'; then
+    WGET_OPTS="--quiet"
+  fi
 
   # Check Github API rate limit
   rate_data=$(curl -s "https://api.github.com/rate_limit")
