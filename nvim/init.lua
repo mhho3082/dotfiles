@@ -358,6 +358,7 @@ lazy.setup({
         require("nvim-treesitter.install").update({})()
       end,
       event = "VeryLazy",
+      branch = "master",
       dependencies = {
         {
           "JoosepAlviste/nvim-ts-context-commentstring",
@@ -593,9 +594,7 @@ lazy.setup({
     -- Chat
     {
       "CopilotC-Nvim/CopilotChat.nvim",
-      dependencies = {
-        { "nvim-lua/plenary.nvim", branch = "master" },
-      },
+      dependencies = { "nvim-lua/plenary.nvim" },
       build = "make tiktoken",
       -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
       opts = {
