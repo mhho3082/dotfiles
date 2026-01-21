@@ -519,6 +519,13 @@ lazy.setup({
     -- Icons
     { "nvim-tree/nvim-web-devicons", event = "VeryLazy", opts = {} },
 
+    -- Center current buffer
+    {
+      "shortcuts/no-neck-pain.nvim",
+      version = "*",
+      opts = { buffers = { wo = { fillchars = "eob: " } } },
+    },
+
     -- Smear cursor, for screen sharing
     {
       "sphamba/smear-cursor.nvim",
@@ -924,6 +931,7 @@ lazy.setup({
           vim.o.background = vim.o.background == "dark" and "light" or "dark"
         end, { desc = "Background" })
         keymap("n", "<leader>ic", "<cmd>SmearCursorToggle<cr>", { desc = "Smear cursor" })
+        keymap("n", "<leader>ip", "<cmd>NoNeckPain<cr>", { desc = "No neck pain" })
       end,
     },
 
