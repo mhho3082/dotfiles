@@ -26,6 +26,7 @@ SAVEHIST=1000
 setopt correct
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
+setopt hist_reduce_blanks
 setopt prompt_subst
 setopt no_case_glob
 unsetopt beep
