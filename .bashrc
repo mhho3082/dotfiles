@@ -111,13 +111,19 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Handy aliases
-alias l='ls -AlhF --group-directories-first --color=auto'
-alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
 alias e="$EDITOR"
 alias v="$VISUAL"
 alias g='git'
 alias c='clear'
 alias q='exit'
+
+if command -v eza >/dev/null 2>&1; then
+  alias l='eza --all --long --icons --sort=type --git --hyperlink'
+  alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
+else
+  alias l='ls -AlhF --group-directories-first --color=auto'
+  alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
+fi
 
 # Generate ".." shortcuts
 # (since paths are set to not be considered executables by themselves)
@@ -153,7 +159,7 @@ function install-local-apps {
   # Check Github API rate limit
   rate_data=$(curl -s "https://api.github.com/rate_limit")
   rate_remaining=$(echo "$rate_data" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.remaining);")
-  if [ "$rate_remaining" -lt 10 ]; then
+  if [ "$rate_remaining" -lt 12 ]; then
     rate_reset=$(echo "$rate_data" | node -e "console.log(new Date(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.reset * 1000).toLocaleString('en-GB'));")
     echo "Warning: GitHub API rate limit is low ($rate_remaining remaining)."
     echo "Consider waiting until $rate_reset before running this script again."
@@ -188,6 +194,12 @@ function install-local-apps {
   wget $WGET_OPTS "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" "$HOME/.local/bin/rg"
+
+  # For eza: https://github.com/eza-community/eza/releases
+  version=$(get-version "eza-community/eza")
+  wget $WGET_OPTS "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz"
+  tar xzf "eza_x86_64-unknown-linux-gnu.tar.gz"
+  mv "eza" "$HOME/.local/bin/eza"
 
   # For difftastic: https://github.com/Wilfred/difftastic/releases
   version=$(get-version "Wilfred/difftastic")
