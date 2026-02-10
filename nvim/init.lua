@@ -46,14 +46,33 @@ vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:ver25"
 -- highlight current line number (but not the whole line)
 -- https://stackoverflow.com/a/13275419
 vim.opt.cursorline = true
+local cursorline_hl = nil
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
   callback = function()
+    cursorline_hl = vim.api.nvim_get_hl(0, { name = "CursorLine", link = false })
     vim.api.nvim_set_hl(0, "CursorLine", {})
     local v = vim.api.nvim_get_hl(0, { name = "CursorLineNR", link = false })
     v.bold = true
     vim.api.nvim_set_hl(0, "CursorLineNR", v)
   end,
 })
+
+-- Restore `cursorline` highlight when toggled on
+local cursorline_enabled = false
+local function toggle_cursorline()
+  cursorline_enabled = not cursorline_enabled
+  if cursorline_enabled then
+    vim.api.nvim_set_hl(0, "CursorLine", cursorline_hl)
+  else
+    vim.api.nvim_set_hl(0, "CursorLine", {})
+  end
+end
+
+-- Use dark background by default
+vim.opt.background = "dark"
+local function toggle_background()
+  vim.o.background = vim.o.background == "dark" and "light" or "dark"
+end
 
 -- Split below (s) and right (v)
 vim.opt.splitbelow = true
@@ -161,19 +180,7 @@ lazy.setup({
     -- More targets
     { "nvim-mini/mini.ai", event = "VeryLazy", opts = {} },
     -- Surround
-    {
-      "nvim-mini/mini.surround",
-      event = "VeryLazy",
-      opts = {
-        custom_surroundings = {
-          -- For Laravel translated strings
-          ["-"] = {
-            input = { "{{__%('.-'%)}}", "^{{__%('().*()'%)}}$" },
-            output = { left = "{{__('", right = "')}}" },
-          },
-        },
-      },
-    },
+    { "nvim-mini/mini.surround", event = "VeryLazy", opts = {} },
     -- Comments
     {
       "nvim-mini/mini.comment",
@@ -183,26 +190,6 @@ lazy.setup({
           custom_commentstring = function()
             return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
           end,
-        },
-      },
-    },
-    -- Align
-    { "nvim-mini/mini.align", event = "VeryLazy", opts = {} },
-    -- Move code
-    {
-      "nvim-mini/mini.move",
-      event = "VeryLazy",
-      opts = {
-        mappings = {
-          left = "<S-Left>",
-          right = "<S-Right>",
-          down = "<S-Down>",
-          up = "<S-Up>",
-
-          line_left = "<S-Left>",
-          line_right = "<S-Right>",
-          line_down = "<S-Down>",
-          line_up = "<S-Up>",
         },
       },
     },
@@ -222,31 +209,11 @@ lazy.setup({
         },
       },
     },
-    -- Easymotion
-    {
-      "nvim-mini/mini.jump2d",
-      event = "VeryLazy",
-      opts = {
-        labels = "tsraneiogmdhpflu",
-        view = { dim = true, n_steps_ahead = 1 },
-        allowed_lines = { blank = false },
-        mappings = { start_jumping = "S" },
-      },
-      config = function(_, opts)
-        local jump2d = require("mini.jump2d")
-
-        opts = vim.tbl_extend("force", {
-          -- One or more [\w-_], containing at least one \w
-          spotter = jump2d.gen_spotter.pattern("[%w_%-]*%w[%w_%-]*"),
-        }, opts or {})
-
-        if opts then
-          jump2d.setup(opts)
-        end
-      end,
-    },
     -- Trailspace
     { "nvim-mini/mini.trailspace", event = "VeryLazy", opts = {} },
+
+    -- Move around better
+    { "chrisgrieser/nvim-spider", event = "VeryLazy" },
 
     -- Readline-like insertion
     { "tpope/vim-rsi", event = "VeryLazy" },
@@ -259,9 +226,7 @@ lazy.setup({
       "Wansmer/treesj",
       event = "VeryLazy",
       dependencies = { "nvim-treesitter/nvim-treesitter" },
-      opts = {
-        use_default_keymaps = false,
-      },
+      opts = { use_default_keymaps = false },
     },
 
     -- Pairs
@@ -295,9 +260,6 @@ lazy.setup({
       end,
     },
 
-    -- Move around better
-    { "chrisgrieser/nvim-spider", event = "VeryLazy" },
-
     -- VIEW --
 
     -- Indent guide
@@ -318,36 +280,9 @@ lazy.setup({
       lazy = false,
       priority = 1000,
       config = function()
-        vim.opt.background = "dark"
         vim.g.gruvbox_material_background = "hard"
         vim.g.gruvbox_material_better_performance = true
         vim.cmd.colorscheme("gruvbox-material")
-
-        -- Function to brighten/dim a color
-        local bit = require("bit")
-        local function adjust_brightness(color, factor)
-          local r = bit.band(bit.rshift(color, 16), 0xFF)
-          local g = bit.band(bit.rshift(color, 8), 0xFF)
-          local b = bit.band(color, 0xFF)
-          factor = factor
-          return bit.bor(
-            bit.lshift(math.floor(r * factor), 16),
-            bit.lshift(math.floor(g * factor), 8),
-            math.floor(b * factor)
-          )
-        end
-
-        -- Adjust the highlight groups for `mini.jump2d` to be closer to `hop.nvim`
-        -- (modifying https://github.com/sainnhe/gruvbox-material/blob/master/colors/gruvbox-material.vim#L1524)
-        local v = vim.api.nvim_get_hl(0, { name = "MiniIconsBlue", link = false })
-        v.bold = true
-        v.nocombine = true
-        vim.api.nvim_set_hl(0, "MiniJump2dSpot", v)
-        vim.api.nvim_set_hl(0, "MiniJump2dSpotUnique", v)
-
-        v.bold = false
-        v.fg = adjust_brightness(v.fg, 0.7)
-        vim.api.nvim_set_hl(0, "MiniJump2dSpotAhead", v)
       end,
     },
 
@@ -480,70 +415,13 @@ lazy.setup({
             lualine_z = {},
           },
           tabline = {},
-          extensions = {
-            "fugitive",
-            "fzf",
-            "lazy",
-            "mason",
-            {
-              -- A modified version of
-              -- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/extensions/oil.lua
-              -- to work with ssh, see
-              -- https://github.com/stevearc/oil.nvim/blob/1360be5fda9c67338331abfcd80de2afbb395bcd/doc/recipes.md?plain=1#L39
-              sections = {
-                lualine_a = {
-                  function()
-                    local ok, oil = pcall(require, "oil")
-                    if ok then
-                      local dir = oil.get_current_dir()
-                      if dir then
-                        return vim.fn.fnamemodify(dir, ":~")
-                      else
-                        -- If there is no current directory (e.g. over ssh), just show the buffer name
-                        return vim.api.nvim_buf_get_name(0)
-                      end
-                    else
-                      return ""
-                    end
-                  end,
-                },
-              },
-
-              filetypes = { "oil" },
-            },
-          },
+          extensions = { "fugitive", "fzf", "lazy", "mason", "oil" },
         })
       end,
     },
 
     -- Icons
     { "nvim-tree/nvim-web-devicons", event = "VeryLazy", opts = {} },
-
-    -- Center current buffer
-    {
-      "shortcuts/no-neck-pain.nvim",
-      version = "*",
-      opts = { buffers = { wo = { fillchars = "eob: " } } },
-    },
-
-    -- Smear cursor, for screen sharing
-    {
-      "sphamba/smear-cursor.nvim",
-      event = "VeryLazy",
-      opts = {
-        -- Disable by default
-        enabled = false,
-        -- Fire hazard style, but neon
-        cursor_color = "#8ec07c",
-        stiffness = 0.5,
-        trailing_stiffness = 0.25,
-        damping = 0.75,
-        trailing_exponent = 5,
-        never_draw_over_target = true,
-        hide_target_hack = true,
-        gamma = 1,
-      },
-    },
 
     -- COPILOTS --
 
@@ -859,7 +737,7 @@ lazy.setup({
         keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohl" })
 
         -- Make
-        keymap("n", "<leader>b", "<cmd>OverseerRun<cr>", { desc = "Build" })
+        keymap("n", "<leader>m", "<cmd>make<cr>", { desc = "Make" })
 
         -- Search and replace
         keymap("n", "<leader>a", grug.open, { desc = "Search and replace" })
@@ -904,7 +782,7 @@ lazy.setup({
         -- Git (group: `g`)
         wk.add({ { "<leader>g", group = "Git" } })
         keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
-        keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff" }) -- Or `Gvdiffsplit`
+        keymap("n", "<leader>gd", "<cmd>Gdiffsplit<cr>", { desc = "Git Diff" })
         keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
         keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
         keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
@@ -926,12 +804,9 @@ lazy.setup({
         keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
         keymap("n", "<leader>is", "<cmd>set spell!<cr>", { desc = "Spell" })
         keymap("n", "<leader>iw", "<cmd>set wrap!<cr>", { desc = "Wrap" })
-        keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
-        keymap("n", "<leader>ib", function()
-          vim.o.background = vim.o.background == "dark" and "light" or "dark"
-        end, { desc = "Background" })
-        keymap("n", "<leader>ic", "<cmd>SmearCursorToggle<cr>", { desc = "Smear cursor" })
-        keymap("n", "<leader>ip", "<cmd>NoNeckPain<cr>", { desc = "No neck pain" })
+        keymap("n", "<leader>ic", toggle_cursorline, { desc = "CursorLine" })
+        keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "IndentLine" })
+        keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
       end,
     },
 
@@ -942,12 +817,6 @@ lazy.setup({
       event = "VeryLazy",
       dependencies = { "nvim-lua/plenary.nvim" },
       opts = { signs_staged_enable = false },
-    },
-    {
-      "sindrets/diffview.nvim",
-      event = "VeryLazy",
-      dependencies = { "nvim-lua/plenary.nvim" },
-      opts = {},
     },
 
     -- Search and go to files
@@ -980,18 +849,7 @@ lazy.setup({
     },
 
     -- Search and replace
-    {
-      "MagicDuck/grug-far.nvim",
-      version = "*",
-      event = "VeryLazy",
-    },
-
-    -- Run commands
-    {
-      "stevearc/overseer.nvim",
-      event = "VeryLazy",
-      opts = {},
-    },
+    { "MagicDuck/grug-far.nvim", version = "*", event = "VeryLazy" },
   },
 })
 
