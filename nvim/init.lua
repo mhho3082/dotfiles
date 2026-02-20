@@ -483,7 +483,7 @@ lazy.setup({
       build = "make tiktoken",
       -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
       opts = {
-        model = "gpt-5.1", -- AI model to use
+        model = "gpt-5.2", -- AI model to use
         temperature = 0.1, -- Lower = focused, higher = creative
         window = {
           layout = "vertical", -- 'vertical', 'horizontal', 'float'
@@ -742,16 +742,13 @@ lazy.setup({
         -- Search and replace
         keymap("n", "<leader>a", grug.open, { desc = "Search and replace" })
         keymap("x", "<leader>a", function()
-          grug.open({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
+          grug.with_visual_selection()
         end, { desc = "Search and replace" })
         keymap("n", "<leader>A", function()
           grug.open({ prefills = { paths = vim.fn.expand("%") } })
         end, { desc = "Search and replace in current file" })
         keymap("x", "<leader>A", function()
-          grug.open({
-            search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))),
-            prefills = { paths = vim.fn.expand("%") },
-          })
+          grug.with_visual_selection({ prefills = { paths = vim.fn.expand("%") } })
         end, { desc = "Search and replace in current file" })
 
         -- Search
