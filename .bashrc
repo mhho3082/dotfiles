@@ -197,8 +197,8 @@ function install-local-apps {
 
   # For eza: https://github.com/eza-community/eza/releases
   version=$(get-version "eza-community/eza")
-  wget $WGET_OPTS "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz"
-  tar xzf "eza_x86_64-unknown-linux-gnu.tar.gz"
+  wget $WGET_OPTS "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-musl.tar.gz"
+  tar xzf "eza_x86_64-unknown-linux-musl.tar.gz"
   mv "eza" "$HOME/.local/bin/eza"
 
   # For difftastic: https://github.com/Wilfred/difftastic/releases
