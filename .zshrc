@@ -527,20 +527,12 @@ local GIT_STAGED_UNSTAGED="%F{yellow}󰋙 %f"
 local GIT_UNTRACKED="%F{red}󰔷 %f"
 local GIT_STAGED_UNTRACKED="%F{yellow}󰔷 %f"
 
-local GIT_BEHIND="⇣"
-local GIT_AHEAD="⇡"
-local GIT_STASHED="󰈻 "
+local GIT_REMOTE="󰊢 "
+local GIT_AHEAD="↑"
+local GIT_BEHIND="↓"
+local GIT_STASHED="⚑"
 
-local GIT_CONFLICT="%F{red}  %f"
-
-local GIT_ICONS_GITHUB=" "
-local GIT_ICONS_GITLAB=" "
-local GIT_ICONS_NOTABUG="󱇪 "
-local GIT_ICONS_CODEBERG=" "
-local GIT_ICONS_GITEA="󰶞 "
-local GIT_ICONS_GOGS=" "
-local GIT_ICONS_BITBUCKET="󰂨 "
-local GIT_ICONS_BASIC_REMOTE="󰘬 "
+local GIT_CONFLICT="%F{red}󱈸 %f"
 
 local GLYPH=""
 local SUPERUSER_GLYPH=""
@@ -586,25 +578,12 @@ _setup_ps1() {
     fi
 
     # Currently running action
-    if [[ -n $VCS_STATUS_ACTION ]]; then
-      RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
-      (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="$GIT_CONFLICT"
-    fi
+    [[ -n $VCS_STATUS_ACTION ]] && RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
+    (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="$GIT_CONFLICT"
 
     # Check if remote exists
     if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
-      # Show correct hosting service icon if appropriate
-      # https://www.baeldung.com/linux/one-case-multiple-conditions#case-statements-with-fallthrough
-      case $VCS_STATUS_REMOTE_URL in
-        *"github.com"*)    RPROMPT+="%F{242}$GIT_ICONS_GITHUB%f"       ;;
-        *"gitlab.com"*)    RPROMPT+="%F{242}$GIT_ICONS_GITLAB%f"       ;;
-        *"notabug.org"*)   RPROMPT+="%F{242}$GIT_ICONS_NOTABUG%f"      ;;
-        *"codeberg.org"*)  RPROMPT+="%F{242}$GIT_ICONS_CODEBERG%f"     ;;
-        *"gitea.com"*)     RPROMPT+="%F{242}$GIT_ICONS_GITEA%f"        ;;
-        *"gogs.io"*)       RPROMPT+="%F{242}$GIT_ICONS_GOGS%f"         ;;
-        *"bitbucket.org"*) RPROMPT+="%F{242}$GIT_ICONS_BITBUCKET%f"    ;;
-        *)                 RPROMPT+="%F{242}$GIT_ICONS_BASIC_REMOTE%f" ;;
-      esac
+      RPROMPT+="%F{242}$GIT_REMOTE%f"
 
       # Show remote name if different
       if [[ $VCS_STATUS_LOCAL_BRANCH != $VCS_STATUS_REMOTE_BRANCH ]]; then
