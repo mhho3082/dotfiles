@@ -181,6 +181,8 @@ lazy.setup({
     { "nvim-mini/mini.ai", event = "VeryLazy", opts = {} },
     -- Surround
     { "nvim-mini/mini.surround", event = "VeryLazy", opts = {} },
+    -- Align
+    { "nvim-mini/mini.align", event = "VeryLazy", opts = {} },
     -- Comments
     {
       "nvim-mini/mini.comment",

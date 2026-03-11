@@ -227,8 +227,10 @@ function bash-git-status {
   fi
 
   # Inter-branch status
+  local remote_indicator=""
   local remote_diff=""
   if git rev-parse --abbrev-ref --symbolic-full-name @{u} &>/dev/null; then
+    remote_indicator="\033[00m⎇ "
     local diff=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
     if [ "$(echo "$diff" | awk '{print $1}')" -gt 0 ]; then remote_diff+="↑"; fi
     if [ "$(echo "$diff" | awk '{print $2}')" -gt 0 ]; then remote_diff+="↓"; fi
@@ -280,7 +282,7 @@ function bash-git-status {
 
   local status=$([ $status_symbol ] && echo -e " $status_color$status_symbol\033[00m")
 
-  echo -e "\033[33m(${location}${remote_diff}${stash_flag}${status}\033[33m)\033[00m"
+  echo -e "\033[33m(${remote_indicator}${location}${remote_diff}${stash_flag}${status}\033[33m)\033[00m"
 }
 
 function bash-prompt {
