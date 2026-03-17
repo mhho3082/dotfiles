@@ -430,7 +430,7 @@ lazy.setup({
     -- Autocomplete
     {
       "saghen/blink.cmp",
-      version = "*",
+      version = "1.*",
       event = "VeryLazy",
       dependencies = { "fang2hou/blink-copilot" },
       opts = {
