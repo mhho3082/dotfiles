@@ -669,12 +669,12 @@ lazy.setup({
         end, { "Left", "Down", "Up", "Right" })
 
         -- Allow zz to work in visual mode (for the whole selection)
-        local function CenterVisualSelection()
+        local function center_visual_selection()
           vim.cmd([[ execute "normal! \<ESC>" ]]) -- Force exit from visual mode
           vim.api.nvim_win_set_cursor(0, { math.floor((vim.fn.line("'<") + vim.fn.line("'>")) / 2), 0 })
           vim.cmd([[ execute "normal! zz" ]])
         end
-        keymap("x", "zz", CenterVisualSelection, { desc = "Center" })
+        keymap("x", "zz", center_visual_selection, { desc = "Center" })
 
         -- Remove default LSP mappings
         vim.keymap.del("n", "grt")
@@ -709,7 +709,7 @@ lazy.setup({
         keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show" })
 
         -- A function to search for TODOs and more
-        local function FindTodo()
+        local function find_todo()
         -- Based on treesitter
         -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
         --stylua: ignore start
@@ -728,6 +728,16 @@ lazy.setup({
           -- Actually initiate the search
           -- https://github.com/ibhagwan/fzf-lua/discussions/1194#discussioncomment-9418686
           fzf.grep({ no_esc = true, search = regexp, prompt = "> ", winopts = { title = "Find TODOs" } })
+        end
+
+        local function toggle_nonascii_hl()
+          local w = vim.w
+          if w._nonascii then
+            pcall(vim.fn.matchdelete, w._nonascii)
+            w._nonascii = nil
+          else
+            w._nonascii = vim.fn.matchadd("MiniTrailspace", "[^\\x00-\\x7F]")
+          end
         end
 
         -- The great <leader> keymap
@@ -759,7 +769,7 @@ lazy.setup({
         keymap("n", "<leader>t", fzf.files, { desc = "Files" })
         keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
         keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
-        keymap("n", "<leader>f", FindTodo, { desc = "Find TODOs" })
+        keymap("n", "<leader>f", find_todo, { desc = "Find TODOs" })
         -- Search selected text in visual mode
         keymap("x", "<leader>s", function()
           fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
@@ -806,6 +816,7 @@ lazy.setup({
         keymap("n", "<leader>ic", toggle_cursorline, { desc = "CursorLine" })
         keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "IndentLine" })
         keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
+        keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "HL non-ASCII" })
       end,
     },
 
