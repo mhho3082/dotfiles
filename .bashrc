@@ -159,7 +159,7 @@ function install-local-apps {
   # Check Github API rate limit
   rate_data=$(curl -s "https://api.github.com/rate_limit")
   rate_remaining=$(echo "$rate_data" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.remaining);")
-  if [ "$rate_remaining" -lt 12 ]; then
+  if [ "$rate_remaining" -lt 14 ]; then
     rate_reset=$(echo "$rate_data" | node -e "console.log(new Date(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.reset * 1000).toLocaleString('en-GB'));")
     echo "Warning: GitHub API rate limit is low ($rate_remaining remaining)."
     echo "Consider waiting until $rate_reset before running this script again."
@@ -194,6 +194,13 @@ function install-local-apps {
   wget $WGET_OPTS "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" "$HOME/.local/bin/rg"
+
+  # For tree-sitter-cli: https://github.com/tree-sitter/tree-sitter/releases
+  version=$(get-version "tree-sitter/tree-sitter")
+  wget $WGET_OPTS "https://github.com/tree-sitter/tree-sitter/releases/download/$version/tree-sitter-cli-linux-x64.zip"
+  unzip -qq "tree-sitter-cli-linux-x64.zip"
+  chmod +x "tree-sitter"
+  mv "tree-sitter" "$HOME/.local/bin/tree-sitter"
 
   # For eza: https://github.com/eza-community/eza/releases
   version=$(get-version "eza-community/eza")
