@@ -1,8 +1,8 @@
--- Programs needed: `unzip`, `ripgrep`, `fd`
-
--- Programs advised:
--- `tree-sitter` (and `tree-sitter-cli`) for install-from-grammer syntax files, esp. LaTeX
--- `fswatch` on Linux to improve LSP file watching performance (see https://www.reddit.com/r/neovim/comments/1b4bk5h)
+-- Programs required:
+-- `unzip`
+-- `tree-sitter-cli`
+-- `fd`
+-- `ripgrep`
 
 -- Notes: (for particular LSP services)
 -- `prettierd` requires that `nodejs` and `npm` be installed globally
@@ -88,20 +88,24 @@ vim.opt.expandtab = true
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = "javascript,typescript,json,jsonc,svelte,vue,html,css,scss,sass,lua,markdown,sh,zsh,fish",
   callback = function()
-    vim.opt.tabstop = 2
-    vim.opt.shiftwidth = 2
-    vim.opt.expandtab = true
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
   end,
 })
 -- Tab default indents
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = "make,just",
   callback = function()
-    vim.opt.tabstop = 4
-    vim.opt.shiftwidth = 4
-    vim.opt.expandtab = false
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.expandtab = false
   end,
 })
+
+-- Ignore editorconfig
+-- Resolves trailing whitespace auto-removed on save
+vim.g.editorconfig = false
 
 -- No backup
 vim.opt.swapfile = false
@@ -242,11 +246,12 @@ lazy.setup({
       opts = {
         view_options = {
           show_hidden = true,
-          -- Don't display `../`
+          natural_order = true,
           is_always_hidden = function(name, _)
             return name == ".."
           end,
         },
+        win_options = { wrap = true },
         delete_to_trash = true,
         watch_for_changes = true,
       },
@@ -291,29 +296,31 @@ lazy.setup({
     -- Syntax highlight
     {
       "nvim-treesitter/nvim-treesitter",
-      build = function()
-        require("nvim-treesitter.install").update({})()
-      end,
-      event = "VeryLazy",
-      branch = "master",
-      dependencies = {
-        {
-          "JoosepAlviste/nvim-ts-context-commentstring",
-          opts = { enable_autocmd = false },
-          config = function()
-            vim.g.skip_ts_context_commentstring_module = true
-          end,
-        },
-      },
-      opts = {
+      lazy = false,
+      branch = "main",
+      build = ":TSUpdate",
+      dependencies = { { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } } },
+      config = function()
+        -- Check if `tree-sitter` CLI is installed on system
+        if vim.fn.executable("tree-sitter") ~= 1 then
+          vim.api.nvim_echo(
+            { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
+            true,
+            {}
+          )
+          return
+        end
+
+        -- See `after/` folder for Blade SCM code
+
         --stylua: ignore start
-        ensure_installed = {
+        local languages = {
           -- Programming
           "c", "cpp", "make", "python", "java", "rust",
           "javascript", "typescript", "jsdoc", "vue", "svelte",
           -- Scripting
-          "html", "css", "scss", "json", "jsonc", "regex", "bash",
-          "php", "php_only", "phpdoc", "blade",
+          "html", "css", "scss", "json", "regex", "bash",
+          "php", "php_only", "phpdoc", "blade", "twig",
           -- Git
           "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
           -- Prose
@@ -323,46 +330,27 @@ lazy.setup({
           "yaml", "toml", "zathurarc", "xresources",
           -- Vim-specific
           "vim", "vimdoc", "comment", "lua", "luadoc", "diff",
-        },
-        --stylua: ignore end
-        highlight = {
-          -- false will disable the whole extension
-          enable = true,
-          -- list of language that will be disabled
-          disable = {},
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<cr>",
-            node_incremental = "<cr>",
-            scope_incremental = "<s-cr>",
-            node_decremental = "<bs>",
-          },
-        },
-      },
-      config = function(_, opts)
-        -- Blade Treesitter install based on https://github.com/EmranMR/tree-sitter-blade/discussions/19
-        -- also see `after/` folder for SCM code
-
-        local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-
-        parser_config.blade = {
-          install_info = {
-            url = "https://github.com/EmranMR/tree-sitter-blade",
-            files = { "src/parser.c" },
-            branch = "main",
-          },
-          filetype = "blade",
         }
+        require("nvim-treesitter").install(languages)
+        --stylua: ignore end
 
-        vim.filetype.add({
-          pattern = {
-            [".*%.blade%.php"] = "blade",
-          },
+        -- Based on https://github.com/MeanderingProgrammer/treesitter-modules.nvim#implementing-yourself
+        vim.api.nvim_create_autocmd("FileType", {
+          group = vim.api.nvim_create_augroup("treesitter.setup", {}),
+          callback = function(args)
+            local buf = args.buf
+            local filetype = args.match
+
+            local language = vim.treesitter.language.get_lang(filetype) or filetype
+            if not vim.treesitter.language.add(language) then
+              return
+            end
+
+            vim.treesitter.start(buf, language)
+
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end,
         })
-
-        require("nvim-treesitter.configs").setup(opts)
       end,
     },
 
@@ -482,6 +470,7 @@ lazy.setup({
     {
       "CopilotC-Nvim/CopilotChat.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
+      event = "VeryLazy",
       build = "make tiktoken",
       -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
       opts = {
@@ -575,7 +564,7 @@ lazy.setup({
         -- Make pyright and basedpyright use the correct pyenv version if provided
         -- https://stackoverflow.com/a/78916731
         if vim.fn.executable("pyenv") == 1 then
-          vim.env.PYENV_VERSION = vim.fn.system("pyenv version-name")
+          vim.env.PYENV_VERSION = vim.trim(vim.fn.system("pyenv version-name"))
         end
       end,
     },
@@ -677,11 +666,12 @@ lazy.setup({
         keymap("x", "zz", center_visual_selection, { desc = "Center" })
 
         -- Remove default LSP mappings
-        vim.keymap.del("n", "grt")
-        vim.keymap.del("n", "grr")
-        vim.keymap.del("n", "grn")
-        vim.keymap.del("n", "gra")
-        vim.keymap.del("n", "gri")
+        pcall(vim.keymap.del, "n", "grt")
+        pcall(vim.keymap.del, "n", "grr")
+        pcall(vim.keymap.del, "n", "grn")
+        pcall(vim.keymap.del, "n", "grx")
+        pcall(vim.keymap.del, "n", "gra")
+        pcall(vim.keymap.del, "n", "gri")
 
         -- LSP mappings
         keymap("n", "<C-n>", vim.lsp.buf.hover, { desc = "Hover" })
@@ -698,8 +688,12 @@ lazy.setup({
           fzf.lsp_references({ jump1 = true, includeDeclaration = false })
         end, { desc = "Goto references" })
 
-        keymap("n", "<M-n>", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-        keymap("n", "<M-e>", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+        keymap("n", "<M-n>", function()
+          vim.diagnostic.jump({ count = 1, float = true })
+        end, { desc = "Next diagnostic" })
+        keymap("n", "<M-e>", function()
+          vim.diagnostic.jump({ count = -1, float = true })
+        end, { desc = "Prev diagnostic" })
 
         -- LSP maappings for both normal and visual modes
         keymap({ "n", "x" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
