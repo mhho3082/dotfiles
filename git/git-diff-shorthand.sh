@@ -1,62 +1,113 @@
 #!/usr/bin/env bash
 
-# Diff display options
+# Styles:
+#   _ : patch + compact summary
+#   f : difftool
+#   w : word diff + compact summary
+#   s : compact summary
+#   n : name-status
 #
-# range: $# = 0 is staged + unstaged
-#        $# = 1 is revision (is revision specifier)
-#        $# = 1 is n commits before HEAD (is integer)
-#        $# = 2 is revision / commits-before range
-# For checking against index (staged), use `--cached`, it will be passed to Git
+# Leading rev/int args only; put paths after `--`.
 #
-# style: ``  is normal (patch + compact summary)
-#        `f` is difftool
-#        `w` is diff-words
-#        `s` is summary
-#        `n` is name only
-# https://stackoverflow.com/a/25634420
-# https://stackoverflow.com/a/1587952
+#   <none>   : working tree vs index (unstaged)
+#   --cached : index vs HEAD (staged)
+#   <rev>    : changes introduced by commit <rev>
+#   <n>      : same, but <n> means HEAD~n (0 == HEAD; HEAD~0 also works)
+#   <a> <b>  : compare two endpoints directly; ints are resolved as HEAD~n
 
-is_rev() {
-  git rev-parse --verify --quiet "$1" &>/dev/null
+is_int() {
+  [[ $1 =~ ^[0-9]+$ ]]
 }
 
-modify_specifiers() {
+is_commit() {
+  git rev-parse --verify --quiet --end-of-options "$1^{commit}" >/dev/null 2>&1
+}
+
+is_spec() {
+  is_int "$1" || is_commit "$1"
+}
+
+to_commit() {
+  if is_int "$1"; then
+    printf 'HEAD~%s\n' "$1"
+  else
+    printf '%s\n' "$1"
+  fi
+}
+
+empty_tree() {
+  git hash-object -t tree /dev/null
+}
+
+resolve_range() {
+  RANGE=()
+
   case $# in
-    0) echo "HEAD" ;;
-    1) echo "$(is_rev "$1" && echo "$1~1 $1" || echo "HEAD~$1")" ;;
-    2) echo "$(is_rev "$1" && echo "$1" || echo "HEAD~$1") $(is_rev "$2" && echo "$2" || echo "HEAD~$2")" ;;
-    *) echo $@ ;;
+    1)
+      local c
+      c=$(to_commit "$1") || return 1
+
+      if git rev-parse --verify --quiet --end-of-options "${c}^" >/dev/null 2>&1; then
+        RANGE=("${c}^" "$c")
+      else
+        RANGE=("$(empty_tree)" "$c") # root commit
+      fi
+      ;;
+    2)
+      RANGE=("$(to_commit "$1")" "$(to_commit "$2")")
+      ;;
+    *)
+      return 1
+      ;;
   esac
 }
 
 main() {
-  local s="$1"
-  shift 1
-  local range="" style="" separator=0 specifiers=()
+  [[ $# -ge 1 ]] || {
+    printf 'usage: %s <style> [spec ...] [-- paths...]\n' "$0" >&2
+    return 2
+  }
 
-  # Find first $@ that is not is_rev nor integer
-  for arg in "$@"; do
-    if is_rev "$arg" || [[ "$arg" =~ ^[0-9]+$ ]]; then
-      ((separator++))
-    else
-      break
-    fi
-  done
+  local style=$1
+  shift
 
-  specifiers=("${@:1:separator}")
-  rest=("${@:((separator + 1))}")
+  local -a args=()
+  local -a specs=()
 
-  range="$(modify_specifiers "${specifiers[@]}")"
-  case "$s" in
-    _) style="diff --patch-with-stat --compact-summary" ;;
-    f) style="difftool --patch-with-stat --compact-summary" ;;
-    w) style="diff --patch-with-stat --compact-summary --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'" ;;
-    s) style="diff --compact-summary" ;;
-    n) style="diff --name-status" ;;
+  case "$style" in
+    _) args=(diff --patch-with-stat --compact-summary) ;;
+    f) args=(difftool --patch-with-stat --compact-summary) ;;
+    w) args=(diff --word-diff=color --patch-with-stat --compact-summary) ;;
+    s) args=(diff --compact-summary) ;;
+    n) args=(diff --name-status) ;;
+    *) printf 'unknown style: %s\n' "$style" >&2 && return 2 ;;
   esac
 
-  local command="git $style $range ${rest[@]}"
-  printf "> %s\n\n" "$command"
-  eval "$command"
+  while (($#)) && is_spec "$1"; do
+    specs+=("$1")
+    shift
+  done
+
+  case ${#specs[@]} in
+    0)
+      ;;
+    1 | 2)
+      resolve_range "${specs[@]}" || return 1
+      args+=("${RANGE[@]}")
+      ;;
+    *)
+      printf 'expected at most 2 leading revisions/integers\n' >&2
+      return 2
+      ;;
+  esac
+
+  args+=("$@")
+
+  printf '> git'
+  printf ' %q' "${args[@]}"
+  printf '\n\n'
+
+  exec git "${args[@]}"
 }
+
 main "$@"
