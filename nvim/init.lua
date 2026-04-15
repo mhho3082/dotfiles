@@ -322,7 +322,7 @@ lazy.setup({
           "html", "css", "scss", "json", "regex", "bash",
           "php", "php_only", "phpdoc", "blade", "twig",
           -- Git
-          "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
+          "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
           -- Prose
           "markdown", "markdown_inline", "bibtex", "mermaid",
           -- Config
@@ -785,6 +785,7 @@ lazy.setup({
         -- Git (group: `g`)
         wk.add({ { "<leader>g", group = "Git" } })
         keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
+        keymap("n", "<leader>gs", fzf.git_status, { desc = "Git Status" })
         keymap("n", "<leader>gd", "<cmd>Gdiffsplit<cr>", { desc = "Git Diff" })
         keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
         keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
@@ -820,7 +821,10 @@ lazy.setup({
       "lewis6991/gitsigns.nvim",
       event = "VeryLazy",
       dependencies = { "nvim-lua/plenary.nvim" },
-      opts = { signs_staged_enable = false },
+      opts = {
+        signs_staged_enable = false,
+        current_line_blame_formatter = "[<abbrev_sha>] <author>, <author_time:%R> - <summary>",
+      },
     },
 
     -- Search and go to files
@@ -828,17 +832,21 @@ lazy.setup({
       "ibhagwan/fzf-lua",
       event = "VeryLazy",
       opts = {
-        defaults = {
+        files = {
           formatter = "path.filename_first",
           multiline = 2,
-        },
-        files = {
           fd_opts = "-t f -H -E '.git/'",
           cwd_prompt = false,
         },
         grep = {
+          formatter = "path.filename_first",
+          multiline = 2,
           -- https://github.com/ibhagwan/fzf-lua/issues/971
           rg_opts = "--hidden -g '!.git/' --column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
+        },
+        lsp = {
+          formatter = "path.filename_first",
+          multiline = 2,
         },
       },
       config = function(_, opts)
