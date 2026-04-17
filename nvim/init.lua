@@ -29,7 +29,6 @@ vim.opt.lazyredraw = true
 vim.opt.updatetime = 100
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 3
-vim.opt.signcolumn = "yes"
 vim.opt.conceallevel = 2 -- For writing prose
 
 -- Don't disturb me (by default)
@@ -66,6 +65,12 @@ local function toggle_cursorline()
   else
     vim.api.nvim_set_hl(0, "CursorLine", {})
   end
+end
+
+-- Toggle status column
+vim.opt.signcolumn = "yes"
+local function toggle_signcolumn()
+  vim.o.signcolumn = vim.o.signcolumn == "yes" and "no" or "yes"
 end
 
 -- Use dark background by default
@@ -806,12 +811,12 @@ lazy.setup({
         -- Interface (group: `i`)
         wk.add({ { "<leader>i", group = "Interface" } })
         keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
-        keymap("n", "<leader>is", "<cmd>set spell!<cr>", { desc = "Spell" })
         keymap("n", "<leader>iw", "<cmd>set wrap!<cr>", { desc = "Wrap" })
-        keymap("n", "<leader>ic", toggle_cursorline, { desc = "CursorLine" })
-        keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "IndentLine" })
-        keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
+        keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
+        keymap("n", "<leader>ic", toggle_cursorline, { desc = "Cursorline" })
+        keymap("n", "<leader>is", toggle_signcolumn, { desc = "Sign column" })
         keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "HL non-ASCII" })
+        keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
       end,
     },
 

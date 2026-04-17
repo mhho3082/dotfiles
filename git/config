@@ -67,11 +67,6 @@
     c = commit
     ci = commit --interactive
 
-    # Simple commit tool
-    ca = "!git add -A && git commit && if git remote | grep . > /dev/null; then git push; fi"
-    # Do not open editor for the commit message
-    cam = "!f() { [ -n \"$1\" ] && git add -A && git commit -m \"$@\" && if git remote | grep . > /dev/null; then git push; fi; }; f"
-
     co = checkout
     cl = clone
     cp = cherry-pick
@@ -188,6 +183,9 @@
 
     # Generate gitignore file based on https://github.com/github/gitignore
     ignore = "!~/.config/git/gitignore.sh"
+
+    # Expand an alias
+    alias = "!f() { a=$(git config --get alias.$1); if [ -n \"$a\" ]; then echo \"$a\"; else echo \"Alias '$1' not found.\" >&2; fi; }; f"
 
 # ---
 
