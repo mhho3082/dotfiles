@@ -27,7 +27,7 @@ vim.g.maplocalleader = "\\"
 vim.opt.termguicolors = true
 vim.opt.lazyredraw = true
 vim.opt.updatetime = 100
-vim.opt.cmdheight = 1
+vim.opt.cmdheight = 0
 vim.opt.laststatus = 3
 vim.opt.conceallevel = 2 -- For writing prose
 
@@ -232,14 +232,6 @@ lazy.setup({
     -- Indent
     { "tpope/vim-sleuth", event = "VeryLazy" },
 
-    -- Splitjoin
-    {
-      "Wansmer/treesj",
-      event = "VeryLazy",
-      dependencies = { "nvim-treesitter/nvim-treesitter" },
-      opts = { use_default_keymaps = false },
-    },
-
     -- Pairs
     { "windwp/nvim-autopairs", event = "VeryLazy", opts = {} },
     { "windwp/nvim-ts-autotag", event = "VeryLazy", opts = {} },
@@ -359,62 +351,6 @@ lazy.setup({
       end,
     },
 
-    -- Statusline and tab-line
-    {
-      "nvim-lualine/lualine.nvim",
-      event = "VeryLazy",
-      config = function()
-        -- gitsigns integration copied from:
-        -- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
-        local function gitsigns_diff_source()
-          local gitsigns = vim.b.gitsigns_status_dict
-          if gitsigns then
-            return {
-              added = gitsigns.added,
-              modified = gitsigns.changed,
-              removed = gitsigns.removed,
-            }
-          end
-        end
-
-        require("lualine").setup({
-          options = {
-            section_separators = "",
-            component_separators = "",
-            globalstatus = true,
-          },
-          sections = {
-            lualine_a = { "mode" },
-            lualine_b = {
-              { "b:gitsigns_head", icon = "" },
-              {
-                "diff",
-                source = gitsigns_diff_source,
-                symbols = { added = " ", modified = " ", removed = " " },
-              },
-            },
-            lualine_c = {
-              { "filename", path = 1 },
-              { "diagnostics", sources = { "nvim_lsp" } },
-            },
-            lualine_x = { "filetype", "fileformat", "encoding" },
-            lualine_y = {},
-            lualine_z = {},
-          },
-          inactive_sections = {
-            lualine_a = {},
-            lualine_b = {},
-            lualine_c = { { "filename", path = 1, symbols = { modified = "" } } },
-            lualine_x = { { "filetype", colored = false } },
-            lualine_y = {},
-            lualine_z = {},
-          },
-          tabline = {},
-          extensions = { "fugitive", "fzf", "lazy", "mason", "oil" },
-        })
-      end,
-    },
-
     -- Icons
     { "nvim-tree/nvim-web-devicons", event = "VeryLazy", opts = {} },
 
@@ -507,10 +443,10 @@ lazy.setup({
           -- Use nerd font for gutter signs
           signs = {
             text = {
-              [vim.diagnostic.severity.ERROR] = "󰅚",
-              [vim.diagnostic.severity.WARN] = "󰀪",
-              [vim.diagnostic.severity.INFO] = "󰋽",
-              [vim.diagnostic.severity.HINT] = "󰌶",
+              [vim.diagnostic.severity.ERROR] = "E",
+              [vim.diagnostic.severity.WARN] = "W",
+              [vim.diagnostic.severity.INFO] = "I",
+              [vim.diagnostic.severity.HINT] = "H",
             },
           },
         })
@@ -621,7 +557,6 @@ lazy.setup({
         end
 
         local _, spider = pcall(require, "spider")
-        local _, treesj = pcall(require, "treesj")
         local _, oil = pcall(require, "oil")
         local _, fzf = pcall(require, "fzf-lua")
         local _, grug = pcall(require, "grug-far")
@@ -643,10 +578,6 @@ lazy.setup({
 
         -- Open oil with -
         keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
-
-        -- Split/join lines
-        keymap({ "n" }, "gs", treesj.split, { desc = "Split" })
-        keymap({ "n" }, "gj", treesj.join, { desc = "Join" })
 
         -- Add easy copy/paste to system clipboard
         keymap({ "n", "x" }, "gy", '"+y', { desc = "Copy to clipboard" })
@@ -868,6 +799,161 @@ lazy.setup({
     -- Search and replace
     { "MagicDuck/grug-far.nvim", version = "*", event = "VeryLazy" },
   },
+})
+
+----------------
+-- STATUSLINE --
+----------------
+
+-- Based on https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/utils/mode.lua
+local function statusline_mode()
+  local map = {
+    ["n"] = "NORMAL",
+    ["no"] = "O-PENDING",
+    ["nov"] = "O-PENDING",
+    ["noV"] = "O-PENDING",
+    ["no\22"] = "O-PENDING",
+    ["niI"] = "NORMAL",
+    ["niR"] = "NORMAL",
+    ["niV"] = "NORMAL",
+    ["nt"] = "NORMAL",
+    ["ntT"] = "NORMAL",
+    ["v"] = "VISUAL",
+    ["vs"] = "VISUAL",
+    ["V"] = "V-LINE",
+    ["Vs"] = "V-LINE",
+    ["\22"] = "V-BLOCK",
+    ["\22s"] = "V-BLOCK",
+    ["s"] = "SELECT",
+    ["S"] = "S-LINE",
+    ["\19"] = "S-BLOCK",
+    ["i"] = "INSERT",
+    ["ic"] = "INSERT",
+    ["ix"] = "INSERT",
+    ["R"] = "REPLACE",
+    ["Rc"] = "REPLACE",
+    ["Rx"] = "REPLACE",
+    ["Rv"] = "V-REPLACE",
+    ["Rvc"] = "V-REPLACE",
+    ["Rvx"] = "V-REPLACE",
+    ["c"] = "COMMAND",
+    ["cv"] = "EX",
+    ["ce"] = "EX",
+    ["r"] = "REPLACE",
+    ["rm"] = "MORE",
+    ["r?"] = "CONFIRM",
+    ["!"] = "SHELL",
+    ["t"] = "TERMINAL",
+  }
+  local hl_map = {
+    ["COMMAND"] = "MiniStatuslineModeCommand",
+    ["EX"] = "MiniStatuslineModeCommand",
+    ["INSERT"] = "MiniStatuslineModeInsert",
+    ["NORMAL"] = "MiniStatuslineModeNormal",
+    ["REPLACE"] = "MiniStatuslineModeReplace",
+    ["V-REPLACE"] = "MiniStatuslineModeReplace",
+    ["VISUAL"] = "MiniStatuslineModeVisual",
+    ["V-LINE"] = "MiniStatuslineModeVisual",
+    ["V-BLOCK"] = "MiniStatuslineModeVisual",
+  }
+  local mode = vim.api.nvim_get_mode().mode
+  mode = map[mode] or mode
+  local hl = hl_map[mode] or "MiniStatuslineModeOther"
+  return table.concat({ "%#" .. hl .. "#", " ", mode, " ", "%*" })
+end
+
+-- Based on https://vieitesss.github.io/posts/Neovim-custom-status-line/
+local function statusline_git()
+  local git_info = vim.b.gitsigns_status_dict
+  if not git_info or git_info.head == "" then
+    return ""
+  end
+
+  return table.concat({
+    " [󰊢 ",
+    git_info.head,
+    git_info.added and git_info.added > 0 and (" +" .. git_info.added) or "",
+    git_info.changed and git_info.changed > 0 and (" ~" .. git_info.changed) or "",
+    git_info.removed and git_info.removed > 0 and (" -" .. git_info.removed) or "",
+    "]",
+  })
+end
+
+local function statusline_diagnostic()
+  local levels = vim.diagnostic.severity
+  local error = #vim.diagnostic.get(0, { severity = levels.ERROR }) or 0
+  local warn = #vim.diagnostic.get(0, { severity = levels.WARN }) or 0
+  local info = #vim.diagnostic.get(0, { severity = levels.INFO }) or 0
+  local hint = #vim.diagnostic.get(0, { severity = levels.HINT }) or 0
+  if error == 0 and warn == 0 and info == 0 and hint == 0 then
+    return ""
+  end
+
+  return table.concat({
+    " [LSP",
+    error > 0 and " E:" .. error or "",
+    warn > 0 and " W:" .. warn or "",
+    info > 0 and " I:" .. info or "",
+    hint > 0 and " H:" .. hint or "",
+    "]",
+  })
+end
+
+-- Based on https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/searchcount.lua
+local function statusline_search()
+  if vim.v.hlsearch == 0 then
+    return ""
+  end
+
+  local ok, result = pcall(vim.fn.searchcount, { maxcount = 999, timeout = 500 })
+  if not ok or next(result) == nil then
+    return ''
+  end
+
+  local denominator = math.min(result.total, result.maxcount)
+  return string.format(' [%d/%d]', result.current, denominator)
+end
+
+-- Ideas from Neovim docs and https://zignar.net/2022/01/21/a-boring-statusline-for-neovim/
+function Statusline()
+  local parts = {
+    statusline_mode(),
+    " %<%f",
+    "%( [%M%R%H]%)",
+    statusline_git(),
+    statusline_diagnostic(),
+    "%=",
+
+    "%#MiniStatuslineFilename#",
+    " %{&filetype}",
+    "%#warningmsg#",
+    vim.bo.ff == "unix" and "" or " " .. vim.bo.ff,
+    (vim.bo.fenc == "utf-8" or vim.bo.fenc == "") and "" or " " .. vim.bo.fenc,
+    "%* ",
+
+    "%#MiniStatuslineFileinfo#",
+    statusline_search(),
+    " %P %l:%c 0x%02B ",
+    "%*",
+  }
+  return table.concat(parts, "")
+end
+
+vim.opt.statusline = "%{%v:lua.Statusline()%}"
+
+-- Based on https://theopark.me/blog/2025-06-08-statusline-notes/
+vim.api.nvim_create_autocmd({
+  "SafeState",
+  "LspAttach",
+  "LspDetach",
+  "DiagnosticChanged",
+}, {
+  group = vim.api.nvim_create_augroup("StatuslineUpdate", { clear = true }),
+  pattern = "*",
+  callback = vim.schedule_wrap(function()
+    vim.cmd("redrawstatus")
+  end),
+  desc = "Update statusline/winbar",
 })
 
 --------------
