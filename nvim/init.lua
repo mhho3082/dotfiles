@@ -268,13 +268,19 @@ local function statusline_search()
     return ""
   end
 
-  local ok, result = pcall(vim.fn.searchcount, { maxcount = 999, timeout = 500 })
+  local ok, result = pcall(vim.fn.searchcount, { maxcount = 99, timeout = 500 })
   if not ok or next(result) == nil then
     return ""
   end
 
-  local denominator = math.min(result.total, result.maxcount)
-  return string.format(" [%d/%d]", result.current, denominator)
+  -- Based on Neovim help files
+  local format = " [%d/%d]"
+  if result.incomplete == 1 then
+    format = " [?/??]"
+  elseif result.incomplete == 2 then
+    format = result.current > result.maxcount and " [>%d/>%d]" or " [%d/>%d]"
+  end
+  return string.format(format, result.current, result.total)
 end
 
 -- Ideas from Neovim docs and https://zignar.net/2022/01/21/a-boring-statusline-for-neovim/
@@ -457,37 +463,36 @@ vim.schedule(function()
   ----------------
 
   -- Check if `tree-sitter` CLI is installed on system
-  if vim.fn.executable("tree-sitter") ~= 1 then
+  if vim.fn.executable("tree-sitter") == 1 then
+    vim.api.nvim_create_user_command("InstallCommonTSParsers", function()
+      --stylua: ignore start
+      local languages = {
+        -- Programming
+        "c", "cpp", "make", "python", "java", "rust",
+        "javascript", "typescript", "jsdoc", "vue", "svelte",
+        -- Scripting
+        "html", "css", "scss", "json", "regex", "bash",
+        "php", "php_only", "phpdoc", "blade", "twig",
+        -- Git
+        "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
+        -- Prose
+        "markdown", "markdown_inline", "bibtex", "mermaid",
+        -- Config
+        "rasi", -- For rofi
+        "yaml", "toml", "zathurarc", "xresources",
+        -- Vim-specific
+        "vim", "vimdoc", "comment", "lua", "luadoc",
+      }
+      --stylua: ignore end
+      require("nvim-treesitter").install(languages)
+    end, { desc = "Install common tree-sitter parsers" })
+  else
     vim.api.nvim_echo(
       { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
       true,
       {}
     )
-    return
   end
-
-  vim.api.nvim_create_user_command("InstallCommonTSParsers", function()
-    --stylua: ignore start
-    local languages = {
-      -- Programming
-      "c", "cpp", "make", "python", "java", "rust",
-      "javascript", "typescript", "jsdoc", "vue", "svelte",
-      -- Scripting
-      "html", "css", "scss", "json", "regex", "bash",
-      "php", "php_only", "phpdoc", "blade", "twig",
-      -- Git
-      "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
-      -- Prose
-      "markdown", "markdown_inline", "bibtex", "mermaid",
-      -- Config
-      "rasi", -- For rofi
-      "yaml", "toml", "zathurarc", "xresources",
-      -- Vim-specific
-      "vim", "vimdoc", "comment", "lua", "luadoc",
-    }
-    --stylua: ignore end
-    require("nvim-treesitter").install(languages)
-  end, { desc = "Install common tree-sitter parsers" })
 
   -- Based on https://github.com/MeanderingProgrammer/treesitter-modules.nvim#implementing-yourself
   vim.api.nvim_create_autocmd("FileType", {
