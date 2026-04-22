@@ -227,6 +227,7 @@ alias v="$VISUAL"
 # Application shorthands
 alias g="git"
 alias m="make"
+alias s="ssh"
 # NPM
 alias n="npm"
 alias nd="npm run dev"
