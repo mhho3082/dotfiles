@@ -1,127 +1,14 @@
--- Programs required: `unzip`, `tree-sitter-cli`, `fd`, `ripgrep`
+-- Programs required: `git`, `tree-sitter-cli`, `fd`, `ripgrep`
 
 -- Notes: (for particular LSP services)
 -- `prettierd` requires that `nodejs` and `npm` be installed globally
 -- `jdtls` (Java LSP) only works with projects
 
--------------
--- PLUGINS --
--------------
+-- Speed up require()
+vim.loader.enable()
 
--- These plugins should not be lazy-loaded
-vim.pack.add({
-  -- Colorscheme
-  { src = "https://github.com/sainnhe/gruvbox-material" },
-})
-
--- The great plugins list
-vim.schedule(function()
-  vim.pack.add({
-    -- Library
-    { src = "https://github.com/nvim-lua/plenary.nvim" },
-    -- Editing
-    { src = "https://github.com/nvim-mini/mini.ai" },
-    { src = "https://github.com/nvim-mini/mini.surround" },
-    { src = "https://github.com/nvim-mini/mini.align" },
-    { src = "https://github.com/nvim-mini/mini.comment" },
-    { src = "https://github.com/nvim-mini/mini.trailspace" },
-    { src = "https://github.com/windwp/nvim-autopairs" },
-    { src = "https://github.com/windwp/nvim-ts-autotag" },
-    { src = "https://github.com/tpope/vim-sleuth" },
-    -- Movement
-    { src = "https://github.com/chrisgrieser/nvim-spider" },
-    { src = "https://github.com/tpope/vim-rsi" },
-    -- File browser
-    { src = "https://github.com/stevearc/oil.nvim" },
-    -- Hinting
-    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
-    { src = "https://github.com/fang2hou/blink-copilot" },
-    { src = "https://github.com/nvim-mini/mini.clue" },
-    -- Copilot Chat
-    { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim" },
-    -- Git
-    { src = "https://github.com/tpope/vim-fugitive" },
-    { src = "https://github.com/lewis6991/gitsigns.nvim" },
-    -- Search
-    { src = "https://github.com/ibhagwan/fzf-lua" },
-    { src = "https://github.com/MagicDuck/grug-far.nvim", version = vim.version.range("*") },
-    -- LSP
-    { src = "https://github.com/neovim/nvim-lspconfig" },
-    { src = "https://github.com/mason-org/mason.nvim" },
-    { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
-    { src = "https://github.com/nvimtools/none-ls.nvim" },
-    -- Highlight
-    { src = "https://github.com/lukas-reineke/indent-blankline.nvim" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
-    { src = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" },
-    -- Icons
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
-    -- Speed check
-    { src = "https://github.com/dstein64/vim-startuptime" },
-  })
-end)
-
-vim.schedule(function()
-  -- Editing packages
-  for _, name in ipairs({
-    "mini.ai",
-    "mini.surround",
-    "mini.align",
-    "mini.trailspace",
-    "nvim-autopairs",
-    "nvim-ts-autotag",
-    "nvim-web-devicons",
-  }) do
-    require(name).setup({})
-  end
-
-  -- Indent line
-  require("ibl").setup({ indent = { char = "│" }, scope = { enabled = false } })
-
-  -- Comment string
-  require("mini.comment").setup({
-    options = {
-      custom_commentstring = function()
-        return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
-      end,
-    },
-  })
-
-  -- Git
-  require("gitsigns").setup({ current_line_blame_formatter = "- [<abbrev_sha>] <author>, <author_time:%R> - <summary>" })
-
-  -- File editor
-  require("oil").setup({
-    view_options = {
-      show_hidden = true,
-      natural_order = true,
-      is_always_hidden = function(name, _)
-        return name == ".."
-      end,
-    },
-    win_options = { wrap = true },
-    delete_to_trash = true,
-    watch_for_changes = true,
-  })
-
-  -- Fuzzy Finder
-  require("fzf-lua").setup({
-    files = {
-      formatter = "path.filename_first",
-      multiline = 2,
-      fd_opts = "-t f -H -E '.git/'",
-      cwd_prompt = false,
-    },
-    grep = {
-      formatter = "path.filename_first",
-      multiline = 2,
-      -- https://github.com/ibhagwan/fzf-lua/issues/971
-      rg_opts = "--hidden -g '!.git/' --column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
-    },
-    lsp = { formatter = "path.filename_first", multiline = 2 },
-  })
-  require("fzf-lua").register_ui_select()
-end)
+-- Prepare for checking startup time
+local pf_config_start = vim.loop.hrtime()
 
 --------------
 -- SETTINGS --
@@ -245,19 +132,8 @@ vim.opt.spelllang = "en_gb"
 -- Markdown code block rendering
 vim.g.markdown_minlines = 500
 
--- Add alias for files
--- https://github.com/nvim-treesitter/nvim-treesitter/issues/2131
--- https://github.com/neovim/neovim/pull/16600
-vim.filetype.add({
-  extension = {
-    -- For Markdown inline block
-    matplotlib = "python",
-  },
-  pattern = {
-    -- https://neovim.discourse.group/t/how-to-add-custom-filetype-detection-to-various-env-files/4272
-    [".env.*"] = "config",
-  },
-})
+-- Add filetypes
+vim.filetype.add({ pattern = { [".env.*"] = "config" } })
 
 -- Make pyright and basedpyright use the correct pyenv version if provided
 -- https://stackoverflow.com/a/78916731
@@ -276,421 +152,10 @@ vim.api.nvim_create_autocmd("FileType", {
 -- COLORSCHEME --
 -----------------
 
+vim.pack.add({ { src = "https://github.com/sainnhe/gruvbox-material" } })
 vim.g.gruvbox_material_background = "hard"
 vim.g.gruvbox_material_better_performance = true
 vim.cmd.colorscheme("gruvbox-material")
-
-----------------
--- TREESITTER --
-----------------
-
--- Check if `tree-sitter` CLI is installed on system
-vim.schedule(function()
-  if vim.fn.executable("tree-sitter") ~= 1 then
-    vim.api.nvim_echo(
-      { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
-      true,
-      {}
-    )
-    return
-  end
-
-  --stylua: ignore start
-  local languages = {
-    -- Programming
-    "c", "cpp", "make", "python", "java", "rust",
-    "javascript", "typescript", "jsdoc", "vue", "svelte",
-    -- Scripting
-    "html", "css", "scss", "json", "regex", "bash",
-    "php", "php_only", "phpdoc", "blade", "twig",
-    -- Git
-    "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
-    -- Prose
-    "markdown", "markdown_inline", "bibtex", "mermaid",
-    -- Config
-    "rasi", -- For rofi
-    "yaml", "toml", "zathurarc", "xresources",
-    -- Vim-specific
-    "vim", "vimdoc", "comment", "lua", "luadoc", "diff",
-  }
-  require("nvim-treesitter").install(languages)
-  --stylua: ignore end
-
-  -- Based on https://github.com/MeanderingProgrammer/treesitter-modules.nvim#implementing-yourself
-  vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup("treesitter.setup", {}),
-    callback = function(args)
-      local buf = args.buf
-      local filetype = args.match
-
-      local language = vim.treesitter.language.get_lang(filetype) or filetype
-      if not vim.treesitter.language.add(language) then
-        return
-      end
-
-      vim.treesitter.start(buf, language)
-
-      vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-    end,
-  })
-end)
-
-------------------
--- AUTOCOMPLETE --
-------------------
-
-vim.schedule(function()
-  require("blink.cmp").setup({
-    keymap = { preset = "super-tab" },
-    sources = {
-      default = function(_)
-        local ok, node = pcall(vim.treesitter.get_node)
-        if ok and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
-          return { "copilot", "path", "buffer" }
-        else
-          return { "copilot", "lsp", "path", "snippets", "buffer" }
-        end
-      end,
-      providers = {
-        copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
-        buffer = { min_keyword_length = 4 },
-      },
-    },
-    cmdline = {
-      keymap = {
-        preset = "cmdline",
-        ["<Tab>"] = { "select_and_accept", "fallback" },
-        ["<Up>"] = { "select_prev", "fallback" },
-        ["<Down>"] = { "select_next", "fallback" },
-      },
-      completion = { menu = { auto_show = true } },
-    },
-    completion = {
-      list = { selection = { auto_insert = false } },
-      documentation = { auto_show = true, auto_show_delay_ms = 0 },
-    },
-    signature = { enabled = true },
-    fuzzy = { implementation = "prefer_rust" },
-  })
-
-  -- Copilot chat
-  -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
-  require("CopilotChat").setup({ model = "gpt-5.2", temperature = 0.1, window = { layout = "vertical", width = 0.5 } })
-end)
-
--------------
--- KEYMAPS --
--------------
-
-vim.schedule(function()
-  -- Leader key
-  vim.g.mapleader = " "
-  vim.g.maplocalleader = "\\"
-
-  -- A quick function to set keymaps;
-  -- see https://neovim.io/doc/user/lua.html#vim.keymap.set()
-  ---@param mode string|string[]
-  ---@param lhs string
-  ---@param rhs string|function
-  ---@param options? table
-  local function keymap(mode, lhs, rhs, options)
-    vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, options or {}))
-  end
-
-  local spider = require("spider")
-  local oil = require("oil")
-  local fzf = require("fzf-lua")
-  local grug = require("grug-far")
-
-  -- Move cursor by display lines by default
-  vim.tbl_map(function(ops)
-    keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
-  end, { "j", "k", "0", "^", "$", "<Down>", "<Up>" })
-
-  -- Better `w`, `e`, and `b` motions
-  vim.tbl_map(function(ops)
-    keymap({ "n", "v", "o", "x" }, ops, function()
-      spider.motion(ops)
-    end, { desc = "Spider-" .. ops })
-  end, { "w", "e", "b", "ge" })
-
-  -- Fix Lua API keyboard interrupt issue
-  keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
-
-  -- Open oil with -
-  keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
-
-  -- Add easy copy/paste to system clipboard
-  keymap({ "n", "x" }, "gy", '"+y', { desc = "Copy to clipboard" })
-  keymap({ "n", "x" }, "gY", '"+Y', { desc = "Copy to clipboard" })
-  keymap({ "n", "x" }, "gp", '"+p', { desc = "Paste to clipboard" })
-  keymap({ "n", "x" }, "gP", '"+P', { desc = "Paste to clipboard" })
-
-  -- Operate on windows with <M-_> in normal mode
-  vim.tbl_map(function(ops)
-    keymap("n", "<M-" .. ops .. ">", "<C-w>" .. ops)
-  end, { "h", "j", "k", "l", "v", "s", "c" })
-  vim.tbl_map(function(ops)
-    keymap("n", "<M-" .. ops .. ">", "<C-w><" .. ops .. ">")
-  end, { "Left", "Down", "Up", "Right" })
-
-  -- Allow zz to work in visual mode (for the whole selection)
-  local function center_visual_selection()
-    vim.cmd([[ execute "normal! \<ESC>" ]]) -- Force exit from visual mode
-    vim.api.nvim_win_set_cursor(0, { math.floor((vim.fn.line("'<") + vim.fn.line("'>")) / 2), 0 })
-    vim.cmd([[ execute "normal! zz" ]])
-  end
-  keymap("x", "zz", center_visual_selection, { desc = "Center" })
-
-  -- Remove default LSP mappings
-  pcall(vim.keymap.del, "n", "grt")
-  pcall(vim.keymap.del, "n", "grr")
-  pcall(vim.keymap.del, "n", "grn")
-  pcall(vim.keymap.del, "n", "grx")
-  pcall(vim.keymap.del, "n", "gra")
-  pcall(vim.keymap.del, "n", "gri")
-
-  -- LSP mappings
-  keymap("n", "<C-n>", vim.lsp.buf.hover, { desc = "Hover" })
-  keymap("n", "<C-e>", function()
-    vim.diagnostic.open_float(0, { scope = "cursor" })
-  end, { desc = "Diagnostics" })
-  keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
-
-  -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
-  keymap("n", "go", function()
-    fzf.lsp_definitions({ jump1 = true })
-  end, { desc = "Goto definition" })
-  keymap("n", "gO", function()
-    fzf.lsp_references({ jump1 = true, includeDeclaration = false })
-  end, { desc = "Goto references" })
-
-  keymap("n", "<M-n>", function()
-    vim.diagnostic.jump({ count = 1, float = true })
-  end, { desc = "Next diagnostic" })
-  keymap("n", "<M-e>", function()
-    vim.diagnostic.jump({ count = -1, float = true })
-  end, { desc = "Prev diagnostic" })
-
-  -- LSP maappings for both normal and visual modes
-  keymap({ "n", "x" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
-  keymap({ "n", "x" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
-
-  -- Manually show completion menu for AI suggestions
-  keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show" })
-
-  -- A function to search for TODOs and more
-  local function find_todo()
-  -- Based on treesitter
-  -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
-
-    --stylua: ignore start
-    local tags = {
-      "TODO", "WIP", -- To-do
-      "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST", -- Note
-      "HACK", "WARNING", "WARN", "FIX", -- Warning
-      "FIXME", "BUG", "ERROR", -- Danger
-    }
-    --stylua: ignore end
-
-    -- From VS Code `todo-tree`'s default regex
-    -- https://github.com/Gruntfuggly/todo-tree/issues/526
-    local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
-
-    -- Actually initiate the search
-    -- https://github.com/ibhagwan/fzf-lua/discussions/1194#discussioncomment-9418686
-    fzf.grep({ no_esc = true, search = regexp, prompt = "> ", winopts = { title = "Find TODOs" } })
-  end
-
-  local function toggle_nonascii_hl()
-    local w = vim.w
-    if w._nonascii then
-      pcall(vim.fn.matchdelete, w._nonascii)
-      w._nonascii = nil
-    else
-      w._nonascii = vim.fn.matchadd("MiniTrailspace", "[^\\x00-\\x7F]")
-    end
-  end
-
-  -- The basics
-  keymap("n", "<leader>w", "<cmd>w!<cr>", { desc = "Save" })
-  keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
-  keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohlsearch" })
-
-  -- Make
-  keymap("n", "<leader>m", "<cmd>make<cr>", { desc = "Make" })
-
-  -- Search and replace
-  keymap("n", "<leader>a", grug.open, { desc = "Replace" })
-  keymap("x", "<leader>a", function()
-    grug.with_visual_selection()
-  end, { desc = "Replace" })
-  keymap("n", "<leader>A", function()
-    grug.open({ prefills = { paths = vim.fn.expand("%") } })
-  end, { desc = "Replace in current file" })
-  keymap("x", "<leader>A", function()
-    grug.with_visual_selection({ prefills = { paths = vim.fn.expand("%") } })
-  end, { desc = "Replace in current file" })
-
-  -- Search
-  keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
-  keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
-  keymap("n", "<leader>t", fzf.files, { desc = "Files" })
-  keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
-  keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
-  keymap("n", "<leader>f", find_todo, { desc = "Find TODOs" })
-  -- Search selected text in visual mode
-  keymap("x", "<leader>s", function()
-    fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
-  end, { desc = "Search" })
-
-  -- Copilot Chat
-  keymap("n", "<leader>c", "<cmd>CopilotChatToggle<cr>", { desc = "Copilot Chat" })
-
-  -- Undo tree (requires `packadd`)
-  keymap("n", "<leader>u", function()
-    require("undotree").open()
-  end, { desc = "Undo tree" })
-
-  -- Plugins (group: `p`)
-  keymap("n", "<leader>pu", function()
-    vim.pack.update()
-  end, { desc = "Pack update" })
-  keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
-
-  -- Git (group: `g`)
-  keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
-  keymap("n", "<leader>gs", fzf.git_status, { desc = "Git Status" })
-  keymap("n", "<leader>gd", "<cmd>Gdiffsplit<cr>", { desc = "Git Diff" })
-  keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
-  keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
-  keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
-  keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
-  keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
-
-  -- Git hunks (group: `h`)
-  keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
-  keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
-  keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
-  keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
-  keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
-  keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
-  keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
-
-  -- Interface (group: `i`)
-  keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
-  keymap("n", "<leader>iw", "<cmd>set wrap!<cr>", { desc = "Wrap" })
-  keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
-  keymap("n", "<leader>ic", toggle_cursorline, { desc = "Cursorline" })
-  keymap("n", "<leader>is", toggle_signcolumn, { desc = "Sign column" })
-  keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "HL non-ASCII" })
-  keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
-
-  -- Based on https://github.com/nvim-mini/mini.clue/blob/main/doc/mini-clue.txt
-  local miniclue = require("mini.clue")
-  miniclue.setup({
-    window = { delay = 200 },
-    triggers = {
-      { mode = { "n", "x" }, keys = "<Leader>" },
-      { mode = "n", keys = "[" },
-      { mode = "n", keys = "]" },
-      { mode = "i", keys = "<C-x>" },
-      { mode = { "n", "x" }, keys = "g" },
-      { mode = { "n", "x" }, keys = "'" },
-      { mode = { "n", "x" }, keys = "`" },
-      { mode = { "n", "x" }, keys = '"' },
-      { mode = { "i", "c" }, keys = "<C-r>" },
-      { mode = "n", keys = "<C-w>" },
-      { mode = { "n", "x" }, keys = "z" },
-    },
-    clues = {
-      miniclue.gen_clues.square_brackets(),
-      miniclue.gen_clues.builtin_completion(),
-      miniclue.gen_clues.g(),
-      miniclue.gen_clues.marks(),
-      miniclue.gen_clues.registers(),
-      miniclue.gen_clues.windows(),
-      miniclue.gen_clues.z(),
-    },
-  })
-end)
-
----------
--- LSP --
----------
-
-vim.schedule(function()
-  vim.diagnostic.config({
-    virtual_text = false,
-    severity_sort = true,
-    signs = {
-      text = {
-        [vim.diagnostic.severity.ERROR] = "󰅚",
-        [vim.diagnostic.severity.WARN] = "󰀪",
-        [vim.diagnostic.severity.INFO] = "󰋽",
-        [vim.diagnostic.severity.HINT] = "󰌶",
-      },
-    },
-  })
-
-  require("mason").setup({})
-  require("mason-lspconfig").setup({ ensure_installed = { "copilot" } })
-
-  local _, blink = pcall(require, "blink.cmp")
-  if blink then
-    vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
-  end
-
-  local null_ls = require("null-ls")
-
-  null_ls.setup({
-    sources = {
-      null_ls.builtins.formatting.prettierd,
-      null_ls.builtins.formatting.stylua,
-      null_ls.builtins.formatting.black,
-      null_ls.builtins.formatting.blade_formatter,
-      null_ls.builtins.formatting.shfmt.with({
-        -- https://github.com/mvdan/sh/issues/212
-        args = { "-i", "2", "-ci", "-filename", "$FILENAME" },
-      }),
-    },
-  })
-
-  -- Specific handlers
-  vim.lsp.config("lua_ls", {
-    settings = {
-      Lua = {
-        diagnostics = { globals = { "vim" } },
-        runtime = { version = "LuaJIT" },
-        format = { enable = false },
-      },
-    },
-  })
-  vim.lsp.config("rust_analyzer", {
-    settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = { command = "clippy" },
-        imports = { granularity = { group = "module" }, prefix = "self" },
-        cargo = { buildScripts = { enable = true } },
-        procMacro = { enable = true },
-      },
-    },
-  })
-  vim.lsp.config("harper_ls", {
-    settings = {
-      ["harper-ls"] = {
-        linters = {
-          SentenceCapitalization = false,
-          SpellCheck = false,
-        },
-      },
-    },
-  })
-  vim.lsp.config("jdtls", { settings = { java = { format = { enabled = false } } } })
-  -- https://github.com/LazyVim/LazyVim/discussions/2159
-  vim.lsp.config("html", { init_options = { provideFormatter = false } })
-  vim.lsp.config("cssls", { init_options = { provideFormatter = false } })
-end)
 
 ----------------
 -- STATUSLINE --
@@ -857,3 +322,538 @@ vim.api.nvim_create_autocmd({
   end),
   desc = "Update statusline/winbar",
 })
+
+-- Enter async to avoid blocking UI during plugin startup
+vim.schedule(function()
+  -------------
+  -- PLUGINS --
+  -------------
+
+  -- The great plugins list
+  vim.pack.add({
+    -- Library
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+    -- Editing
+    { src = "https://github.com/nvim-mini/mini.ai" },
+    { src = "https://github.com/nvim-mini/mini.surround" },
+    { src = "https://github.com/nvim-mini/mini.align" },
+    { src = "https://github.com/nvim-mini/mini.comment" },
+    { src = "https://github.com/nvim-mini/mini.trailspace" },
+    { src = "https://github.com/windwp/nvim-autopairs" },
+    { src = "https://github.com/windwp/nvim-ts-autotag" },
+    { src = "https://github.com/tpope/vim-sleuth" },
+    -- Movement
+    { src = "https://github.com/chrisgrieser/nvim-spider" },
+    { src = "https://github.com/tpope/vim-rsi" },
+    -- File browser
+    { src = "https://github.com/stevearc/oil.nvim" },
+    -- Hinting
+    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
+    { src = "https://github.com/fang2hou/blink-copilot" },
+    { src = "https://github.com/nvim-mini/mini.clue" },
+    -- Copilot Chat
+    { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim" },
+    -- Git
+    { src = "https://github.com/tpope/vim-fugitive" },
+    { src = "https://github.com/lewis6991/gitsigns.nvim" },
+    -- Search
+    { src = "https://github.com/ibhagwan/fzf-lua" },
+    { src = "https://github.com/MagicDuck/grug-far.nvim", version = vim.version.range("*") },
+    -- LSP
+    { src = "https://github.com/neovim/nvim-lspconfig" },
+    { src = "https://github.com/mason-org/mason.nvim" },
+    { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+    { src = "https://github.com/nvimtools/none-ls.nvim" },
+    -- Highlight
+    { src = "https://github.com/lukas-reineke/indent-blankline.nvim" },
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+    { src = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" },
+    -- Icons
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+  })
+
+  -- Editing packages
+  for _, name in ipairs({
+    "mini.ai",
+    "mini.surround",
+    "mini.align",
+    "mini.trailspace",
+    "nvim-autopairs",
+    "nvim-ts-autotag",
+    "nvim-web-devicons",
+  }) do
+    require(name).setup({})
+  end
+
+  -- Indent line
+  require("ibl").setup({ indent = { char = "│" }, scope = { enabled = false } })
+
+  -- Comment string
+  require("mini.comment").setup({
+    options = {
+      custom_commentstring = function()
+        return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+      end,
+    },
+  })
+
+  -- Git
+  require("gitsigns").setup({ current_line_blame_formatter = "- [<abbrev_sha>] <author>, <author_time:%R> - <summary>" })
+
+  -- File editor
+  require("oil").setup({
+    view_options = {
+      show_hidden = true,
+      natural_order = true,
+      is_always_hidden = function(name, _)
+        return name == ".."
+      end,
+    },
+    win_options = { wrap = true },
+    delete_to_trash = true,
+    watch_for_changes = true,
+  })
+
+  -- Fuzzy Finder
+  require("fzf-lua").setup({
+    files = {
+      formatter = "path.filename_first",
+      multiline = 2,
+      fd_opts = "-t f -H -E '.git/'",
+      cwd_prompt = false,
+    },
+    grep = {
+      formatter = "path.filename_first",
+      multiline = 2,
+      -- https://github.com/ibhagwan/fzf-lua/issues/971
+      rg_opts = "--hidden -g '!.git/' --column --line-number --no-heading --color=always --smart-case --max-columns=4096 --trim -e",
+    },
+    lsp = { formatter = "path.filename_first", multiline = 2 },
+  })
+  require("fzf-lua").register_ui_select()
+
+  ----------------
+  -- TREESITTER --
+  ----------------
+
+  -- Check if `tree-sitter` CLI is installed on system
+  if vim.fn.executable("tree-sitter") ~= 1 then
+    vim.api.nvim_echo(
+      { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
+      true,
+      {}
+    )
+    return
+  end
+
+  vim.api.nvim_create_user_command("InstallCommonTSParsers", function()
+    --stylua: ignore start
+    local languages = {
+      -- Programming
+      "c", "cpp", "make", "python", "java", "rust",
+      "javascript", "typescript", "jsdoc", "vue", "svelte",
+      -- Scripting
+      "html", "css", "scss", "json", "regex", "bash",
+      "php", "php_only", "phpdoc", "blade", "twig",
+      -- Git
+      "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
+      -- Prose
+      "markdown", "markdown_inline", "bibtex", "mermaid",
+      -- Config
+      "rasi", -- For rofi
+      "yaml", "toml", "zathurarc", "xresources",
+      -- Vim-specific
+      "vim", "vimdoc", "comment", "lua", "luadoc",
+    }
+    --stylua: ignore end
+    require("nvim-treesitter").install(languages)
+  end, { desc = "Install common tree-sitter parsers" })
+
+  -- Based on https://github.com/MeanderingProgrammer/treesitter-modules.nvim#implementing-yourself
+  vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("treesitter.setup", {}),
+    callback = function(args)
+      local buf = args.buf
+      local filetype = args.match
+
+      local language = vim.treesitter.language.get_lang(filetype) or filetype
+      if not vim.treesitter.language.add(language) then
+        return
+      end
+
+      vim.treesitter.start(buf, language)
+
+      vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end,
+  })
+
+  ------------------
+  -- AUTOCOMPLETE --
+  ------------------
+
+  require("blink.cmp").setup({
+    keymap = { preset = "super-tab" },
+    sources = {
+      default = function(_)
+        local ok, node = pcall(vim.treesitter.get_node)
+        if ok and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
+          return { "copilot", "path", "buffer" }
+        else
+          return { "copilot", "lsp", "path", "snippets", "buffer" }
+        end
+      end,
+      providers = {
+        copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
+        buffer = { min_keyword_length = 4 },
+      },
+    },
+    cmdline = {
+      keymap = {
+        preset = "cmdline",
+        ["<Tab>"] = { "select_and_accept", "fallback" },
+        ["<Up>"] = { "select_prev", "fallback" },
+        ["<Down>"] = { "select_next", "fallback" },
+      },
+      completion = { menu = { auto_show = true } },
+    },
+    completion = {
+      list = { selection = { auto_insert = false } },
+      documentation = { auto_show = true, auto_show_delay_ms = 0 },
+    },
+    signature = { enabled = true },
+    fuzzy = { implementation = "prefer_rust" },
+  })
+
+  -- Copilot chat
+  -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
+  require("CopilotChat").setup({ model = "gpt-5.2", temperature = 0.1, window = { layout = "vertical", width = 0.5 } })
+
+  -------------
+  -- KEYMAPS --
+  -------------
+
+  -- Leader key
+  vim.g.mapleader = " "
+  vim.g.maplocalleader = "\\"
+
+  -- A quick function to set keymaps;
+  -- see https://neovim.io/doc/user/lua.html#vim.keymap.set()
+  ---@param mode string|string[]
+  ---@param lhs string
+  ---@param rhs string|function
+  ---@param options? table
+  local function keymap(mode, lhs, rhs, options)
+    vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, options or {}))
+  end
+
+  local spider = require("spider")
+  local oil = require("oil")
+  local fzf = require("fzf-lua")
+  local grug = require("grug-far")
+
+  -- Move cursor by display lines by default
+  vim.tbl_map(function(ops)
+    keymap({ "n", "v", "o", "x" }, ops, "g" .. ops)
+  end, { "j", "k", "0", "^", "$", "<Down>", "<Up>" })
+
+  -- Better `w`, `e`, and `b` motions
+  vim.tbl_map(function(ops)
+    keymap({ "n", "v", "o", "x" }, ops, function()
+      spider.motion(ops)
+    end, { desc = "Spider-" .. ops })
+  end, { "w", "e", "b", "ge" })
+
+  -- Fix Lua API keyboard interrupt issue
+  keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
+
+  -- Open oil with -
+  keymap({ "n" }, "-", oil.open, { desc = "Open oil.nvim" })
+
+  -- Add easy copy/paste to system clipboard
+  keymap({ "n", "x" }, "gy", '"+y', { desc = "Copy to clipboard" })
+  keymap({ "n", "x" }, "gY", '"+Y', { desc = "Copy to clipboard" })
+  keymap({ "n", "x" }, "gp", '"+p', { desc = "Paste to clipboard" })
+  keymap({ "n", "x" }, "gP", '"+P', { desc = "Paste to clipboard" })
+
+  -- Operate on windows with <M-_> in normal mode
+  vim.tbl_map(function(ops)
+    keymap("n", "<M-" .. ops .. ">", "<C-w>" .. ops)
+  end, { "h", "j", "k", "l", "v", "s", "c" })
+  vim.tbl_map(function(ops)
+    keymap("n", "<M-" .. ops .. ">", "<C-w><" .. ops .. ">")
+  end, { "Left", "Down", "Up", "Right" })
+
+  -- Allow zz to work in visual mode (for the whole selection)
+  local function center_visual_selection()
+    vim.cmd([[ execute "normal! \<ESC>" ]]) -- Force exit from visual mode
+    vim.api.nvim_win_set_cursor(0, { math.floor((vim.fn.line("'<") + vim.fn.line("'>")) / 2), 0 })
+    vim.cmd([[ execute "normal! zz" ]])
+  end
+  keymap("x", "zz", center_visual_selection, { desc = "Center" })
+
+  -- Remove default LSP mappings
+  pcall(vim.keymap.del, "n", "grt")
+  pcall(vim.keymap.del, "n", "grr")
+  pcall(vim.keymap.del, "n", "grn")
+  pcall(vim.keymap.del, "n", "grx")
+  pcall(vim.keymap.del, "n", "gra")
+  pcall(vim.keymap.del, "n", "gri")
+
+  -- LSP mappings
+  keymap("n", "<C-n>", vim.lsp.buf.hover, { desc = "Hover" })
+  keymap("n", "<C-e>", function()
+    vim.diagnostic.open_float(0, { scope = "cursor" })
+  end, { desc = "Diagnostics" })
+  keymap("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
+
+  -- https://github.com/ibhagwan/fzf-lua/wiki#lsp-single-result
+  keymap("n", "go", function()
+    fzf.lsp_definitions({ jump1 = true })
+  end, { desc = "Goto definition" })
+  keymap("n", "gO", function()
+    fzf.lsp_references({ jump1 = true, includeDeclaration = false })
+  end, { desc = "Goto references" })
+
+  keymap("n", "<M-n>", function()
+    vim.diagnostic.jump({ count = 1, float = true })
+  end, { desc = "Next diagnostic" })
+  keymap("n", "<M-e>", function()
+    vim.diagnostic.jump({ count = -1, float = true })
+  end, { desc = "Prev diagnostic" })
+
+  -- LSP maappings for both normal and visual modes
+  keymap({ "n", "x" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
+  keymap({ "n", "x" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
+
+  -- Manually show completion menu for AI suggestions
+  keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show" })
+
+  -- A function to search for TODOs and more
+  local function find_todo()
+  -- Based on treesitter
+  -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
+
+    --stylua: ignore start
+    local tags = {
+      "TODO", "WIP", -- To-do
+      "NOTE", "XXX", "INFO", "DOCS", "PERF", "TEST", -- Note
+      "HACK", "WARNING", "WARN", "FIX", -- Warning
+      "FIXME", "BUG", "ERROR", -- Danger
+    }
+    --stylua: ignore end
+
+    -- From VS Code `todo-tree`'s default regex
+    -- https://github.com/Gruntfuggly/todo-tree/issues/526
+    local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
+
+    -- Actually initiate the search
+    -- https://github.com/ibhagwan/fzf-lua/discussions/1194#discussioncomment-9418686
+    fzf.grep({ no_esc = true, search = regexp, prompt = "> ", winopts = { title = "Find TODOs" } })
+  end
+
+  local function toggle_nonascii_hl()
+    local w = vim.w
+    if w._nonascii then
+      pcall(vim.fn.matchdelete, w._nonascii)
+      w._nonascii = nil
+    else
+      w._nonascii = vim.fn.matchadd("MiniTrailspace", "[^\\x00-\\x7F]")
+    end
+  end
+
+  -- The basics
+  keymap("n", "<leader>w", "<cmd>silent w<cr>", { desc = "Save" })
+  keymap("n", "<leader>q", "<cmd>silent qa!<cr>", { desc = "Quit" })
+  keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohlsearch" })
+
+  -- Make
+  keymap("n", "<leader>m", "<cmd>make<cr>", { desc = "Make" })
+
+  -- Search and replace
+  keymap("n", "<leader>a", grug.open, { desc = "Replace" })
+  keymap("x", "<leader>a", function()
+    grug.with_visual_selection()
+  end, { desc = "Replace" })
+  keymap("n", "<leader>A", function()
+    grug.open({ prefills = { paths = vim.fn.expand("%") } })
+  end, { desc = "Replace in current file" })
+  keymap("x", "<leader>A", function()
+    grug.with_visual_selection({ prefills = { paths = vim.fn.expand("%") } })
+  end, { desc = "Replace in current file" })
+
+  -- Search
+  keymap("n", "<leader>r", fzf.resume, { desc = "Resume search" })
+  keymap("n", "<leader>s", fzf.live_grep, { desc = "Search" })
+  keymap("n", "<leader>t", fzf.files, { desc = "Files" })
+  keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
+  keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
+  keymap("n", "<leader>f", find_todo, { desc = "Find TODOs" })
+  -- Search selected text in visual mode
+  keymap("x", "<leader>s", function()
+    fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
+  end, { desc = "Search" })
+
+  -- Copilot Chat
+  keymap("n", "<leader>c", "<cmd>CopilotChatToggle<cr>", { desc = "Copilot Chat" })
+
+  -- Plugins (group: `p`)
+  keymap("n", "<leader>pu", function()
+    vim.pack.update()
+  end, { desc = "Pack update" })
+  keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
+
+  -- Git (group: `g`)
+  keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
+  keymap("n", "<leader>gs", fzf.git_status, { desc = "Git Status" })
+  keymap("n", "<leader>gd", "<cmd>Gdiffsplit<cr>", { desc = "Git Diff" })
+  keymap("n", "<leader>gf", "<cmd>G fetch<cr>", { desc = "Git Fetch" })
+  keymap("n", "<leader>gm", "<cmd>G merge<cr>", { desc = "Git Merge" })
+  keymap("n", "<leader>ga", "<cmd>G add %<cr>", { desc = "Git Add" })
+  keymap("n", "<leader>gc", "<cmd>G commit<cr>", { desc = "Git Commit" })
+  keymap("n", "<leader>gp", "<cmd>G push<cr>", { desc = "Git Push" })
+
+  -- Git hunks (group: `h`)
+  keymap("n", "<leader>hd", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Diff hunk" })
+  keymap("n", "<leader>hv", "<cmd>Gitsigns select_hunk<cr>", { desc = "Visual select hunk" })
+  keymap("n", "<leader>hn", "<cmd>Gitsigns next_hunk<cr>", { desc = "Next hunk" })
+  keymap("n", "<leader>hp", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Previous hunk" })
+  keymap("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", { desc = "Stage hunk" })
+  keymap("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", { desc = "Undo stage hunk" })
+  keymap("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", { desc = "Reset hunk" })
+
+  -- Interface (group: `i`)
+  keymap("n", "<leader>in", "<cmd>set number!<cr>", { desc = "Number" })
+  keymap("n", "<leader>iw", "<cmd>set wrap!<cr>", { desc = "Wrap" })
+  keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
+  keymap("n", "<leader>ic", toggle_cursorline, { desc = "Cursorline" })
+  keymap("n", "<leader>is", toggle_signcolumn, { desc = "Sign column" })
+  keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "HL non-ASCII" })
+  keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
+
+  -- Based on https://github.com/nvim-mini/mini.clue/blob/main/doc/mini-clue.txt
+  local miniclue = require("mini.clue")
+  miniclue.setup({
+    window = { delay = 200 },
+    triggers = {
+      { mode = { "n", "x" }, keys = "<Leader>" },
+      { mode = "n", keys = "[" },
+      { mode = "n", keys = "]" },
+      { mode = "i", keys = "<C-x>" },
+      { mode = { "n", "x" }, keys = "g" },
+      { mode = { "n", "x" }, keys = "'" },
+      { mode = { "n", "x" }, keys = "`" },
+      { mode = { "n", "x" }, keys = '"' },
+      { mode = { "i", "c" }, keys = "<C-r>" },
+      { mode = "n", keys = "<C-w>" },
+      { mode = { "n", "x" }, keys = "z" },
+    },
+    clues = {
+      miniclue.gen_clues.square_brackets(),
+      miniclue.gen_clues.builtin_completion(),
+      miniclue.gen_clues.g(),
+      miniclue.gen_clues.marks(),
+      miniclue.gen_clues.registers(),
+      miniclue.gen_clues.windows(),
+      miniclue.gen_clues.z(),
+    },
+  })
+
+  ---------
+  -- LSP --
+  ---------
+
+  vim.diagnostic.config({
+    virtual_text = false,
+    severity_sort = true,
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = "󰅚",
+        [vim.diagnostic.severity.WARN] = "󰀪",
+        [vim.diagnostic.severity.INFO] = "󰋽",
+        [vim.diagnostic.severity.HINT] = "󰌶",
+      },
+    },
+  })
+
+  require("mason").setup({})
+  require("mason-lspconfig").setup({ ensure_installed = { "copilot" } })
+
+  local _, blink = pcall(require, "blink.cmp")
+  if blink then
+    vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
+  end
+
+  local null_ls = require("null-ls")
+
+  null_ls.setup({
+    sources = {
+      null_ls.builtins.formatting.prettierd,
+      null_ls.builtins.formatting.stylua,
+      null_ls.builtins.formatting.black,
+      null_ls.builtins.formatting.blade_formatter,
+      null_ls.builtins.formatting.shfmt.with({
+        -- https://github.com/mvdan/sh/issues/212
+        args = { "-i", "2", "-ci", "-filename", "$FILENAME" },
+      }),
+    },
+  })
+
+  -- Specific handlers
+  vim.lsp.config("lua_ls", {
+    settings = {
+      Lua = {
+        diagnostics = { globals = { "vim" } },
+        runtime = { version = "LuaJIT" },
+        format = { enable = false },
+      },
+    },
+  })
+  vim.lsp.config("rust_analyzer", {
+    settings = {
+      ["rust-analyzer"] = {
+        checkOnSave = { command = "clippy" },
+        imports = { granularity = { group = "module" }, prefix = "self" },
+        cargo = { buildScripts = { enable = true } },
+        procMacro = { enable = true },
+      },
+    },
+  })
+  vim.lsp.config("harper_ls", {
+    settings = {
+      ["harper-ls"] = {
+        linters = {
+          SentenceCapitalization = false,
+          SpellCheck = false,
+        },
+      },
+    },
+  })
+  vim.lsp.config("jdtls", { settings = { java = { format = { enabled = false } } } })
+  -- https://github.com/LazyVim/LazyVim/discussions/2159
+  vim.lsp.config("html", { init_options = { provideFormatter = false } })
+  vim.lsp.config("cssls", { init_options = { provideFormatter = false } })
+end)
+
+-------------------------
+-- STARTUP PERFORMANCE --
+-------------------------
+
+local pf_config_done = vim.loop.hrtime()
+local pf_config_schedule_done = 0
+vim.schedule(function()
+  pf_config_schedule_done = vim.loop.hrtime()
+end)
+
+vim.api.nvim_create_user_command("StartupTime", function()
+  local time_to_config = (pf_config_done - pf_config_start) / 1e6
+  local time_to_schedule = (pf_config_schedule_done - pf_config_done) / 1e6
+  local time_total = (pf_config_schedule_done - pf_config_start) / 1e6
+  print(
+    string.format(
+      "- Time to config: %.2fms\n- Time to schedule: %.2fms\n- Total time: %.2fms",
+      time_to_config,
+      time_to_schedule,
+      time_total
+    )
+  )
+end, { desc = "Show startup performance" })

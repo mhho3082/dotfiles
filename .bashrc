@@ -114,6 +114,7 @@ fi
 alias e="$EDITOR"
 alias v="$VISUAL"
 alias g='git'
+alias s='ssh'
 alias c='clear'
 alias q='exit'
 
