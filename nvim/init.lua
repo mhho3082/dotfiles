@@ -432,6 +432,26 @@ vim.schedule(function()
   })
   require("fzf-lua").register_ui_select()
 
+  -- Function to find and remove all unused packages
+  vim.api.nvim_create_user_command("PackClean", function()
+    local packages = vim.tbl_map(
+      function(v)
+        return v.spec.name
+      end,
+      vim.tbl_filter(function(v)
+        return not v.active
+      end, vim.pack.get())
+    )
+    local confirm = vim.fn.confirm(
+      string.format("Packages: %s\nRemove unused packages?", vim.iter(packages):join(", ")),
+      "&Yes\n&No",
+      2
+    )
+    if confirm == 1 then
+      vim.pack.del(packages)
+    end
+  end, { desc = "Remove unused packages" })
+
   ----------------
   -- TREESITTER --
   ----------------
