@@ -378,23 +378,15 @@ vim.schedule(function()
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   })
 
-  -- Editing packages
-  for _, name in ipairs({
-    "mini.ai",
-    "mini.surround",
-    "mini.align",
-    "mini.trailspace",
-    "nvim-autopairs",
-    "nvim-ts-autotag",
-    "nvim-web-devicons",
-  }) do
-    require(name).setup({})
-  end
-
-  -- Indent line
+  -- UI
+  require("nvim-web-devicons").setup({})
   require("ibl").setup({ indent = { char = "│" }, scope = { enabled = false } })
 
-  -- Comment string
+  -- Editing packages
+  require("mini.ai").setup({})
+  require("mini.surround").setup({})
+  require("mini.align").setup({})
+  require("mini.trailspace").setup({})
   require("mini.comment").setup({
     options = {
       custom_commentstring = function()
@@ -402,6 +394,8 @@ vim.schedule(function()
       end,
     },
   })
+  require("nvim-autopairs").setup({})
+  require("nvim-ts-autotag").setup({})
 
   -- Git
   require("gitsigns").setup({ current_line_blame_formatter = "- [<abbrev_sha>] <author>, <author_time:%R> - <summary>" })
@@ -463,15 +457,16 @@ vim.schedule(function()
   ----------------
 
   -- Check if `tree-sitter` CLI is installed on system
-  if vim.fn.executable("tree-sitter") == 1 then
-    vim.api.nvim_create_user_command("InstallCommonTSParsers", function()
+  vim.api.nvim_create_user_command("InstallCommonTSParsers", function()
+    if vim.fn.executable("tree-sitter") == 1 then
       --stylua: ignore start
       local languages = {
         -- Programming
         "c", "cpp", "make", "python", "java", "rust",
         "javascript", "typescript", "jsdoc", "vue", "svelte",
         -- Scripting
-        "html", "css", "scss", "json", "regex", "bash",
+        "regex", "bash", "zsh", "sql",
+        "html", "css", "scss", "json",
         "php", "php_only", "phpdoc", "blade", "twig",
         -- Git
         "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
@@ -485,14 +480,14 @@ vim.schedule(function()
       }
       --stylua: ignore end
       require("nvim-treesitter").install(languages)
-    end, { desc = "Install common tree-sitter parsers" })
-  else
-    vim.api.nvim_echo(
-      { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
-      true,
-      {}
-    )
-  end
+    else
+      vim.api.nvim_echo(
+        { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
+        true,
+        {}
+      )
+    end
+  end, { desc = "Install common tree-sitter parsers" })
 
   -- Based on https://github.com/MeanderingProgrammer/treesitter-modules.nvim#implementing-yourself
   vim.api.nvim_create_autocmd("FileType", {
