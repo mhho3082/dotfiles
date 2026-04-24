@@ -253,13 +253,18 @@ local function statusline_diagnostic()
   end
 
   return table.concat({
-    " [LSP",
+    " [",
     error > 0 and " 󰅚 " .. error or "",
     warn > 0 and " 󰀪 " .. warn or "",
     info > 0 and " 󰋽 " .. info or "",
     hint > 0 and " 󰌶 " .. hint or "",
     "]",
   })
+end
+
+local function statusline_macro()
+  local register = vim.fn.reg_recording()
+  return register ~= "" and (" [rec @" .. register .. "]") or ""
 end
 
 -- Based on https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/searchcount.lua
@@ -295,8 +300,8 @@ function Statusline()
     "%*",
     "%=",
 
+    " %#Constant#" .. vim.lsp.status(),
     "%#MiniStatuslineFilename#",
-    " " .. vim.lsp.status(),
     " %{&filetype}",
     "%#warningmsg#",
     vim.bo.ff == "unix" and "" or " format:" .. vim.bo.ff,
@@ -304,6 +309,7 @@ function Statusline()
     "%* ",
 
     "%#MiniStatuslineFileinfo#",
+    statusline_macro(),
     statusline_search(),
     " %p%% %l:%c 0x%02B ",
     "%*",
@@ -315,7 +321,8 @@ vim.opt.statusline = "%{%v:lua.Statusline()%}"
 
 -- Based on https://theopark.me/blog/2025-06-08-statusline-notes/
 vim.api.nvim_create_autocmd({
-  "SafeState",
+  -- DO NOT use `SafeState`: statusline redraw triggers `SafeState` itself!
+  "TextChanged",
   "LspAttach",
   "LspDetach",
   "LspProgress",
@@ -326,7 +333,7 @@ vim.api.nvim_create_autocmd({
   callback = vim.schedule_wrap(function()
     vim.cmd.redrawstatus()
   end),
-  desc = "Update statusline/winbar",
+  desc = "Update statusline",
 })
 
 -- Enter async to avoid blocking UI during plugin startup
@@ -456,30 +463,31 @@ vim.schedule(function()
   -- TREESITTER --
   ----------------
 
-  -- Check if `tree-sitter` CLI is installed on system
-  vim.api.nvim_create_user_command("InstallCommonTSParsers", function()
+  local function install_common_tree_sitter()
+    --stylua: ignore start
+    local languages = {
+      -- Programming
+      "c", "cpp", "make", "python", "java", "rust",
+      "javascript", "typescript", "jsdoc", "vue", "svelte",
+      -- Scripting
+      "regex", "bash", "zsh", "sql",
+      "html", "css", "scss", "json",
+      "php", "php_only", "phpdoc", "blade", "twig",
+      -- Git
+      "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
+      -- Prose
+      "markdown", "markdown_inline", "bibtex", "mermaid",
+      -- Config
+      "rasi", -- For rofi
+      "yaml", "toml", "zathurarc", "xresources",
+      -- Vim-specific
+      "vim", "vimdoc", "comment", "lua", "luadoc",
+    }
+    --stylua: ignore end
+
+    -- Check if `tree-sitter` CLI is installed on system
     if vim.fn.executable("tree-sitter") == 1 then
-      --stylua: ignore start
-      local languages = {
-        -- Programming
-        "c", "cpp", "make", "python", "java", "rust",
-        "javascript", "typescript", "jsdoc", "vue", "svelte",
-        -- Scripting
-        "regex", "bash", "zsh", "sql",
-        "html", "css", "scss", "json",
-        "php", "php_only", "phpdoc", "blade", "twig",
-        -- Git
-        "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
-        -- Prose
-        "markdown", "markdown_inline", "bibtex", "mermaid",
-        -- Config
-        "rasi", -- For rofi
-        "yaml", "toml", "zathurarc", "xresources",
-        -- Vim-specific
-        "vim", "vimdoc", "comment", "lua", "luadoc",
-      }
-      --stylua: ignore end
-      require("nvim-treesitter").install(languages)
+      require("nvim-treesitter").install(languages, { summary = true })
     else
       vim.api.nvim_echo(
         { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
@@ -487,7 +495,7 @@ vim.schedule(function()
         {}
       )
     end
-  end, { desc = "Install common tree-sitter parsers" })
+  end
 
   -- Based on https://github.com/MeanderingProgrammer/treesitter-modules.nvim#implementing-yourself
   vim.api.nvim_create_autocmd("FileType", {
@@ -721,6 +729,7 @@ vim.schedule(function()
     vim.pack.update()
   end, { desc = "Pack update" })
   keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
+  keymap("n", "<leader>pt", install_common_tree_sitter, { desc = "Tree-sitter" })
 
   -- Git (group: `g`)
   keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
