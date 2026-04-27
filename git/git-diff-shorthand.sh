@@ -14,6 +14,8 @@
 #   <rev>    : changes introduced by commit <rev>
 #   <n>      : same, but <n> means HEAD~n (0 == HEAD; HEAD~0 also works)
 #   <a> <b>  : compare two endpoints directly; ints are resolved as HEAD~n
+#
+# If your revision specifier is an integer, use `heads/[rev]` or `tags/[rev]` to disambiguate
 
 is_int() {
   [[ $1 =~ ^[0-9]+$ ]]
