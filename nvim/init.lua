@@ -85,6 +85,11 @@ end
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
+-- Auto resize splits when the terminal's window is resized
+vim.api.nvim_create_autocmd("VimResized", {
+  command = "wincmd =",
+})
+
 -- Default indent: 4 spaces
 -- (sleuth overrides this if indent format found)
 vim.opt.tabstop = 4
@@ -166,7 +171,7 @@ vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
 
 -- Based on https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/utils/mode.lua
-local function statusline_mode()
+function Statusline_mode()
   local map = {
     ["n"] = "NORMAL",
     ["no"] = "O-PENDING",
@@ -226,14 +231,14 @@ local function statusline_mode()
 end
 
 -- Based on https://vieitesss.github.io/posts/Neovim-custom-status-line/
-local function statusline_git()
+function Statusline_git()
   local git_info = vim.b.gitsigns_status_dict
   if not git_info or git_info.head == "" then
     return ""
   end
 
   return table.concat({
-    " [󰊢 ",
+    "[󰊢 ",
     git_info.head,
     git_info.added and git_info.added > 0 and (" +" .. git_info.added) or "",
     git_info.changed and git_info.changed > 0 and (" ~" .. git_info.changed) or "",
@@ -242,7 +247,7 @@ local function statusline_git()
   })
 end
 
-local function statusline_diagnostic()
+function Statusline_diagnostic()
   local levels = vim.diagnostic.severity
   local error = #vim.diagnostic.get(0, { severity = levels.ERROR }) or 0
   local warn = #vim.diagnostic.get(0, { severity = levels.WARN }) or 0
@@ -253,7 +258,7 @@ local function statusline_diagnostic()
   end
 
   return table.concat({
-    " [",
+    "[LSP",
     error > 0 and " 󰅚 " .. error or "",
     warn > 0 and " 󰀪 " .. warn or "",
     info > 0 and " 󰋽 " .. info or "",
@@ -262,13 +267,13 @@ local function statusline_diagnostic()
   })
 end
 
-local function statusline_macro()
+function Statusline_macro()
   local register = vim.fn.reg_recording()
-  return register ~= "" and (" [rec @" .. register .. "]") or ""
+  return register ~= "" and ("[rec @" .. register .. "]") or ""
 end
 
 -- Based on https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/searchcount.lua
-local function statusline_search()
+function Statusline_search()
   if vim.v.hlsearch == 0 then
     return ""
   end
@@ -279,62 +284,195 @@ local function statusline_search()
   end
 
   -- Based on Neovim help files
-  local format = " [%d/%d]"
+  local format = "[%d/%d]"
   if result.incomplete == 1 then
-    format = " [?/??]"
+    format = "[?/??]"
   elseif result.incomplete == 2 then
-    format = result.current > result.maxcount and " [>%d/>%d]" or " [%d/>%d]"
+    format = result.current > result.maxcount and "[>%d/>%d]" or "[%d/>%d]"
   end
   return string.format(format, result.current, result.total)
 end
 
 -- Ideas from Neovim docs and https://zignar.net/2022/01/21/a-boring-statusline-for-neovim/
-function Statusline()
-  local parts = {
-    statusline_mode(),
-    " %<%f",
-    "%( [%M%R%H]%)",
-    "%#MiniStatuslineFilename#",
-    statusline_git(),
-    statusline_diagnostic(),
-    "%*",
-    "%=",
+vim.opt.statusline = table.concat({
+  "%{%v:lua.Statusline_mode()%}",
+  " %<%f",
+  "%( [%M%R%H]%)",
+  "%#MiniStatuslineFilename#",
+  "%( %{%v:lua.Statusline_git()%}%)",
+  "%( %{%v:lua.Statusline_diagnostic()%}%)",
+  "%*",
+  "%=",
+  "%#Constant#%{v:lua.vim.lsp.status()}",
+  "%#MiniStatuslineFilename# %{&filetype}",
+  "%#warningmsg#",
+  "%{&ff=='unix'?'':' format:'..&ff}",
+  "%{((&fenc==''||&fenc=='utf-8')?'':' encoding:'..&fenc)}",
+  " %#MiniStatuslineFileinfo#",
+  "%( %{%v:lua.Statusline_macro()%}%)",
+  "%( %{%v:lua.Statusline_search()%}%)",
+  " %p%% %l:%c 0x%02B ",
+  "%*",
+})
 
-    " %#Constant#" .. vim.lsp.status(),
-    "%#MiniStatuslineFilename#",
-    " %{&filetype}",
-    "%#warningmsg#",
-    vim.bo.ff == "unix" and "" or " format:" .. vim.bo.ff,
-    (vim.bo.fenc == "utf-8" or vim.bo.fenc == "") and "" or " encoding:" .. vim.bo.fenc,
-    "%* ",
+-- Refresh statusline every 100ms
+-- Do not use autocmd for this, it fails to trigger on keymaps and many more
+local statusline_timer = vim.uv.new_timer()
+statusline_timer:start(0, 100, vim.schedule_wrap(function()
+  vim.cmd.redrawstatus()
+end))
 
-    "%#MiniStatuslineFileinfo#",
-    statusline_macro(),
-    statusline_search(),
-    " %p%% %l:%c 0x%02B ",
-    "%*",
-  }
-  return table.concat(parts, "")
+---------
+-- PHP --
+---------
+
+-- Add CI3 @property annotations for loaded modules in the current PHP buffer
+-- Allows intelephense to recognize them, stop throwing false errors, and provide autocompletion and type checking
+local function add_ci3_properties()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+  if vim.bo[bufnr].filetype ~= "php" then
+    return
+  end
+
+  local class_idx
+  for i, line in ipairs(lines) do
+    if line:match("^%s*class%s+[%w_]+") then
+      class_idx = i
+      break
+    end
+  end
+
+  if not class_idx then
+    return
+  end
+
+  local props = {}
+
+  local function add_prop(class, name)
+    if not class or not name then
+      return
+    end
+
+    props[name] = string.format(" * @property %s $%s", class, name)
+  end
+
+  for _, line in ipairs(lines) do
+    local module = line:match("%$this%->load%->module%s*%(%s*['\"]([^'\"]+)['\"]")
+    if module then
+      local alias = line:match("%$this%->load%->module%s*%([^,]+,%s*['\"]([^'\"]+)['\"]")
+      local name = alias or module:match("([^/]+)$")
+      add_prop(name, name)
+    end
+
+    local lib = line:match("%$this%->load%->library%s*%(%s*['\"]([^'\"]+)['\"]")
+    if lib then
+      local alias = line:match("%$this%->load%->library%s*%([^,]+,%s*['\"]([^'\"]+)['\"]")
+      local name = alias or lib:match("([^/]+)$")
+      add_prop(name:gsub("^%l", string.upper), name)
+    end
+
+    if line:match("%$this%->entity") then
+      add_prop("entity", "entity")
+    end
+  end
+
+  local function find_docblock()
+    local doc_start
+
+    for i = class_idx - 1, 1, -1 do
+      if lines[i]:match("^%s*/%*%*%s*$") then
+        doc_start = i
+        break
+      end
+
+      local is_doc_line = lines[i]:match("^%s*%*") or lines[i]:match("^%s*/%s*$") or lines[i]:match("^%s*$")
+
+      if not is_doc_line then
+        break
+      end
+    end
+
+    if not doc_start then
+      return
+    end
+
+    for i = doc_start, class_idx - 1 do
+      if lines[i]:match("^%s*%*/%s*$") then
+        return doc_start, i
+      end
+    end
+  end
+
+  local function has_allow_dynamic_properties()
+    for i = class_idx - 1, math.max(1, class_idx - 3), -1 do
+      if lines[i]:match("^%s*#%[AllowDynamicProperties%]%s*$") then
+        return true
+      end
+    end
+    return false
+  end
+
+  local function insert_lines(at, new_lines)
+    vim.api.nvim_buf_set_lines(bufnr, at, at, false, new_lines)
+  end
+
+  local function insert_allow_dynamic_properties()
+    if has_allow_dynamic_properties() then
+      return
+    end
+
+    insert_lines(class_idx - 1, { "#[AllowDynamicProperties]" })
+    class_idx = class_idx + 1
+  end
+
+  local doc_start, doc_end = find_docblock()
+  local names = vim.tbl_keys(props)
+  table.sort(names)
+
+  if doc_start and doc_end then
+    local existing = {}
+
+    for i = doc_start, doc_end do
+      local name = lines[i]:match("@property%s+[%w_\\]+%s+%$([%w_]+)")
+      if name then
+        existing[name] = true
+      end
+    end
+
+    local to_add = {}
+    for _, name in ipairs(names) do
+      if not existing[name] then
+        table.insert(to_add, props[name])
+      end
+    end
+
+    if #to_add > 0 then
+      insert_lines(doc_end - 1, to_add)
+      class_idx = class_idx + #to_add
+    end
+
+    insert_allow_dynamic_properties()
+    return
+  end
+
+  if #names > 0 then
+    local to_add = { "/**" }
+
+    for _, name in ipairs(names) do
+      table.insert(to_add, props[name])
+    end
+
+    table.insert(to_add, " */")
+    insert_lines(class_idx - 1, to_add)
+    class_idx = class_idx + #to_add
+  end
+
+  insert_allow_dynamic_properties()
 end
 
-vim.opt.statusline = "%{%v:lua.Statusline()%}"
-
--- Based on https://theopark.me/blog/2025-06-08-statusline-notes/
-vim.api.nvim_create_autocmd({
-  -- DO NOT use `SafeState`: statusline redraw triggers `SafeState` itself!
-  "TextChanged",
-  "LspAttach",
-  "LspDetach",
-  "LspProgress",
-  "DiagnosticChanged",
-}, {
-  group = vim.api.nvim_create_augroup("StatuslineUpdate", { clear = true }),
-  pattern = "*",
-  callback = vim.schedule_wrap(function()
-    vim.cmd.redrawstatus()
-  end),
-  desc = "Update statusline",
-})
+vim.api.nvim_create_user_command("Ci3AddProperties", add_ci3_properties, {})
 
 -- Enter async to avoid blocking UI during plugin startup
 vim.schedule(function()
@@ -830,17 +968,13 @@ vim.schedule(function()
   -- Specific handlers
   vim.lsp.config("lua_ls", {
     settings = {
-      Lua = {
-        diagnostics = { globals = { "vim" } },
-        runtime = { version = "LuaJIT" },
-        format = { enable = false },
-      },
+      Lua = { diagnostics = { globals = { "vim" } }, runtime = { version = "LuaJIT" }, format = { enable = false } },
     },
   })
   vim.lsp.config("rust_analyzer", {
     settings = {
       ["rust-analyzer"] = {
-        checkOnSave = { command = "clippy" },
+        checkOnSave = true,
         imports = { granularity = { group = "module" }, prefix = "self" },
         cargo = { buildScripts = { enable = true } },
         procMacro = { enable = true },
@@ -848,14 +982,7 @@ vim.schedule(function()
     },
   })
   vim.lsp.config("harper_ls", {
-    settings = {
-      ["harper-ls"] = {
-        linters = {
-          SentenceCapitalization = false,
-          SpellCheck = false,
-        },
-      },
-    },
+    settings = { ["harper-ls"] = { linters = { SentenceCapitalization = false, SpellCheck = false } } },
   })
   vim.lsp.config("jdtls", { settings = { java = { format = { enabled = false } } } })
   -- https://github.com/LazyVim/LazyVim/discussions/2159
