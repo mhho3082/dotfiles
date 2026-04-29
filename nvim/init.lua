@@ -293,6 +293,14 @@ function Statusline_search()
   return string.format(format, result.current, result.total)
 end
 
+local spinner_frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+local spinner_counter = 1
+function Statusline_spinner()
+  local frame = spinner_frames[spinner_counter]
+  spinner_counter = (spinner_counter % #spinner_frames) + 1
+  return frame
+end
+
 -- Ideas from Neovim docs and https://zignar.net/2022/01/21/a-boring-statusline-for-neovim/
 vim.opt.statusline = table.concat({
   "%{%v:lua.Statusline_mode()%}",
@@ -301,26 +309,32 @@ vim.opt.statusline = table.concat({
   "%#MiniStatuslineFilename#",
   "%( %{%v:lua.Statusline_git()%}%)",
   "%( %{%v:lua.Statusline_diagnostic()%}%)",
-  "%*",
+  "%#Constant#",
+  "%( %{v:lua.vim.lsp.status()?v:lua.Statusline_spinner():''}%)",
   "%=",
-  "%#Constant#%{v:lua.vim.lsp.status()}",
-  "%#MiniStatuslineFilename# %{&filetype}",
+  "%#MiniStatuslineFilename#",
+  "%{&filetype}",
   "%#warningmsg#",
   "%{&ff=='unix'?'':' format:'..&ff}",
   "%{((&fenc==''||&fenc=='utf-8')?'':' encoding:'..&fenc)}",
-  " %#MiniStatuslineFileinfo#",
+  " ",
+  "%#MiniStatuslineFileinfo#",
   "%( %{%v:lua.Statusline_macro()%}%)",
   "%( %{%v:lua.Statusline_search()%}%)",
   " %p%% %l:%c 0x%02B ",
   "%*",
 })
 
--- Refresh statusline every 100ms
+-- Refresh statusline every 100 milliseconds
 -- Do not use autocmd for this, it fails to trigger on keymaps and many more
 local statusline_timer = vim.uv.new_timer()
-statusline_timer:start(0, 100, vim.schedule_wrap(function()
-  vim.cmd.redrawstatus()
-end))
+statusline_timer:start(
+  0,
+  100,
+  vim.schedule_wrap(function()
+    vim.cmd.redrawstatus()
+  end)
+)
 
 ---------
 -- PHP --
