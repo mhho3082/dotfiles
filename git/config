@@ -83,17 +83,23 @@
     # Fetch remote branches, and update existing local branches (without creating new ones)
     fe = "!f() { dr=\"${1:-$(git default-remote)}\"; git fetch \"$dr\"; git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads | while read -r b u; do [ -z \"$u\" ] && continue; [ \"$b\" = \"$(git rev-parse --abbrev-ref HEAD)\" ] && continue; r=\"${u%%/*}\"; ub=\"${u#*/}\"; git remote get-url \"$r\" >/dev/null 2>&1 || continue; git fetch \"$r\" \"$ub:$b\"; done; }; f"
 
+    # Run a git subcommand on a branch without necessarily switching to it
+    # Uses current repo if already on the branch, otherwise uses a temporary worktree
+    # Usage: git local-or-worktree <target-branch> <git-subcommand> [args...]
+    local-or-worktree = "!f() { local BR=$1; shift; local SUB=$1; shift; local CURR=$(git rev-parse --abbrev-ref HEAD) WT_DIR DIR STATUS; if [ \"$BR\" = \"$CURR\" ]; then DIR=\".\"; else WT_DIR=$(mktemp -d /tmp/git-worktree.XXXXXX) || return 1; if ! git worktree add --quiet \"$WT_DIR\" \"$BR\" >/dev/null; then echo \"Error: Could not create worktree for '$BR'.\" >&2; rm -rf \"$WT_DIR\"; return 1; fi; DIR=\"$WT_DIR\"; fi; git -C \"$DIR\" \"$SUB\" \"$@\"; STATUS=$?; if [ $STATUS -ne 0 ]; then git -C \"$DIR\" merge --abort >/dev/null 2>&1; git -C \"$DIR\" rebase --abort >/dev/null 2>&1; fi; if [ -n \"$WT_DIR\" ]; then git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1 || rm -rf \"$WT_DIR\"; fi; return $STATUS; }; f"
+
     m = merge
-    # Merge branches without switching to them
-    # Usage: git mr <source-branch> <target-branch-1> <target-branch-2> ...
-    # Note that the current branch can be the source or one of the targets
-    mr = "!f() { : git checkout ; local SRC=$1 CURR=$(git rev-parse --abbrev-ref HEAD) DST WT_DIR; shift; if ! git rev-parse --verify \"$SRC\" >/dev/null 2>&1; then echo \"Error: Source branch '$SRC' does not exist.\" >&2; return 1; fi; for DST in \"$@\"; do if [ \"$DST\" = \"$CURR\" ]; then if git merge --no-edit \"$SRC\"; then echo \"Successfully merged '$SRC' into '$DST'.\"; else echo \"Merge of '$SRC' into '$DST' failed. Branch not updated.\" >&2; git merge --abort >/dev/null 2>&1; fi; else WT_DIR=$(mktemp -d /tmp/git-worktree.XXXXXX); if ! git worktree add --quiet \"$WT_DIR\" \"$DST\" >/dev/null; then echo \"Error: Could not create worktree for '$DST'.\" >&2; rm -rf \"$WT_DIR\"; continue; fi; if git -C \"$WT_DIR\" merge --no-edit \"$SRC\"; then echo \"Successfully merged '$SRC' into '$DST'.\"; else echo \"Merge of '$SRC' into '$DST' failed. Branch not updated.\" >&2; fi; git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1 || rm -rf \"$WT_DIR\"; fi; echo; done; }; f"
+    # Check if merge can happen without conflicts
+    # Usage: git mc <source-branch> <target-branch>
+    mc = "!f() { : git checkout ; git merge-tree --write-tree $1 $2; if [ $? -eq 0 ]; then echo; echo \"Branches '$1' and '$2' can be merged without conflicts.\"; else echo; echo \"Branches '$1' and '$2' have merge conflicts.\"; fi; }; f"
+    # Merge branch without having to switch to it
+    # Usage: git mr <source-branch> <target-branch> [<merge-arg>...]
+    mr = "!f() { : git merge ; local SRC=$1 DST=$2; shift 2; if git local-or-worktree \"$DST\" merge \"$@\" \"$SRC\"; then echo \"Successfully merged '$SRC' into '$DST'.\"; else echo \"Merge of '$SRC' into '$DST' failed. Branch not updated.\" >&2; return 1; fi; }; f"
 
     r = rebase
-    # Rebase branches without switching to them
-    # Usage: git rr <source-branch> <target-branch-1> <target-branch-2> ...
-    # Note that the current branch can be the source or one of the targets
-    rr = "!f() { : git checkout ; local SRC=$1 CURR=$(git rev-parse --abbrev-ref HEAD) DST WT_DIR; shift; if ! git rev-parse --verify \"$SRC\" >/dev/null 2>&1; then echo \"Error: Source branch '$SRC' does not exist.\" >&2; return 1; fi; for DST in \"$@\"; do if [ \"$DST\" = \"$CURR\" ]; then if git rebase \"$SRC\"; then echo \"Successfully rebased '$DST' onto '$SRC'.\"; else echo \"Rebase of '$DST' onto '$SRC' failed. Branch not updated.\" >&2; git rebase --abort >/dev/null 2>&1; fi; else WT_DIR=$(mktemp -d /tmp/git-worktree.XXXXXX); if ! git worktree add --quiet \"$WT_DIR\" \"$DST\" >/dev/null; then echo \"Error: Could not create worktree for '$DST'.\" >&2; rm -rf \"$WT_DIR\"; continue; fi; if git -C \"$WT_DIR\" rebase \"$SRC\"; then echo \"Successfully rebased '$DST' onto '$SRC'.\"; else echo \"Rebase of '$DST' onto '$SRC' failed. Branch not updated.\" >&2; git -C \"$WT_DIR\" rebase --abort >/dev/null 2>&1; fi; git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1 || rm -rf \"$WT_DIR\"; fi; echo; done; }; f"
+    # Rebase branch without having to switch to it
+    # Usage: git rr <source-branch> <target-branch> [<rebase-arg>...]
+    rr = "!f() { : git rebase ; local SRC=$1 DST=$2; shift 2; if git local-or-worktree \"$DST\" rebase \"$@\" \"$SRC\"; then echo \"Successfully rebased '$DST' onto '$SRC'.\"; else echo \"Rebase of '$DST' onto '$SRC' failed. Branch not updated.\" >&2; return 1; fi; }; f"
     ri = rebase --interactive
     # Modify commits before pushing to upstream
     riu = rebase --interactive @{upstream}
