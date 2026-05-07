@@ -166,9 +166,9 @@ vim.cmd.colorscheme("gruvbox-material")
 -- STATUSLINE --
 ----------------
 
--- Global statusline and hidden command line
+-- Global statusline and command line
 vim.opt.laststatus = 3
-vim.opt.cmdheight = 0
+vim.opt.cmdheight = 1
 
 -- Based on https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/utils/mode.lua
 function Statusline_mode()
@@ -842,8 +842,8 @@ vim.schedule(function()
   end
 
   -- The basics
-  keymap("n", "<leader>w", "<cmd>silent w<cr>", { desc = "Save" })
-  keymap("n", "<leader>q", "<cmd>silent qa!<cr>", { desc = "Quit" })
+  keymap("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
+  keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
   keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohlsearch" })
 
   -- Make
