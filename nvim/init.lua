@@ -293,6 +293,19 @@ function Statusline_search()
   return string.format(format, result.current, result.total)
 end
 
+-- Based on https://www.reddit.com/r/neovim/comments/z2tgf5/how_to_show_selected_characterline_count_on/
+function Statusline_selection()
+  local mode = vim.fn.mode()
+  if mode == "v" or mode == "V" or mode == "\22" then
+    local wc = vim.fn.wordcount()
+    if wc.visual_chars ~= nil then
+      local lines = math.abs(vim.fn.line(".") - vim.fn.line("v")) + 1
+      return string.format("%d(%d)x%d", wc.visual_chars, wc.visual_words, lines)
+    end
+  end
+  return ""
+end
+
 local spinner_frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
 local spinner_counter = 1
 function Statusline_spinner()
@@ -321,8 +334,11 @@ vim.opt.statusline = table.concat({
   "%#MiniStatuslineFileinfo#",
   "%( %{%v:lua.Statusline_macro()%}%)",
   "%( %{%v:lua.Statusline_search()%}%)",
-  " %p%% %l:%c 0x%02B ",
-  "%*",
+  " %p%%",
+  " %l:%c",
+  "%( %{%v:lua.Statusline_selection()%}%)",
+  " 0x%02B",
+  " %*",
 })
 
 -- Refresh statusline every 100 milliseconds
