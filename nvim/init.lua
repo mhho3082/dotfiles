@@ -1032,7 +1032,7 @@ vim.schedule(function()
     settings = {
       ["harper-ls"] = {
         dialect = "British",
-        linters = { ToDoHyphen = false, SentenceCapitalization = false, SpellCheck = false },
+        linters = { ToDoHyphen = false, SentenceCapitalization = false, SpellCheck = false, OkToOkay = false },
       },
     },
   })

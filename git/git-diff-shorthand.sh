@@ -11,29 +11,32 @@
 #
 #   <none>   : working tree vs index (unstaged)
 #   --cached : index vs HEAD (staged)
-#   <rev>    : changes introduced by commit <rev>
+#   <rev>    : changes introduced by commit / tag / branch <rev>
 #   <n>      : same, but <n> means HEAD~n (0 == HEAD; HEAD~0 also works)
 #   <a> <b>  : compare two endpoints directly; ints are resolved as HEAD~n
 #
-# If your revision specifier is an integer, use `heads/[rev]` or `tags/[rev]` to disambiguate
-
-is_int() {
-  [[ $1 =~ ^[0-9]+$ ]]
-}
+# If you want to use an integer that collides with a commit, tag, or branch name,
+# use explicit syntax like HEAD~<n> to disambiguate.
 
 is_commit() {
   git rev-parse --verify --quiet --end-of-options "$1^{commit}" >/dev/null 2>&1
 }
 
+is_int() {
+  [[ $1 =~ ^[0-9]+$ ]]
+}
+
 is_spec() {
-  is_int "$1" || is_commit "$1"
+  is_commit "$1" || is_int "$1"
 }
 
 to_commit() {
-  if is_int "$1"; then
+  if is_commit "$1"; then
+    printf '%s\n' "$1"
+  elif is_int "$1"; then
     printf 'HEAD~%s\n' "$1"
   else
-    printf '%s\n' "$1"
+    return 1
   fi
 }
 
