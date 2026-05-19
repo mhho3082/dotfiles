@@ -25,8 +25,10 @@ config.harfbuzz_features = { "ss19", "cv07", "cv99" }
 -- Set font size
 config.font_size = is_darwin and 15.0 or 12.0
 
--- Disable the tab bar
-config.enable_tab_bar = false
+-- Use tab bar
+config.enable_tab_bar = true
+config.use_fancy_tab_bar = false
+config.tab_bar_at_bottom = true
 
 -- Use gruvbox
 config.color_scheme = "Gruvbox dark, hard (base16)"
@@ -46,6 +48,11 @@ config.use_ime = false
 -- Disable bell
 config.audible_bell = "Disabled"
 
+-- On bell, give a toast notification
+wezterm.on("bell", function(window, _)
+  window:toast_notification("WezTerm", 'Bell from tab "' .. window:active_tab():get_title() .. '"')
+end)
+
 -- Give a reasonable title to the terminal window (for macOS)
 wezterm.on("format-window-title", function(tab)
   return "WezTerm: " .. tab.active_pane.title
@@ -57,13 +64,13 @@ if not is_darwin then
   local xcursor_size = nil
   local xcursor_theme = nil
 
-  local success, stdout, stderr =
+  local success, stdout, _ =
     wezterm.run_child_process({ "gsettings", "get", "org.gnome.desktop.interface", "cursor-theme" })
   if success then
     xcursor_theme = stdout:gsub("'(.+)'\n", "%1")
   end
 
-  local _success, _stdout, _stderr =
+  local _success, _stdout, _ =
     wezterm.run_child_process({ "gsettings", "get", "org.gnome.desktop.interface", "cursor-size" })
   if _success then
     xcursor_size = tonumber(_stdout)
@@ -75,41 +82,48 @@ end
 
 config.keys = {
   -- Copy/paste
-  {
-    key = "c",
-    mods = is_darwin and "CMD" or "CTRL|SHIFT",
-    action = wezterm.action.CopyTo("Clipboard"),
-  },
-  {
-    key = "v",
-    mods = is_darwin and "CMD" or "CTRL|SHIFT",
-    action = wezterm.action.PasteFrom("Clipboard"),
-  },
+  { key = "c", mods = "CTRL|SHIFT", action = wezterm.action.CopyTo("Clipboard") },
+  { key = "v", mods = "CTRL|SHIFT", action = wezterm.action.PasteFrom("Clipboard") },
+  { key = "f", mods = "CTRL|SHIFT", action = wezterm.action.Search({CaseSensitiveString=""}) },
+  { key = "Space", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
   -- Change font size
-  {
-    key = "-",
-    mods = is_darwin and "CMD" or "CTRL",
-    action = wezterm.action.DecreaseFontSize,
-  },
-  {
-    key = "=",
-    mods = is_darwin and "CMD" or "CTRL",
-    action = wezterm.action.IncreaseFontSize,
-  },
-  {
-    key = "0",
-    mods = is_darwin and "CMD" or "CTRL",
-    action = wezterm.action.ResetFontSize,
-  },
+  { key = "-", mods = "CTRL", action = wezterm.action.DecreaseFontSize },
+  { key = "+", mods = "CTRL", action = wezterm.action.IncreaseFontSize },
+  { key = "=", mods = "CTRL", action = wezterm.action.ResetFontSize },
   -- Scroll up/down
+  { key = "PageUp", mods = "SHIFT", action = wezterm.action.ScrollByPage(-0.5) },
+  { key = "PageDown", mods = "SHIFT", action = wezterm.action.ScrollByPage(0.5) },
+  -- Tabs
+  { key = "t", mods = "CTRL", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+  { key = "w", mods = "CTRL", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
   {
-    key = "PageUp",
-    action = wezterm.action.ScrollByPage(-0.5),
+    key = ",",
+    mods = "CTRL",
+    action = wezterm.action.PromptInputLine({
+      description = "Enter new name for tab",
+      action = wezterm.action_callback(function(window, _, line)
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end),
+    }),
   },
-  {
-    key = "PageDown",
-    action = wezterm.action.ScrollByPage(0.5),
-  },
+  { key = "Tab", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "Tab", mods = "CTRL", action = wezterm.action.ActivateTabRelative(1) },
+  { key = "LeftArrow", mods = "CTRL|SHIFT", action = wezterm.action.MoveTabRelative(-1) },
+  { key = "RightArrow", mods = "CTRL|SHIFT", action = wezterm.action.MoveTabRelative(1) },
+  { key = "1", mods = "ALT", action = wezterm.action.ActivateTab(0) },
+  { key = "2", mods = "ALT", action = wezterm.action.ActivateTab(1) },
+  { key = "3", mods = "ALT", action = wezterm.action.ActivateTab(2) },
+  { key = "4", mods = "ALT", action = wezterm.action.ActivateTab(3) },
+  { key = "5", mods = "ALT", action = wezterm.action.ActivateTab(4) },
+  { key = "6", mods = "ALT", action = wezterm.action.ActivateTab(5) },
+  { key = "7", mods = "ALT", action = wezterm.action.ActivateTab(6) },
+  { key = "8", mods = "ALT", action = wezterm.action.ActivateTab(7) },
+  { key = "9", mods = "ALT", action = wezterm.action.ActivateTab(8) },
+  { key = "0", mods = "ALT", action = wezterm.action.ActivateTab(-1) },
+  -- Windows
+  { key = "n", mods = "CTRL|SHIFT", action = wezterm.action.SpawnWindow },
 }
 
 return config

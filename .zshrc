@@ -34,7 +34,7 @@ unsetopt autocd
 
 # Change less flags
 # https://unix.stackexchange.com/q/566943
-export LESS=FRX
+export LESS=FRXQ
 
 # Add paths to PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
