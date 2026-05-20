@@ -40,12 +40,6 @@ export LESS=FRXQ
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
 [[ -d "$HOME/.local/bin" ]] && path+="$HOME/.local/bin"
 
-# Add gem path if any
-if (( $+commands[ruby] )); then
-  export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
-  path+="$GEM_HOME/bin"
-fi
-
 # Set GPG's tty to the current one
 # https://unix.stackexchange.com/a/724766
 export GPG_TTY=$(tty)
@@ -347,21 +341,6 @@ function sizes {
   paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
 }
 
-# Get the IP address of this machine
-# https://unix.stackexchange.com/q/119269
-function ip-addr {
-  # Get all IP addresses for this machine
-  local all_ips=($(ip addr show | perl -nle 's/inet (\S+)/print $1/e'))
-
-  # Get the main outbound IP address
-  local out_ip=$(ip route get 8.8.8.8 | perl -nle 's/src (\S+)/print $1/e')
-
-  # Highlight the main outbound IP address group in print
-  for ip_addr in $all_ips; do
-    [[ $ip_addr =~ $out_ip ]] && print -P '%F{cyan}'$ip_addr'%f' || echo $ip_addr
-  done
-}
-
 # Get n-letters long alias and functions
 # (helpful to get a wider picture)
 function shorthands {
@@ -631,10 +610,6 @@ add-zsh-hook precmd _setup_ps1
 # == FZF ==
 
 # Add completion for fzf
-if (( $+commands[fzf] )); then
-  source <(fzf --zsh)
-fi
-
 if (( $+commands[fzf] )); then
   export FZF_DEFAULT_COMMAND="fd -t f -H"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

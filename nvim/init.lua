@@ -779,23 +779,6 @@ vim.schedule(function()
     keymap("n", "<M-" .. ops .. ">", "<C-w><" .. ops .. ">")
   end, { "Left", "Down", "Up", "Right" })
 
-  -- incremental selection treesitter/LSP
-  -- Based on https://github.com/pawelgrzybek/dotfiles/blob/master/nvim/lua/keymaps.lua#L92-L107
-  keymap({ "n", "x", "o" }, "<M-o>", function()
-    if vim.treesitter.get_parser(nil, nil, { error = false }) then
-      require("vim.treesitter._select").select_parent(vim.v.count1)
-    else
-      vim.lsp.buf.selection_range(vim.v.count1)
-    end
-  end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
-  keymap({ "n", "x", "o" }, "<M-i>", function()
-    if vim.treesitter.get_parser(nil, nil, { error = false }) then
-      require("vim.treesitter._select").select_child(vim.v.count1)
-    else
-      vim.lsp.buf.selection_range(-vim.v.count1)
-    end
-  end, { desc = "Select child treesitter node or inner incremental lsp selections" })
-
   -- Allow zz to work in visual mode (for the whole selection)
   local function center_visual_selection()
     vim.cmd([[ execute "normal! \<ESC>" ]]) -- Force exit from visual mode

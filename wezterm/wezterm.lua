@@ -29,9 +29,13 @@ config.font_size = is_darwin and 15.0 or 12.0
 config.enable_tab_bar = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
+config.tab_max_width = 32
 
 -- Use gruvbox
 config.color_scheme = "Gruvbox dark, hard (base16)"
+
+-- Remove all padding
+config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 
 -- Use non-blinking bar by default
 config.default_cursor_style = "SteadyBar"
@@ -50,12 +54,7 @@ config.audible_bell = "Disabled"
 
 -- On bell, give a toast notification
 wezterm.on("bell", function(window, _)
-  window:toast_notification("WezTerm", 'Bell from tab "' .. window:active_tab():get_title() .. '"')
-end)
-
--- Give a reasonable title to the terminal window (for macOS)
-wezterm.on("format-window-title", function(tab)
-  return "WezTerm: " .. tab.active_pane.title
+  window:toast_notification("WezTerm", 'Bell from tab "' .. window:active_tab():active_pane():get_title() .. '"')
 end)
 
 if not is_darwin then
@@ -84,7 +83,7 @@ config.keys = {
   -- Copy/paste
   { key = "c", mods = "CTRL|SHIFT", action = wezterm.action.CopyTo("Clipboard") },
   { key = "v", mods = "CTRL|SHIFT", action = wezterm.action.PasteFrom("Clipboard") },
-  { key = "f", mods = "CTRL|SHIFT", action = wezterm.action.Search({CaseSensitiveString=""}) },
+  { key = "f", mods = "CTRL|SHIFT", action = wezterm.action.Search({ CaseSensitiveString = "" }) },
   { key = "Space", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
   -- Change font size
   { key = "-", mods = "CTRL", action = wezterm.action.DecreaseFontSize },
@@ -110,6 +109,8 @@ config.keys = {
   },
   { key = "Tab", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "Tab", mods = "CTRL", action = wezterm.action.ActivateTabRelative(1) },
+  { key = "LeftArrow", mods = "CTRL", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "RightArrow", mods = "CTRL", action = wezterm.action.ActivateTabRelative(1) },
   { key = "LeftArrow", mods = "CTRL|SHIFT", action = wezterm.action.MoveTabRelative(-1) },
   { key = "RightArrow", mods = "CTRL|SHIFT", action = wezterm.action.MoveTabRelative(1) },
   { key = "1", mods = "ALT", action = wezterm.action.ActivateTab(0) },
