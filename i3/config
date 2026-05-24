@@ -48,9 +48,9 @@ set $screenshot_clipboard flameshot gui -c
 ### Gaps ###
 ############
 
-gaps inner 6
-gaps outer 3
-# smart_gaps on
+gaps inner 4
+gaps outer 4
+smart_gaps on
 smart_borders on
 
 for_window [class="^.*"] border pixel 1
@@ -245,7 +245,7 @@ exec --no-startup-id redshift
 # Set default screen brightness
 exec --no-startup-id brightnessctl set "50%"
 
-# Run bar (polybar)
+# Run bar
 exec_always --no-startup-id $bar
 
 ##############
