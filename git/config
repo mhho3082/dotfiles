@@ -127,8 +127,9 @@
     st = status --short --branch
 
     s = stash
-    sn = stash --include-untracked # Stash, with new files
-    si = stash --patch
+    ss = stash push --staged
+    sn = stash push --include-untracked # Stash, with new files
+    si = stash push --patch
     sp = stash pop
 
     # Checkout or create branch
