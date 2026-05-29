@@ -72,7 +72,7 @@
     cp = cherry-pick
 
     # Diff display options
-    diff-shorthand = "!f() { : git diff ; ~/.config/git/git-diff-shorthand.sh $@; }; f"
+    diff-shorthand = "!f() { : git diff ; ~/.config/git/diff-shorthand.sh $@; }; f"
     d   = diff-shorthand _
     df  = diff-shorthand f
     dw  = diff-shorthand w
@@ -80,29 +80,25 @@
     dn  = diff-shorthand n
 
     f = fetch
-    # Fetch remote branches, and update existing local branches (without creating new ones)
+    # Fetch remote branches, and update existing local branches
     fe = "!f() { dr=\"${1:-$(git default-remote)}\"; git fetch \"$dr\"; git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads | while read -r b u; do [ -z \"$u\" ] && continue; [ \"$b\" = \"$(git rev-parse --abbrev-ref HEAD)\" ] && continue; r=\"${u%%/*}\"; ub=\"${u#*/}\"; git remote get-url \"$r\" >/dev/null 2>&1 || continue; git fetch \"$r\" \"$ub:$b\"; done; }; f"
 
-    # Run a git subcommand on a branch without necessarily switching to it
-    # Uses current repo if already on the branch, otherwise uses a temporary worktree
-    # Usage: git local-or-worktree <target-branch> <git-subcommand> [args...]
-    local-or-worktree = "!f() { local BR=$1; shift; local SUB=$1; shift; local CURR=$(git rev-parse --abbrev-ref HEAD) WT_DIR DIR STATUS; if [ \"$BR\" = \"$CURR\" ]; then DIR=\".\"; else WT_DIR=$(mktemp -d /tmp/git-worktree.XXXXXX) || return 1; if ! git worktree add --quiet \"$WT_DIR\" \"$BR\" >/dev/null; then echo \"Error: Could not create worktree for '$BR'.\" >&2; rm -rf \"$WT_DIR\"; return 1; fi; DIR=\"$WT_DIR\"; fi; git -C \"$DIR\" \"$SUB\" \"$@\"; STATUS=$?; if [ $STATUS -ne 0 ]; then git -C \"$DIR\" merge --abort >/dev/null 2>&1; git -C \"$DIR\" rebase --abort >/dev/null 2>&1; fi; if [ -n \"$WT_DIR\" ]; then git worktree remove --force \"$WT_DIR\" >/dev/null 2>&1 || rm -rf \"$WT_DIR\"; fi; return $STATUS; }; f"
-
     m = merge
-    # Check if merge can happen without conflicts
+    # Check if merge / rebase can happen without conflicts
     # Usage: git mc <source-branch> <target-branch>
     mc = "!f() { : git checkout ; git merge-tree --write-tree $1 $2; if [ $? -eq 0 ]; then echo; echo \"Branches '$1' and '$2' can be merged without conflicts.\"; else echo; echo \"Branches '$1' and '$2' have merge conflicts.\"; fi; }; f"
-    # Merge branch without having to switch to it
-    # Usage: git mr <source-branch> <target-branch> [<merge-arg>...]
-    mr = "!f() { : git merge ; local SRC=$1 DST=$2; shift 2; if git local-or-worktree \"$DST\" merge \"$@\" \"$SRC\"; then echo \"Successfully merged '$SRC' into '$DST'.\"; else echo \"Merge of '$SRC' into '$DST' failed. Branch not updated.\" >&2; return 1; fi; }; f"
 
     r = rebase
-    # Rebase branch without having to switch to it
-    # Usage: git rr <source-branch> <target-branch> [<rebase-arg>...]
-    rr = "!f() { : git rebase ; local SRC=$1 DST=$2; shift 2; if git local-or-worktree \"$DST\" rebase \"$@\" \"$SRC\"; then echo \"Successfully rebased '$DST' onto '$SRC'.\"; else echo \"Rebase of '$DST' onto '$SRC' failed. Branch not updated.\" >&2; return 1; fi; }; f"
     ri = rebase --interactive
-    # Modify commits before pushing to upstream
     riu = rebase --interactive @{upstream}
+
+    # Run a git subcommand in a worktree of the target branch without switching to it
+    # Changes are sandboxed, and are disposed if the command fails
+    run-in-worktree = "!f() { ~/.config/git/run-in-worktree.sh $@; }; f"
+    # For merge: git mr <source-branch> <target-branch> [<merge-arg>...]
+    mr = "!f() { : git merge ; local SRC=$1 DST=$2; shift 2; git run-in-worktree \"$DST\" merge \"$@\" \"$SRC\"; }; f"
+    # For rebase: git rr <source-branch> <target-branch> [<rebase-arg>...]
+    rr = "!f() { : git rebase ; local SRC=$1 DST=$2; shift 2; git run-in-worktree \"$DST\" rebase \"$@\" \"$SRC\"; }; f"
 
     # https://www.reddit.com/r/programming/comments/1febgy/handy_git_tips_to_stop_you_getting_fired/
     # Handle merge conflicts easily
@@ -112,17 +108,14 @@
     p = push
     pa = push --all
     pu = pull
-    # Fast-forward pull only, fail otherwise
-    pf = pull --ff-only
-    # Stash changes away before pull
-    ps = pull --rebase --autostash
-    # The more aggressive version
-    pss = "!git stash; git pull --rebase; git stash pop"
 
     # Force local changes up to remotes
     force = push --all --force-with-lease
     # Save and push all temporary changes in case of emergency
     fire = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force-with-lease"
+    # Delete the branch and fetch it back from remote
+    # Sets current index to detached HEAD if the branch being reset is the current branch
+    fpull = "!f() { : git checkout ; b=\"${1:-$(git symbolic-ref --quiet --short HEAD)}\"; if [ -z \"$b\" ]; then return 1; fi; u=$(git rev-parse --abbrev-ref --symbolic-full-name \"$b@{upstream}\" 2>/dev/null) || { echo >&2 \"No upstream found for '$b'.\"; return 1; }; remote=${u%%/*}; rbranch=${u#*/}; if [ \"$(git rev-parse --abbrev-ref HEAD)\" = \"$b\" ]; then git checkout --detach; fi; git branch -D \"$b\" && git fetch \"$remote\" \"$rbranch:$b\" && git branch --set-upstream-to=\"$u\" \"$b\"; }; f"
 
     st = status --short --branch
 
@@ -134,12 +127,10 @@
 
     # Checkout or create branch
     # https://stackoverflow.com/q/26961371
-    # Adjusted to run on both bash and dash
     cd = "!f() { : git checkout ; b=\"$1\"; if [ -z \"$b\" ]; then b=$(git default-branch); fi; if git rev-parse --verify \"$b\" >/dev/null 2>&1; then git checkout \"$b\"; else printf 'Revision specifier %s not found, create branch %s? [y/N] ' \"$b\" \"$b\"; read answer; case \"$answer\" in [yY]) git checkout -b \"$b\" ;; esac; fi; }; f"
 
     # https://joshtronic.com/2020/08/09/how-to-get-the-default-git-branch/
     # Also handles repos without remote by responding the config's default branch instead
-    # Adjusted to run on both bash and dash
     default-branch = "!f() { b=$(git symbolic-ref refs/remotes/$(git default-remote)/HEAD 2>/dev/null); if [ -n \"$b\" ]; then echo \"$b\" | sed 's@^refs/remotes/'$(git default-remote)'/@@'; else git config --get init.defaultBranch; fi; }; f"
     default-remote = "!f() { r=$(git remote); if [ -n \"$r\" ]; then echo \"$r\" | head -n1; else echo \"origin\"; fi; }; f"
 

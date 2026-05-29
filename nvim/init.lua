@@ -525,7 +525,6 @@ vim.schedule(function()
     { src = "https://github.com/tpope/vim-sleuth" },
     -- Movement
     { src = "https://github.com/chrisgrieser/nvim-spider" },
-    { src = "https://github.com/tpope/vim-rsi" },
     -- File browser
     { src = "https://github.com/stevearc/oil.nvim" },
     -- Hinting
@@ -639,7 +638,7 @@ vim.schedule(function()
       "javascript", "typescript", "jsdoc", "vue", "svelte",
       -- Scripting
       "regex", "bash", "zsh", "sql",
-      "html", "css", "scss", "json",
+      "html", "css", "scss", "json", "http",
       "php", "php_only", "phpdoc", "blade", "twig",
       -- Git
       "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",
@@ -758,6 +757,12 @@ vim.schedule(function()
       spider.motion(ops)
     end, { desc = "Spider-" .. ops })
   end, { "w", "e", "b", "ge" })
+
+  -- Readline-style movement keymaps
+  vim.keymap.set("i", "<C-a>", "<C-o>^")
+  vim.keymap.set("c", "<C-a>", "<Home>")
+  vim.keymap.set("i", "<C-e>", "<C-o>$")
+  vim.keymap.set("c", "<C-e>", "<End>")
 
   -- Fix Lua API keyboard interrupt issue
   keymap("i", "<C-c>", "<C-[>", { desc = "Escape" })
