@@ -148,7 +148,7 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = vim.schedule_wrap(function()
     if vim.fn.executable("pyenv") == 1 then
       vim.env.PYENV_VERSION = vim.trim(vim.fn.system("pyenv version-name"))
-      vim.cmd("lsp restart")
+      vim.cmd("silent! lsp restart")
     end
   end),
 })
@@ -352,158 +352,6 @@ statusline_timer:start(
   end)
 )
 
----------
--- PHP --
----------
-
--- Add CI3 @property annotations for loaded modules in the current PHP buffer
--- Allows intelephense to recognize them, stop throwing false errors, and provide autocompletion and type checking
-local function add_ci3_properties()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-
-  if vim.bo[bufnr].filetype ~= "php" then
-    return
-  end
-
-  local class_idx
-  for i, line in ipairs(lines) do
-    if line:match("^%s*class%s+[%w_]+") then
-      class_idx = i
-      break
-    end
-  end
-
-  if not class_idx then
-    return
-  end
-
-  local props = {}
-
-  local function add_prop(class, name)
-    if not class or not name then
-      return
-    end
-
-    props[name] = string.format(" * @property %s $%s", class, name)
-  end
-
-  for _, line in ipairs(lines) do
-    local module = line:match("%$this%->load%->module%s*%(%s*['\"]([^'\"]+)['\"]")
-    if module then
-      local alias = line:match("%$this%->load%->module%s*%([^,]+,%s*['\"]([^'\"]+)['\"]")
-      local name = alias or module:match("([^/]+)$")
-      add_prop(name, name)
-    end
-
-    local lib = line:match("%$this%->load%->library%s*%(%s*['\"]([^'\"]+)['\"]")
-    if lib then
-      local alias = line:match("%$this%->load%->library%s*%([^,]+,%s*['\"]([^'\"]+)['\"]")
-      local name = alias or lib:match("([^/]+)$")
-      add_prop(name:gsub("^%l", string.upper), name)
-    end
-
-    if line:match("%$this%->entity") then
-      add_prop("entity", "entity")
-    end
-  end
-
-  local function find_docblock()
-    local doc_start
-
-    for i = class_idx - 1, 1, -1 do
-      if lines[i]:match("^%s*/%*%*%s*$") then
-        doc_start = i
-        break
-      end
-
-      local is_doc_line = lines[i]:match("^%s*%*") or lines[i]:match("^%s*/%s*$") or lines[i]:match("^%s*$")
-
-      if not is_doc_line then
-        break
-      end
-    end
-
-    if not doc_start then
-      return
-    end
-
-    for i = doc_start, class_idx - 1 do
-      if lines[i]:match("^%s*%*/%s*$") then
-        return doc_start, i
-      end
-    end
-  end
-
-  local function has_allow_dynamic_properties()
-    for i = class_idx - 1, math.max(1, class_idx - 3), -1 do
-      if lines[i]:match("^%s*#%[AllowDynamicProperties%]%s*$") then
-        return true
-      end
-    end
-    return false
-  end
-
-  local function insert_lines(at, new_lines)
-    vim.api.nvim_buf_set_lines(bufnr, at, at, false, new_lines)
-  end
-
-  local function insert_allow_dynamic_properties()
-    if has_allow_dynamic_properties() then
-      return
-    end
-
-    insert_lines(class_idx - 1, { "#[AllowDynamicProperties]" })
-    class_idx = class_idx + 1
-  end
-
-  local doc_start, doc_end = find_docblock()
-  local names = vim.tbl_keys(props)
-  table.sort(names)
-
-  if doc_start and doc_end then
-    local existing = {}
-
-    for i = doc_start, doc_end do
-      local name = lines[i]:match("@property%s+[%w_\\]+%s+%$([%w_]+)")
-      if name then
-        existing[name] = true
-      end
-    end
-
-    local to_add = {}
-    for _, name in ipairs(names) do
-      if not existing[name] then
-        table.insert(to_add, props[name])
-      end
-    end
-
-    if #to_add > 0 then
-      insert_lines(doc_end - 1, to_add)
-      class_idx = class_idx + #to_add
-    end
-
-    insert_allow_dynamic_properties()
-    return
-  end
-
-  if #names > 0 then
-    local to_add = { "/**" }
-
-    for _, name in ipairs(names) do
-      table.insert(to_add, props[name])
-    end
-
-    table.insert(to_add, " */")
-    insert_lines(class_idx - 1, to_add)
-    class_idx = class_idx + #to_add
-  end
-
-  insert_allow_dynamic_properties()
-end
-
-vim.api.nvim_create_user_command("Ci3AddProperties", add_ci3_properties, {})
-
 -- Enter async to avoid blocking UI during plugin startup
 vim.schedule(function()
   -------------
@@ -530,7 +378,6 @@ vim.schedule(function()
     -- Hinting
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     { src = "https://github.com/fang2hou/blink-copilot" },
-    { src = "https://github.com/nvim-mini/mini.clue" },
     -- Copilot Chat
     { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim" },
     -- Git
@@ -792,6 +639,10 @@ vim.schedule(function()
   end
   keymap("x", "zz", center_visual_selection, { desc = "Center" })
 
+  -- Use FzfLua for spelling suggestions
+  pcall(vim.keymap.del, "n", "z=")
+  keymap("n", "z=", fzf.spell_suggest, { desc = "Spelling suggestions" })
+
   -- Remove default LSP mappings
   pcall(vim.keymap.del, "n", "grt")
   pcall(vim.keymap.del, "n", "grr")
@@ -827,12 +678,11 @@ vim.schedule(function()
   keymap({ "n", "x" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
 
   -- Manually show completion menu for AI suggestions
-  keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show" })
+  keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show completion menu" })
 
   -- A function to search for TODOs and more
   local function find_todo()
-  -- Based on treesitter
-  -- https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
+  -- Based on treesitter: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
 
     --stylua: ignore start
     local tags = {
@@ -843,12 +693,19 @@ vim.schedule(function()
     }
     --stylua: ignore end
 
-    -- From VS Code `todo-tree`'s default regex
-    -- https://github.com/Gruntfuggly/todo-tree/issues/526
-    local regexp = "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*(" .. table.concat(tags, "|") .. ")"
+    local start_regex = "^\\s*"
+    local comment_syntaxes = {
+      "//", -- C-like languages
+      "/\\*", -- C-like block comments
+      start_regex .. "\\*", -- C-like block comment continuation lines
+      "#\\s", -- Shell scripts, Python, Ruby, etc. (space to avoid matching hashtags)
+      "<!--", -- HTML, SVG, etc.
+      ";", -- Assembly, Lisp, INI, etc.
+      "--", -- SQL, Lua, etc.
+    }
+    local regexp = "(" .. table.concat(comment_syntaxes, "|") .. ")\\s*(" .. table.concat(tags, "|") .. ")"
 
     -- Actually initiate the search
-    -- https://github.com/ibhagwan/fzf-lua/discussions/1194#discussioncomment-9418686
     fzf.grep({ no_esc = true, search = regexp, prompt = "> ", winopts = { title = "Find TODOs" } })
   end
 
@@ -893,6 +750,7 @@ vim.schedule(function()
   keymap("x", "<leader>s", function()
     fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
   end, { desc = "Search" })
+  keymap("n", "<leader>k", fzf.keymaps, { desc = "Keymaps" })
 
   -- Copilot Chat
   keymap("n", "<leader>c", "<cmd>CopilotChatToggle<cr>", { desc = "Copilot Chat" })
@@ -929,36 +787,8 @@ vim.schedule(function()
   keymap("n", "<leader>il", "<cmd>IBLToggle<cr>", { desc = "Indentline" })
   keymap("n", "<leader>ic", toggle_cursorline, { desc = "Cursorline" })
   keymap("n", "<leader>is", toggle_signcolumn, { desc = "Sign column" })
-  keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "HL non-ASCII" })
+  keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "Highlight non-ASCII" })
   keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
-
-  -- Based on https://github.com/nvim-mini/mini.clue/blob/main/doc/mini-clue.txt
-  local miniclue = require("mini.clue")
-  miniclue.setup({
-    window = { delay = 200 },
-    triggers = {
-      { mode = { "n", "x" }, keys = "<Leader>" },
-      { mode = "n", keys = "[" },
-      { mode = "n", keys = "]" },
-      { mode = "i", keys = "<C-x>" },
-      { mode = { "n", "x" }, keys = "g" },
-      { mode = { "n", "x" }, keys = "'" },
-      { mode = { "n", "x" }, keys = "`" },
-      { mode = { "n", "x" }, keys = '"' },
-      { mode = { "i", "c" }, keys = "<C-r>" },
-      { mode = "n", keys = "<C-w>" },
-      { mode = { "n", "x" }, keys = "z" },
-    },
-    clues = {
-      miniclue.gen_clues.square_brackets(),
-      miniclue.gen_clues.builtin_completion(),
-      miniclue.gen_clues.g(),
-      miniclue.gen_clues.marks(),
-      miniclue.gen_clues.registers(),
-      miniclue.gen_clues.windows(),
-      miniclue.gen_clues.z(),
-    },
-  })
 
   ---------
   -- LSP --
