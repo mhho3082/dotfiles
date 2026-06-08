@@ -15,7 +15,7 @@ local pf_config_start = vim.loop.hrtime()
 --------------
 
 -- General settings
-vim.opt.title = true
+vim.opt.title = false
 vim.opt.hidden = true
 vim.opt.linebreak = true
 vim.opt.completeopt = "menuone,noselect"
@@ -568,7 +568,7 @@ vim.schedule(function()
 
   -- Copilot chat
   -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
-  require("CopilotChat").setup({ model = "gpt-5.2", temperature = 0.1, window = { layout = "vertical", width = 0.5 } })
+  require("CopilotChat").setup({ model = "gpt-5.4", temperature = 0.1, window = { layout = "vertical", width = 0.5 } })
 
   -------------
   -- KEYMAPS --
@@ -641,7 +641,8 @@ vim.schedule(function()
 
   -- Use FzfLua for spelling suggestions
   pcall(vim.keymap.del, "n", "z=")
-  keymap("n", "z=", fzf.spell_suggest, { desc = "Spelling suggestions" })
+  pcall(vim.keymap.del, "x", "z=")
+  keymap({ "n", "x" }, "z=", fzf.spell_suggest, { desc = "Spelling suggestions" })
 
   -- Remove default LSP mappings
   pcall(vim.keymap.del, "n", "grt")
