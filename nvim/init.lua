@@ -18,7 +18,6 @@ local pf_config_start = vim.loop.hrtime()
 vim.opt.title = false
 vim.opt.hidden = true
 vim.opt.linebreak = true
-vim.opt.completeopt = "menuone,noselect"
 vim.opt.mousemodel = "extend"
 
 -- Basic theme settings
@@ -363,23 +362,22 @@ vim.schedule(function()
     -- Library
     { src = "https://github.com/nvim-lua/plenary.nvim" },
     -- Editing
+    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     { src = "https://github.com/nvim-mini/mini.ai" },
     { src = "https://github.com/nvim-mini/mini.surround" },
     { src = "https://github.com/nvim-mini/mini.align" },
     { src = "https://github.com/nvim-mini/mini.comment" },
-    { src = "https://github.com/nvim-mini/mini.trailspace" },
     { src = "https://github.com/windwp/nvim-autopairs" },
     { src = "https://github.com/windwp/nvim-ts-autotag" },
-    { src = "https://github.com/tpope/vim-sleuth" },
-    -- Movement
     { src = "https://github.com/chrisgrieser/nvim-spider" },
-    -- File browser
     { src = "https://github.com/stevearc/oil.nvim" },
-    -- Hinting
-    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
-    { src = "https://github.com/fang2hou/blink-copilot" },
-    -- Copilot Chat
-    { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim" },
+    -- Viewing
+    { src = "https://github.com/tpope/vim-sleuth" },
+    { src = "https://github.com/lukas-reineke/indent-blankline.nvim" },
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+    { src = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" },
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+    { src = "https://github.com/nvim-mini/mini.trailspace" },
     -- Git
     { src = "https://github.com/tpope/vim-fugitive" },
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
@@ -391,12 +389,6 @@ vim.schedule(function()
     { src = "https://github.com/mason-org/mason.nvim" },
     { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
     { src = "https://github.com/nvimtools/none-ls.nvim" },
-    -- Highlight
-    { src = "https://github.com/lukas-reineke/indent-blankline.nvim" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
-    { src = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" },
-    -- Icons
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   })
 
   -- UI
@@ -452,26 +444,6 @@ vim.schedule(function()
     lsp = { formatter = "path.filename_first", multiline = 2 },
   })
   require("fzf-lua").register_ui_select()
-
-  -- Function to find and remove all unused packages
-  vim.api.nvim_create_user_command("PackClean", function()
-    local packages = vim.tbl_map(
-      function(v)
-        return v.spec.name
-      end,
-      vim.tbl_filter(function(v)
-        return not v.active
-      end, vim.pack.get())
-    )
-    local confirm = vim.fn.confirm(
-      string.format("Packages: %s\nRemove unused packages?", vim.iter(packages):join(", ")),
-      "&Yes\n&No",
-      2
-    )
-    if confirm == 1 then
-      vim.pack.del(packages)
-    end
-  end, { desc = "Remove unused packages" })
 
   ----------------
   -- TREESITTER --
@@ -539,15 +511,12 @@ vim.schedule(function()
       default = function(_)
         local ok, node = pcall(vim.treesitter.get_node)
         if ok and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
-          return { "copilot", "path", "buffer" }
+          return { "path", "buffer" }
         else
-          return { "copilot", "lsp", "path", "snippets", "buffer" }
+          return { "lsp", "path", "snippets", "buffer" }
         end
       end,
-      providers = {
-        copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
-        buffer = { min_keyword_length = 4 },
-      },
+      providers = { buffer = { min_keyword_length = 4 } },
     },
     cmdline = {
       keymap = {
@@ -565,10 +534,6 @@ vim.schedule(function()
     signature = { enabled = true },
     fuzzy = { implementation = "prefer_rust" },
   })
-
-  -- Copilot chat
-  -- https://copilotc-nvim.github.io/CopilotChat.nvim/#/?id=configuration
-  require("CopilotChat").setup({ model = "gpt-5.4", temperature = 0.1, window = { layout = "vertical", width = 0.5 } })
 
   -------------
   -- KEYMAPS --
@@ -678,9 +643,6 @@ vim.schedule(function()
   keymap({ "n", "x" }, "<leader>n", vim.lsp.buf.code_action, { desc = "Code action" })
   keymap({ "n", "x" }, "<leader>e", vim.lsp.buf.format, { desc = "Format" })
 
-  -- Manually show completion menu for AI suggestions
-  keymap({ "i" }, "<C-g>", require("blink.cmp").show, { desc = "Show completion menu" })
-
   -- A function to search for TODOs and more
   local function find_todo()
   -- Based on treesitter: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/comment/highlights.scm
@@ -710,6 +672,30 @@ vim.schedule(function()
     fzf.grep({ no_esc = true, search = regexp, prompt = "> ", winopts = { title = "Find TODOs" } })
   end
 
+  -- Function to find and remove all unused packages
+  local function pack_clean()
+    local packages = vim.tbl_map(
+      function(v)
+        return v.spec.name
+      end,
+      vim.tbl_filter(function(v)
+        return not v.active
+      end, vim.pack.get())
+    )
+    if next(packages) == nil then
+      vim.notify("No unused packages to remove.", vim.log.levels.INFO)
+      return
+    end
+    local confirm = vim.fn.confirm(
+      string.format("Packages: %s\nRemove unused packages?", vim.iter(packages):join(", ")),
+      "&Yes\n&No",
+      2
+    )
+    if confirm == 1 then
+      vim.pack.del(packages)
+    end
+  end
+
   local function toggle_nonascii_hl()
     local w = vim.w
     if w._nonascii then
@@ -723,10 +709,8 @@ vim.schedule(function()
   -- The basics
   keymap("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
   keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
-  keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohlsearch" })
-
-  -- Make
   keymap("n", "<leader>m", "<cmd>make<cr>", { desc = "Make" })
+  keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohlsearch" })
 
   -- Search and replace
   keymap("n", "<leader>a", grug.open, { desc = "Replace" })
@@ -747,19 +731,17 @@ vim.schedule(function()
   keymap("n", "<leader>x", fzf.lsp_document_symbols, { desc = "Symbols" })
   keymap("n", "<leader>d", fzf.diagnostics_workspace, { desc = "Diagnostics" })
   keymap("n", "<leader>f", find_todo, { desc = "Find TODOs" })
+  keymap("n", "<leader>k", fzf.keymaps, { desc = "Keymaps" })
   -- Search selected text in visual mode
   keymap("x", "<leader>s", function()
     fzf.live_grep({ search = table.concat(vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))) })
   end, { desc = "Search" })
-  keymap("n", "<leader>k", fzf.keymaps, { desc = "Keymaps" })
-
-  -- Copilot Chat
-  keymap("n", "<leader>c", "<cmd>CopilotChatToggle<cr>", { desc = "Copilot Chat" })
 
   -- Plugins (group: `p`)
   keymap("n", "<leader>pu", function()
     vim.pack.update()
   end, { desc = "Pack update" })
+  keymap("n", "<leader>pc", pack_clean, { desc = "Pack update" })
   keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
   keymap("n", "<leader>pt", install_common_tree_sitter, { desc = "Tree-sitter" })
 
@@ -808,13 +790,13 @@ vim.schedule(function()
     },
   })
 
-  require("mason").setup({})
-  require("mason-lspconfig").setup({})
-
   local _, blink = pcall(require, "blink.cmp")
   if blink then
     vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
   end
+
+  require("mason").setup({})
+  require("mason-lspconfig").setup({})
 
   local null_ls = require("null-ls")
 
