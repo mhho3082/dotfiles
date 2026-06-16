@@ -63,8 +63,6 @@
     an = add --all --intent-to-add # Add new: for adding (but not staging) new files
 
     b = branch
-    # Select and set upstream branch using fzf
-    bu = "!f() { : git checkout ; b=\"${1:-$(git symbolic-ref --quiet --short HEAD)}\"; git branch --remote  | sed -e 's/^\\s*//' | fzf --layout=reverse --height=80% --query=\"$b\" --preview \"git show --stat --decorate --color=always {}\" | xargs --no-run-if-empty -I{} git branch --set-upstream-to={} \"$b\"; }; f"
 
     c = commit
     ci = commit --interactive
@@ -162,6 +160,9 @@
     # Amend the recent commit
     amend = commit --amend
     overwrite = commit --amend --no-edit --reset-author
+
+    # Select and set upstream branch using fzf
+    upstream = "!f() { : git checkout ; b=\"${1:-$(git symbolic-ref --quiet --short HEAD)}\"; git branch --remote  | sed -e 's/^\\s*//' | fzf --layout=reverse --height=80% --query=\"$b\" --preview \"git show --stat --decorate --color=always {}\" | xargs --no-run-if-empty -I{} git branch --set-upstream-to={} \"$b\"; }; f"
 
     # Remove unused objects in the .git directory
     autoclean = gc --prune=now --aggressive
