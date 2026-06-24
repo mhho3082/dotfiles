@@ -139,6 +139,10 @@ for i in {1..9}; do
   eval $line
 done
 
+# Password generator
+function gen_password {
+  LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c ${1:-20}; echo
+}
 function install-local-apps {
   # (re-)Install local apps
   # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,

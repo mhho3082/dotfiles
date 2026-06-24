@@ -323,72 +323,10 @@ alias superuser="sudo -Eks"
 
 # == Functions ==
 
-# Pretty print paths
-function paths {
-  for i in $path; do
-    echo $i
-  done
+# Password generator
+function gen_password {
+  LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c ${1:-20}; echo
 }
-
-# Run every autostart script
-function autostart {
-  timeout 1s bash -c 'for script in $HOME/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
-}
-
-# Get sizes of different directories / files in current directory
-# https://superuser.com/q/605414/
-function sizes {
-  paste <(du $1 -axh -d 1 2>/dev/null | sed 's/\s.*//') <(ls $1 --color=always -1 --almost-all -U) | sort -k1 -hr | less
-}
-
-# Get n-letters long alias and functions
-# (helpful to get a wider picture)
-function shorthands {
-  # Use 1 if none provided
-  local length=${1:-1}
-
-  # Generate grep checker
-  local letters=$(printf '[a-z]%.0s' {1..$length})
-
-  # Get alias with correct length
-  local alias_list=$(alias | grep '^'$letters'=')
-
-  # Print alias if any
-  if [[ -n $alias_list ]]; then
-    print -P '%F{cyan}alias%f'
-    echo $alias_list | grep '^'$letters
-  fi
-
-  # Get functions with correct length
-  local functions_list=$(for f in $(print -l ${(ok)functions} | grep '^'$letters'$'); do
-      if ! [[ $(type $f) =~ ".*is an alias for.*" ]]; then
-        # Get function definition
-        local definition=$(functions $f | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
-        if [[ ${#definition} -ge 50 ]]; then
-          echo "$(echo $definition | head -c 50)..."
-        else
-          echo $definition
-        fi
-      fi
-  done)
-
-  # Print functions if any
-  if [[ -n $functions_list ]]; then
-    print -P '\n%F{cyan}functions%f'
-    echo $functions_list | grep '^'$letters
-  fi
-}
-
-# Edit the content of the most recent clipboard
-if (( $+commands[xsel] )); then
-  function clipedit {
-    tempfile=$(mktemp)
-    xsel -ob > "$tempfile"
-    $VISUAL "$tempfile"
-    xsel -ib < "$tempfile"
-    rm "$tempfile"
-  }
-fi
 
 # Only define functions if the AUR helper exists
 if (( $+commands[$AUR_HELPER] )); then
