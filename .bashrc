@@ -90,7 +90,7 @@ if command -v __git_complete &>/dev/null; then
   done
 fi
 
-# == Aliases and functions ==
+# == Alias ==
 
 # Enable .bash_aliases if exists
 if [ -f "$HOME/.bash_aliases" ]; then
@@ -111,12 +111,19 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Handy aliases
+alias c='clear'
+alias q='exit'
 alias e="$EDITOR"
 alias v="$VISUAL"
 alias g='git'
+alias m='make'
 alias s='ssh'
-alias c='clear'
-alias q='exit'
+
+if command -v trash >/dev/null 2>&1; then
+  alias r="trash"
+else
+  alias r="rm -i"
+fi
 
 if command -v eza >/dev/null 2>&1; then
   alias l='eza --all --long --icons --sort=type --git --hyperlink'
@@ -139,10 +146,17 @@ for i in {1..9}; do
   eval $line
 done
 
+# Change to superuser
+alias superuser="sudo -Eks"
+
+# == Functions ==
+
 # Password generator
-function gen_password {
-  LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c ${1:-20}; echo
+function gen-password {
+  LC_ALL=C tr -dc '[:graph:]' </dev/urandom | head -c ${1:-20}
+  echo
 }
+
 function install-local-apps {
   # (re-)Install local apps
   # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,
@@ -344,7 +358,5 @@ export PROMPT_COMMAND='bash-prompt'
 # == NVM ==
 
 export NVM_DIR="$HOME/.nvm"
-# Load nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
-# Add completion for nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
