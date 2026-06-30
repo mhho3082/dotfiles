@@ -211,7 +211,6 @@ fi
 
 # Utility shortahnds
 alias c="clear"
-alias d="disown"
 alias q="exit"
 
 # Editors
@@ -222,17 +221,6 @@ alias v="$VISUAL"
 alias g="git"
 alias m="make"
 alias s="ssh"
-# NPM
-alias n="npm"
-alias nd="npm run dev"
-# Yarn
-alias y="yarn"
-alias yd="yarn dev"
-alias yx="yarn dlx"
-# Tmux
-alias t="tmux"
-alias ta="tmux attach || tmux new"
-alias tl="tmux ls"
 
 if (( $+commands[trash] )); then
   alias r="trash"
@@ -315,17 +303,15 @@ if (( $+commands[wezterm] )); then
   alias imgcat="wezterm imgcat"
 fi
 
-# Prepare virtual network for virt-manager
-alias virshprep="sudo virsh net-start default >/dev/null"
-
 # Change to superuser
 alias superuser="sudo -Eks"
 
 # == Functions ==
 
 # Password generator
-function gen_password {
-  LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c ${1:-20}; echo
+function gen-password {
+  LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c ${1:-20}
+  echo
 }
 
 # Only define functions if the AUR helper exists
