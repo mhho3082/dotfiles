@@ -32,7 +32,19 @@ config.tab_bar_at_bottom = true
 config.tab_max_width = 32
 
 -- Use gruvbox
-config.color_scheme = "Gruvbox dark, hard (base16)"
+local light_scheme = "Gruvbox light, hard (base16)"
+local dark_scheme = "Gruvbox dark, hard (base16)"
+config.color_scheme = dark_scheme
+
+wezterm.on("toggle-color-scheme", function(window)
+  local overrides = window:get_config_overrides() or {}
+  if overrides.color_scheme == light_scheme then
+    overrides.color_scheme = dark_scheme
+  else
+    overrides.color_scheme = light_scheme
+  end
+  window:set_config_overrides(overrides)
+end)
 
 -- Remove all padding
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
@@ -92,6 +104,8 @@ config.keys = {
   -- Scroll up/down
   { key = "PageUp", mods = "SHIFT", action = wezterm.action.ScrollByPage(-0.5) },
   { key = "PageDown", mods = "SHIFT", action = wezterm.action.ScrollByPage(0.5) },
+  -- Change backgound color
+  { key = "b", mods = "SHIFT|CTRL", action = wezterm.action({ EmitEvent = "toggle-color-scheme" }) },
   -- Tabs
   { key = "t", mods = "CTRL", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
   { key = "w", mods = "CTRL", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
