@@ -34,7 +34,7 @@ unsetopt autocd
 
 # Change less flags
 # https://unix.stackexchange.com/q/566943
-export LESS=FRXQ
+export LESS="-FRX --mouse --wheel-lines=3 --incsearch"
 
 # Add paths to PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
