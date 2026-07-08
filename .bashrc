@@ -35,7 +35,7 @@ shopt -s checkwinsize
 
 # Change less flags
 # https://unix.stackexchange.com/q/566943
-export LESS=FRXQ
+export LESS="-FRX --mouse --wheel-lines=3 --incsearch"
 
 # Disable "Did you mean ...?" suggestions
 # https://askubuntu.com/a/958493

@@ -61,13 +61,16 @@ config.adjust_window_size_when_changing_font_size = false
 -- Disable IME
 config.use_ime = false
 
--- Disable bell
+-- Disable the audible bell
 config.audible_bell = "Disabled"
 
--- On bell, give a toast notification
-wezterm.on("bell", function(window, _)
-  window:toast_notification("WezTerm", 'Bell from tab "' .. window:active_tab():active_pane():get_title() .. '"')
-end)
+-- On bell, gently flash.
+config.visual_bell = {
+  fade_in_function = "EaseIn",
+  fade_in_duration_ms = 150,
+  fade_out_function = "EaseOut",
+  fade_out_duration_ms = 150,
+}
 
 if not is_darwin then
   -- Fix cursor theme on i3
