@@ -126,8 +126,8 @@ else
 fi
 
 if command -v eza >/dev/null 2>&1; then
-  alias l='eza --all --long --icons --sort=type --git --hyperlink'
-  alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
+  alias l='eza --all --long --icons --sort=type --git --hyperlink=auto'
+  alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink=auto --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
 else
   alias l='ls -AlhF --group-directories-first --color=auto'
   alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
@@ -223,7 +223,7 @@ function install-local-apps {
 
   # For eza: https://github.com/eza-community/eza/releases
   version=$(get-version "eza-community/eza")
-  wget $WGET_OPTS "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-musl.tar.gz"
+  wget $WGET_OPTS "https://github.com/eza-community/eza/releases/download/$version/eza_x86_64-unknown-linux-musl.tar.gz"
   tar xzf "eza_x86_64-unknown-linux-musl.tar.gz"
   mv "eza" "$HOME/.local/bin/eza"
 
