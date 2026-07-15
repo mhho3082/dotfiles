@@ -10,9 +10,6 @@
     eol = lf
     autocrlf = false
 
-[code]
-    editor = nvim
-
 [init]
     defaultBranch = main
 
@@ -32,7 +29,6 @@
 
 [fetch]
     prune = true
-    pruneTags = true
     all = true
 
 [rebase]
@@ -109,8 +105,10 @@
     pa = push --all
     pu = pull
 
-    # Force local changes up to remotes
-    force = push --all --force-with-lease
+    # Force the current branch up to its remote
+    force = push --force-with-lease
+    # Force all local branches up to their remotes
+    force-all = push --all --force-with-lease
     # Save and push all temporary changes in case of emergency
     fire = "!git checkout -B \"EMERGENCY-$(git config user.email)\"; git add -A; git commit -m \"WIP: Emergency commit on $(date +%d/%m/%Y\\ %H:%M:%S)\"; git push --force-with-lease"
     # Delete the branch and fetch it back from remote
@@ -165,7 +163,8 @@
     upstream = "!f() { : git checkout ; b=\"${1:-$(git symbolic-ref --quiet --short HEAD)}\"; git branch --remote  | sed -e 's/^\\s*//' | fzf --layout=reverse --height=80% --query=\"$b\" --preview \"git show --stat --decorate --color=always {}\" | xargs --no-run-if-empty -I{} git branch --set-upstream-to={} \"$b\"; }; f"
 
     # Remove unused objects in the .git directory
-    autoclean = gc --prune=now --aggressive
+    # Note: avoid --aggressive; it discards good deltas and often repacks worse
+    autoclean = gc --prune=now
 
     # Show verbose data
     sha = rev-parse --short HEAD

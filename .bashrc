@@ -35,7 +35,14 @@ shopt -s checkwinsize
 
 # Change less flags
 # https://unix.stackexchange.com/q/566943
-export LESS="-FRX --mouse --wheel-lines=3 --incsearch"
+LESS_VERSION=$(less -V | head -n1 | grep -oE '[0-9]+' | head -n1)
+export LESS="-FMRX"
+if (( LESS_VERSION >= 550 )); then
+  export LESS="$LESS --mouse --wheel-lines=3"
+fi
+if (( LESS_VERSION >= 580 )); then
+    export LESS="$LESS --incsearch"
+fi
 
 # Disable "Did you mean ...?" suggestions
 # https://askubuntu.com/a/958493
