@@ -34,7 +34,14 @@ unsetopt autocd
 
 # Change less flags
 # https://unix.stackexchange.com/q/566943
-export LESS="-FRX --mouse --wheel-lines=3 --incsearch"
+LESS_VERSION=$(less -V | head -n1 | grep -oE '[0-9]+' | head -n1)
+export LESS="-FMRX"
+if (( LESS_VERSION >= 550 )); then
+  export LESS="$LESS --mouse --wheel-lines=3"
+fi
+if (( LESS_VERSION >= 580 )); then
+    export LESS="$LESS --incsearch"
+fi
 
 # Add paths to PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
@@ -201,6 +208,13 @@ bindkey '^E' end-of-line
 # Ctrl-u/k for delete to beginning/end of line
 bindkey '^U' backward-kill-line
 bindkey '^K' kill-line
+
+# Set up native command line editor
+autoload -Uz edit-command-line
+zle -N edit-command-line
+
+# <Esc> v for editing current prompt in editor
+bindkey -M vicmd 'v' edit-command-line
 
 # == Alias ==
 
