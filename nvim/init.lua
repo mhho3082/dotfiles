@@ -465,7 +465,7 @@ vim.schedule(function()
       "markdown", "markdown_inline", "bibtex", "mermaid",
       -- Config
       "rasi", -- For rofi
-      "yaml", "toml", "zathurarc", "xresources",
+      "yaml", "toml", "xresources",
       -- Vim-specific
       "vim", "vimdoc", "comment", "lua", "luadoc",
     }
