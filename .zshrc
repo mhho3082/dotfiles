@@ -36,12 +36,21 @@ unsetopt autocd
 # https://unix.stackexchange.com/q/566943
 LESS_VERSION=$(less -V | head -n1 | grep -oE '[0-9]+' | head -n1)
 export LESS="-FMRX"
-if (( LESS_VERSION >= 550 )); then
+if ((LESS_VERSION >= 550)); then
   export LESS="$LESS --mouse --wheel-lines=3"
 fi
-if (( LESS_VERSION >= 580 )); then
-    export LESS="$LESS --incsearch"
+if ((LESS_VERSION >= 580)); then
+  export LESS="$LESS --incsearch"
 fi
+
+# If the server does not understand tmux-256color, use fallback
+# https://unix.stackexchange.com/a/574674
+if [ "$TERM" = "tmux-256color" ] && ! infocmp -0qU "tmux-256color" >/dev/null 2>&1; then
+  export TERM=screen-256color
+fi
+
+# fix washed-out colors over SSH
+export COLORTERM=truecolor
 
 # Add paths to PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
