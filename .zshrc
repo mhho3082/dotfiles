@@ -1,11 +1,11 @@
 # == Base config ==
 
 # Use nvim (or vim, or vi) for editing
-if (( $+commands[nvim] )); then
+if (($+commands[nvim])); then
   export VISUAL="nvim"
   export EDITOR="nvim"
   export MANPAGER='nvim +Man!'
-elif (( $+commands[vim] )); then
+elif (($+commands[vim])); then
   export VISUAL="vim"
   export EDITOR="vim"
   export MANPAGER="vim -M +MANPAGER -"
@@ -87,7 +87,7 @@ function plugin-load {
     fi
     if [[ ! -e $initfile ]]; then
       initfiles=($plugdir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
-      (( $#initfiles )) || { echo >&2 "No init file '$repo'." && continue }
+      (($#initfiles)) || { echo >&2 "No init file '$repo'." && continue; }
       ln -sf $initfiles[1] $initfile
     fi
     fpath+=$plugdir
@@ -172,12 +172,12 @@ local CURSOR_INSERT='\e[6 q'
 # Change cursor upon changing modes
 function zle-keymap-select {
   if [[ ${KEYMAP} == vicmd ]] ||
-  [[ $1 = 'block' ]]; then
+    [[ $1 = 'block' ]]; then
     echo -ne $CURSOR_NORMAL
   elif [[ ${KEYMAP} == main ]] ||
-  [[ ${KEYMAP} == viins ]] ||
-  [[ ${KEYMAP} = '' ]] ||
-  [[ $1 = 'beam' ]]; then
+    [[ ${KEYMAP} == viins ]] ||
+    [[ ${KEYMAP} = '' ]] ||
+    [[ $1 = 'beam' ]]; then
     echo -ne $CURSOR_INSERT
   fi
 }
@@ -245,7 +245,7 @@ alias g="git"
 alias m="make"
 alias s="ssh"
 
-if (( $+commands[trash] )); then
+if (($+commands[trash])); then
   alias r="trash"
 else
   alias r="rm -i"
@@ -253,25 +253,28 @@ fi
 
 # File manager (open)
 function o {
-  if (( $+commands[open] )); then
+  if (($+commands[open])); then
     # For macOS
-    open ${@:-.} 2>/dev/null & disown
+    open ${@:-.} 2>/dev/null &
+    disown
   elif grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
     # Open in File Explorer (for WSL)
     # https://stackoverflow.com/q/38086185
-    explorer.exe ${@:-.}; (( $? == 1 ))
+    explorer.exe ${@:-.}
+    (($? == 1))
   else
-    xdg-open ${@:-.} 2>/dev/null & disown
+    xdg-open ${@:-.} 2>/dev/null &
+    disown
   fi
 }
 
 # Exa/Eza (or ls + tree)
-if (( $+commands[eza] )); then
+if (($+commands[eza])); then
   alias l='eza --all --long --icons --sort=type --git --hyperlink=auto'
   alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink=auto --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
 else
   alias l='ls -AlhF --group-directories-first --color=auto'
-  if (( $+commands[tree] )); then
+  if (($+commands[tree])); then
     alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
   fi
 fi
@@ -281,7 +284,7 @@ fi
 for i in {1..9}; do
   local alias_name="."
   local relative_path=""
-  for j in `seq $i`; do
+  for j in $(seq $i); do
     alias_name+='.'
     relative_path+='../'
   done
@@ -290,7 +293,7 @@ for i in {1..9}; do
 done
 
 # Zathura / Zaread
-if (( $+commands[zaread] )); then
+if (($+commands[zaread])); then
   # Select only the viewable files (based on extension)
   local za_e=(
     'pdf' 'epub'
@@ -304,7 +307,7 @@ if (( $+commands[zaread] )); then
   done
   local search='$(find -type f \( '$za_f' \) | fzf --cycle --layout=reverse --height=80%)'
   alias za='local f='$search'; zaread $f & disown'
-elif (( $+commands[zathura] )); then
+elif (($+commands[zathura])); then
   # Select only the viewable files (based on extension)
   local za_e=('pdf')
   local za_f=""
@@ -316,7 +319,7 @@ elif (( $+commands[zathura] )); then
 fi
 
 # Wezterm
-if (( $+commands[wezterm] )); then
+if (($+commands[wezterm])); then
   # Create a new instance of wezterm with the same directory
   # (nice to have for tiling window managers, e.g., i3wm)
   # https://wezfurlong.org/wezterm/troubleshooting.html#increasing-log-verbosity
@@ -333,12 +336,12 @@ alias superuser="sudo -Eks"
 
 # Password generator
 function gen-password {
-  LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c ${1:-20}
+  LC_ALL=C tr -dc '[:graph:]' </dev/urandom | head -c ${1:-20}
   echo
 }
 
 # Only define functions if the AUR helper exists
-if (( $+commands[$AUR_HELPER] )); then
+if (($+commands[$AUR_HELPER])); then
   # Package regexes that may require a reboot
   # Based on https://github.com/endeavouros-team/eos-bash-shared/blob/main/eos-reboot-required.hook
   local aur_reboot_pkgs=(
@@ -372,14 +375,17 @@ if (( $+commands[$AUR_HELPER] )); then
   )
 
   # Join the package names with '|' and check word boundaries using space char
-  local aur_reboot_check="\s($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))(?=\s)"
+  local aur_reboot_check="\s($(
+    IFS='|'
+    echo "${aur_reboot_pkgs[*]}"
+  ))(?=\s)"
 
   # Update the system and reboot if needed
   function aur-update {
     # Sync databases
     local updates
 
-    if (( $+commands[checkupdates] )); then
+    if (($+commands[checkupdates])); then
       updates=$(checkupdates --nocolor | awk '{print $1;}' | tr '\n' ' ')
     else
       $AUR_HELPER -Sy
@@ -404,8 +410,8 @@ if (( $+commands[$AUR_HELPER] )); then
 
     # Perform upgrade
     $AUR_HELPER -Syu --noconfirm
-    if (( $? == 0 )); then
-      if (( reboot_needed )); then
+    if (($? == 0)); then
+      if ((reboot_needed)); then
         reboot && return
       else
         print -P "%F{green}Update successful. No reboot needed.%f"
@@ -428,7 +434,7 @@ if (( $+commands[$AUR_HELPER] )); then
 fi
 
 # For homebrew / linuxbrew
-if (( $+commands[brew] )); then
+if (($+commands[brew])); then
   # Update homebrew
   function brew-update {
     brew update
@@ -496,9 +502,9 @@ _setup_ps1() {
   RPROMPT=""
   if gitstatus_query 'MY' && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
     # Inter-branch status
-    (( VCS_STATUS_COMMITS_AHEAD )) && RPROMPT+="$GIT_AHEAD"
-    (( VCS_STATUS_COMMITS_BEHIND )) && RPROMPT+="$GIT_BEHIND"
-    (( VCS_STATUS_STASHES )) && RPROMPT+="$GIT_STASHED"
+    ((VCS_STATUS_COMMITS_AHEAD)) && RPROMPT+="$GIT_AHEAD"
+    ((VCS_STATUS_COMMITS_BEHIND)) && RPROMPT+="$GIT_BEHIND"
+    ((VCS_STATUS_STASHES)) && RPROMPT+="$GIT_STASHED"
 
     if [[ -n $RPROMPT ]]; then
       RPROMPT+=" "
@@ -506,7 +512,7 @@ _setup_ps1() {
 
     # Currently running action
     [[ -n $VCS_STATUS_ACTION ]] && RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
-    (( VCS_STATUS_HAS_CONFLICTED )) && RPROMPT+="$GIT_CONFLICT"
+    ((VCS_STATUS_HAS_CONFLICTED)) && RPROMPT+="$GIT_CONFLICT"
 
     # Check if remote exists
     if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
@@ -530,25 +536,25 @@ _setup_ps1() {
 
     # Within-branch status
     # Combine "Untracked" and "Deleted" counts as they share the same logic
-    local is_untracked=$(( VCS_STATUS_NUM_UNTRACKED + VCS_STATUS_NUM_UNSTAGED_DELETED ))
-    if (( VCS_STATUS_NUM_STAGED )); then
-      if   (( is_untracked )); then
+    local is_untracked=$((VCS_STATUS_NUM_UNTRACKED + VCS_STATUS_NUM_UNSTAGED_DELETED))
+    if ((VCS_STATUS_NUM_STAGED)); then
+      if ((is_untracked)); then
         RPROMPT+=" $GIT_STAGED_UNTRACKED"
-      elif (( VCS_STATUS_NUM_UNSTAGED )); then
+      elif ((VCS_STATUS_NUM_UNSTAGED)); then
         RPROMPT+=" $GIT_STAGED_UNSTAGED"
       else
         RPROMPT+=" $GIT_STAGED"
       fi
-    elif (( is_untracked )); then
+    elif ((is_untracked)); then
       RPROMPT+=" $GIT_UNTRACKED"
-    elif (( VCS_STATUS_NUM_UNSTAGED )); then
+    elif ((VCS_STATUS_NUM_UNSTAGED)); then
       RPROMPT+=" $GIT_UNSTAGED"
     else
       RPROMPT+=" $GIT_CLEAN"
     fi
   fi
 
-  setopt no_prompt_{bang,subst} prompt_percent  # enable/disable correct prompt expansions
+  setopt no_prompt_{bang,subst} prompt_percent # enable/disable correct prompt expansions
 }
 gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
 autoload -Uz add-zsh-hook
@@ -557,7 +563,7 @@ add-zsh-hook precmd _setup_ps1
 # == FZF ==
 
 # Add completion for fzf
-if (( $+commands[fzf] )); then
+if (($+commands[fzf])); then
   export FZF_DEFAULT_COMMAND="fd -t f -H"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_CTRL_T_OPTS="--preview='less {}'"
@@ -567,7 +573,7 @@ fi
 
 # Add completion for zoxide
 # https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
-if (( $+commands[zoxide] )); then
+if (($+commands[zoxide])); then
   eval "$(zoxide init zsh)"
 fi
 
