@@ -807,6 +807,7 @@ vim.schedule(function()
       null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.blade_formatter,
       null_ls.builtins.formatting.shfmt.with({
+        filetypes = { "sh", "bash", "zsh" },
         -- https://github.com/mvdan/sh/issues/212
         args = { "-i", "2", "-ci", "-filename", "$FILENAME" },
       }),
