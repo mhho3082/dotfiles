@@ -112,13 +112,11 @@ Some extensions that I install in my browsers:
 <details>
 <summary> Browser extensions </summary>
 
-- [`Vimium`](https://github.com/philc/vimium)
 - [`uBlock Origin`](https://github.com/gorhill/uBlock)
-- [`Dark Background and Light Text`](https://github.com/m-khvoinitsky/dark-background-light-text-extension)
 - [`Redirector`](https://github.com/einaregilsson/Redirector)
-- [`Tab Session Manager`](https://github.com/sienori/Tab-Session-Manager)
 - [`HTTPS Everywhere`](https://www.eff.org/https-everywhere)
 - [`Facebook Container`](https://addons.mozilla.org/en-US/firefox/addon/facebook-container/)
+- [`Enhancer for YouTube`](https://www.mrfdev.com/enhancer-for-youtube)
 
 Gruvbox theme for browsers is [`teatwig/gruvbox-firefox-themes`](https://github.com/teatwig/gruvbox-firefox-themes)
 
