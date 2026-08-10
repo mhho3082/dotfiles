@@ -479,7 +479,7 @@ _setup_ps1() {
   PS1="%(1j.%F{cyan}[%j]%f .)"
 
   # pwd
-  PS1+="%F{blue}%(4~|.../%3~|%~)%f "
+  PS1+="%F{blue}%~%f "
 
   # Is in tmux?
   if [ -n "$TMUX" ]; then
