@@ -33,15 +33,7 @@ unsetopt beep
 unsetopt autocd
 
 # Change less flags
-# https://unix.stackexchange.com/q/566943
-LESS_VERSION=$(less -V | head -n1 | grep -oE '[0-9]+' | head -n1)
 export LESS="-FMRX"
-if ((LESS_VERSION >= 550)); then
-  export LESS="$LESS --mouse --wheel-lines=3"
-fi
-if ((LESS_VERSION >= 580)); then
-  export LESS="$LESS --incsearch"
-fi
 
 # If the server does not understand tmux-256color, use fallback
 # https://unix.stackexchange.com/a/574674
@@ -270,8 +262,8 @@ function o {
 
 # Exa/Eza (or ls + tree)
 if (($+commands[eza])); then
-  alias l='eza --all --long --icons --sort=type --git --hyperlink=auto'
-  alias ll='eza --all --long --tree --icons --sort=type --git --hyperlink=auto --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
+  alias l='eza --all --long --icons --sort=type --git'
+  alias ll='eza --all --long --tree --icons --sort=type --git --ignore-glob="CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv"'
 else
   alias l='ls -AlhF --group-directories-first --color=auto'
   if (($+commands[tree])); then
