@@ -365,7 +365,6 @@ vim.schedule(function()
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     { src = "https://github.com/nvim-mini/mini.ai" },
     { src = "https://github.com/nvim-mini/mini.surround" },
-    { src = "https://github.com/nvim-mini/mini.align" },
     { src = "https://github.com/nvim-mini/mini.comment" },
     { src = "https://github.com/windwp/nvim-autopairs" },
     { src = "https://github.com/windwp/nvim-ts-autotag" },
@@ -377,7 +376,6 @@ vim.schedule(function()
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
     { src = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" },
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
-    { src = "https://github.com/nvim-mini/mini.trailspace" },
     -- Git
     { src = "https://github.com/tpope/vim-fugitive" },
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
@@ -398,8 +396,6 @@ vim.schedule(function()
   -- Editing packages
   require("mini.ai").setup({})
   require("mini.surround").setup({})
-  require("mini.align").setup({})
-  require("mini.trailspace").setup({})
   require("mini.comment").setup({
     options = {
       custom_commentstring = function()
@@ -449,7 +445,7 @@ vim.schedule(function()
   -- TREESITTER --
   ----------------
 
-  local function install_common_tree_sitter()
+  local function update_tree_sitter()
     --stylua: ignore start
     local languages = {
       -- Programming
@@ -473,7 +469,9 @@ vim.schedule(function()
 
     -- Check if `tree-sitter` CLI is installed on system
     if vim.fn.executable("tree-sitter") == 1 then
-      require("nvim-treesitter").install(languages, { summary = true })
+      local treesitter = require("nvim-treesitter")
+      treesitter.install(languages, { summary = true })
+      treesitter.update()
     else
       vim.api.nvim_echo(
         { { "Error: tree-sitter CLI is not installed. Please install it to use nvim-treesitter.", "ErrorMsg" } },
@@ -706,6 +704,16 @@ vim.schedule(function()
     end
   end
 
+  local function toggle_trailing_ws_hl()
+    local w = vim.w
+    if w._trailingws then
+      pcall(vim.fn.matchdelete, w._trailingws)
+      w._trailingws = nil
+    else
+      w._trailingws = vim.fn.matchadd("MiniTrailspace", [[\s\+$]])
+    end
+  end
+
   -- The basics
   keymap("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
   keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
@@ -743,7 +751,7 @@ vim.schedule(function()
   end, { desc = "Pack update" })
   keymap("n", "<leader>pc", pack_clean, { desc = "Pack update" })
   keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
-  keymap("n", "<leader>pt", install_common_tree_sitter, { desc = "Tree-sitter" })
+  keymap("n", "<leader>pt", update_tree_sitter, { desc = "Tree-sitter" })
 
   -- Git (group: `g`)
   keymap("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<cr>", { desc = "Git Blame" })
@@ -771,6 +779,7 @@ vim.schedule(function()
   keymap("n", "<leader>ic", toggle_cursorline, { desc = "Cursorline" })
   keymap("n", "<leader>is", toggle_signcolumn, { desc = "Sign column" })
   keymap("n", "<leader>ia", toggle_nonascii_hl, { desc = "Highlight non-ASCII" })
+  keymap("n", "<leader>it", toggle_trailing_ws_hl, { desc = "Highlight trailing whitespace" })
   keymap("n", "<leader>ib", toggle_background, { desc = "Background" })
 
   ---------
