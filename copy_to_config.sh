@@ -14,6 +14,7 @@ ignore_patterns=(
   "tips/"
   "makefile"
   "vimium-options.json"
+  "enhancer-for-youtube-options.json"
 )
 
 # Get all Git files in this repo
