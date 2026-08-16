@@ -279,22 +279,259 @@ for example below semi-dynamic script:
 <summary> <code>/etc/lightdm/display_setup.sh</code> </summary>
 
 ```bash
+
 #!/bin/sh
+#
+# keep every connected monitor mirrored for the whole lifetime of the LightDM greeter,
+# react to hotplug/unplug, then get out of the way.
+#
+# Inspired by https://chaoticlab.io/posts/lightdm-extmonitor/ , but instead of
+# running once and using a single output, it runs as a tiny background worker and
+# clones *all* outputs: a common mode is used when the monitors share one,
+# RandR scaling otherwise (LightDM's own mirroring breaks on mixed resolutions).
+#
+# Usage:
+#   lightdm-mirror-displays start   # from display-setup-script (returns at once)
+#   lightdm-mirror-displays stop    # from session-setup-script / greeter cleanup
+#   lightdm-mirror-displays run     # the worker itself (foreground, for debugging)
 
-# Primary display is always known, typically something like eDP for laptops;
-# Please check xrandr to be sure
-PRIMARY_MONITOR="eDP"
+set -u
 
-# Get all connected monitors except the primary one
-OTHER_MONITORS=$(xrandr --query | grep " connected" | grep -v "$PRIMARY_MONITOR" | cut -d" " -f1)
+PROG=lightdm-mirror-displays
+RUNDIR=${MIRROR_RUNDIR:-/run/lightdm-mirror}
+POLL=${MIRROR_POLL:-2}                        # seconds between RandR checks
+GREETER_RE=${MIRROR_GREETER_RE:-greeter}      # pgrep -f pattern of the greeter
+GREETER_GRACE=${MIRROR_GREETER_GRACE:-60}     # give the greeter this long to appear
 
-# Enable the primary monitor first
-xrandr --output "$PRIMARY_MONITOR" --auto --primary
+XRANDR=$(command -v xrandr 2>/dev/null || echo "")
 
-# Loop through all other connected monitors and mirror them to the primary monitor
-for MONITOR in $OTHER_MONITORS; do
-    xrandr --output "$MONITOR" --auto --same-as "$PRIMARY_MONITOR"
-done
+# one worker per X display (multi-seat friendly)
+tag=$(printf '%s' "${DISPLAY:-nodisplay}" | tr -c 'A-Za-z0-9' '_')
+PIDFILE="$RUNDIR/$PROG$tag.pid"
+
+log() {
+	logger -t "$PROG" -- "$*" 2>/dev/null || printf '%s: %s\n' "$PROG" "$*" >&2
+}
+
+# ---------------------------------------------------------------- RandR helpers
+
+# "OUTPUT mode mode mode ..." for every connected output that reports modes
+outputs_info() {
+	$XRANDR -q 2>/dev/null | awk '
+		/^[^[:space:]]/ {
+			if ($2 == "connected") { out = $1; printf "%s%s", (n++ ? "\n" : ""), out }
+			else                     out = ""
+			next
+		}
+		/^[[:space:]]+[0-9]+x[0-9]+/ { if (out != "") printf " %s", $1 }
+		END { if (n) printf "\n" }'
+}
+
+# outputs that are disconnected but still driving a CRTC (stale clones)
+stale_outputs() {
+	$XRANDR -q 2>/dev/null | awk '$2 == "disconnected" && $0 ~ /[0-9]+x[0-9]+\+-?[0-9]+\+-?[0-9]+/ { print $1 }'
+}
+
+primary_output() {
+	$XRANDR -q 2>/dev/null | awk '$2 == "connected" && $3 == "primary" { print $1; exit }'
+}
+
+# cheap "state of the world" fingerprint: who is connected + current geometry
+signature() {
+	$XRANDR -q 2>/dev/null | awk '/ connected| disconnected/ {
+		geo = "off"
+		for (i = 3; i <= NF; i++)
+			if ($i ~ /^[0-9]+x[0-9]+\+-?[0-9]+\+-?[0-9]+$/) geo = $i
+		print $1, $2, geo
+	}'
+}
+
+# largest mode supported by *every* connected output ("" if there is none)
+common_mode() {
+	awk '
+		{
+			n++; seen = " "
+			for (i = 2; i <= NF; i++)
+				if (index(seen, " " $i " ") == 0) { seen = seen $i " "; cnt[$i]++ }
+		}
+		END {
+			best = ""; bestarea = 0
+			for (m in cnt) if (cnt[m] == n) {
+				split(m, d, "x"); a = (d[1] + 0) * (d[2] + 0)
+				if (a > bestarea) { bestarea = a; best = m }
+			}
+			print best
+		}'
+}
+
+# pick_mode <anchor_w> <anchor_h> ; stdin: one "OUTPUT mode mode ..." line
+# -> mode whose aspect ratio is closest to the anchor (largest one wins ties)
+pick_mode() {
+	awk -v aw="$1" -v ah="$2" '{
+		target = aw / ah; best = ""; bestd = 1e9; besta = 0
+		for (i = 2; i <= NF; i++) {
+			split($i, d, "x"); w = d[1] + 0; h = d[2] + 0
+			if (w <= 0 || h <= 0) continue
+			r = w / h; diff = (r > target ? r - target : target - r); a = w * h
+			if (diff < bestd - 1e-6 || (diff < bestd + 1e-6 && a > besta)) {
+				bestd = diff; besta = a; best = $i
+			}
+		}
+		print best
+	}'
+}
+
+# ------------------------------------------------------------------- the action
+
+apply_mirror() {
+	info=$(outputs_info)
+	[ -n "$info" ] || return 0
+
+	# clone anchor: keep whatever is already primary, do not re-assign it
+	anchor=$(primary_output)
+	if [ -z "$anchor" ] || ! printf '%s\n' "$info" | grep -q "^$anchor "; then
+		anchor=$(printf '%s\n' "$info" | head -n 1 | cut -d ' ' -f 1)
+	fi
+
+	args=""
+	for dead in $(stale_outputs); do
+		args="$args --output $dead --off"
+	done
+
+	mode=$(printf '%s\n' "$info" | common_mode)
+
+	if [ -n "$mode" ]; then
+		# --- true hardware clone: identical mode everywhere -------------------
+		args="$args --output $anchor --mode $mode --scale 1x1 --rotate normal --pos 0x0"
+		for name in $(printf '%s\n' "$info" | cut -d ' ' -f 1); do
+			[ "$name" = "$anchor" ] && continue
+			args="$args --output $name --mode $mode --scale 1x1 --rotate normal --same-as $anchor"
+		done
+	else
+		# --- no common mode: scale every panel onto the anchor's area ---------
+		aline=$(printf '%s\n' "$info" | grep "^$anchor ")
+		amode=$(printf '%s\n' "$aline" | cut -d ' ' -f 2)
+		aw=${amode%%x*}; ah=${amode#*x}; ah=${ah%%[!0-9]*}
+		args="$args --output $anchor --mode $amode --scale 1x1 --rotate normal --pos 0x0"
+		while read -r line; do
+			name=${line%% *}
+			[ "$name" = "$anchor" ] && continue
+			m=$(printf '%s\n' "$line" | pick_mode "$aw" "$ah")
+			[ -n "$m" ] || continue
+			mw=${m%%x*}; mh=${m#*x}; mh=${mh%%[!0-9]*}
+			scale=$(awk -v aw="$aw" -v ah="$ah" -v mw="$mw" -v mh="$mh" \
+				'BEGIN { printf "%.6fx%.6f", aw / mw, ah / mh }')
+			args="$args --output $name --mode $m --scale $scale --rotate normal --same-as $anchor"
+		done <<-EOF
+		$info
+		EOF
+	fi
+
+	log "applying: xrandr$args"
+	# no output name or mode contains whitespace, so word splitting is safe here
+	# shellcheck disable=SC2086
+	$XRANDR $args 2>&1 | while read -r l; do log "xrandr: $l"; done
+}
+
+# ----------------------------------------------------------------- worker & co.
+
+run() {
+	[ -n "$XRANDR" ]      || { log "xrandr not found, nothing to do"; exit 0; }
+	[ -n "${DISPLAY:-}" ] || { log "DISPLAY is not set, nothing to do"; exit 0; }
+
+	mkdir -p "$RUNDIR" 2>/dev/null
+	echo $$ > "$PIDFILE" 2>/dev/null
+	trap 'rm -f "$PIDFILE"' EXIT
+	trap 'log "signalled, releasing xrandr"; exit 0' TERM INT HUP
+
+	log "worker started on DISPLAY=$DISPLAY (pid $$)"
+
+	last=""; greeter_seen=0; waited=0
+	while :; do
+		# X server gone (display server restarted / seat removed) -> we are done
+		if ! $XRANDR -q >/dev/null 2>&1; then
+			log "cannot talk to X on $DISPLAY, exiting"
+			break
+		fi
+
+		# hotplug, unplug, or somebody else changed the layout -> re-mirror.
+		# Storing the *post*-apply signature also prevents retry loops when a
+		# requested configuration cannot be realised.
+		sig=$(signature)
+		if [ "$sig" != "$last" ]; then
+			apply_mirror
+			last=$(signature)
+		fi
+
+		# watchdog: hand control over as soon as the greeter is gone
+		if pgrep -f -- "$GREETER_RE" >/dev/null 2>&1; then
+			greeter_seen=1
+		elif [ "$greeter_seen" -eq 1 ]; then
+			log "greeter exited (user logged in?), releasing xrandr"
+			break
+		else
+			waited=$((waited + POLL))
+			if [ "$waited" -ge "$GREETER_GRACE" ]; then
+				log "no greeter after ${GREETER_GRACE}s (autologin?), exiting"
+				break
+			fi
+		fi
+
+		sleep "$POLL"
+	done
+}
+
+start() {
+	# must never block or fail: LightDM waits for display-setup-script
+	[ -n "$XRANDR" ]      || exit 0
+	[ -n "${DISPLAY:-}" ] || exit 0
+	mkdir -p "$RUNDIR" 2>/dev/null
+	stop                                   # drop a stale worker for this display
+	if command -v setsid >/dev/null 2>&1; then
+		setsid "$0" run < /dev/null > /dev/null 2>&1 &
+	else
+		"$0" run < /dev/null > /dev/null 2>&1 &
+	fi
+	exit 0
+}
+
+stop() {
+	[ -f "$PIDFILE" ] || return 0
+	pid=$(cat "$PIDFILE" 2>/dev/null)
+	if [ -n "${pid:-}" ] && kill -0 "$pid" 2>/dev/null; then
+		kill -TERM "$pid" 2>/dev/null
+		i=0
+		while kill -0 "$pid" 2>/dev/null && [ "$i" -lt 20 ]; do
+			sleep 0.1 2>/dev/null || sleep 1
+			i=$((i + 1))
+		done
+		kill -KILL "$pid" 2>/dev/null
+	fi
+	rm -f "$PIDFILE"
+	return 0
+}
+
+case "${1:-start}" in
+	start) start ;;
+	stop)  stop; exit 0 ;;
+	run)   run;  exit 0 ;;
+	*)     printf 'usage: %s {start|stop|run}\n' "$PROG" >&2; exit 2 ;;
+esac
+```
+
+</details>
+
+Then, modify `/etc/lightdm/lightdm.conf`:
+
+<details>
+<summary> <code>/etc/lightdm/lightdm.conf</code> </summary>
+
+```conf
+[Seat:*]
+# ...
+display-setup-script=/etc/lightdm/display_setup.sh start
+session-setup-script=/etc/lightdm/display_setup.sh stop
+# ...
 ```
 
 </details>
