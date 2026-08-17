@@ -322,7 +322,7 @@ if (($+commands[wezterm])); then
 fi
 
 # Change to superuser
-alias superuser="sudo -Eks"
+alias superuser="sudo -Es"
 
 # == Functions ==
 
@@ -459,10 +459,8 @@ local GIT_STASHED="⚑"
 
 local GIT_CONFLICT="%F{red}󱈸 %f"
 
-local GLYPH=""
-local SUPERUSER_GLYPH=""
-local TMUX_GLYPH="%F{green}%f"
-local VENV_GLYPH="%F{yellow}%f"
+local GLYPH="$"
+local SUPERUSER_GLYPH="#"
 
 _setup_ps1() {
   ## PS1 ##
@@ -470,22 +468,15 @@ _setup_ps1() {
   # Jobs
   PS1="%(1j.%F{cyan}[%j]%f .)"
 
+  # Username and hostname
+  PS1+="%F{green}%n@%m%f "
+
   # pwd
   PS1+="%F{blue}%~%f "
 
-  # Is in tmux?
-  if [ -n "$TMUX" ]; then
-    PS1+="$TMUX_GLYPH "
-  fi
-
-  # Is in Python venv?
-  if [ -n "$VIRTUAL_ENV" ]; then
-    PS1+="$VENV_GLYPH "
-  fi
-
   # Glyph (special glyph for superuser)
   # Turn red if previous command return != 0
-  PS1+="%(?.%F{cyan}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
+  PS1+="%(?.%F{blue}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
 
   ## RPROMPT ##
 

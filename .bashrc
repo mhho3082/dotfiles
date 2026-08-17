@@ -149,7 +149,7 @@ for i in {1..9}; do
 done
 
 # Change to superuser
-alias superuser="sudo -Eks"
+alias superuser="sudo -Es"
 
 # == Functions ==
 
