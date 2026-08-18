@@ -452,7 +452,7 @@ local GIT_STAGED_UNSTAGED="%F{yellow}󰋙 %f"
 local GIT_UNTRACKED="%F{red}󰔷 %f"
 local GIT_STAGED_UNTRACKED="%F{yellow}󰔷 %f"
 
-local GIT_REMOTE="󰊢 "
+local GIT_REMOTE=" "
 local GIT_AHEAD="↑"
 local GIT_BEHIND="↓"
 local GIT_STASHED="⚑"
@@ -469,14 +469,14 @@ _setup_ps1() {
   PS1="%(1j.%F{cyan}[%j]%f .)"
 
   # Username and hostname
-  PS1+="%F{green}%n@%m%f "
+  PS1+="%F{green}%n%F{242}@%F{green}%m%f "
 
   # pwd
   PS1+="%F{blue}%~%f "
 
   # Glyph (special glyph for superuser)
   # Turn red if previous command return != 0
-  PS1+="%(?.%F{blue}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
+  PS1+="%(?.%F{242}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
 
   ## RPROMPT ##
 
