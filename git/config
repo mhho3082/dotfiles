@@ -175,8 +175,9 @@
     stashes = stash list
     conflicts = diff --name-only --diff-filter=U
 
-    # Make an archive of the current repo
-    quick-archive = "!f() { d=\"$(git rev-parse --show-toplevel)\"; [ -d $d ] && pushd \"$d/..\" && tar cf \"$(basename $d).tar\" \"$(basename $d)\" && popd; }; f"
+    # Make a gzipped archive of the current repo, .git included and untracked/ignored files kept
+    # Use `git archive` instead for a clean export of only tracked files at a given ref
+    quick-gzip = "!f() { d=\"$(git rev-parse --show-toplevel)\"; [ -d $d ] && pushd \"$d/..\" && tar czf \"$(basename $d).tar.gz\" \"$(basename $d)\" && popd; }; f"
 
     # Initiate a git repo
     quick-init = "!f() { if [ ! -d .git ]; then git init && git add -A && git commit -m \"feat: Repo init\"; else printf 'Git repository already exists, fully overwrite it? [y/N] '; read answer; case \"$answer\" in [yY]) rm -rf .git && git init && git add -A && git commit -m \"feat: Repo init\" ;; esac; fi; }; f"

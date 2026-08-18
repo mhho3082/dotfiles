@@ -249,9 +249,9 @@ function bash-git-status {
   if [ -n "$branch" ]; then
     location="\033[33m$branch"
   elif [ -n "$tag" ]; then
-    location="\033[00;90m#\033[33m$tag"
+    location="\033[38;5;242m#\033[33m$tag"
   else
-    location="\033[00;90m@\033[33m$sha"
+    location="\033[38;5;242m@\033[33m$sha"
   fi
 
   # Inter-branch status
@@ -268,7 +268,7 @@ function bash-git-status {
   # Stash status
   local stash_flag=""
   if [ "$(git rev-list --walk-reflogs --ignore-missing --count refs/stash)" -gt 0 ]; then
-    stash_flag=" \033[00;90m⚑"
+    stash_flag=" \033[38;5;242m⚑"
   fi
 
   # Status indicator
@@ -327,7 +327,7 @@ function bash-prompt {
   fi
 
   # Username and hostname
-  PS1+="\[\033[00;32m\]\u@\h "
+  PS1+="\[\033[00;32m\]\u\[\033[38;5;242m\]@\[\033[00;32m\]\h "
 
   # pwd
   PS1+="\[\033[00;34m\]\w "
@@ -339,7 +339,7 @@ function bash-prompt {
 
   # Glyph indicating last command status
   if [ $status -eq 0 ]; then
-    PS1+="\[\033[00;34m\]"
+    PS1+="\[\033[38;5;242m\]"
   else
     PS1+="\[\033[00;31m\]"
   fi
