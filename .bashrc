@@ -327,7 +327,15 @@ function bash-prompt {
   fi
 
   # Username and hostname
-  PS1+="\[\033[00;32m\]\u\[\033[38;5;242m\]@\[\033[00;32m\]\h "
+  # Hostname is always a different color from the username so they never
+  # blend together; it turns orange when remoting in (SSH or similar), as a
+  # "you're remote" warning
+  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_CONNECTION" ]; then
+    host_color="\[\033[38;5;208m\]"
+  else
+    host_color="\[\033[00;35m\]"
+  fi
+  PS1+="\[\033[00;32m\]\u\[\033[38;5;242m\]@${host_color}\h "
 
   # pwd
   PS1+="\[\033[00;34m\]\w "

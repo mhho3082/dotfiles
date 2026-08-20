@@ -469,7 +469,12 @@ _setup_ps1() {
   PS1="%(1j.%F{cyan}[%j]%f .)"
 
   # Username and hostname
-  PS1+="%F{green}%n%F{242}@%F{green}%m%f "
+  # Hostname is always a different color from the username so they never
+  # blend together; it turns orange when remoting in (SSH or similar), as a
+  # "you're remote" warning
+  local HOST_COLOR="magenta"
+  [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" || -n "$SSH_CONNECTION" ]] && HOST_COLOR="208"
+  PS1+="%F{green}%n%F{242}@%F{$HOST_COLOR}%m%f "
 
   # pwd
   PS1+="%F{blue}%~%f "
