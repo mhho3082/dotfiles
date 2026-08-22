@@ -19,6 +19,9 @@ function main {
 
   # https://superuser.com/a/644829
   xset s off && xset s noblank && xset -dpms
+
+  # Update the background resolution
+  [[ -x "$HOME/.fehbg" ]] && "$HOME/.fehbg"
 }
 main
 
