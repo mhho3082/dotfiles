@@ -102,7 +102,7 @@ config.keys = {
   { key = "Space", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
   -- Change font size
   { key = "-", mods = "CTRL", action = wezterm.action.DecreaseFontSize },
-  { key = "=", mods = "CTRL", action = wezterm.action.IncreaseFontSize },
+  { key = "=", mods = "CTRL|SHIFT", action = wezterm.action.IncreaseFontSize },
   { key = "0", mods = "CTRL", action = wezterm.action.ResetFontSize },
   -- Scroll up/down
   { key = "PageUp", mods = "SHIFT", action = wezterm.action.ScrollByPage(-0.5) },
