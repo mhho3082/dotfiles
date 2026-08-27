@@ -66,7 +66,7 @@ function plugin-load {
   local repo repos=($@) plugdir initfile initfiles=()
 
   # Clear positional parameters ($@),
-  # otherwise old plugins (like gitstatus) might malfunction with unexpected parameters passed to them
+  # otherwise old plugins might malfunction with unexpected parameters passed to them
   set --
 
   for repo in $repos; do
@@ -112,9 +112,7 @@ function plugin-update {
 }
 
 local repos=(
-  romkatv/gitstatus
   zsh-users/zsh-completions
-  zsh-users/zsh-autosuggestions
   # zsh-syntax-highlighting must be sourced after all ZLE command-line buffer hooks,
   # see https://github.com/zsh-users/zsh-syntax-highlighting?tab=readme-ov-file#why-must-zsh-syntax-highlightingzsh-be-sourced-at-the-end-of-the-zshrc-file
   zsh-users/zsh-syntax-highlighting
@@ -438,29 +436,121 @@ fi
 
 # == Prompt ==
 
-# Uses romkatv/gitstatus plugin
+# Detect an in-progress rebase/merge/cherry-pick/revert/bisect/am action
+function zsh-git-action {
+  local git_dir="$1"
+  [[ -z $git_dir ]] && return
+  if [[ -f "$git_dir/rebase-merge/interactive" ]]; then
+    echo "rebase-i"
+  elif [[ -d "$git_dir/rebase-merge" ]]; then
+    echo "rebase-m"
+  elif [[ -d "$git_dir/rebase-apply" ]]; then
+    if [[ -f "$git_dir/rebase-apply/rebasing" ]]; then
+      echo "rebase"
+    elif [[ -f "$git_dir/rebase-apply/applying" ]]; then
+      echo "am"
+    else
+      echo "am/rebase"
+    fi
+  elif [[ -f "$git_dir/MERGE_HEAD" ]]; then
+    echo "merge"
+  elif [[ -f "$git_dir/CHERRY_PICK_HEAD" ]]; then
+    echo "cherry-pick"
+  elif [[ -f "$git_dir/REVERT_HEAD" ]]; then
+    echo "revert"
+  elif [[ -f "$git_dir/BISECT_LOG" ]]; then
+    echo "bisect"
+  fi
+}
 
-# https://zserge.com/posts/terminal/
-# https://voracious.dev/blog/a-guide-to-customizing-the-zsh-shell-prompt
-# https://unix.stackexchange.com/q/273529
-# https://stackoverflow.com/q/37364631
+function zsh-git-status {
+  local git_dir=$(git rev-parse --git-dir 2>/dev/null)
+  [[ -z $git_dir ]] && return
 
-local GIT_CLEAN="%F{blue}󰝥 %f"
-local GIT_STAGED="%F{green}󰋘 %f"
-local GIT_UNSTAGED="%F{red}󰋙 %f"
-local GIT_STAGED_UNSTAGED="%F{yellow}󰋙 %f"
-local GIT_UNTRACKED="%F{red}󰔷 %f"
-local GIT_STAGED_UNTRACKED="%F{yellow}󰔷 %f"
+  local output=""
 
-local GIT_REMOTE=" "
-local GIT_AHEAD="↑"
-local GIT_BEHIND="↓"
-local GIT_STASHED="⚑"
+  # Inter-branch status: commits ahead/behind upstream, and stash count
+  local upstream="" has_upstream=false
+  if upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null); then
+    has_upstream=true
+    local diff=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
+    (($(echo "$diff" | awk '{print $1}') > 0)) && output+="↑"
+    (($(echo "$diff" | awk '{print $2}') > 0)) && output+="↓"
+  fi
+  if (($(git rev-list --walk-reflogs --ignore-missing --count refs/stash 2>/dev/null) > 0)); then
+    output+="%F{242}⚑%f"
+  fi
+  [[ -n $output ]] && output+=" "
 
-local GIT_CONFLICT="%F{red}󱈸 %f"
+  # Currently running action (rebase, merge, cherry-pick, ...)
+  local action=$(zsh-git-action "$git_dir")
+  [[ -n $action ]] && output+="%F{242}${action}%f "
 
-local GLYPH="$"
-local SUPERUSER_GLYPH="#"
+  # Status indicator (single pass over porcelain output)
+  local has_staged=false has_unstaged=false has_untracked=false has_conflict=false
+  local line x y
+  while IFS= read -r line; do
+    x="${line[1]}" y="${line[2]}"
+    if [[ $x == "?" ]]; then
+      has_untracked=true
+    elif [[ $x == "U" || $y == "U" || ($x == "A" && $y == "A") || ($x == "D" && $y == "D") ]]; then
+      has_conflict=true
+    else
+      [[ $x != " " ]] && has_staged=true
+      if [[ $y == "D" ]]; then
+        has_untracked=true
+      elif [[ $y != " " ]]; then
+        has_unstaged=true
+      fi
+    fi
+  done < <(git status --porcelain 2>/dev/null)
+
+  $has_conflict && output+="%F{red}✗%f "
+
+  # Remote indicator, and remote branch name if it differs from the local one
+  local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
+  if $has_upstream; then
+    output+="%F{242}⎇ %f"
+    local remote_branch="${upstream#*/}"
+    if [[ -n $remote_branch && $remote_branch != $branch ]]; then
+      output+="%F{242}(${${remote_branch}//\%/%%})%f "
+    fi
+  fi
+
+  # Location: branch, or tag, or short commit hash
+  local tag=$(git describe --tags --exact-match 2>/dev/null)
+  local sha=$(git rev-parse --short HEAD 2>/dev/null)
+  if [[ -n $branch ]]; then
+    output+="%F{yellow}${${branch}//\%/%%}%f"
+  elif [[ -n $tag ]]; then
+    output+="%F{242}#%F{yellow}${${tag}//\%/%%}%f"
+  else
+    output+="%F{242}@%F{yellow}${sha}%f"
+  fi
+
+  # Status glyph: same symbol as the matching single state, recolored yellow
+  # when it is combined with staged changes
+  local status_color="" status_symbol=""
+  if $has_staged; then
+    if $has_untracked; then
+      status_color="%F{yellow}" && status_symbol="?"
+    elif $has_unstaged; then
+      status_color="%F{yellow}" && status_symbol="!"
+    else
+      status_color="%F{green}" && status_symbol="+"
+    fi
+  elif $has_untracked; then
+    status_color="%F{red}" && status_symbol="?"
+  elif $has_unstaged; then
+    status_color="%F{red}" && status_symbol="!"
+  fi
+
+  if [ -n "$status_symbol" ]; then
+    output+=" ${status_color}${status_symbol}%f"
+  fi
+
+  echo "%F{yellow}(%f${output}%F{yellow})%f"
+}
 
 _setup_ps1() {
   ## PS1 ##
@@ -479,72 +569,17 @@ _setup_ps1() {
   # pwd
   PS1+="%F{blue}%~%f "
 
+  # Git branch and status
+  if git rev-parse --git-dir &>/dev/null; then
+    PS1+="$(zsh-git-status) "
+  fi
+
   # Glyph (special glyph for superuser)
   # Turn red if previous command return != 0
-  PS1+="%(?.%F{242}.%F{red})%(!.$SUPERUSER_GLYPH.$GLYPH)%f "
-
-  ## RPROMPT ##
-
-  # RHS prompt: git info
-  # Modified from https://github.com/romkatv/gitstatus
-  RPROMPT=""
-  if gitstatus_query 'MY' && [[ $VCS_STATUS_RESULT == ok-sync ]]; then
-    # Inter-branch status
-    ((VCS_STATUS_COMMITS_AHEAD)) && RPROMPT+="$GIT_AHEAD"
-    ((VCS_STATUS_COMMITS_BEHIND)) && RPROMPT+="$GIT_BEHIND"
-    ((VCS_STATUS_STASHES)) && RPROMPT+="$GIT_STASHED"
-
-    if [[ -n $RPROMPT ]]; then
-      RPROMPT+=" "
-    fi
-
-    # Currently running action
-    [[ -n $VCS_STATUS_ACTION ]] && RPROMPT+="%F{yellow}${VCS_STATUS_ACTION}%f "
-    ((VCS_STATUS_HAS_CONFLICTED)) && RPROMPT+="$GIT_CONFLICT"
-
-    # Check if remote exists
-    if [[ -n $VCS_STATUS_REMOTE_NAME ]]; then
-      RPROMPT+="%F{242}$GIT_REMOTE%f"
-
-      # Show remote name if different
-      if [[ $VCS_STATUS_LOCAL_BRANCH != $VCS_STATUS_REMOTE_BRANCH ]]; then
-        RPROMPT+="%F{242}(${${VCS_STATUS_REMOTE_BRANCH}//\%/%%}) %f"
-      fi
-    fi
-
-    # Branch name
-    # Modified from https://github.com/romkatv/gitstatus/blob/master/gitstatus.prompt.zsh
-    if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
-      RPROMPT+="%F{242}${${VCS_STATUS_LOCAL_BRANCH}//\%/%%}%f"
-    elif [[ -n $VCS_STATUS_TAG ]]; then
-      RPROMPT+="#%F{242}${${VCS_STATUS_TAG}//\%/%%}%f"
-    else
-      RPROMPT+="@%F{242}${${VCS_STATUS_COMMIT:0:8}//\%/%%}%f"
-    fi
-
-    # Within-branch status
-    # Combine "Untracked" and "Deleted" counts as they share the same logic
-    local is_untracked=$((VCS_STATUS_NUM_UNTRACKED + VCS_STATUS_NUM_UNSTAGED_DELETED))
-    if ((VCS_STATUS_NUM_STAGED)); then
-      if ((is_untracked)); then
-        RPROMPT+=" $GIT_STAGED_UNTRACKED"
-      elif ((VCS_STATUS_NUM_UNSTAGED)); then
-        RPROMPT+=" $GIT_STAGED_UNSTAGED"
-      else
-        RPROMPT+=" $GIT_STAGED"
-      fi
-    elif ((is_untracked)); then
-      RPROMPT+=" $GIT_UNTRACKED"
-    elif ((VCS_STATUS_NUM_UNSTAGED)); then
-      RPROMPT+=" $GIT_UNSTAGED"
-    else
-      RPROMPT+=" $GIT_CLEAN"
-    fi
-  fi
+  PS1+="%(?.%F{242}.%F{red})%(!.#.$)%f "
 
   setopt no_prompt_{bang,subst} prompt_percent # enable/disable correct prompt expansions
 }
-gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _setup_ps1
 

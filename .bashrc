@@ -240,77 +240,120 @@ function install-local-apps {
 
 # == Prompt ==
 
+# Detect an in-progress rebase/merge/cherry-pick/revert/bisect/am action
+function bash-git-action {
+  local git_dir="$1"
+  [ -z "$git_dir" ] && return
+  if [ -f "$git_dir/rebase-merge/interactive" ]; then
+    echo "rebase-i"
+  elif [ -d "$git_dir/rebase-merge" ]; then
+    echo "rebase-m"
+  elif [ -d "$git_dir/rebase-apply" ]; then
+    if [ -f "$git_dir/rebase-apply/rebasing" ]; then
+      echo "rebase"
+    elif [ -f "$git_dir/rebase-apply/applying" ]; then
+      echo "am"
+    else
+      echo "am/rebase"
+    fi
+  elif [ -f "$git_dir/MERGE_HEAD" ]; then
+    echo "merge"
+  elif [ -f "$git_dir/CHERRY_PICK_HEAD" ]; then
+    echo "cherry-pick"
+  elif [ -f "$git_dir/REVERT_HEAD" ]; then
+    echo "revert"
+  elif [ -f "$git_dir/BISECT_LOG" ]; then
+    echo "bisect"
+  fi
+}
+
 function bash-git-status {
-  # In-branch status
-  local location=""
-  local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null || echo "")
-  local tag=$(git describe --tags --exact-match 2>/dev/null || echo "")
-  local sha=$(git rev-parse --short HEAD 2>/dev/null || echo "")
-  if [ -n "$branch" ]; then
-    location="\033[33m$branch"
-  elif [ -n "$tag" ]; then
-    location="\033[38;5;242m#\033[33m$tag"
-  else
-    location="\033[38;5;242m@\033[33m$sha"
-  fi
+  local git_dir=$(git rev-parse --git-dir 2>/dev/null)
+  [ -z "$git_dir" ] && return
 
-  # Inter-branch status
-  local remote_indicator=""
-  local remote_diff=""
-  if git rev-parse --abbrev-ref --symbolic-full-name @{u} &>/dev/null; then
-    remote_indicator="\033[00m⎇ "
+  local output=""
+
+  # Inter-branch status: commits ahead/behind upstream, and stash count
+  local upstream=""
+  local has_upstream=false
+  if upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null); then
+    has_upstream=true
     local diff=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
-    if [ "$(echo "$diff" | awk '{print $1}')" -gt 0 ]; then remote_diff+="↑"; fi
-    if [ "$(echo "$diff" | awk '{print $2}')" -gt 0 ]; then remote_diff+="↓"; fi
+    [ "$(echo "$diff" | awk '{print $1}')" -gt 0 ] && output+="↑"
+    [ "$(echo "$diff" | awk '{print $2}')" -gt 0 ] && output+="↓"
   fi
-  if [ -n "$remote_diff" ]; then remote_diff=" \033[00m$remote_diff"; fi
-
-  # Stash status
-  local stash_flag=""
-  if [ "$(git rev-list --walk-reflogs --ignore-missing --count refs/stash)" -gt 0 ]; then
-    stash_flag=" \033[38;5;242m⚑"
+  if [ "$(git rev-list --walk-reflogs --ignore-missing --count refs/stash 2>/dev/null)" -gt 0 ]; then
+    output+="\033[38;5;242m⚑\033[00m"
   fi
+  [ -n "$output" ] && output+=" "
 
-  # Status indicator
-  has_staged=false
-  has_unstaged=false
-  has_untracked=false
+  # Currently running action (rebase, merge, cherry-pick, ...)
+  local action=$(bash-git-action "$git_dir")
+  [ -n "$action" ] && output+="\033[38;5;242m${action}\033[00m "
+
+  # Status indicator (single pass over porcelain output)
+  local has_staged=false has_unstaged=false has_untracked=false has_conflict=false
   while IFS= read -r line; do
     local x="${line:0:1}" y="${line:1:1}"
     if [[ "$x" == "?" ]]; then
       has_untracked=true
-    elif [[ "$x" != " " ]]; then
-      has_staged=true
-    elif [[ "$y" != " " ]]; then
-      has_unstaged=true
+    elif [[ "$x" == "U" || "$y" == "U" || ("$x" == "A" && "$y" == "A") || ("$x" == "D" && "$y" == "D") ]]; then
+      has_conflict=true
+    else
+      [[ "$x" != " " ]] && has_staged=true
+      if [[ "$y" == "D" ]]; then
+        has_untracked=true
+      elif [[ "$y" != " " ]]; then
+        has_unstaged=true
+      fi
     fi
   done < <(git status --porcelain 2>/dev/null)
 
-  local status_color=""
-  if $has_staged; then
-    if $has_unstaged || $has_untracked; then
-      status_color="\033[01;33m" # yellow
-    else
-      status_color="\033[01;32m" # green
+  $has_conflict && output+="\033[00;31m✗\033[00m "
+
+  # Remote indicator, and remote branch name if it differs from the local one
+  local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
+  if $has_upstream; then
+    output+="\033[38;5;242m⎇ \033[00m"
+    local remote_branch="${upstream#*/}"
+    if [ -n "$remote_branch" ] && [ "$remote_branch" != "$branch" ]; then
+      output+="\033[38;5;242m(${remote_branch})\033[00m "
     fi
-  elif $has_unstaged || $has_untracked; then
-    status_color="\033[01;31m" # red
+  fi
+
+  # Location: branch, or tag, or short commit hash
+  local tag=$(git describe --tags --exact-match 2>/dev/null)
+  local sha=$(git rev-parse --short HEAD 2>/dev/null)
+  if [ -n "$branch" ]; then
+    output+="\033[33m$branch\033[00m"
+  elif [ -n "$tag" ]; then
+    output+="\033[38;5;242m#\033[33m$tag\033[00m"
   else
-    status_color="\033[01;34m" # blue
+    output+="\033[38;5;242m@\033[33m$sha\033[00m"
   fi
 
-  local status_symbol=""
-  if $has_untracked; then
-    status_symbol+="?"
+  # Status glyph: same symbol as the matching single state, recolored yellow
+  # when it is combined with staged changes
+  local status_color="" status_symbol=""
+  if $has_staged; then
+    if $has_untracked; then
+      status_color="\033[01;33m" && status_symbol="?" # yellow
+    elif $has_unstaged; then
+      status_color="\033[01;33m" && status_symbol="!" # yellow
+    else
+      status_color="\033[01;32m" && status_symbol="+" # green
+    fi
+  elif $has_untracked; then
+    status_color="\033[01;31m" && status_symbol="?" # red
   elif $has_unstaged; then
-    status_symbol+="!"
-  elif $has_staged; then
-    status_symbol+="+"
+    status_color="\033[01;31m" && status_symbol="!" # red
   fi
 
-  local status=$([ $status_symbol ] && echo -e " $status_color$status_symbol\033[00m")
+  if [ -n "$status_symbol" ]; then
+    output+=" $status_color$status_symbol\033[00m"
+  fi
 
-  echo -e "\033[33m(${remote_indicator}${location}${remote_diff}${stash_flag}${status}\033[33m)\033[00m"
+  echo -e "\033[33m(\033[00m${output}\033[33m)\033[00m"
 }
 
 function bash-prompt {
