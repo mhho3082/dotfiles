@@ -11,7 +11,6 @@ ignore_patterns=(
   "copy_to_config.*"
   "README.*"
   ".stylua.*"
-  "tips/"
   "makefile"
   "vimium-options.json"
   "enhancer-for-youtube-options.json"
