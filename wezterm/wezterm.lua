@@ -107,7 +107,7 @@ config.keys = {
   -- Scroll up/down
   { key = "PageUp", mods = "SHIFT", action = wezterm.action.ScrollByPage(-0.5) },
   { key = "PageDown", mods = "SHIFT", action = wezterm.action.ScrollByPage(0.5) },
-  -- Change backgound color
+  -- Change background color
   { key = "b", mods = "SHIFT|CTRL", action = wezterm.action({ EmitEvent = "toggle-color-scheme" }) },
   -- Tabs
   { key = "t", mods = "CTRL", action = wezterm.action.SpawnTab("CurrentPaneDomain") },

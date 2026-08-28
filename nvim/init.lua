@@ -74,8 +74,6 @@ local function toggle_signcolumn()
   vim.o.signcolumn = vim.o.signcolumn == "yes" and "no" or "yes"
 end
 
--- Use dark background by default
-vim.opt.background = "dark"
 local function toggle_background()
   vim.o.background = vim.o.background == "dark" and "light" or "dark"
 end

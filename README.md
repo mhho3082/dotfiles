@@ -38,6 +38,7 @@ which may take additional setup to install
   - [`zsh`](https://zsh.sourceforge.io/)
   - [`eza`](https://github.com/eza-community/eza)
   - [`fd`](https://github.com/sharkdp/fd)
+  - [`bat`](https://github.com/sharkdp/bat)
   - [`zoxide`](https://github.com/ajeetdsouza/zoxide)
   - [`fzf`](https://github.com/junegunn/fzf)
   - [`ripgrep`](https://github.com/BurntSushi/ripgrep)

@@ -180,7 +180,7 @@ function install-local-apps {
   # Check Github API rate limit
   rate_data=$(curl -s "https://api.github.com/rate_limit")
   rate_remaining=$(echo "$rate_data" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.remaining);")
-  if [ "$rate_remaining" -lt 14 ]; then
+  if [ "$rate_remaining" -lt 16 ]; then
     rate_reset=$(echo "$rate_data" | node -e "console.log(new Date(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.reset * 1000).toLocaleString('en-GB'));")
     echo "Warning: GitHub API rate limit is low ($rate_remaining remaining)."
     echo "Consider waiting until $rate_reset before running this script again."
@@ -209,6 +209,12 @@ function install-local-apps {
   wget $WGET_OPTS "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
   tar xzf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
   mv "fd-$version-x86_64-unknown-linux-musl/fd" "$HOME/.local/bin/fd"
+
+  # For bat: https://github.com/sharkdp/bat/releases
+  version=$(get-version "sharkdp/bat")
+  wget $WGET_OPTS "https://github.com/sharkdp/bat/releases/download/$version/bat-$version-x86_64-unknown-linux-musl.tar.gz"
+  tar xzf "bat-$version-x86_64-unknown-linux-musl.tar.gz"
+  mv "bat-$version-x86_64-unknown-linux-musl/bat" "$HOME/.local/bin/bat"
 
   # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
   version=$(get-version "BurntSushi/ripgrep")
