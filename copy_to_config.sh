@@ -52,8 +52,8 @@ diff_and_ask() {
   # Ask user for confirmation
   if [[ -f "$dst" ]]; then
     # Show diff first
-    if command -v difft &>/dev/null; then
-      difft "$dst" "$src" --color=always | less -FRX
+    if command -v delta &>/dev/null; then
+      delta "$dst" "$src"
     else
       diff "$dst" "$src" --color=always | less -FRX
     fi

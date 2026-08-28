@@ -2,7 +2,7 @@
 
 ## Quick start
 
-If you want to use my config, I would advise you to fork this repo,
+If you want to use my config, please fork this repo,
 look through the code, and remove the parts you don't need first.
 
 ```bash
@@ -26,8 +26,8 @@ please see the folder [`./tips/`](https://github.com/mhho3082/dotfiles/tree/main
 
 ## App list
 
-The apps that I usually use
-(some of which I install only when needed),
+The usually-used apps
+(some of which are installed only when needed),
 which may take additional setup to install
 (please kindly refer to their respective documentation):
 
@@ -48,7 +48,7 @@ which may take additional setup to install
 - Coding
   - [`neovim`](https://neovim.io/)
   - [`github-cli`](https://cli.github.com/)
-  - [`difftastic`](https://github.com/Wilfred/difftastic)
+  - [`delta`](https://dandavison.github.io/delta/)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
   - [`llvm`](https://llvm.org/) (for C/C++ [`clangd`](https://clangd.llvm.org/) in editors)
 - Version managers
@@ -108,7 +108,7 @@ which may take additional setup to install
 
 </details>
 
-Some extensions that I install in my browsers:
+The browser extensions:
 
 <details>
 <summary> Browser extensions </summary>
@@ -127,8 +127,7 @@ please refer to their [wiki](https://github.com/gorhill/uBlock/wiki).)
 
 </details>
 
-I also install some LSP servers in Neovim with `mason.nvim`
-with respect to the languages I am currently working with.
+LSP servers in Neovim with `mason.nvim`:
 
 <details>
 <summary> Some LSP servers </summary>
@@ -243,7 +242,7 @@ patch:
 </details>
 
 This config uses `brightnessctl` by default;
-if you find `xbacklight` not working, you are advised to switch to `brightnesctl`.
+if you find `xbacklight` not working, please consider switching to `brightnesctl`.
 
 For fixing brightness issues
 (esp. brightness drops to minimum when (un)plugging), see

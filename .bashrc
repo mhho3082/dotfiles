@@ -222,12 +222,11 @@ function install-local-apps {
   tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
   mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" "$HOME/.local/bin/rg"
 
-  # For tree-sitter-cli: https://github.com/tree-sitter/tree-sitter/releases
-  version=$(get-version "tree-sitter/tree-sitter")
-  wget $WGET_OPTS "https://github.com/tree-sitter/tree-sitter/releases/download/$version/tree-sitter-cli-linux-x64.zip"
-  unzip -qq "tree-sitter-cli-linux-x64.zip"
-  chmod +x "tree-sitter"
-  mv "tree-sitter" "$HOME/.local/bin/tree-sitter"
+  # For delta: https://github.com/dandavison/delta/releases
+  version=$(get-version "dandavison/delta")
+  wget $WGET_OPTS "https://github.com/dandavison/delta/releases/download/$version/delta-$version-x86_64-unknown-linux-musl.tar.gz"
+  tar xzf "delta-$version-x86_64-unknown-linux-musl.tar.gz"
+  mv "delta-$version-x86_64-unknown-linux-musl/delta" "$HOME/.local/bin/delta"
 
   # For eza: https://github.com/eza-community/eza/releases
   version=$(get-version "eza-community/eza")
@@ -235,11 +234,12 @@ function install-local-apps {
   tar xzf "eza_x86_64-unknown-linux-musl.tar.gz"
   mv "eza" "$HOME/.local/bin/eza"
 
-  # For difftastic: https://github.com/Wilfred/difftastic/releases
-  version=$(get-version "Wilfred/difftastic")
-  wget $WGET_OPTS "https://github.com/Wilfred/difftastic/releases/download/${version#v}/difft-x86_64-unknown-linux-musl.tar.gz"
-  tar xzf "difft-x86_64-unknown-linux-musl.tar.gz"
-  mv difft "$HOME/.local/bin/difft"
+  # For tree-sitter-cli: https://github.com/tree-sitter/tree-sitter/releases
+  version=$(get-version "tree-sitter/tree-sitter")
+  wget $WGET_OPTS "https://github.com/tree-sitter/tree-sitter/releases/download/$version/tree-sitter-cli-linux-x64.zip"
+  unzip -qq "tree-sitter-cli-linux-x64.zip"
+  chmod +x "tree-sitter"
+  mv "tree-sitter" "$HOME/.local/bin/tree-sitter"
 
   popd >/dev/null && rm -rf "$TEMP_DIR"
 }

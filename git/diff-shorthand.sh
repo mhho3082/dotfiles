@@ -2,7 +2,6 @@
 
 # Styles:
 #   _ : patch + compact summary
-#   f : difftool
 #   w : word diff + compact summary
 #   s : compact summary
 #   n : name-status
@@ -81,7 +80,6 @@ main() {
 
   case "$style" in
     _) args=(diff --patch-with-stat --compact-summary) ;;
-    f) args=(difftool --patch-with-stat --compact-summary) ;;
     w) args=(diff --word-diff=color --patch-with-stat --compact-summary) ;;
     s) args=(diff --compact-summary) ;;
     n) args=(diff --name-status) ;;

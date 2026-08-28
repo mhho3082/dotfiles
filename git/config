@@ -9,6 +9,7 @@
     editor = nvim
     eol = lf
     autocrlf = false
+    pager = delta
 
 [init]
     defaultBranch = main
@@ -70,7 +71,6 @@
     # Diff display options
     diff-shorthand = "!f() { : git diff ; ~/.config/git/diff-shorthand.sh $@; }; f"
     d   = diff-shorthand _
-    df  = diff-shorthand f
     dw  = diff-shorthand w
     ds  = diff-shorthand s
     dn  = diff-shorthand n
@@ -200,30 +200,20 @@
 [format]
     pretty = "%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(green)(%cr) %C(cyan)<%an>%Creset"
 
-[pager]
-    difftool = true
-
 # ---
 
 [diff]
-    tool = difftastic
     algorithm = histogram
-    colorMoved = plain
+    colorMoved = default
     mnemonicPrefix = true
     renames = true
 
-[difftool]
-    prompt = false
+[interactive]
+    diffFilter = delta --color-only
 
-[difftool "difftastic"]
-    cmd = difft "$LOCAL" "$REMOTE"
-
-
-[difftool "nvimdiff"]
-    cmd = !"nvim -d \"$LOCAL\" \"$REMOTE\""
-
-[difftool "vscode"]
-    cmd = code --wait --diff $LOCAL $REMOTE
+[delta]
+    line-numbers = true
+    navigate = true  # use n and N to move between diff sections
 
 # ---
 
