@@ -181,7 +181,7 @@
     quick-gzip = "!f() { d=\"$(git rev-parse --show-toplevel)\"; [ -d $d ] && pushd \"$d/..\" && tar czf \"$(basename $d).tar.gz\" \"$(basename $d)\" && popd; }; f"
 
     # Initiate a git repo
-    quick-init = "!f() { if [ ! -d .git ]; then git init && git add -A && git commit -m \"feat: Repo init\"; else printf 'Git repository already exists, fully overwrite it? [y/N] '; read answer; case \"$answer\" in [yY]) rm -rf .git && git init && git add -A && git commit -m \"feat: Repo init\" ;; esac; fi; }; f"
+    quick-init = "!f() { if [ ! -d .git ]; then git init && git add -A && git commit -m \"feat: repo init\"; else printf 'Git repository already exists, fully overwrite it? [y/N] '; read answer; case \"$answer\" in [yY]) rm -rf .git && git init && git add -A && git commit -m \"feat: Repo init\" ;; esac; fi; }; f"
 
     # Generate gitignore file based on https://github.com/github/gitignore
     ignore = "!~/.config/git/gitignore.sh"

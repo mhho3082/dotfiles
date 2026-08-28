@@ -40,6 +40,8 @@ setopt prompt_subst
 setopt no_case_glob
 unsetopt beep
 unsetopt autocd
+unsetopt correct_all
+unsetopt correct
 
 # Change less flags
 export LESS="-FMRX"
