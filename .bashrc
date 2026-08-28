@@ -3,20 +3,27 @@
 
 # == Base config ==
 
-# Use nvim (or vim, or vi) for editing
+# Set the command-line editor
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR=nvim
   export VISUAL=nvim
-  export MANPAGER='nvim +Man!'
 elif command -v vim >/dev/null 2>&1; then
-  # Fallback to Vim if Neovim is not available
   export EDITOR=vim
   export VISUAL=vim
-  export MANPAGER="vim -M +MANPAGER -"
 else
-  # Default editor if neither Neovim nor Vim is available
   export EDITOR=vi
   export VISUAL=vi
+fi
+
+# Set the man pager
+if command -v bat >/dev/null 2>&1; then
+  export MANPAGER='bat -plman'
+elif command -v nvim >/dev/null 2>&1; then
+  export MANPAGER='nvim +Man!'
+elif command -v vim >/dev/null 2>&1; then
+  export MANPAGER='vim -M +MANPAGER -'
+else
+  export MANPAGER='less -s'
 fi
 
 # Check the window size after each command and, if necessary,
@@ -159,91 +166,6 @@ function gen-password {
   echo
 }
 
-function install-local-apps {
-  # (re-)Install local apps
-  # Uses `musl` instead of `gnu` for portability to servers that do not support recent glibc versions,
-  # see https://github.com/sharkdp/fd/issues/417
-
-  function get-version {
-    curl -s "https://api.github.com/repos/$1/releases/latest" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).tag_name);"
-  }
-
-  mkdir -p "$HOME/.local/bin"
-  TEMP_DIR=$(mktemp -d /tmp/install.XXXXXX) && pushd "$TEMP_DIR" >/dev/null
-
-  WGET_OPTS="--quiet --show-progress --progress=bar:force:noscroll"
-  # If wget is too old to support --show-progress, fallback to no progress
-  if ! wget --help | grep -q -- '--show-progress'; then
-    WGET_OPTS="--quiet"
-  fi
-
-  # Check Github API rate limit
-  rate_data=$(curl -s "https://api.github.com/rate_limit")
-  rate_remaining=$(echo "$rate_data" | node -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.remaining);")
-  if [ "$rate_remaining" -lt 16 ]; then
-    rate_reset=$(echo "$rate_data" | node -e "console.log(new Date(JSON.parse(require('fs').readFileSync(0, 'utf-8')).rate.reset * 1000).toLocaleString('en-GB'));")
-    echo "Warning: GitHub API rate limit is low ($rate_remaining remaining)."
-    echo "Consider waiting until $rate_reset before running this script again."
-    return 1
-  fi
-
-  # For nvim: https://github.com/neovim/neovim/releases
-  # If server does not support recent glibc versions, use https://github.com/neovim/neovim-releases (glibc 2.17) instead
-  glibc_version=$(ldd --version | head -n1 | awk '{print $NF}')
-  neovim_repo=$([ "$glibc_version" == "2.17" ] && echo "neovim/neovim-releases" || echo "neovim/neovim")
-  version=$(get-version "$neovim_repo")
-  wget $WGET_OPTS "https://github.com/$neovim_repo/releases/download/$version/nvim-linux-x86_64.tar.gz"
-  tar xzf "nvim-linux-x86_64.tar.gz"
-  rm -rf "$HOME/.local/bin/nvim-linux-x86_64" "$HOME/.local/bin/nvim" || true
-  mv "nvim-linux-x86_64" "$HOME/.local/bin/nvim-linux-x86_64"
-  ln -s "$HOME/.local/bin/nvim-linux-x86_64/bin/nvim" "$HOME/.local/bin/nvim"
-
-  # For fzf: https://github.com/junegunn/fzf/releases
-  version=$(get-version "junegunn/fzf")
-  wget $WGET_OPTS "https://github.com/junegunn/fzf/releases/download/$version/fzf-${version#v}-linux_amd64.tar.gz"
-  tar xzf "fzf-${version#v}-linux_amd64.tar.gz"
-  mv fzf "$HOME/.local/bin/fzf"
-
-  # For fd: https://github.com/sharkdp/fd/releases
-  version=$(get-version "sharkdp/fd")
-  wget $WGET_OPTS "https://github.com/sharkdp/fd/releases/download/$version/fd-$version-x86_64-unknown-linux-musl.tar.gz"
-  tar xzf "fd-$version-x86_64-unknown-linux-musl.tar.gz"
-  mv "fd-$version-x86_64-unknown-linux-musl/fd" "$HOME/.local/bin/fd"
-
-  # For bat: https://github.com/sharkdp/bat/releases
-  version=$(get-version "sharkdp/bat")
-  wget $WGET_OPTS "https://github.com/sharkdp/bat/releases/download/$version/bat-$version-x86_64-unknown-linux-musl.tar.gz"
-  tar xzf "bat-$version-x86_64-unknown-linux-musl.tar.gz"
-  mv "bat-$version-x86_64-unknown-linux-musl/bat" "$HOME/.local/bin/bat"
-
-  # For ripgrep: https://github.com/BurntSushi/ripgrep/releases
-  version=$(get-version "BurntSushi/ripgrep")
-  wget $WGET_OPTS "https://github.com/BurntSushi/ripgrep/releases/download/${version#v}/ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
-  tar xzf "ripgrep-${version#v}-x86_64-unknown-linux-musl.tar.gz"
-  mv "ripgrep-${version#v}-x86_64-unknown-linux-musl/rg" "$HOME/.local/bin/rg"
-
-  # For delta: https://github.com/dandavison/delta/releases
-  version=$(get-version "dandavison/delta")
-  wget $WGET_OPTS "https://github.com/dandavison/delta/releases/download/$version/delta-$version-x86_64-unknown-linux-musl.tar.gz"
-  tar xzf "delta-$version-x86_64-unknown-linux-musl.tar.gz"
-  mv "delta-$version-x86_64-unknown-linux-musl/delta" "$HOME/.local/bin/delta"
-
-  # For eza: https://github.com/eza-community/eza/releases
-  version=$(get-version "eza-community/eza")
-  wget $WGET_OPTS "https://github.com/eza-community/eza/releases/download/$version/eza_x86_64-unknown-linux-musl.tar.gz"
-  tar xzf "eza_x86_64-unknown-linux-musl.tar.gz"
-  mv "eza" "$HOME/.local/bin/eza"
-
-  # For tree-sitter-cli: https://github.com/tree-sitter/tree-sitter/releases
-  version=$(get-version "tree-sitter/tree-sitter")
-  wget $WGET_OPTS "https://github.com/tree-sitter/tree-sitter/releases/download/$version/tree-sitter-cli-linux-x64.zip"
-  unzip -qq "tree-sitter-cli-linux-x64.zip"
-  chmod +x "tree-sitter"
-  mv "tree-sitter" "$HOME/.local/bin/tree-sitter"
-
-  popd >/dev/null && rm -rf "$TEMP_DIR"
-}
-
 # == Prompt ==
 
 # Detect an in-progress rebase/merge/cherry-pick/revert/bisect/am action
@@ -320,7 +242,7 @@ function bash-git-status {
   # Remote indicator, and remote branch name if it differs from the local one
   local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
   if $has_upstream; then
-    output+="\033[38;5;242m⎇ \033[00m"
+    output+="\033[38;5;242m⧉ \033[00m"
     local remote_branch="${upstream#*/}"
     if [ -n "$remote_branch" ] && [ "$remote_branch" != "$branch" ]; then
       output+="\033[38;5;242m(${remote_branch})\033[00m "

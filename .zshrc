@@ -1,17 +1,26 @@
 # == Base config ==
 
-# Use nvim (or vim, or vi) for editing
+# Set the command-line editor
 if (($+commands[nvim])); then
   export VISUAL="nvim"
   export EDITOR="nvim"
-  export MANPAGER='nvim +Man!'
 elif (($+commands[vim])); then
   export VISUAL="vim"
   export EDITOR="vim"
-  export MANPAGER="vim -M +MANPAGER -"
 else
   export VISUAL="vi"
   export EDITOR="vi"
+fi
+
+# Set the man pager
+if (($+commands[bat])); then
+  export MANPAGER='bat -plman'
+elif (($+commands[nvim])); then
+  export MANPAGER='nvim +Man!'
+elif (($+commands[vim])); then
+  export MANPAGER='vim -M +MANPAGER -'
+else
+  export MANPAGER='less -s'
 fi
 
 # Set the AUR helper (variable used only for .zshrc functions)
@@ -510,7 +519,7 @@ function zsh-git-status {
   # Remote indicator, and remote branch name if it differs from the local one
   local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
   if $has_upstream; then
-    output+="%F{242}⎇ %f"
+    output+="%F{242}⧉ %f"
     local remote_branch="${upstream#*/}"
     if [[ -n $remote_branch && $remote_branch != $branch ]]; then
       output+="%F{242}(${${remote_branch}//\%/%%})%f "
@@ -585,7 +594,7 @@ add-zsh-hook precmd _setup_ps1
 
 # == FZF ==
 
-# Add completion for fzf
+# Add configuration for fzf
 if (($+commands[fzf])); then
   export FZF_DEFAULT_COMMAND="fd -t f -H"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

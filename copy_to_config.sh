@@ -81,7 +81,10 @@ git_username=$(git config --global user.name)
 git_email=$(git config --global user.email)
 git_signingkey=$(git config --global user.signingkey)
 if [ -n "$git_username" ] || [ -n "$git_email" ] || [ -n "$git_signingkey" ]; then
-  echo -e "\033[0;32mWe will preserve your current Git user settings...\033[0m"
+  echo -e "\033[0;32mMoving your current Git user settings aside...\033[0m"
+  git config --global --unset user.name
+  git config --global --unset user.email
+  git config --global --unset user.signingkey
 fi
 
 # For every file in this repo

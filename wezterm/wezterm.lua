@@ -23,7 +23,7 @@ config.harfbuzz_features = { "ss19", "cv07", "cv99" }
 -- config.harfbuzz_features = { "zero", "ss01", "ss03", "ss05", "ss06", "ss08" }
 
 -- Set font size
-config.font_size = is_darwin and 15.0 or 12.0
+config.font_size = 15.0
 
 -- Use tab bar
 config.enable_tab_bar = true
@@ -102,13 +102,13 @@ config.keys = {
   { key = "Space", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
   -- Change font size
   { key = "-", mods = "CTRL", action = wezterm.action.DecreaseFontSize },
-  { key = "=", mods = "CTRL|SHIFT", action = wezterm.action.IncreaseFontSize },
+  { key = "=", mods = "CTRL", action = wezterm.action.IncreaseFontSize },
   { key = "0", mods = "CTRL", action = wezterm.action.ResetFontSize },
   -- Scroll up/down
   { key = "PageUp", mods = "SHIFT", action = wezterm.action.ScrollByPage(-0.5) },
   { key = "PageDown", mods = "SHIFT", action = wezterm.action.ScrollByPage(0.5) },
   -- Change background color
-  { key = "b", mods = "SHIFT|CTRL", action = wezterm.action({ EmitEvent = "toggle-color-scheme" }) },
+  { key = "b", mods = "CTRL|SHIFT", action = wezterm.action({ EmitEvent = "toggle-color-scheme" }) },
   -- Tabs
   { key = "t", mods = "CTRL", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
   { key = "w", mods = "CTRL", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
