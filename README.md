@@ -23,14 +23,25 @@ cd dotfiles
 
 ## App list
 
-The usually-used apps
-(some of which are installed only when needed),
-which may take additional setup to install
-(please kindly refer to their respective documentation):
+Apps used regularly
+(some installed only when needed);
+refer to their respective documentation for installation details:
 
 <details>
 <summary> App List </summary>
 
+- Desktop environment
+  - [`i3-wm`](https://i3wm.org/)
+  - [`paru`](https://github.com/Morganamilo/paru)
+  - [`wezterm`](https://github.com/wez/wezterm)
+  - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
+  - [`feh`](https://feh.finalrewind.org/)
+  - [`rofi`](https://github.com/davatorium/rofi)
+  - [`polybar`](https://github.com/polybar/polybar)
+  - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
+  - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
+  - [`redshift`](http://jonls.dk/redshift/)
+  - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - CLI and TUI
   - [`eza`](https://github.com/eza-community/eza)
   - [`fd`](https://github.com/sharkdp/fd)
@@ -70,18 +81,6 @@ which may take additional setup to install
   - [`firefox`](https://www.mozilla.org/en-US/firefox/)
   - [`chromium`](https://www.chromium.org/Home/)
   - [`discord`](https://discord.com/)
-- Desktop environment setup
-  - [`i3-wm`](https://i3wm.org/)
-  - [`paru`](https://github.com/Morganamilo/paru)
-  - [`wezterm`](https://github.com/wez/wezterm)
-  - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
-  - [`feh`](https://feh.finalrewind.org/)
-  - [`rofi`](https://github.com/davatorium/rofi)
-  - [`polybar`](https://github.com/polybar/polybar)
-  - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
-  - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
-  - [`redshift`](http://jonls.dk/redshift/)
-  - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - Utilities
   - [`htop`](https://htop.dev/)
   - [`flameshot`](https://flameshot.org/)
@@ -149,21 +148,30 @@ LSP servers in Neovim with `mason.nvim`:
 
 ## Handy setup guides
 
-To install Arch Linux, please see the very helpful guide by [`DenshiVideo`](https://www.youtube.com/watch?v=68z11VAYMS8).
-Interesting things to note:
+Before running any `curl | bash`-style install script (common in official install guides,
+e.g. `curl https://example.com/install.sh | bash`),
+inspect it first with `bat` (or `cat`):
 
-- You may see something like `/dev/nvme0n1` instead of `/dev/sda` as your block device
-  (see [`Ask Ubuntu`](https://askubuntu.com/a/932336), and check with `lsblk`);
-  it is fine, just use that instead of `sda` in your commands.
-- Different to the guide, you are often advised to use a swap file instead of a partition
-  (for flexibility and future modifications), with a guide on [ArchWiki](https://wiki.archlinux.org/title/Swap#Swap_file).
+```bash
+curl https://example.com/install.sh | bat
+# then, if it looks safe:
+curl https://example.com/install.sh | bash
+```
 
-You could refer to [`EndeavourOS`'s package list](https://github.com/endeavouros-team/EndeavourOS-packages-lists)
-for some ideas for core packages to install after installing Arch
-(note that some packages listed are `EndeavourOS`-only).
+To install Arch Linux, see the guide by [`DenshiVideo`](https://www.youtube.com/watch?v=68z11VAYMS8).
+A few notes:
 
-A safe sequence to bootstrap `paru` from a clean installation
-(for Arch-based distros):
+- You may see `/dev/nvme0n1` instead of `/dev/sda` as your block device
+  (see [`Ask Ubuntu`](https://askubuntu.com/a/932336), check with `lsblk`);
+  just substitute it in your commands.
+- Prefer a swap file over a swap partition for flexibility;
+  see [ArchWiki](https://wiki.archlinux.org/title/Swap#Swap_file).
+
+[`EndeavourOS`'s package list](https://github.com/endeavouros-team/EndeavourOS-packages-lists)
+is a useful reference for core packages to install after Arch
+(some packages listed are `EndeavourOS`-only).
+
+To bootstrap `paru` from a clean Arch-based installation:
 
 ```bash
 # Add colour to pacman CLI
@@ -238,36 +246,34 @@ patch:
 </details>
 
 This config uses `brightnessctl` by default;
-if you find `xbacklight` not working, please consider switching to `brightnesctl`.
+if `xbacklight` is not working, switch to `brightnessctl`.
 
-For fixing brightness issues
-(esp. brightness drops to minimum when (un)plugging), see
+For brightness issues (e.g. brightness dropping to minimum on plug/unplug), see
 [Backlight on ArchWiki](https://wiki.archlinux.org/title/Backlight#Kernel_command-line_options).
-You may want to set `acpi_backlight=native` in Grub config, for which see
-[Kernel parameters on ArchWiki](https://wiki.archlinux.org/title/Kernel_parameters).
+Setting `acpi_backlight=native` in Grub config often helps;
+see [Kernel parameters on ArchWiki](https://wiki.archlinux.org/title/Kernel_parameters).
 
 To fix screen-tearing issues with Ryzen APUs, see
 [Ryzen on ArchWiki](<https://wiki.archlinux.org/title/Ryzen#Screen-tearing_(APU)>).
 
-After you configure Grub, remember to `grub-mkconfig`, then `grub-install`.
+After configuring Grub, run `grub-mkconfig` then `grub-install`.
 See [Grub on ArchWiki](https://wiki.archlinux.org/title/GRUB#Configuration).
-A nice example of installing a theme can be seen
-[in the Breeze theme README](https://github.com/gustawho/grub2-theme-breeze#installation).
+For an example of installing a theme, see
+[the Breeze theme README](https://github.com/gustawho/grub2-theme-breeze#installation).
 
-If you want to use Colemak-DH on a staggered keyboard (e.g., your laptop),
-try to set the keymap to `colemak_dh_ortho`;
+For Colemak-DH on a staggered keyboard (e.g. a laptop),
+set the keymap to `colemak_dh_ortho`;
 see [discussion on Reddit](https://www.reddit.com/r/Colemak/comments/wqcspl/colemak_dh_on_linux/).
 
-To have GnuPG use the terminal instead of a pop-up window for asking passwords,
+To have GnuPG use the terminal instead of a pop-up for passwords,
 see [this StackExchange answer on editing `~/.gnupg/gpg-agent.conf`](https://unix.stackexchange.com/a/724765).
 
-If you want to keep using your laptop after closing the lid
-(eg with another monitor),
+To keep using your laptop after closing the lid (e.g. with an external monitor),
 see [this StackExchange answer](https://unix.stackexchange.com/a/52645).
 
-To show `lightdm` greeter on multiple screens,
+To show the `lightdm` greeter on multiple screens,
 see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/),
-for example below semi-dynamic script:
+for example the semi-dynamic script below:
 
 <!-- Use :r!cat /etc/lightdm/display_setup.sh to copy to below -->
 
