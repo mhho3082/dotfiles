@@ -59,6 +59,10 @@ export COLORTERM=truecolor
 # Add local bin to PATH
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 
+# Set GPG's tty to the current one
+# https://unix.stackexchange.com/a/724766
+export GPG_TTY=$(tty)
+
 # == History ==
 
 # Don't put duplicate lines or lines starting with space in the history.
@@ -158,6 +162,17 @@ done
 # Change to superuser
 alias superuser="sudo -Es"
 
+# Wezterm
+if command -v wezterm >/dev/null 2>&1; then
+  # Create a new instance of wezterm with the same directory
+  # (nice to have for tiling window managers, e.g., i3wm)
+  # https://wezfurlong.org/wezterm/troubleshooting.html#increasing-log-verbosity
+  alias wezterm-split="WEZTERM_LOG=config=debug,wezterm_font=debug,warn wezterm start --cwd ."
+
+  # Show images in the terminal
+  alias imgcat="wezterm imgcat"
+fi
+
 # == Functions ==
 
 # Password generator
@@ -165,6 +180,126 @@ function gen-password {
   LC_ALL=C tr -dc '[:graph:]' </dev/urandom | head -c ${1:-20}
   echo
 }
+
+# File manager (open)
+function o {
+  if command -v open >/dev/null 2>&1; then
+    # For macOS
+    open "${@:-.}" 2>/dev/null &
+    disown
+  elif grep -qEi "(Microsoft|WSL)" /proc/sys/kernel/osrelease &>/dev/null; then
+    # Open in File Explorer (for WSL)
+    # https://stackoverflow.com/q/38086185
+    explorer.exe "${@:-.}"
+    (($? == 1))
+  else
+    xdg-open "${@:-.}" 2>/dev/null &
+    disown
+  fi
+}
+
+# Set the AUR helper (variable used only for .bashrc functions)
+export AUR_HELPER="paru"
+
+# Only define functions if the AUR helper exists
+if command -v "$AUR_HELPER" >/dev/null 2>&1; then
+  # Package regexes that may require a reboot
+  # Based on https://github.com/endeavouros-team/eos-bash-shared/blob/main/eos-reboot-required.hook
+  aur_reboot_pkgs=(
+    'amd-ucode'
+    'intel-ucode'
+    'btrfs-progs'
+    'cryptsetup'
+    'linux'
+    'linux-hardened'
+    'linux-lts'
+    'linux-zen'
+    'linux-rt'
+    'linux-rt-lts'
+    'linux-firmware\S*'
+    'nvidia'
+    'nvidia-dkms'
+    'nvidia-\S*xx-dkms'
+    'nvidia-\S*xx'
+    'nvidia-\S*lts-dkms'
+    'nvidia\S*-lts'
+    'mesa'
+    'systemd\S*'
+    'wayland'
+    'virtualbox-guest-utils'
+    'virtualbox-host-dkms'
+    'virtualbox-host-modules-arch'
+    'egl-wayland'
+    'xf86-video-\S*'
+    'xorg-server\S*'
+    'xorg-fonts\S*'
+  )
+
+  # Join the package names with '|' and check word boundaries using space char
+  aur_reboot_check="\s($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))(?=\s)"
+
+  # Update the system and reboot if needed
+  function aur-update {
+    local updates
+
+    if command -v checkupdates >/dev/null 2>&1; then
+      updates=$(checkupdates --nocolor | awk '{print $1;}' | tr '\n' ' ')
+    else
+      "$AUR_HELPER" -Sy
+      updates=$("$AUR_HELPER" -Qu --color=never | awk '{print $1;}' | tr '\n' ' ')
+    fi
+
+    if [ -z "$updates" ]; then
+      echo -e "\033[00;32mNo updates available.\033[00m"
+      return
+    fi
+
+    # Warn about required reboot
+    local reboot_needed=0
+    if echo " $updates " | grep -P "$aur_reboot_check" &>/dev/null; then
+      reboot_needed=1
+      echo "Packages to update:"
+      echo " $updates " | grep -P "$aur_reboot_check" --color=always | xargs
+      read -rn1 -p "Reboot likely needed. Proceed with update? [y/N] " answer
+      echo
+      [[ "$answer" =~ ^[yY]$ ]] || return
+    fi
+
+    # Perform upgrade
+    "$AUR_HELPER" -Syu --noconfirm
+    if [ $? -eq 0 ]; then
+      if [ "$reboot_needed" -eq 1 ]; then
+        reboot && return
+      else
+        echo -e "\033[00;32mUpdate successful. No reboot needed.\033[00m"
+      fi
+    else
+      echo -e "\033[00;31mUpdate failed using $AUR_HELPER!\033[00m"
+    fi
+
+    # Reload autostart scripts (bootup parts only)
+    timeout 1s bash -c 'for script in $HOME/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+
+    # Return without errors if it could get to the end
+    return 0
+  }
+
+  # Remove orphaned packages
+  function aur-autoremove {
+    "$AUR_HELPER" -Runs $("$AUR_HELPER" -Qdtq)
+  }
+fi
+
+# For homebrew / linuxbrew
+if command -v brew >/dev/null 2>&1; then
+  # Update homebrew
+  function brew-update {
+    brew update
+    brew upgrade
+    brew cleanup
+    brew doctor
+  }
+fi
 
 # == Prompt ==
 
@@ -336,8 +471,53 @@ function bash-prompt {
 # Reset cursor shape to insert mode
 export PROMPT_COMMAND='bash-prompt'
 
+# == FZF ==
+
+# Add configuration for fzf
+if command -v fzf >/dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND="fd -t f -H"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_CTRL_T_OPTS="--preview='less {}'"
+fi
+
+# == ZOXIDE ==
+
+# Add completion for zoxide
+# https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init bash)"
+fi
+
+# == Version managers ==
+
 # == NVM ==
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
+
+# == PYENV ==
+
+# To enable auto-activation of Python virtualenvs
+# (when you are likely doing Python-intensive work),
+# call pyenv in advance
+
+# Lazy-load pyenv: define a stub that initialises pyenv on first use
+if command -v pyenv >/dev/null 2>&1 || [ -d "$HOME/.pyenv" ]; then
+  export PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+
+  function _pyenv_init {
+    unset -f pyenv _pyenv_init
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+    if pyenv commands | grep -q "virtualenv-init"; then
+      eval "$(pyenv virtualenv-init -)"
+    fi
+  }
+
+  function pyenv {
+    _pyenv_init
+    pyenv "$@"
+  }
+fi
