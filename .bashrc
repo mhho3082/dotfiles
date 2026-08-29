@@ -162,17 +162,6 @@ done
 # Change to superuser
 alias superuser="sudo -Es"
 
-# Wezterm
-if command -v wezterm >/dev/null 2>&1; then
-  # Create a new instance of wezterm with the same directory
-  # (nice to have for tiling window managers, e.g., i3wm)
-  # https://wezfurlong.org/wezterm/troubleshooting.html#increasing-log-verbosity
-  alias wezterm-split="WEZTERM_LOG=config=debug,wezterm_font=debug,warn wezterm start --cwd ."
-
-  # Show images in the terminal
-  alias imgcat="wezterm imgcat"
-fi
-
 # == Functions ==
 
 # Password generator

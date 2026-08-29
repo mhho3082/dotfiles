@@ -32,7 +32,6 @@ which may take additional setup to install
 <summary> App List </summary>
 
 - CLI and TUI
-  - [`zsh`](https://zsh.sourceforge.io/)
   - [`eza`](https://github.com/eza-community/eza)
   - [`fd`](https://github.com/sharkdp/fd)
   - [`bat`](https://github.com/sharkdp/bat)
@@ -185,10 +184,10 @@ cd paru
 makepkg -si
 ```
 
-Set `zsh` as the default shell (from bash):
+Set `bash` as the default shell:
 
 ```bash
-chsh -s `which zsh`
+chsh -s `which bash`
 ```
 
 Enable timers:

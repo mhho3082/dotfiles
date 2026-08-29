@@ -97,7 +97,7 @@ for dotfile in $dotfiles; do
   fi
 
   if [[ $dotfile != *"/"* ]]; then
-    # Copy files that don't use XDG_CONFIG_HOME (indicated by not being in its own dir inside the repo, eg `.zshrc`) to ~/
+    # Copy files that don't use XDG_CONFIG_HOME (indicated by not being in its own dir inside the repo, eg `.bashrc`) to ~/
     config_file=$(resolve_path "${HOME}/${dotfile}")
   else
     config_file=$(resolve_path "${config_dir}/${dotfile}")
