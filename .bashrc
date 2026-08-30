@@ -212,7 +212,10 @@ if command -v "$AUR_HELPER" >/dev/null 2>&1; then
   )
 
   # Join the package names with '|' and check word boundaries using space char
-  aur_reboot_check="\s($(IFS='|'; echo "${aur_reboot_pkgs[*]}"))(?=\s)"
+  aur_reboot_check="\s($(
+    IFS='|'
+    echo "${aur_reboot_pkgs[*]}"
+  ))(?=\s)"
 
   # Update the system and reboot if needed
   function aur-update {
@@ -450,11 +453,21 @@ export PROMPT_COMMAND='bash-prompt'
 
 # == FZF ==
 
-# Add configuration for fzf
+# Add completion for fzf
 if command -v fzf >/dev/null 2>&1; then
-  export FZF_DEFAULT_COMMAND="fd -t f -H"
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_CTRL_T_OPTS="--preview='less {}'"
+  if command -v fd >/dev/null 2>&1; then
+    export FZF_DEFAULT_OPTS="--ansi"
+    export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude .git --color=always"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  fi
+
+  if command -v bat >/dev/null 2>&1; then
+    export FZF_CTRL_T_OPTS="--preview='bat --color=always --style=numbers --line-range=:500 {}'"
+  else
+    export FZF_CTRL_T_OPTS="--preview='less {}'"
+  fi
+
+  eval "$(fzf --bash)"
 fi
 
 # == Zoxide ==

@@ -30,6 +30,7 @@ config.enable_tab_bar = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.tab_max_width = 32
+config.hide_tab_bar_if_only_one_tab = true
 
 -- Use gruvbox
 local light_scheme = "Gruvbox light, hard (base16)"
@@ -102,7 +103,7 @@ config.keys = {
   { key = "Space", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
   -- Change font size
   { key = "-", mods = "CTRL", action = wezterm.action.DecreaseFontSize },
-  { key = "=", mods = "CTRL", action = wezterm.action.IncreaseFontSize },
+  { key = "+", mods = "CTRL|SHIFT", action = wezterm.action.IncreaseFontSize },
   { key = "0", mods = "CTRL", action = wezterm.action.ResetFontSize },
   -- Scroll up/down
   { key = "PageUp", mods = "SHIFT", action = wezterm.action.ScrollByPage(-0.5) },
@@ -110,13 +111,13 @@ config.keys = {
   -- Change background color
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action({ EmitEvent = "toggle-color-scheme" }) },
   -- Tabs
-  { key = "t", mods = "CTRL", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-  { key = "w", mods = "CTRL", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+  { key = "t", mods = "CTRL|SHIFT", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+  { key = "w", mods = "CTRL|SHIFT", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
   {
     key = ",",
     mods = "CTRL",
     action = wezterm.action.PromptInputLine({
-      description = "Enter new name for tab",
+      description = "Enter new name for tab (leave empty to reset)",
       action = wezterm.action_callback(function(window, _, line)
         if line then
           window:active_tab():set_title(line)
