@@ -279,6 +279,8 @@ fi
 
 # == Prompt ==
 
+# https://linuxvox.com/blog/bash-ps1-line-wrap-issue-with-non-printing-characters-from-an-external-command/
+
 # Detect an in-progress rebase/merge/cherry-pick/revert/bisect/am action
 function bash-git-action {
   local git_dir="$1"
@@ -310,9 +312,17 @@ function bash-git-status {
   local git_dir=$(git rev-parse --git-dir 2>/dev/null)
   [ -z "$git_dir" ] && return
 
+  local S=$'\x01' E=$'\x02'
+  local RESET="${S}$(tput sgr0)${E}"
+  local DIM="${S}$(tput setaf 242)${E}"
+  local YELLOW="${S}$(tput setaf 3)${E}"
+  local RED="${S}$(tput setaf 1)${E}"
+  local GREEN_BOLD="${S}$(tput bold)$(tput setaf 2)${E}"
+  local YELLOW_BOLD="${S}$(tput bold)$(tput setaf 3)${E}"
+  local RED_BOLD="${S}$(tput bold)$(tput setaf 1)${E}"
+
   local output=""
 
-  # Inter-branch status: commits ahead/behind upstream, and stash count
   local upstream=""
   local has_upstream=false
   if upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null); then
@@ -322,15 +332,13 @@ function bash-git-status {
     [ "$(echo "$diff" | awk '{print $2}')" -gt 0 ] && output+="↓"
   fi
   if [ "$(git rev-list --walk-reflogs --ignore-missing --count refs/stash 2>/dev/null)" -gt 0 ]; then
-    output+="\033[38;5;242m⚑\033[00m"
+    output+="${DIM}⚑${RESET}"
   fi
   [ -n "$output" ] && output+=" "
 
-  # Currently running action (rebase, merge, cherry-pick, ...)
   local action=$(bash-git-action "$git_dir")
-  [ -n "$action" ] && output+="\033[38;5;242m${action}\033[00m "
+  [ -n "$action" ] && output+="${DIM}${action}${RESET} "
 
-  # Status indicator (single pass over porcelain output)
   local has_staged=false has_unstaged=false has_untracked=false has_conflict=false
   while IFS= read -r line; do
     local x="${line:0:1}" y="${line:1:1}"
@@ -348,100 +356,93 @@ function bash-git-status {
     fi
   done < <(git status --porcelain 2>/dev/null)
 
-  $has_conflict && output+="\033[00;31m✗\033[00m "
+  $has_conflict && output+="${RED}✗${RESET} "
 
-  # Remote indicator, and remote branch name if it differs from the local one
   local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
   if $has_upstream; then
-    output+="\033[38;5;242m⧉ \033[00m"
+    output+="${DIM}⧉ ${RESET}"
     local remote_branch="${upstream#*/}"
     if [ -n "$remote_branch" ] && [ "$remote_branch" != "$branch" ]; then
-      output+="\033[38;5;242m(${remote_branch})\033[00m "
+      output+="${DIM}(${remote_branch})${RESET} "
     fi
   fi
 
-  # Location: branch, or tag, or short commit hash
   local tag=$(git describe --tags --exact-match 2>/dev/null)
   local sha=$(git rev-parse --short HEAD 2>/dev/null)
   if [ -n "$branch" ]; then
-    output+="\033[33m$branch\033[00m"
+    output+="${YELLOW}$branch${RESET}"
   elif [ -n "$tag" ]; then
-    output+="\033[38;5;242m#\033[33m$tag\033[00m"
+    output+="${DIM}#${YELLOW}$tag${RESET}"
   else
-    output+="\033[38;5;242m@\033[33m$sha\033[00m"
+    output+="${DIM}@${YELLOW}$sha${RESET}"
   fi
 
-  # Status glyph: same symbol as the matching single state, recolored yellow
-  # when it is combined with staged changes
   local status_color="" status_symbol=""
   if $has_staged; then
     if $has_untracked; then
-      status_color="\033[01;33m" && status_symbol="?" # yellow
+      status_color="$YELLOW_BOLD" && status_symbol="?"
     elif $has_unstaged; then
-      status_color="\033[01;33m" && status_symbol="!" # yellow
+      status_color="$YELLOW_BOLD" && status_symbol="!"
     else
-      status_color="\033[01;32m" && status_symbol="+" # green
+      status_color="$GREEN_BOLD" && status_symbol="+"
     fi
   elif $has_untracked; then
-    status_color="\033[01;31m" && status_symbol="?" # red
+    status_color="$RED_BOLD" && status_symbol="?"
   elif $has_unstaged; then
-    status_color="\033[01;31m" && status_symbol="!" # red
+    status_color="$RED_BOLD" && status_symbol="!"
   fi
 
   if [ -n "$status_symbol" ]; then
-    output+=" $status_color$status_symbol\033[00m"
+    output+=" ${status_color}${status_symbol}${RESET}"
   fi
 
-  echo -e "\033[33m(\033[00m${output}\033[33m)\033[00m"
+  echo -e "${YELLOW}(${RESET}${output}${YELLOW})${RESET}"
 }
 
 function bash-prompt {
-  # Capture exit status of the last command
   status="$?"
 
-  # Reset PS1
+  local RESET="\[$(tput sgr0)\]"
+  local DIM="\[$(tput setaf 242)\]"
+  local GREEN="\[$(tput setaf 2)\]"
+  local BLUE="\[$(tput setaf 4)\]"
+  local CYAN="\[$(tput setaf 6)\]"
+  local MAGENTA="\[$(tput setaf 5)\]"
+  local ORANGE="\[$(tput setaf 208)\]"
+  local RED="\[$(tput setaf 1)\]"
+
   PS1=""
 
-  # Jobs
   jobs_count=$(jobs -p | wc -l)
   if [ "$jobs_count" -gt 0 ]; then
-    PS1+="\[\033[00;36m\]\133${jobs_count}\135 \[\033[00m\]"
+    PS1+="${CYAN}\133${jobs_count}\135 ${RESET}"
   fi
 
-  # Username and hostname
-  # Hostname is always a different color from the username so they never
-  # blend together; it turns orange when remoting in (SSH or similar), as a
-  # "you're remote" warning
   if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_CONNECTION" ]; then
-    host_color="\[\033[38;5;208m\]"
+    local host_color="$ORANGE"
   else
-    host_color="\[\033[00;35m\]"
+    local host_color="$MAGENTA"
   fi
-  PS1+="\[\033[00;32m\]\u\[\033[38;5;242m\]@${host_color}\h "
+  PS1+="${GREEN}\u${DIM}@${host_color}\h ${RESET}"
 
-  # pwd
-  PS1+="\[\033[00;34m\]\w "
+  PS1+="${BLUE}\w ${RESET}"
 
-  # Git branch and status
   if git rev-parse --git-dir &>/dev/null; then
     PS1+="\$(bash-git-status) "
   fi
 
-  # Glyph indicating last command status
   if [ $status -eq 0 ]; then
-    PS1+="\[\033[38;5;242m\]"
+    PS1+="${DIM}"
   else
-    PS1+="\[\033[00;31m\]"
+    PS1+="${RED}"
   fi
-  # Check if superuser
   if [ "$EUID" -eq 0 ]; then
     PS1+="# "
   else
     PS1+="$ "
   fi
 
-  # Reset the prompt color
-  PS1+="\[\033[00m\]"
+  PS1+="${RESET}"
 }
 
 # Reset cursor shape to insert mode
