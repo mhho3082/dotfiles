@@ -146,19 +146,6 @@ else
   alias ll='tree -CAFa -I "CVS|*.*.package|.svn|.git|.hg|node_modules|bower_components|.next|.svelte-kit|venv" --dirsfirst'
 fi
 
-# Generate ".." shortcuts
-# (since paths are set to not be considered executables by themselves)
-for i in {1..9}; do
-  alias_name="."
-  relative_path=""
-  for j in $(seq $i); do
-    alias_name+='.'
-    relative_path+='../'
-  done
-  line="alias $alias_name='cd $relative_path'"
-  eval $line
-done
-
 # Change to superuser
 alias superuser="sudo -Es"
 
@@ -469,13 +456,19 @@ if command -v fzf >/dev/null 2>&1; then
   export FZF_CTRL_T_OPTS="--preview='less {}'"
 fi
 
-# == ZOXIDE ==
+# == Zoxide ==
 
 # Add completion for zoxide
 # https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init bash)"
 fi
+
+# == AI tools ==
+
+# Disable setting terminal titles
+export OPENCODE_DISABLE_TERMINAL_TITLE="true"
+export CLAUDE_CODE_DISABLE_TERMINAL_TITLE="true"
 
 # == Version managers ==
 
@@ -485,7 +478,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
 
-# == PYENV ==
+# == Pyenv ==
 
 # To enable auto-activation of Python virtualenvs
 # (when you are likely doing Python-intensive work),
