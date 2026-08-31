@@ -407,6 +407,7 @@ function bash-prompt {
 
   local RESET="\[$(tput sgr0)\]"
   local DIM="\[$(tput setaf 242)\]"
+  local INVERT="\[$(tput rev)\]"
   local GREEN="\[$(tput setaf 2)\]"
   local BLUE="\[$(tput setaf 4)\]"
   local CYAN="\[$(tput setaf 6)\]"
@@ -415,6 +416,15 @@ function bash-prompt {
   local RED="\[$(tput setaf 1)\]"
 
   PS1=""
+
+  # If the previous command did not add a new line, add it ourselves
+  # https://stackoverflow.com/a/20156527
+  local curpos
+  echo -en "\E[6n"
+  IFS=";" read -sdR -a curpos
+  if ((curpos[1] != 1)); then
+    PS1+="${INVERT}%${RESET}\n"
+  fi
 
   jobs_count=$(jobs -p | wc -l)
   if [ "$jobs_count" -gt 0 ]; then
