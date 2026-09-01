@@ -219,7 +219,7 @@ if command -v "$AUR_HELPER" >/dev/null 2>&1; then
 
   # Update the system and reboot if needed
   function aur-update {
-    local updates
+    local updates status=0
 
     if command -v checkupdates >/dev/null 2>&1; then
       updates=$(checkupdates --nocolor | awk '{print $1;}' | tr '\n' ' ')
@@ -229,7 +229,7 @@ if command -v "$AUR_HELPER" >/dev/null 2>&1; then
     fi
 
     if [ -z "$updates" ]; then
-      echo -e "\033[00;32mNo updates available.\033[00m"
+      echo -e "No updates available."
       return
     fi
 
@@ -246,21 +246,22 @@ if command -v "$AUR_HELPER" >/dev/null 2>&1; then
 
     # Perform upgrade
     "$AUR_HELPER" -Syu --noconfirm
-    if [ $? -eq 0 ]; then
+    status="$?"
+    if [ $status -eq 0 ]; then
       if [ "$reboot_needed" -eq 1 ]; then
+        echo -e "Update successful. rebooting now."
         reboot && return
       else
-        echo -e "\033[00;32mUpdate successful. No reboot needed.\033[00m"
+        echo -e "Update successful. No reboot needed."
       fi
     else
-      echo -e "\033[00;31mUpdate failed using $AUR_HELPER!\033[00m"
+      echo -e "Update failed using $AUR_HELPER. See logs above."
     fi
 
     # Reload autostart scripts (bootup parts only)
     timeout 1s bash -c 'for script in $HOME/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
 
-    # Return without errors if it could get to the end
-    return 0
+    return $status
   }
 
   # Remove orphaned packages
