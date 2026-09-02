@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+RESET=$(tput sgr0)
+DIM=$(tput setaf 242)
+
 # The dir where default configs go
 # https://unix.stackexchange.com/a/537531
 config_dir=${XDG_CONFIG_HOME:-~/.config}
@@ -8,7 +11,7 @@ mkdir -p "$config_dir"
 # Regex patterns to ignore
 ignore_patterns=(
   ".gitignore"
-  "copy_to_config.*"
+  "copy-to-config.*"
   "README.*"
   ".stylua.*"
   "makefile"
@@ -38,7 +41,7 @@ copy_chmod() {
   local dst=$2
 
   if [[ -f $src && -x $src && -f $dst && ! -x $dst ]]; then
-    echo -e "\033[1;32mMaking $dst executable...\033[0m"
+    echo "${DIM}Making $dst executable...${RESET}"
     chmod +x "$dst"
   fi
 }
@@ -56,22 +59,19 @@ diff_and_ask() {
     else
       diff "$dst" "$src" --color=always | less -FRX
     fi
-
-    read -n1 -p $'Do you want to overwrite \e[34m'$dst$'\e[0m? [y/N] ' answer
-    echo
-  else
-    read -n1 -p $'Do you want to create \e[34m'$dst$'\e[0m? [y/N] ' answer
-    echo
   fi
+  action_name=$([[ -f "$dst" ]] && echo "overwrite" || echo "create")
+  read -n1 -p "${DIM}Do you want to ${action_name} ${RESET}${dst}${DIM}? [y/N] ${RESET}" answer
+  echo
 
   if [[ "$answer" =~ ^[yY]$ ]]; then
     # Copy file from source to destination,
     # creating necessary dirs if needed
-    echo -e "\033[0;32mCopying $src to $dst...\033[0m"
+    echo "${DIM}Copying $src to $dst...${RESET}"
     mkdir -p $(dirname "$dst")
     cp "$src" "$dst"
   else
-    echo -e "\033[1;33mSkipping $src...\033[0m"
+    echo "${DIM}Skipping $src...${RESET}"
   fi
 }
 
@@ -80,7 +80,7 @@ git_username=$(git config --global user.name)
 git_email=$(git config --global user.email)
 git_signingkey=$(git config --global user.signingkey)
 if [ -n "$git_username" ] || [ -n "$git_email" ] || [ -n "$git_signingkey" ]; then
-  echo -e "\033[0;32mMoving your current Git user settings aside...\033[0m"
+  echo "${DIM}Moving your current Git user settings aside...${RESET}"
   git config --global --unset user.name
   git config --global --unset user.email
   git config --global --unset user.signingkey
@@ -91,7 +91,7 @@ for dotfile in $dotfiles; do
   # If the file is not found (deleted from filesystem, but not `git rm` yet), skip it
   # Use red output to alert user to handle the Git issues
   if [[ ! -f $dotfile ]]; then
-    echo -e "\033[1;31mCannot find $dotfile (likely deleted), skipping...\033[0m"
+    echo "${DIM}Cannot find $dotfile (likely deleted), skipping...${RESET}"
 
     continue
   fi
@@ -119,7 +119,7 @@ done
 
 # Re-configure Git username and email if needed
 if [ -n "$git_username" ] || [ -n "$git_email" ] || [ -n "$git_signingkey" ]; then
-  echo -e "\033[0;32mRe-configuring your Git user settings...\033[0m"
+  echo "${DIM}Re-configuring your Git user settings...${RESET}"
   [ -n "$git_username" ] && git config --global user.name "$git_username" || true
   [ -n "$git_email" ] && git config --global user.email "$git_email" || true
   [ -n "$git_signingkey" ] && git config --global user.signingkey "$git_signingkey" || true

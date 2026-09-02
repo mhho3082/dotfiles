@@ -11,7 +11,7 @@ git clone https://github.com/mhho3082/dotfiles.git --depth=1
 cd dotfiles
 
 # Copy/update to ~/.config (backup first if needed)
-./copy_to_config.sh
+./copy-to-config.sh
 ```
 
 ## Features

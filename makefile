@@ -1,3 +1,3 @@
-# As a shortcut for running copy_to_config.sh
+# As a shortcut for running copy-to-config.sh
 all:
-	@./copy_to_config.sh
+	@./copy-to-config.sh
