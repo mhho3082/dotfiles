@@ -80,19 +80,19 @@ shopt -s histappend
 
 # Enable programmable completion features
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    source /etc/bash_completion
+  if [[ -r /usr/share/bash-completion/bash_completion ]]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [[ -r /etc/bash_completion ]]; then
+    . /etc/bash_completion
   fi
 fi
 
 # Include some major applications' completions
 for app in git; do
-  if [ -f "/usr/share/bash-completion/completions/$app" ]; then
-    source "/usr/share/bash-completion/completions/$app"
-  elif [ -f "/etc/bash_completion.d/$app" ]; then
-    source "/etc/bash_completion.d/$app"
+  if [[ -r "/usr/share/bash-completion/completions/$app" ]]; then
+    . "/usr/share/bash-completion/completions/$app"
+  elif [[ -r "/etc/bash_completion.d/$app" ]]; then
+    . "/etc/bash_completion.d/$app"
   fi
 done
 
