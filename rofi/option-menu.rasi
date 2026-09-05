@@ -14,13 +14,17 @@ window {
     width:    180px;
     location: center;
 }
+inputbar {
+    children: ["entry"];
+}
 listview {
-    lines:     6;
+    lines:     8;
     columns:   1;
     scrollbar: false;
 }
-element {
-    border:  0;
-    padding: 1px;
+entry {
+    font:              inherit;
+    placeholder:       "Choose one...";
+    placeholder-color: #504945;
 }
 /* vim: set ft=rasi: */

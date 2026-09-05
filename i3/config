@@ -36,7 +36,6 @@ set $launcher rofi -modi drun -show drun -config ~/.config/rofi/rofidmenu.rasi
 set $bar ~/.config/polybar/launch.sh
 
 # Scripts
-set $help_keybinds ~/.config/i3/scripts/keyhint-2
 set $locker betterlockscreen -l dim
 set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
@@ -108,9 +107,6 @@ bindsym $mod+Shift+c exec chromium --incognito
 bindsym $mod+Shift+e exec $powermenu
 bindsym $mod+l exec $locker
 bindsym $mod+p exec $powerprofiles
-
-# keybinding in fancy rofi (automated):
-bindsym $mod+Shift+slash exec $help_keybinds
 
 # Toggle polybar show/hide
 bindsym $mod+b exec polybar-msg cmd toggle
