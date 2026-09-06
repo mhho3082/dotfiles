@@ -271,9 +271,26 @@ see [this StackExchange answer on editing `~/.gnupg/gpg-agent.conf`](https://uni
 To keep using your laptop after closing the lid (e.g. with an external monitor),
 see [this StackExchange answer](https://unix.stackexchange.com/a/52645).
 
+To enable natural scrolling on touchpads with `libinput`,
+create `/etc/X11/xorg.conf.d/30-touchpad.conf`:
+
+<details>
+<summary> <code>/etc/X11/xorg.conf.d/30-touchpad.conf</code> </summary>
+
+```conf
+Section "InputClass"
+    Identifier "devname"
+    Driver "libinput"
+    MatchIsTouchpad "on"
+    Option "NaturalScrolling" "true"
+EndSection
+```
+
+</details>
+
 To show the `lightdm` greeter on multiple screens,
 see [this Chaotic Experiments post](https://chaoticlab.io/posts/lightdm-extmonitor/),
-for example the semi-dynamic script below:
+or use the dynamic script below:
 
 <!-- Use :r!cat /etc/lightdm/display_setup.sh to copy to below -->
 
