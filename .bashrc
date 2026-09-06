@@ -364,7 +364,7 @@ function bash-git-status {
 
   local branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
   if $has_upstream; then
-    output+="${DIM}⧉ ${RESET}"
+    output+="${DIM}󰊢 ${RESET}"
     local remote_branch="${upstream#*/}"
     if [ -n "$remote_branch" ] && [ "$remote_branch" != "$branch" ]; then
       output+="${DIM}(${remote_branch})${RESET} "

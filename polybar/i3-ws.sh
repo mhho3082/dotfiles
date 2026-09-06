@@ -1,32 +1,29 @@
 #!/usr/bin/env bash
 
+filled=("󰎡 " "󰎤 " "󰎧 " "󰎪 " "󰎭 " "󰎱 " "󰎳 " "󰎶 " "󰎹 " "󰎼 " "󰽽 ")
+
+empty=("󰎣 " "󰎦 " "󰎩 " "󰎬 " "󰎮 " "󰎰 " "󰎵 " "󰎸 " "󰎻 " "󰎾 " "󰽾 ")
+
 # Function to check workspaces and output status
 update_workspaces() {
   workspaces=$(i3-msg -t get_workspaces)
 
-  # Get largest workspace index
-  if echo "$workspaces" | jq -e ".[] | select(.num > 5)" >/dev/null; then
-    last=10
-  else
-    last=5
-  fi
+  # Get sorted list of workspace numbers that exist
+  nums=$(echo "$workspaces" | jq -r '.[].num' | sort -n)
 
-  # Update icon of each workspace
-  for i in $(seq 1 $last); do
+  # Show only workspaces that exist
+  for i in $nums; do
     workspace=$(echo "$workspaces" | jq -e ".[] | select(.num == $i)")
 
-    if echo "$workspace" | jq -e ".focused" >/dev/null; then
-      # Primary
-      echo -n '%{F#83A598}%{F-} '
-    elif echo "$workspace" | jq -e ".urgent" >/dev/null; then
+    if echo "$workspace" | jq -e ".urgent" >/dev/null 2>&1; then
       # Urgent
-      echo -n '%{F#FB4934}%{F-} '
-    elif [ -n "$workspace" ]; then
-      # Filled
-      echo -n '%{F#BDAE93}%{F-} '
+      echo -n "%{F#FB4934}${filled[i]}%{F-}"
+    elif echo "$workspace" | jq -e ".focused" >/dev/null 2>&1; then
+      # Focused
+      echo -n "%{F#BDAE93}${filled[i]}%{F-}"
     else
-      # Empty
-      echo -n '%{F#BDAE93}%{F-} '
+      # Exists but not focused
+      echo -n "%{F#BDAE93}${empty[i]}%{F-}"
     fi
   done
   echo
