@@ -317,13 +317,13 @@ function bash-git-status {
   [ -z "$git_dir" ] && return
 
   local S=$'\x01' E=$'\x02'
-  local RESET="${S}$(tput sgr0)${E}"
-  local DIM="${S}$(tput setaf 242)${E}"
-  local YELLOW="${S}$(tput setaf 3)${E}"
-  local RED="${S}$(tput setaf 1)${E}"
-  local GREEN_BOLD="${S}$(tput bold)$(tput setaf 2)${E}"
-  local YELLOW_BOLD="${S}$(tput bold)$(tput setaf 3)${E}"
-  local RED_BOLD="${S}$(tput bold)$(tput setaf 1)${E}"
+  local RESET="${S}"$'\033[0m'"${E}"
+  local DIM="${S}"$'\033[38;5;242m'"${E}"
+  local YELLOW="${S}"$'\033[33m'"${E}"
+  local RED="${S}"$'\033[31m'"${E}"
+  local GREEN_BOLD="${S}"$'\033[1;32m'"${E}"
+  local YELLOW_BOLD="${S}"$'\033[1;33m'"${E}"
+  local RED_BOLD="${S}"$'\033[1;31m'"${E}"
 
   local output=""
 
@@ -406,15 +406,15 @@ function bash-git-status {
 function bash-prompt {
   status="$?"
 
-  local RESET="\[$(tput sgr0)\]"
-  local DIM="\[$(tput setaf 242)\]"
-  local INVERT="\[$(tput rev)\]"
-  local GREEN="\[$(tput setaf 2)\]"
-  local BLUE="\[$(tput setaf 4)\]"
-  local CYAN="\[$(tput setaf 6)\]"
-  local MAGENTA="\[$(tput setaf 5)\]"
-  local ORANGE="\[$(tput setaf 208)\]"
-  local RED="\[$(tput setaf 1)\]"
+  local RESET="\[\033[0m\]"
+  local DIM="\[\033[38;5;242m\]"
+  local INVERT="\[\033[7m\]"
+  local GREEN="\[\033[32m\]"
+  local BLUE="\[\033[34m\]"
+  local CYAN="\[\033[36m\]"
+  local MAGENTA="\[\033[35m\]"
+  local ORANGE="\[\033[38;5;208m\]"
+  local RED="\[\033[31m\]"
 
   PS1=""
 
