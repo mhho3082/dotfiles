@@ -2,9 +2,6 @@
 
 ## Quick start
 
-If you want to use my config, please fork this repo,
-look through the code, and remove the parts you don't need first.
-
 ```bash
 # Clone the repo
 git clone https://github.com/mhho3082/dotfiles.git --depth=1

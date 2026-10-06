@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 
+current=$(powerprofilesctl get)
+
+mark() {
+    [[ "$1" == "$current" ]] && echo "• $2" || echo "  $2"
+}
+
 entries=(
-    "Performance"
-    "Balanced"
-    "Power Saver"
+    "$(mark performance  "Performance")"
+    "$(mark balanced     "Balanced")"
+    "$(mark power-saver  "Power Saver")"
 )
 
 selection=$(printf '%s\n' "${entries[@]}" | rofi -dmenu -p '' -i -theme ~/.config/rofi/option-menu.rasi)
 
-case "$selection" in
+case "${selection#[•\ ] }" in
     "Performance") powerprofilesctl set performance ;;
     "Balanced")    powerprofilesctl set balanced ;;
     "Power Saver") powerprofilesctl set power-saver ;;

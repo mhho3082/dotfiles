@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+# Build a list of sinks: "Description\tname" pairs
+declare -A sink_map
+while IFS= read -r line; do
+    if [[ "$line" =~ ^Sink\ #([0-9]+) ]]; then
+        current_sink=""
+        current_desc=""
+    elif [[ "$line" =~ Name:\ (.+) ]]; then
+        current_sink="${BASH_REMATCH[1]}"
+    elif [[ "$line" =~ Description:\ (.+) ]]; then
+        current_desc="${BASH_REMATCH[1]}"
+        if [[ -n "$current_sink" && -n "$current_desc" ]]; then
+            sink_map["$current_desc"]="$current_sink"
+        fi
+    fi
+done < <(pactl list sinks)
+
+# Get the name of the currently active default sink
+default_sink=$(pactl get-default-sink)
+
+# Build menu entries, marking the active one with a bullet
+entries=()
+for desc in "${!sink_map[@]}"; do
+    if [[ "${sink_map[$desc]}" == "$default_sink" ]]; then
+        entries+=("• $desc")
+    else
+        entries+=("  $desc")
+    fi
+done
+
+# Show rofi menu
+selection=$(printf '%s\n' "${entries[@]}" | sort | rofi -dmenu -p '' -i -theme ~/.config/rofi/option-menu.rasi)
+
+[[ -z "$selection" ]] && exit 0
+
+# Strip the leading marker (bullet or spaces)
+clean="${selection#• }"
+clean="${clean#  }"
+
+# Look up the sink name and set it as default
+sink_name="${sink_map[$clean]}"
+if [[ -n "$sink_name" ]]; then
+    pactl set-default-sink "$sink_name"
+
+    # Move all currently playing streams to the new sink
+    while IFS= read -r stream_index; do
+        pactl move-sink-input "$stream_index" "$sink_name"
+    done < <(pactl list short sink-inputs | awk '{print $1}')
+fi

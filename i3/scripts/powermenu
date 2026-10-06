@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 entries=(
-    "Shutdown"
-    "Reboot"
-    "Suspend"
-    "Hibernate"
-    "Lock"
-    "Logout"
+    "  Shutdown"
+    "  Reboot"
+    "  Suspend"
+    "  Hibernate"
+    "  Lock"
+    "  Logout"
 )
 
 selection=$(printf '%s\n' "${entries[@]}" | rofi -dmenu -p '' -i -theme ~/.config/rofi/option-menu.rasi)
 
-case "$selection" in
+case "${selection#  }" in
     "Shutdown")  systemctl poweroff ;;
     "Reboot")    systemctl reboot ;;
     "Suspend")   systemctl suspend ;;

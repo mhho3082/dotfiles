@@ -58,6 +58,8 @@ export COLORTERM=truecolor
 
 # Add local bin to PATH
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+[ -d "$HOME/.ghcup/bin" ] && export PATH="$HOME/.ghcup/bin:$PATH"
+[ -d "$HOME/.cabal/bin" ] && export PATH="$HOME/.cabal/bin:$PATH"
 
 # Set GPG's tty to the current one
 # https://unix.stackexchange.com/a/724766
