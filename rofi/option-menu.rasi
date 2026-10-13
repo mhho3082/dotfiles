@@ -11,20 +11,17 @@ configuration {
 @theme "/usr/share/rofi/themes/gruvbox-dark-hard.rasi"
 
 window {
-    width:    180px;
+    width:    360px;
     location: center;
-}
-inputbar {
-    children: ["entry"];
 }
 listview {
     lines:     8;
     columns:   1;
     scrollbar: false;
 }
-entry {
-    font:              inherit;
-    placeholder:       "Choose one...";
-    placeholder-color: #504945;
+textbox-prompt-sep {
+    font:   inherit;
+    str:    "> ";
+    margin: 0 0 0 0;
 }
 /* vim: set ft=rasi: */

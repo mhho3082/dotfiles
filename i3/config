@@ -40,6 +40,7 @@ set $locker betterlockscreen -l dim
 set $powersaving ~/.config/i3/scripts/xidlehook
 set $powermenu ~/.config/i3/scripts/powermenu
 set $powerprofiles ~/.config/i3/scripts/power-profiles
+set $audiooutput ~/.config/i3/scripts/audio-output
 set $screenshot flameshot gui
 set $screenshot_clipboard flameshot gui -c
 
@@ -107,6 +108,7 @@ bindsym $mod+Shift+c exec chromium --incognito
 bindsym $mod+Shift+e exec $powermenu
 bindsym $mod+l exec $locker
 bindsym $mod+p exec $powerprofiles
+bindsym $mod+Shift+p exec $audiooutput
 
 # Toggle polybar show/hide
 bindsym $mod+b exec polybar-msg cmd toggle
