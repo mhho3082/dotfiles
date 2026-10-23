@@ -32,12 +32,21 @@ refer to their respective documentation for installation details:
   - [`paru`](https://github.com/Morganamilo/paru)
   - [`wezterm`](https://github.com/wez/wezterm)
   - [`betterlockscreen`](https://github.com/betterlockscreen/betterlockscreen)
-  - [`feh`](https://feh.finalrewind.org/)
   - [`rofi`](https://github.com/davatorium/rofi)
+  - [`thunar`](https://docs.xfce.org/xfce/thunar/start)
+- Desktop services
+  - [`feh`](https://feh.finalrewind.org/)
+  - [`arandr`](https://christian.amsuess.com/tools/arandr/)
   - [`polybar`](https://github.com/polybar/polybar)
+  - [`picom`](https://github.com/yshui/picom)
+  - [`dunst`](https://dunst-project.org/)
   - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
   - [`xidlehook`](https://gitlab.com/jD91mZM2/xidlehook)
   - [`redshift`](http://jonls.dk/redshift/)
+  - [`numlockx`](https://github.com/rg3/numlockx)
+  - [`dex`](https://github.com/jceb/dex)
+  - [`polkit-gnome`](https://gitlab.gnome.org/Archive/policykit-gnome)
+  - [`playerctl`](https://github.com/altdesktop/playerctl)
   - [`networkmanager-dispatcher-ntpd`](https://man.archlinux.org/man/NetworkManager-dispatcher.8.en)
 - CLI and TUI
   - [`eza`](https://github.com/eza-community/eza)
@@ -51,6 +60,7 @@ refer to their respective documentation for installation details:
   - [`trash-cli`](https://github.com/andreafrancia/trash-cli)
 - Coding
   - [`neovim`](https://neovim.io/)
+  - [`tree-sitter-cli`](https://github.com/tree-sitter/tree-sitter) (required by Neovim's Treesitter)
   - [`github-cli`](https://cli.github.com/)
   - [`delta`](https://dandavison.github.io/delta/)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
@@ -211,6 +221,32 @@ Set up `betterlockscreen`:
 # This would update the cached image
 betterlockscreen -u "/path/to/img.jpg"
 ```
+
+Set up monitor layout with `arandr`:
+
+The i3 config runs `~/.screenlayout/monitor.sh` on startup to configure displays.
+Generate this file with `arandr`: arrange your monitors visually, then save the layout.
+`arandr` saves it as a shell script — save to `~/.screenlayout/monitor.sh` and make it executable:
+
+```bash
+chmod +x ~/.screenlayout/monitor.sh
+```
+
+Set up the wallpaper with `feh`:
+
+The i3 config runs `~/.fehbg` on startup to restore the wallpaper.
+Set your wallpaper once with `feh` and it will generate this file automatically:
+
+```bash
+feh --bg-fill /path/to/wallpaper.jpg
+# ~/.fehbg is now created and will be used on every i3 startup
+```
+
+Some shell configuration is intentionally machine-specific and not tracked in this repo:
+
+- `~/.bash_aliases` / `~/.zsh_aliases` — sourced automatically if they exist; use for
+  host-specific aliases (both shell configs handle missing files gracefully)
+- `~/.dircolors` — custom `ls` colour scheme; falls back to the system default if absent
 
 To set up a GPG key for Git and GitHub usage, see
 [How to Sign Git Commits by With Blue Ink](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html).
