@@ -75,8 +75,6 @@ PS1='%F{green}%n%F{242}@%F{magenta}%m%f %F{blue}%~%f$(zsh-git-branch) %(?.%F{242
 
 # == Aliases ==
 
-[[ -f "$HOME/.zsh_aliases" ]] && source "$HOME/.zsh_aliases"
-
 # enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
   test -r "$HOME/.dircolors" && eval "$(dircolors -b "$HOME/.dircolors")" || eval "$(dircolors -b)"

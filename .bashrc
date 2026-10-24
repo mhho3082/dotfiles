@@ -105,11 +105,6 @@ fi
 
 # == Alias ==
 
-# Enable .bash_aliases if exists
-if [ -f "$HOME/.bash_aliases" ]; then
-  . "$HOME/.bash_aliases"
-fi
-
 # Enable vi mode
 set -o vi
 
@@ -245,7 +240,7 @@ if command -v "$AUR_HELPER" >/dev/null 2>&1; then
     fi
 
     # Perform upgrade
-    "$AUR_HELPER" -Syu --noconfirm
+    "$AUR_HELPER" -Syu
     status="$?"
     if [ $status -eq 0 ]; then
       if [ "$reboot_needed" -eq 1 ]; then
@@ -259,7 +254,7 @@ if command -v "$AUR_HELPER" >/dev/null 2>&1; then
     fi
 
     # Reload autostart scripts (bootup parts only)
-    timeout 1s bash -c 'for script in $HOME/.config/autostart/*.sh; do "$script" &>/dev/null & done; wait'
+    timeout 1s bash -c '$HOME/.config/autostart/99-display-switch.sh &>/dev/null & $HOME/.config/autostart/99-elecom-huge.sh &>/dev/null & wait'
 
     return $status
   }
@@ -496,12 +491,6 @@ export OPENCODE_DISABLE_TERMINAL_TITLE="true"
 export CLAUDE_CODE_DISABLE_TERMINAL_TITLE="true"
 
 # == Version managers ==
-
-# == NVM ==
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true
 
 # == Pyenv ==
 

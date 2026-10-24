@@ -198,9 +198,8 @@ exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # Execute .desktop apps with dex
 exec --no-startup-id dex --autostart --environment i3
 
-# Run all bash scripts in config's autostart folder
-# exec --no-startup-id run-parts --regex '.*\.sh$' ~/.config/autostart
-exec --no-startup-id bash -c 'for script in ~/.config/autostart/*.sh; do "$script" & done; disown'
+# Run autostart scripts
+exec --no-startup-id bash -c '~/.config/autostart/99-display-switch.sh & ~/.config/autostart/99-elecom-huge.sh & disown'
 
 # Activate num lock
 exec --no-startup-id numlockx on
