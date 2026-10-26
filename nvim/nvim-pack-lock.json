@@ -6,7 +6,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "fzf-lua": {
-      "rev": "507dfc85551ff2d9293ec215f10f19395252aada",
+      "rev": "5b88d6f0af7fcb41d4a8bb340bf70d7e3824ee9d",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -27,7 +27,7 @@
       "src": "https://github.com/lukas-reineke/indent-blankline.nvim"
     },
     "mason-lspconfig.nvim": {
-      "rev": "c302d3fcaf4727ee7d48b20e7c293668ed1f6d98",
+      "rev": "a338f44149f5673882c32629697d67b0c0547aec",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
     },
     "mason.nvim": {
