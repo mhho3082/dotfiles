@@ -64,7 +64,18 @@ refer to their respective documentation for installation details:
   - [`github-cli`](https://cli.github.com/)
   - [`delta`](https://dandavison.github.io/delta/)
   - [`base-devel`](https://archlinux.org/groups/x86_64/base-devel/)
-  - [`llvm`](https://llvm.org/) (for C/C++ [`clangd`](https://clangd.llvm.org/) in editors)
+  - LSP servers and formatters
+    - [`bash-language-server`](https://github.com/bash-lsp/bash-language-server)
+    - [`vscode-css-languageserver`](https://github.com/microsoft/vscode-css-languageservice)
+    - [`vscode-html-languageserver`](https://github.com/microsoft/vscode-html-languageservice)
+    - [`lua-language-server`](https://github.com/LuaLS/lua-language-server)
+    - [`pyright`](https://github.com/microsoft/pyright)
+    - [`typescript-language-server`](https://github.com/typescript-language-server/typescript-language-server)
+    - [`harper`](https://github.com/Automattic/harper) (provides `harper-ls`)
+    - [`prettier`](https://prettier.io/)
+    - [`stylua`](https://github.com/JohnnyMorganz/StyLua)
+    - [`python-black`](https://github.com/psf/black)
+    - [`shfmt`](https://github.com/mvdan/sh)
 - Version managers
   - [`nvm`](https://github.com/nvm-sh/nvm)
   - [`pyenv`](https://github.com/pyenv/pyenv) and [`pyenv-virtualenv`](https://github.com/pyenv/pyenv-virtualenv)
@@ -126,30 +137,6 @@ Gruvbox theme for browsers is [`teatwig/gruvbox-firefox-themes`](https://github.
 (You may want to also activate additional filter lists in `uBlock Origin`
 for things such as Facebook or cookie banners;
 please refer to their [wiki](https://github.com/gorhill/uBlock/wiki).)
-
-</details>
-
-LSP servers in Neovim with `mason.nvim`:
-
-<details>
-<summary> Some LSP servers </summary>
-
-- JS/TS
-  - `tsserver`
-  - `prettierd`
-- CSS
-  - `css-lsp`
-- Lua
-  - `lua-language-server`
-  - `stylua`
-- C/C++
-  - `clangd`
-- Markdown
-  - `harper_ls`
-  - `marksman`
-- Bash
-  - `bash-language-server`
-  - `beautysh`
 
 </details>
 

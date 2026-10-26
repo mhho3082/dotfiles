@@ -382,8 +382,6 @@ vim.schedule(function()
     { src = "https://github.com/MagicDuck/grug-far.nvim", version = vim.version.range("*") },
     -- LSP
     { src = "https://github.com/neovim/nvim-lspconfig" },
-    { src = "https://github.com/mason-org/mason.nvim" },
-    { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
     { src = "https://github.com/nvimtools/none-ls.nvim" },
   })
 
@@ -747,8 +745,7 @@ vim.schedule(function()
   keymap("n", "<leader>pu", function()
     vim.pack.update()
   end, { desc = "Pack update" })
-  keymap("n", "<leader>pc", pack_clean, { desc = "Pack update" })
-  keymap("n", "<leader>pm", "<cmd>Mason<cr>", { desc = "Mason" })
+  keymap("n", "<leader>pc", pack_clean, { desc = "Pack clean" })
   keymap("n", "<leader>pt", update_tree_sitter, { desc = "Tree-sitter" })
 
   -- Git (group: `g`)
@@ -802,17 +799,13 @@ vim.schedule(function()
     vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
   end
 
-  require("mason").setup({})
-  require("mason-lspconfig").setup({})
-
   local null_ls = require("null-ls")
 
   null_ls.setup({
     sources = {
-      null_ls.builtins.formatting.prettierd,
+      null_ls.builtins.formatting.prettier,
       null_ls.builtins.formatting.stylua,
       null_ls.builtins.formatting.black,
-      null_ls.builtins.formatting.blade_formatter,
       null_ls.builtins.formatting.shfmt.with({
         filetypes = { "sh", "bash", "zsh" },
         -- https://github.com/mvdan/sh/issues/212
@@ -845,10 +838,21 @@ vim.schedule(function()
       },
     },
   })
-  vim.lsp.config("jdtls", { settings = { java = { format = { enabled = false } } } })
   -- https://github.com/LazyVim/LazyVim/discussions/2159
   vim.lsp.config("html", { init_options = { provideFormatter = false } })
   vim.lsp.config("cssls", { init_options = { provideFormatter = false } })
+
+  -- Enable all LSP servers (installed system-wide via pacman/paru)
+  vim.lsp.enable({
+    "bashls",
+    "cssls",
+    "harper_ls",
+    "html",
+    "lua_ls",
+    "pyright",
+    "rust_analyzer", -- provided by rustup: `rustup component add rust-analyzer`
+    "ts_ls",
+  })
 end)
 
 -------------------------
