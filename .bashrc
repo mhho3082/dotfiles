@@ -108,16 +108,6 @@ fi
 # Enable vi mode
 set -o vi
 
-# enable color support of ls and grep
-if [ -x /usr/bin/dircolors ]; then
-  test -r "$HOME/.dircolors" && eval "$(dircolors -b "$HOME/.dircolors")" || eval "$(dircolors -b)"
-
-  alias ls='ls --color=auto'
-  alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
-fi
-
 # Handy aliases
 alias c='clear'
 alias q='exit'
