@@ -114,8 +114,6 @@ alias q='exit'
 alias e="$EDITOR"
 alias v="$VISUAL"
 alias g='git'
-alias m='make'
-alias s='ssh'
 
 if command -v trash >/dev/null 2>&1; then
   alias r="trash"

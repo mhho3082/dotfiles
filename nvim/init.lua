@@ -713,7 +713,6 @@ vim.schedule(function()
   -- The basics
   keymap("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
   keymap("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Quit" })
-  keymap("n", "<leader>m", "<cmd>make<cr>", { desc = "Make" })
   keymap("n", "<leader>o", vim.cmd.nohl, { desc = "Nohlsearch" })
 
   -- Search and replace
