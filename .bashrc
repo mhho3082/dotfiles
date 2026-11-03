@@ -478,6 +478,14 @@ fi
 export OPENCODE_DISABLE_TERMINAL_TITLE="true"
 export CLAUDE_CODE_DISABLE_TERMINAL_TITLE="true"
 
+# == React Native ==
+
+export ANDROID_HOME=$HOME/Android/Sdk
+if [ -d "$ANDROID_HOME" ]; then
+  export PATH=$PATH:$ANDROID_HOME/emulator
+  export PATH=$PATH:$ANDROID_HOME/platform-tools
+fi
+
 # == Version managers ==
 
 # == Pyenv ==
