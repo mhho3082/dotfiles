@@ -6,7 +6,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "fzf-lua": {
-      "rev": "11357ee24a9f092b1db503237eb57e2a11e48434",
+      "rev": "6ab6a29d56888dcf66edfeb082ad4a46e7f075bb",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -39,7 +39,7 @@
       "src": "https://github.com/nvim-mini/mini.surround"
     },
     "none-ls.nvim": {
-      "rev": "c4b82bb63b13856ba4d6b971b7aad3bb38fc6fe2",
+      "rev": "0b281893e36fe147077b49f022bf9cd78af3ad12",
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
     "nvim-autopairs": {
@@ -47,7 +47,7 @@
       "src": "https://github.com/windwp/nvim-autopairs"
     },
     "nvim-lspconfig": {
-      "rev": "cc404d425c7752f56b8eaa269107be44d888ea51",
+      "rev": "993d048db0d83d8e8ba3f9cb376456321acdcce3",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-spider": {
